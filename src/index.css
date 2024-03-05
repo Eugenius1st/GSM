@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* common */
+.eg-marginY {
+    @apply my-4;
+}
+
+.eg-title {
+    @apply text-xl font-bold my-4;
+}
+
+/* admin */
+.eg-admin-wrapper {
+    @apply max-w-screen-md m-auto p-2 mt-16;
+}

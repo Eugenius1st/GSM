@@ -1,3 +1,22 @@
-export default function App() {
-    return <h1 className="text-3xl text-red-500 font-bold underline">Hello world!</h1>;
-}
+// layouts
+import AdminHome from 'layouts/Admin/Home';
+import AdminCoach from 'layouts/Admin/Coach';
+// hooks
+import { Route, Routes } from 'react-router-dom';
+
+const App = () => {
+    return (
+        <Routes>
+            <Route
+                path="/"
+                element={<AdminHome />}
+            />
+            <Route
+                path="/admin/coach-management"
+                element={<AdminCoach />}
+            />
+        </Routes>
+    );
+};
+
+export default App;
