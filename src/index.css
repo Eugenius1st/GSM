@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --egWhite-default: #ffffff;
+    --egPurple-default: #6b00ff;
+}
+
 /* common */
 .eg-marginY {
     @apply my-4;

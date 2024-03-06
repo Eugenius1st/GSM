@@ -5,16 +5,22 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-
+//color
+import colors from 'assets/colors/palette';
 interface EgPhotoCardType {
+    id: number;
     name: string;
+    birthYear?: number;
     image: string;
+    describe?: string;
     imageY: number;
+    type?: string;
 }
 
-const EgPhotoCard = ({ name, image, imageY }: EgPhotoCardType) => {
+const EgPhotoCard = ({ id, name, image, birthYear, describe, imageY, type }: EgPhotoCardType) => {
+    const { egWhite, egPurple } = colors;
     return (
-        <Card sx={{ maxWidth: 345, mx: 1 }}>
+        <Card sx={{ width: '100%', mx: 1 }}>
             <CardMedia
                 sx={{ height: imageY }}
                 image={image}
@@ -28,17 +34,39 @@ const EgPhotoCard = ({ name, image, imageY }: EgPhotoCardType) => {
                 >
                     {name}
                 </Typography>
+                {birthYear && (
+                    <Typography
+                        variant="body2"
+                        color="text.secondary"
+                    >
+                        {birthYear} 년생
+                    </Typography>
+                )}
                 <Typography
                     variant="body2"
                     color="text.secondary"
                 >
-                    Lizards are a widespread group of squamate reptiles, with over 6,000
+                    {describe}
                 </Typography>
             </CardContent>
-            <CardActions>
-                <Button size="small">정보보기</Button>
-                <Button size="small">수업보기</Button>
-            </CardActions>
+            {type && type === 'coach' ? (
+                <CardActions sx={{ display: 'flex', justifyContent: 'end' }}>
+                    <Button
+                        size="small"
+                        sx={{ color: egPurple.default }}
+                    >
+                        정보보기
+                    </Button>
+                    <Button
+                        size="small"
+                        sx={{ color: egPurple.default }}
+                    >
+                        수업보기
+                    </Button>
+                </CardActions>
+            ) : (
+                <></>
+            )}
         </Card>
     );
 };

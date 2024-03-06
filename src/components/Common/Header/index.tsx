@@ -9,7 +9,7 @@ import galloping_purple_logo from 'assets/logo/galloping_purple_logo.jpg';
 
 const Header = () => {
     return (
-        <div className="fixed top-0 flex justify-center w-screen border border-b-2 bg-egWhite-default border-egBlack-light">
+        <div className="fixed top-0 z-50 flex justify-center w-screen border border-b-2 bg-egWhite-default border-egBlack-light">
             <head className="flex items-center justify-between w-8/12 p-2 ">
                 <div>
                     <img

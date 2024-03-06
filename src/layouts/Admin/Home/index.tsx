@@ -1,7 +1,7 @@
 // Commons
 import Divider from 'components/Common/Divider';
 // Eg Components
-import EgTable from 'components/EgMaterials/PageTable';
+import EgPageTable from 'components/EgMaterials/PageTable';
 import EgPhotoCard from 'components/EgMaterials/PhotoCard';
 // Admin Home Components
 import TitleBar from 'layouts/Admin/Home/Components/TitleBar';
@@ -11,58 +11,95 @@ import coach_kim from 'assets/coach/coach_kim.jpeg';
 import coach_hong from 'assets/coach/coach_hong.jpeg';
 import class_adult_man from 'assets/class/class_adult_man.jpeg';
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
+import user1 from 'assets/user/user1.png';
+import user2 from 'assets/user/user2.png';
+import user3 from 'assets/user/user3.jpeg';
+import user4 from 'assets/user/user4.png';
+
+export interface columnType {
+    id: string;
+    label: string;
+    minWidth?: number;
+    align?: 'center' | 'left' | 'right' | 'inherit' | 'justify' | undefined;
+}
 
 const Home = () => {
     const coachInfo = [
-        { name: '손흥민', image: coach_son },
-        { name: '김민재', image: coach_kim },
-        { name: '홍길동', image: coach_hong },
+        { id: 1, name: '손흥민', birthYear: 1998, image: coach_son, type: 'coach' },
+        { id: 2, name: '김민재', birthYear: 2000, image: coach_kim, type: 'coach' },
+        { id: 3, name: '홍길동', birthYear: 1994, image: coach_hong, type: 'coach' },
     ];
     const classInfo = [
-        { name: '성인남성반', image: class_adult_man },
-        { name: '성인여성반', image: class_adult_woman },
+        { id: 1, name: '성인남성반', image: class_adult_man, describe: '성인 남성반에 대한 설명입니다', type: 'class' },
+        {
+            id: 2,
+            name: '성인여성반',
+            image: class_adult_woman,
+            describe: '성인 여성반에 대한 설명입니다',
+            type: 'class',
+        },
+    ];
+    const userInfoCol: columnType[] = [
+        { id: 'thumnail', label: 'Profile', minWidth: 100, align: 'left' },
+        { id: 'name', label: 'Name', minWidth: 100, align: 'center' },
+        { id: 'age', label: 'Age', minWidth: 100, align: 'center' },
+    ];
+    const userInfoRow = [
+        { thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 100 },
+        { thumnail: user2, name: '상훈손', age: '20', align: 'center', minWidth: 100 },
+        { thumnail: user3, name: '최보미', age: '20', align: 'center', minWidth: 100 },
+        { thumnail: user4, name: '조영준', age: '7', align: 'center', minWidth: 100 },
     ];
     return (
         <div className="eg-admin-wrapper">
             <TitleBar
                 title="회원관리"
-                navigationURL="/user-management"
+                navigationURL="/admin/user-management"
             />
-            <EgTable />
+            <EgPageTable
+                columns={userInfoCol}
+                rows={userInfoRow}
+            />
             <Divider />
             <TitleBar
                 title="코치관리"
-                navigationURL="/coach-management"
+                navigationURL="/admin/coach-management"
             />
             <div className="flex justify-between">
                 {coachInfo.map((el, idx) => (
                     <EgPhotoCard
                         key={idx}
+                        id={el.id}
                         name={el.name}
+                        birthYear={el.birthYear}
                         image={el.image}
                         imageY={180}
+                        type={el.type}
                     />
                 ))}
             </div>
             <Divider />
             <TitleBar
                 title="수업관리"
-                navigationURL="/class-management"
+                navigationURL="/admin/class-management"
             />
             <div className="flex justify-between">
                 {classInfo.map((el, idx) => (
                     <EgPhotoCard
                         key={idx}
+                        id={el.id}
                         name={el.name}
                         image={el.image}
+                        describe={el.describe}
                         imageY={180}
+                        type={el.type}
                     />
                 ))}
             </div>
             <Divider />
             <TitleBar
                 title="알림 및 안내"
-                navigationURL="/notification"
+                navigationURL="/admin/notification"
             />
         </div>
     );
