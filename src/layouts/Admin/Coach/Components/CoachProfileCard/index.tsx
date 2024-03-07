@@ -21,7 +21,6 @@ interface InfoType {
 
 const CoachProfileCard = ({ coachInfo }: InfoType) => {
     const titleStyle = 'mr-2 font-bold my-1';
-    console.log(coachInfo);
     return (
         <div>
             <div className="flex items-center ">

@@ -63,13 +63,15 @@ const MemoCard = ({ tab, memo }: MemoCardType) => {
                         </div>
                     )}
                 </div>
-                <div className="flex justify-center mt-4">
-                    <input className="w-11/12 border-2 " />
-                    <PurpleBtn
-                        content="작성"
-                        width="24"
-                    />
-                </div>
+                {memoTab !== '임금' && (
+                    <div className="flex justify-center mt-4">
+                        <input className="w-11/12 border-2 " />
+                        <PurpleBtn
+                            content="작성"
+                            width="24"
+                        />
+                    </div>
+                )}
             </div>
         </div>
     );

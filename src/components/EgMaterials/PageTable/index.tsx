@@ -12,16 +12,12 @@ import TableRow from '@mui/material/TableRow';
 // type
 import type { ColumnType } from 'layouts/Admin/Home';
 
-// colors
-import colors from 'assets/colors/palette';
-
 interface EgPageTableType {
     rows: any;
     columns: ColumnType[];
 }
 
 const EgPageTable = ({ columns, rows }: EgPageTableType) => {
-    const { egWhite, egPurple } = colors;
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 

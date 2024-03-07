@@ -25,13 +25,13 @@ const Header = () => {
                             <Link to="/">HOME</Link>
                         </li>
                         <li>
-                            <Link to="/admin/user-management">회원관리</Link>
+                            <Link to="/admin/user">회원관리</Link>
                         </li>
                         <li>
-                            <Link to="/admin/coach-management">코치관리</Link>
+                            <Link to="/admin/coach">코치관리</Link>
                         </li>
                         <li>
-                            <Link to="/admin">수업관리</Link>
+                            <Link to="/admin/class">수업관리</Link>
                         </li>
                         <li>
                             <Link to="/admin">알림 및 안내</Link>

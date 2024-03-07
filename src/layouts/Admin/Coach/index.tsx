@@ -1,53 +1,63 @@
-// Cards
-import MemoCard from 'components/Cards/MemoCard';
-// Common
-import Divider from 'components/Common/Divider';
+// Buttons
+import WhiteBtn from 'components/Buttons/WhiteBtn';
+// Eg Components
+import EgPageTable from 'components/EgMaterials/PageTable';
+import CoachTable from 'layouts/Admin/Coach/Components/CoachTable';
 // images
 import coach_son from 'assets/coach/coach_son.jpeg';
-// Admin Coach Components
-import CoachProfileCard from 'layouts/Admin/Coach/Components/CoachProfileCard';
+import coach_kim from 'assets/coach/coach_kim.jpeg';
+import coach_hong from 'assets/coach/coach_hong.jpeg';
+import user1 from 'assets/user/user1.png';
+import user2 from 'assets/user/user2.png';
+import user3 from 'assets/user/user3.jpeg';
+import user4 from 'assets/user/user4.png';
 
+export interface ColumnType {
+    id: string;
+    label: string;
+    minWidth?: number;
+    align?: 'center' | 'left' | 'right' | 'inherit' | 'justify' | undefined;
+}
 const Coach = () => {
-    const coachInfo = {
-        thumbnail: coach_son,
-        name: '손흥민',
-        birth: '1998-08-25',
-        gender: 'man',
-        duty: false,
-        license: ['자격증1', '자격증2', '자격증3'],
-        record: [
-            { date: 2001, title: '프로선수출신' },
-            { date: 1990, title: '명문고' },
-            { date: 1995, title: '명문중' },
-        ],
-    };
-    const coachMemo = {
-        salary: '3000 만원',
-        significant: [
-            {
-                date: '2024-03-07',
-                content:
-                    '태도가 아주 좋음 태도가 아주 좋음 태도가 아주 좋음 태도가 아주 좋음 태도가 아주 좋음 태도가 아주 좋음',
-            },
-            { date: '2024-03-07', content: '태도가 아주 좋음' },
-            { date: '2024-03-07', content: '태도가 아주 좋음' },
-            { date: '2024-03-07', content: '태도가 아주 좋음' },
-            { date: '2024-03-05', content: '인사성 밝음' },
-            { date: '2024-03-04', content: '아이들 이름 외울 필요 있음' },
-        ],
-    };
+    const coachesInfoCol: ColumnType[] = [
+        { id: 'id', label: 'id', minWidth: 100, align: 'left' },
+        { id: 'thumnail', label: 'Profile', minWidth: 100, align: 'left' },
+        { id: 'name', label: 'Name', minWidth: 100, align: 'center' },
+        { id: 'age', label: 'Age', minWidth: 100, align: 'center' },
+        { id: 'infoBtn', label: '정보보기', minWidth: 100, align: 'center' },
+        { id: 'classBtn', label: '수업보기', minWidth: 100, align: 'center' },
+    ];
+
+    const coachesInfoRow = [
+        {
+            id: 1,
+            thumbnail: coach_son,
+            name: '손흥민',
+            birth: '1998',
+            infoBtn: true,
+            classBtn: true,
+        },
+        {
+            id: 2,
+            thumbnail: coach_kim,
+            name: '김민재',
+            birth: '1997',
+            infoBtn: true,
+            classBtn: true,
+        },
+        {
+            id: 3,
+            thumbnail: coach_hong,
+            name: '홍길동',
+            birth: '2000',
+            infoBtn: true,
+            classBtn: true,
+        },
+    ];
     return (
         <div className="eg-admin-wrapper">
-            <div className="eg-title">코치관리</div>
-            <div className="text-sm text-right">Edit</div>
-            <CoachProfileCard coachInfo={coachInfo} />
-            <Divider />
-            <Divider />
-
-            <MemoCard
-                tab={['임금', '특이사항']}
-                memo={coachMemo}
-            />
+            <h1 className="my-4 text-xl font-bold">코치관리</h1>
+            <CoachTable />
         </div>
     );
 };
