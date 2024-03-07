@@ -5,7 +5,7 @@ module.exports = {
         extend: {
             colors: {
                 egPurple: {
-                    superLght: '#6B00FF10',
+                    superLght: '#F6F0FF',
                     light: '#6B00FF50',
                     semilight: '#6B00FF75',
                     default: '#6B00FF',

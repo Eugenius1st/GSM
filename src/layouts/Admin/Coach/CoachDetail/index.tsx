@@ -42,8 +42,6 @@ const CoachDetail = () => {
             <div className="text-sm text-right">Edit</div>
             <CoachProfileCard coachInfo={coachInfo} />
             <Divider />
-            <Divider />
-
             <MemoCard
                 tab={['임금', '특이사항']}
                 memo={coachMemo}

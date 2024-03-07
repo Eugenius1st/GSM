@@ -1,8 +1,9 @@
 // layouts
 import AdminHome from 'layouts/Admin/Home';
 import AdminCoach from 'layouts/Admin/Coach';
-import CoachDetail from 'layouts/Admin/Coach/CoachDetail';
-import CoachClass from 'layouts/Admin/Coach/CoachClass';
+import AdminCoachDetail from 'layouts/Admin/Coach/CoachDetail';
+import AdminCoachClass from 'layouts/Admin/Coach/CoachClass';
+import AdminCoachClassDetail from 'layouts/Admin/Coach/CoachClassDetail';
 // hooks
 import { Route, Routes } from 'react-router-dom';
 
@@ -14,16 +15,20 @@ const App = () => {
                 element={<AdminHome />}
             />
             <Route
+                path="/admin/coach"
+                element={<AdminCoach />}
+            />
+            <Route
                 path="/admin/coach/:coachId"
-                element={<CoachDetail />}
+                element={<AdminCoachDetail />}
             />
             <Route
                 path="/admin/coach-class/:coachId"
-                element={<CoachClass />}
+                element={<AdminCoachClass />}
             />
             <Route
-                path="/admin/coach"
-                element={<AdminCoach />}
+                path="/admin/coach-class/:coachId/:classId"
+                element={<AdminCoachClassDetail />}
             />
         </Routes>
     );

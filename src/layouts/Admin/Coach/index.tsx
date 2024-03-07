@@ -7,10 +7,8 @@ import CoachTable from 'layouts/Admin/Coach/Components/CoachTable';
 import coach_son from 'assets/coach/coach_son.jpeg';
 import coach_kim from 'assets/coach/coach_kim.jpeg';
 import coach_hong from 'assets/coach/coach_hong.jpeg';
-import user1 from 'assets/user/user1.png';
-import user2 from 'assets/user/user2.png';
-import user3 from 'assets/user/user3.jpeg';
-import user4 from 'assets/user/user4.png';
+// Commons
+import Divider from 'components/Common/Divider';
 
 export interface ColumnType {
     id: string;
@@ -55,8 +53,7 @@ const Coach = () => {
         },
     ];
     return (
-        <div className="eg-admin-wrapper">
-            <h1 className="my-4 text-xl font-bold">코치관리</h1>
+        <div className="mb-2 eg-admin-wrapper">
             <CoachTable />
         </div>
     );

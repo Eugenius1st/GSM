@@ -9,8 +9,14 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
+// Buttons
+import WhiteBtn from 'components/Buttons/WhiteBtn';
+
 // type
 import type { ColumnType } from 'layouts/Admin/Home';
+
+// colors
+import colors from 'assets/colors/palette';
 
 interface EgPageTableType {
     rows: any;
@@ -18,6 +24,7 @@ interface EgPageTableType {
 }
 
 const EgPageTable = ({ columns, rows }: EgPageTableType) => {
+    const { egPurple } = colors;
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -35,11 +42,10 @@ const EgPageTable = ({ columns, rows }: EgPageTableType) => {
             <TableContainer sx={{ maxHeight: 440 }}>
                 <Table
                     stickyHeader
-                    aria-label="sticky table"
+                    size="small"
+                    aria-label="a dense table"
                 >
-                    <TableHead
-                    // sx={{ '.MuiTableCell-root': { background: egPurple.semilight } }}
-                    >
+                    <TableHead sx={{ '.MuiTableCell-root': { background: egPurple.superLight } }}>
                         <TableRow>
                             {columns.map((column: ColumnType) => (
                                 <TableCell
@@ -78,6 +84,8 @@ const EgPageTable = ({ columns, rows }: EgPageTableType) => {
                                                                 className="w-12 h-12 rounded-full"
                                                             />
                                                         </div>
+                                                    ) : column.id === 'infoBtn' ? (
+                                                        <WhiteBtn content={row.infoBtn} />
                                                     ) : (
                                                         <div>{value}</div>
                                                     )}

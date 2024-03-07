@@ -31,6 +31,9 @@ import coach_hong from 'assets/coach/coach_hong.jpeg';
 import WhiteBtn from 'components/Buttons/WhiteBtn';
 import PurpleBtn from 'components/Buttons/PurpleBtn';
 
+// colors
+import colors from 'assets/colors/palette';
+
 interface Data {
     id: number;
     profile: string;
@@ -202,15 +205,19 @@ interface EnhancedTableProps {
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
+    const { egPurple } = colors;
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
     const createSortHandler = (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
     };
 
     return (
-        <TableHead>
+        <TableHead sx={{ '.MuiTableCell-root': { background: egPurple.superLight } }}>
             <TableRow>
-                <TableCell padding="checkbox">
+                <TableCell
+                    align="center"
+                    padding="checkbox"
+                >
                     <Checkbox
                         color="primary"
                         indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -223,8 +230,9 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                 </TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
+                        sx={{ paddingX: 0 }}
                         key={headCell.id}
-                        align={headCell.numeric ? 'right' : 'left'}
+                        align="left"
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         <TableSortLabel
@@ -244,6 +252,18 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                         </TableSortLabel>
                     </TableCell>
                 ))}
+                <TableCell
+                    sx={{ paddingX: 0 }}
+                    align="center"
+                >
+                    정보 보기
+                </TableCell>
+                <TableCell
+                    sx={{ paddingX: 0 }}
+                    align="center"
+                >
+                    수업 보기
+                </TableCell>
             </TableRow>
         </TableHead>
     );
@@ -277,12 +297,12 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                 </Typography>
             ) : (
                 <Typography
-                    sx={{ flex: '1 1 100%' }}
-                    variant="button"
+                    sx={{ flex: '1 1 100%', fontWeight: 'bold' }}
+                    variant="h6"
                     id="tableTitle"
                     component="div"
                 >
-                    코치 프로필
+                    코치 관리
                 </Typography>
             )}
             {numSelected > 0 ? (
@@ -364,7 +384,7 @@ export default function EnhancedTable() {
                 <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer sx={{ overflowY: 'scroll' }}>
                     <Table
-                        sx={{ minWidth: 700 }}
+                        sx={{ minWidth: 440 }}
                         aria-labelledby="tableTitle"
                         size="small"
                     >
@@ -401,7 +421,10 @@ export default function EnhancedTable() {
                                                 }}
                                             />
                                         </TableCell>
-                                        <TableCell align="left">
+                                        <TableCell
+                                            sx={{ paddingX: 0 }}
+                                            align="center"
+                                        >
                                             <img
                                                 className="object-cover rounded-full w-14 h-14"
                                                 src={row.profile}
@@ -410,16 +433,19 @@ export default function EnhancedTable() {
                                         </TableCell>
 
                                         <TableCell
-                                            align="left"
+                                            sx={{ paddingX: 0 }}
                                             component="th"
                                             id={labelId}
                                             scope="row"
                                         >
                                             {row.name}
                                         </TableCell>
-                                        <TableCell align="center">{row.level} lv</TableCell>
-                                        <TableCell align="center">{row.birth}</TableCell>
-                                        <TableCell align="right">
+                                        <TableCell sx={{ paddingX: 0 }}>{row.level} lv</TableCell>
+                                        <TableCell sx={{ paddingX: 0 }}>{row.birth}</TableCell>
+                                        <TableCell
+                                            sx={{ paddingX: 0 }}
+                                            align="center"
+                                        >
                                             <Link to={`/admin/coach/${row.id}`}>
                                                 <WhiteBtn
                                                     content="정보보기"
@@ -427,7 +453,10 @@ export default function EnhancedTable() {
                                                 />
                                             </Link>
                                         </TableCell>
-                                        <TableCell align="left">
+                                        <TableCell
+                                            sx={{ paddingX: 0 }}
+                                            align="center"
+                                        >
                                             <Link to={`/admin/coach-class/${row.id}`}>
                                                 <WhiteBtn
                                                     content="수업보기"

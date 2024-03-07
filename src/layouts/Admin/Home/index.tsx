@@ -21,6 +21,7 @@ export interface ColumnType {
     label: string;
     minWidth?: number;
     align?: 'center' | 'left' | 'right' | 'inherit' | 'justify' | undefined;
+    infoBtn?: string;
 }
 
 const Home = () => {
@@ -40,17 +41,22 @@ const Home = () => {
         },
     ];
     const usersInfoCol: ColumnType[] = [
-        { id: 'thumnail', label: 'Profile', minWidth: 100, align: 'left' },
-        { id: 'name', label: 'Name', minWidth: 100, align: 'center' },
-        { id: 'age', label: 'Age', minWidth: 100, align: 'center' },
+        { id: 'thumnail', label: 'Profile', minWidth: 30, align: 'left' },
+        { id: 'name', label: 'Name', minWidth: 30, align: 'center' },
+        { id: 'age', label: 'Age', minWidth: 30, align: 'center' },
+        { id: 'infoBtn', label: '정보보기', minWidth: 30, align: 'center' },
     ];
     const usersInfoRow = [
-        { thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 100 },
-        { thumnail: user2, name: '상훈손', age: '20', align: 'center', minWidth: 100 },
-        { thumnail: user3, name: '최보미', age: '20', align: 'center', minWidth: 100 },
-        { thumnail: user4, name: '조영준', age: '7', align: 'center', minWidth: 100 },
-        { thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 100 },
-        { thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 100 },
+        { thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 30, infoBtn: '정보보기' },
+        { thumnail: user2, name: '상훈손', age: '20', align: 'center', minWidth: 30, infoBtn: '정보보기' },
+        { thumnail: user3, name: '최보미', age: '20', align: 'center', minWidth: 30, infoBtn: '정보보기' },
+        { thumnail: user4, name: '조영준', age: '7', align: 'center', minWidth: 30, infoBtn: '정보보기' },
+        { thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 30, infoBtn: '정보보기' },
+        { thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 30, infoBtn: '정보보기' },
+        { thumnail: user3, name: '최보미', age: '20', align: 'center', minWidth: 30, infoBtn: '정보보기' },
+        { thumnail: user4, name: '조영준', age: '7', align: 'center', minWidth: 30, infoBtn: '정보보기' },
+        { thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 30, infoBtn: '정보보기' },
+        { thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 30, infoBtn: '정보보기' },
     ];
     return (
         <div className="eg-admin-wrapper">
