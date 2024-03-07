@@ -9,15 +9,19 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
-//type
-import type { columnType } from 'layouts/Admin/Home';
+// type
+import type { ColumnType } from 'layouts/Admin/Home';
+
+// colors
+import colors from 'assets/colors/palette';
 
 interface EgPageTableType {
     rows: any;
-    columns: columnType[];
+    columns: ColumnType[];
 }
 
 const EgPageTable = ({ columns, rows }: EgPageTableType) => {
+    const { egWhite, egPurple } = colors;
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -37,9 +41,11 @@ const EgPageTable = ({ columns, rows }: EgPageTableType) => {
                     stickyHeader
                     aria-label="sticky table"
                 >
-                    <TableHead>
+                    <TableHead
+                    // sx={{ '.MuiTableCell-root': { background: egPurple.semilight } }}
+                    >
                         <TableRow>
-                            {columns.map((column: columnType) => (
+                            {columns.map((column: ColumnType) => (
                                 <TableCell
                                     key={column.id}
                                     align={column.align}
@@ -61,7 +67,7 @@ const EgPageTable = ({ columns, rows }: EgPageTableType) => {
                                         tabIndex={-1}
                                         key={idx}
                                     >
-                                        {columns.map((column: columnType) => {
+                                        {columns.map((column: ColumnType) => {
                                             const value = row[column.id];
                                             return (
                                                 <TableCell

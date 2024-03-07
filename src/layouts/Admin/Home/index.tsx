@@ -16,7 +16,7 @@ import user2 from 'assets/user/user2.png';
 import user3 from 'assets/user/user3.jpeg';
 import user4 from 'assets/user/user4.png';
 
-export interface columnType {
+export interface ColumnType {
     id: string;
     label: string;
     minWidth?: number;
@@ -39,16 +39,18 @@ const Home = () => {
             type: 'class',
         },
     ];
-    const userInfoCol: columnType[] = [
+    const usersInfoCol: ColumnType[] = [
         { id: 'thumnail', label: 'Profile', minWidth: 100, align: 'left' },
         { id: 'name', label: 'Name', minWidth: 100, align: 'center' },
         { id: 'age', label: 'Age', minWidth: 100, align: 'center' },
     ];
-    const userInfoRow = [
+    const usersInfoRow = [
         { thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 100 },
         { thumnail: user2, name: '상훈손', age: '20', align: 'center', minWidth: 100 },
         { thumnail: user3, name: '최보미', age: '20', align: 'center', minWidth: 100 },
         { thumnail: user4, name: '조영준', age: '7', align: 'center', minWidth: 100 },
+        { thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 100 },
+        { thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 100 },
     ];
     return (
         <div className="eg-admin-wrapper">
@@ -57,8 +59,8 @@ const Home = () => {
                 navigationURL="/admin/user-management"
             />
             <EgPageTable
-                columns={userInfoCol}
-                rows={userInfoRow}
+                columns={usersInfoCol}
+                rows={usersInfoRow}
             />
             <Divider />
             <TitleBar

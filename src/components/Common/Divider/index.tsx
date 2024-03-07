@@ -1,5 +1,5 @@
 const Divider = () => {
-    return <div className="mt-8"></div>;
+    return <div className="h-8"></div>;
 };
 
 export default Divider;

@@ -29,7 +29,7 @@ const EgPhotoCard = ({ id, name, image, birthYear, describe, imageY, type }: EgP
             <CardContent>
                 <Typography
                     gutterBottom
-                    variant="h5"
+                    variant="h6"
                     component="div"
                 >
                     {name}

@@ -9,14 +9,14 @@ import galloping_purple_logo from 'assets/logo/galloping_purple_logo.jpg';
 
 const Header = () => {
     return (
-        <div className="fixed top-0 z-50 flex justify-center w-screen border border-b-2 bg-egWhite-default border-egBlack-light">
-            <head className="flex items-center justify-between w-8/12 p-2 ">
-                <div>
+        <div className="fixed top-0 z-50 w-screen border-b-2 bg-egWhite-default">
+            <div className="flex items-center justify-between max-w-screen-xl p-2 m-auto ">
+                <div className="flex items-center">
                     <img
                         src={galloping_purple_logo}
                         className="inline w-10 h-10 mr-2 rounded-full"
                     />
-                    <span className="text-lg font-bold">GSM</span>
+                    <h1 className="text-lg font-bold text-egPurple-default">GSM</h1>
                 </div>
 
                 <div>
@@ -42,7 +42,7 @@ const Header = () => {
                     <WhiteBtn content="SignUp" />
                     <PurpleBtn content="Login" />
                 </div>
-            </head>
+            </div>
         </div>
     );
 };
