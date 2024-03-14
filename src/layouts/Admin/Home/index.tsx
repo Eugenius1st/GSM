@@ -11,7 +11,7 @@ import coach_kim from 'assets/coach/coach_kim.jpeg';
 import coach_hong from 'assets/coach/coach_hong.jpeg';
 import class_adult_man from 'assets/class/class_adult_man.jpeg';
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
-import user1 from 'assets/user/user1.png';
+import user1 from 'assets/user/user1.jpg';
 import user2 from 'assets/user/user2.png';
 import user3 from 'assets/user/user3.jpeg';
 import user4 from 'assets/user/user4.png';

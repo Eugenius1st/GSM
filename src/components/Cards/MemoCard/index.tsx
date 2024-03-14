@@ -31,7 +31,7 @@ export interface MemoCardType {
 const MemoCard = ({ tab, memo }: MemoCardType) => {
     const [memoTab, setMemoTab] = useState(tab[0]);
     const activeTab = 'text-egWhite-default bg-egPurple-default font-base';
-    const inactiveTab = 'text-egWhite-default bg-egPurple-semilight font-base';
+    const inactiveTab = 'text-egPurple-default bg-egGrey-default font-base hover:bg-egPurple-light';
     return (
         <div>
             <div>
@@ -52,8 +52,11 @@ const MemoCard = ({ tab, memo }: MemoCardType) => {
                             {tab[0] == '임금' ? (
                                 <div>{memo.salary}</div>
                             ) : (
-                                memo?.feedback?.map((el) => (
-                                    <div className="relative w-full px-4 py-1 mb-4 rounded-lg bg-egPurple-superLght">
+                                memo?.feedback?.map((el, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="relative w-full px-4 py-1 mb-4 rounded-lg bg-egPurple-superLght"
+                                    >
                                         <div className="w-11/12 text-base">{el.content}</div>
                                         <div className="text-xs text-right">{el.date}</div>
                                         <div className="absolute flex items-center justify-center top-1 right-1">
@@ -68,8 +71,11 @@ const MemoCard = ({ tab, memo }: MemoCardType) => {
                     {memoTab === tab[1] && (
                         <div>
                             {tab[1] == '특이사항' &&
-                                memo.significant.map((el) => (
-                                    <div className="relative w-full px-4 py-1 mb-4 rounded-lg bg-egPurple-superLght">
+                                memo.significant.map((el, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="relative w-full px-4 py-1 mb-4 rounded-lg bg-egGrey-light"
+                                    >
                                         <div className="w-11/12 text-base">{el.content}</div>
                                         <div className="text-xs text-right">{el.date}</div>
                                         <div className="absolute flex items-center justify-center top-1 right-1">

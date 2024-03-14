@@ -27,7 +27,7 @@ const CoachProfileCard = ({ coachInfo }: InfoType) => {
                 <img
                     src={coachInfo.thumbnail}
                     alt="coach_son"
-                    className="mr-8 rounded-full h-36"
+                    className="object-cover h-40 mr-4 rounded-full min-w-40"
                 />
                 <ul>
                     <li>

@@ -1,9 +1,11 @@
-// Coach Components
-import CoachViewUserCard from 'layouts/Admin/Coach/Components/CoachViewUserCard';
+// Class Components
+import ViewUserCard from 'layouts/Admin/Class/Components/ViewUserCard';
 // Icons
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 // Cards
-import CoachClassCard from 'layouts/Admin/Coach/Components/CoachClassCard';
+import ClassCard from 'layouts/Admin/Class/Components/ClassCard';
+// Button
+import PurpleBtn from 'components/Buttons/PurpleBtn';
 // images
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
 import user1 from 'assets/user/user1.jpg';
@@ -13,8 +15,9 @@ import user4 from 'assets/user/user4.png';
 
 // Commons
 import Divider from 'components/Common/Divider';
+import WhiteBtn from 'components/Buttons/WhiteBtn';
 
-const CoachClassDetail = () => {
+const ClassDetail = () => {
     const classInfo = {
         id: 1,
         classImage: class_adult_woman,
@@ -31,31 +34,49 @@ const CoachClassDetail = () => {
         { profile: user2, name: '홍이동', age: 13, attend: '불참' },
         { profile: user3, name: '홍삼동', age: 13, attend: '지각' },
         { profile: user4, name: '홍사동', age: 13, attend: '취소' },
+        { profile: user1, name: '홍길동', age: 13, attend: '출석' },
+        { profile: user2, name: '홍이동', age: 13, attend: '불참' },
+        { profile: user3, name: '홍삼동', age: 13, attend: '지각' },
+        { profile: user4, name: '홍사동', age: 13, attend: '취소' },
+    ];
+    const waitingInfo = [
+        { profile: user1, name: '홍길동', age: 13, attend: '출석' },
+        { profile: user2, name: '홍이동', age: 13, attend: '불참' },
+        { profile: user3, name: '홍삼동', age: 13, attend: '지각' },
+        { profile: user4, name: '홍사동', age: 13, attend: '취소' },
     ];
 
     return (
         <div className="eg-admin-wrapper">
             <div className="flex items-center justify-start eg-title">
-                <span>코치관리</span>
+                <span>수업관리</span>
                 <MdOutlineArrowForwardIos className="w-4 h-4 mx-1" />
                 <span> 수업정보</span>
             </div>
             <div>
-                <CoachClassCard classInfo={classInfo} />
+                <ClassCard classInfo={classInfo} />
             </div>
+
             <Divider />
             <div className="text-lg font-bold">참석자 명단</div>
+
             <Divider />
-            <div>
-                {attendInfo.map((el, idx) => (
-                    <CoachViewUserCard
-                        key={idx}
-                        attendInfo={attendInfo}
-                    />
-                ))}
+            <ViewUserCard attendInfo={attendInfo} />
+
+            <Divider />
+            <div className="text-lg font-bold">대기자 명단</div>
+
+            <Divider />
+            <ViewUserCard attendInfo={waitingInfo} />
+
+            <Divider />
+            <div className="flex justify-end">
+                <WhiteBtn content="대기자 추가" />
+
+                <PurpleBtn content="참석자 추가" />
             </div>
         </div>
     );
 };
 
-export default CoachClassDetail;
+export default ClassDetail;

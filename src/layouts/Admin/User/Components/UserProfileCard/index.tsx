@@ -84,7 +84,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                 <img
                     src={thumbnail}
                     alt="coach_son"
-                    className="mr-8 rounded-full h-36"
+                    className="object-cover h-40 mr-4 rounded-full min-w-40"
                 />
                 <ul>
                     <li className={listStyle}>
@@ -254,8 +254,11 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                         </div>
                     </li>
                     {seeMore &&
-                        classInfo.reasonList.map((el) => (
-                            <li className="flex mb-2 border-b border-egPurple-light">
+                        classInfo.reasonList.map((el, idx) => (
+                            <li
+                                key={idx}
+                                className="flex mb-2 border-b border-egPurple-light"
+                            >
                                 <div className="w-36"></div>
                                 <div className="flex w-full">
                                     <div className="w-1/3">{el.count}</div>

@@ -3,7 +3,7 @@ import MemoCard from 'components/Cards/MemoCard';
 // Common
 import Divider from 'components/Common/Divider';
 // images
-import user1 from 'assets/user/user1.png';
+import user1 from 'assets/user/user1.jpg';
 // Admin User Components
 import UserProfileCard from 'layouts/Admin/User/Components/UserProfileCard';
 

@@ -5,18 +5,27 @@ module.exports = {
         extend: {
             colors: {
                 egPurple: {
-                    superLght: '#F6F0FF',
-                    light: '#6B00FF50',
-                    semilight: '#6B00FF75',
                     default: '#6B00FF',
+                    semilLght: '#6B00FF75',
+                    light: '#E3DAF2',
+                    superLght: '#F6F0FF',
                 },
                 egWhite: {
                     default: '#ffffff',
                 },
-                egBlack: {
-                    light: '#D9D9D9',
-                    default: '#000000',
+                egGrey: {
+                    default: '#F3F3F3',
+                    light: '#F9F9F9',
                 },
+                egBlack: {
+                    default: '#252525',
+                    semilLght: '#505050',
+                    light: '#B5B5B5',
+                    superLght: '#E1E1E1',
+                },
+                egRed: { default: '#DA1E28', semiLihgt: '#DA1E2840', light: '#FBE8E9' },
+                egGreen: { default: '#35CF61', light: '#EBFAEF' },
+                egYellow: { default: '#FED74C', semiLight: '#FED74C50', light: '#FFFBED' },
             },
         },
     },

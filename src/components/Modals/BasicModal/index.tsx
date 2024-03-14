@@ -35,9 +35,10 @@ const BasicModal = ({
                         <div>{ModalContents}</div>
                         <div className="flex justify-end">
                             {ModalFooterExitBtn && (
-                                <div onClick={() => setIsShow(false)}>
-                                    <WhiteBtn content={ModalFooterExitBtn} />
-                                </div>
+                                <WhiteBtn
+                                    content={ModalFooterExitBtn}
+                                    func={() => setIsShow(true)}
+                                />
                             )}
                             {ModalFooterActiveBtn && (
                                 <div>

@@ -327,6 +327,7 @@ export default function EnhancedTable() {
     const [selected, setSelected] = React.useState<readonly number[]>([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const { egPurple } = colors;
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -396,7 +397,7 @@ export default function EnhancedTable() {
                             onRequestSort={handleRequestSort}
                             rowCount={rows.length}
                         />
-                        <TableBody>
+                        <TableBody sx={{ '.MuiTableRow-hover:hover': { background: egPurple.superLight } }}>
                             {visibleRows.map((row, index) => {
                                 const isItemSelected = isSelected(row.id);
                                 const labelId = `enhanced-table-checkbox-${index}`;
@@ -457,7 +458,7 @@ export default function EnhancedTable() {
                                             sx={{ paddingX: 0 }}
                                             align="center"
                                         >
-                                            <Link to={`/admin/coach-class/${row.id}`}>
+                                            <Link to={`/admin/coach/coach-class/${row.id}`}>
                                                 <WhiteBtn
                                                     content="수업보기"
                                                     width="18"

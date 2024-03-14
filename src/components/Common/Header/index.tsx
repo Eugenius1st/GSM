@@ -11,6 +11,7 @@ const Header = () => {
     const location = useLocation().pathname;
     const locationList = location.split('/');
     const curLocation = locationList[2];
+    const tabActiveStyle = 'text-egPurple-default border-b-2 border-egPurple-default pb-1';
     return (
         <div className="fixed top-0 z-50 w-screen border-b-2 bg-egWhite-default">
             {locationList[1] === 'admin' ? (
@@ -30,7 +31,7 @@ const Header = () => {
                             <li>
                                 <Link
                                     to="/admin"
-                                    className={`${!curLocation && 'text-egPurple-default'}`}
+                                    className={`${!curLocation ? tabActiveStyle : 'text-egBlack-semilLght'}`}
                                 >
                                     HOME
                                 </Link>
@@ -38,7 +39,7 @@ const Header = () => {
                             <li>
                                 <Link
                                     to="/admin/user"
-                                    className={`${curLocation === 'user' && 'text-egPurple-default'}`}
+                                    className={`${curLocation === 'user' ? tabActiveStyle : 'text-egBlack-semilLght'}`}
                                 >
                                     회원관리
                                 </Link>
@@ -46,7 +47,7 @@ const Header = () => {
                             <li>
                                 <Link
                                     to="/admin/coach"
-                                    className={`${curLocation === 'coach' && 'text-egPurple-default'}`}
+                                    className={`${curLocation === 'coach' ? tabActiveStyle : 'text-egBlack-semilLght'}`}
                                 >
                                     코치관리
                                 </Link>
@@ -54,7 +55,7 @@ const Header = () => {
                             <li>
                                 <Link
                                     to="/admin/class"
-                                    className={`${curLocation === 'class' && 'text-egPurple-default'}`}
+                                    className={`${curLocation === 'class' ? tabActiveStyle : 'text-egBlack-semilLght'}`}
                                 >
                                     수업관리
                                 </Link>
@@ -62,7 +63,9 @@ const Header = () => {
                             <li>
                                 <Link
                                     to="/admin/notification"
-                                    className={`${curLocation === 'notification' && 'text-egPurple-default'}`}
+                                    className={`${
+                                        curLocation === 'notification' ? tabActiveStyle : 'text-egBlack-semilLght'
+                                    }`}
                                 >
                                     알림 및 안내
                                 </Link>

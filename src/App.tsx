@@ -6,6 +6,8 @@ import AdminCoachClass from 'layouts/Admin/Coach/CoachClass';
 import AdminCoachClassDetail from 'layouts/Admin/Coach/CoachClassDetail';
 import AdminUser from 'layouts/Admin/User';
 import AdminUserDetail from 'layouts/Admin/User/UserDetail';
+import AdminClass from 'layouts/Admin/Class';
+import AdminClassDetail from 'layouts/Admin/Class/ClassDetail';
 // hooks
 import { Route, Routes } from 'react-router-dom';
 
@@ -25,11 +27,11 @@ const App = () => {
                 element={<AdminCoachDetail />}
             />
             <Route
-                path="/admin/coach-class/:coachId"
+                path="/admin/coach/coach-class/:coachId"
                 element={<AdminCoachClass />}
             />
             <Route
-                path="/admin/coach-class/:coachId/:classId"
+                path="/admin/coach/coach-class/:coachId/:classId"
                 element={<AdminCoachClassDetail />}
             />
             <Route
@@ -39,6 +41,14 @@ const App = () => {
             <Route
                 path="/admin/user/:userId"
                 element={<AdminUserDetail />}
+            />
+            <Route
+                path="/admin/class"
+                element={<AdminClass />}
+            />
+            <Route
+                path="/admin/class/:calssId"
+                element={<AdminClassDetail />}
             />
         </Routes>
     );

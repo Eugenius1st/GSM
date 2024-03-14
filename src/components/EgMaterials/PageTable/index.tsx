@@ -58,7 +58,7 @@ const EgPageTable = ({ columns, rows }: EgPageTableType) => {
                             ))}
                         </TableRow>
                     </TableHead>
-                    <TableBody>
+                    <TableBody sx={{ '.MuiTableRow-hover:hover': { background: egPurple.superLight } }}>
                         {rows
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row: any, idx: number) => {
@@ -81,7 +81,7 @@ const EgPageTable = ({ columns, rows }: EgPageTableType) => {
                                                             <img
                                                                 src={value}
                                                                 alt="thumnail"
-                                                                className="w-12 h-12 rounded-full"
+                                                                className="object-cover w-12 h-12 rounded-full"
                                                             />
                                                         </div>
                                                     ) : column.id === 'infoBtn' ? (
