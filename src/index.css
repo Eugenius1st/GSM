@@ -38,5 +38,5 @@
 
 /* admin */
 .eg-admin-wrapper {
-    @apply max-w-screen-md m-auto p-2 mt-16;
+    @apply max-w-screen-md m-auto p-2 mt-16 mb-8;
 }

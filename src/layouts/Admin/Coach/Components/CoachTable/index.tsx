@@ -302,7 +302,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                     id="tableTitle"
                     component="div"
                 >
-                    코치 관리
+                    코치관리
                 </Typography>
             )}
             {numSelected > 0 ? (

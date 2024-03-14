@@ -7,8 +7,6 @@ import CoachTable from 'layouts/Admin/Coach/Components/CoachTable';
 import coach_son from 'assets/coach/coach_son.jpeg';
 import coach_kim from 'assets/coach/coach_kim.jpeg';
 import coach_hong from 'assets/coach/coach_hong.jpeg';
-// Commons
-import Divider from 'components/Common/Divider';
 
 export interface ColumnType {
     id: string;

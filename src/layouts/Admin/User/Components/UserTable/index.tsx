@@ -302,7 +302,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                     id="tableTitle"
                     component="div"
                 >
-                    회원 관리
+                    회원관리
                 </Typography>
             )}
 

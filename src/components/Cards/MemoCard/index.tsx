@@ -86,7 +86,7 @@ const MemoCard = ({ tab, memo }: MemoCardType) => {
                         <input className="w-11/12 border-2 " />
                         <PurpleBtn
                             content="작성"
-                            width="24"
+                            width="28"
                         />
                     </div>
                 )}

@@ -1,71 +1,287 @@
+// hooks
+import { useState } from 'react';
+
+// EgMetrials
+import EgCheckBox from 'components/EgMaterials/CheckBox';
+
 // Common
 import Divider from 'components/Common/Divider';
-interface recordType {
-    date: number;
-    title: string;
+import BasicModal from 'components/Modals/BasicModal';
+
+// icons
+import { IoIosArrowDown } from 'react-icons/io';
+import { IoIosArrowUp } from 'react-icons/io';
+
+interface reasonList {
+    count?: string;
+    date?: string;
+    reson?: string;
+}
+interface ClassInfo {
+    lessonName?: string;
+    deposit?: boolean;
+    remainingRounds?: number;
+    paymentRound?: number;
+    reasonList: reasonList[];
 }
 
-interface CoachInfoType {
+interface MarketingConsent {
+    privacy: boolean | true;
+    event: boolean | true;
+}
+
+interface UserInfoType {
     thumbnail: string;
     name: string;
-    birth: string;
     gender: string;
-    duty: boolean;
-    license: string[];
-    record: recordType[];
+    birth: string;
+    height: number;
+    weight: number;
+    phone?: string;
+    parentsPhone?: string;
+    soccerSkills?: string;
+    advantages?: string;
+    team?: string;
+    position?: string;
+    lessonExperience?: string;
+    mainFoot?: string;
+    classInfo: ClassInfo;
+    marketingConsent: MarketingConsent;
 }
 
 interface InfoType {
-    coachInfo: CoachInfoType;
+    userInfo: UserInfoType;
 }
 
-const UserProfileCard = ({ coachInfo }: InfoType) => {
+const UserProfileCard = ({ userInfo }: InfoType) => {
+    const {
+        thumbnail,
+        name,
+        gender,
+        birth,
+        height,
+        weight,
+        phone,
+        parentsPhone,
+        soccerSkills,
+        advantages,
+        team,
+        position,
+        lessonExperience,
+        mainFoot,
+        classInfo,
+        marketingConsent,
+    } = userInfo;
     const titleStyle = 'mr-2 font-bold my-1';
+    const listStyle = 'inline-block w-56';
+    const [seeMore, setSeeMore] = useState(false);
+    const [marketingPrivacy, setMarketingPrivacy] = useState(marketingConsent.privacy);
+    const [marketingEvent, setMarketingEvent] = useState(marketingConsent.event);
+
     return (
         <div>
-            <div className="flex items-center ">
+            <div className="flex items-center">
                 <img
-                    src={coachInfo.thumbnail}
+                    src={thumbnail}
                     alt="coach_son"
                     className="mr-8 rounded-full h-36"
                 />
                 <ul>
-                    <li>
+                    <li className={listStyle}>
                         <span className={titleStyle}>코치이름:</span>
-                        <span>{coachInfo.name}</span>
+                        <span>{name}</span>
                     </li>
-                    <li>
+                    <li className={listStyle}>
                         <span className={titleStyle}>생년월일:</span>
-                        <span>{coachInfo.birth}</span>
+                        <span>{birth}</span>
                     </li>
-                    <li>
+                    <li className={listStyle}>
                         <span className={titleStyle}>성별:</span>
-                        <span>{coachInfo.gender === 'man' ? '남자' : '여자'}</span>
+                        <span>{gender === 'man' ? '남자' : '여자'}</span>
                     </li>
-                    <li>
-                        <span className={titleStyle}>군필여부:</span>
-                        <span>{coachInfo.duty ? '있음' : '없음'}</span>
+                    <li className={listStyle}>
+                        <span className={titleStyle}>키/무게:</span>
+                        <span>{height}</span>
+                        <span>{weight}</span>
                     </li>
-                    <li>
-                        <span className={titleStyle}>자격증:</span>
-                        <span>{coachInfo.license.join(', ')}</span>
+                    <li className={listStyle}>
+                        <span className={titleStyle}>휴대폰:</span>
+                        <span>{phone}</span>
+                    </li>
+                    <li className={listStyle}>
+                        <span className={titleStyle}>부모님 휴대폰:</span>
+                        <span>{parentsPhone}</span>
+                    </li>
+                    <li className={listStyle}>
+                        <span className={titleStyle}>축구 구력:</span>
+                        <span>{soccerSkills}</span>
+                    </li>
+                    <li className={listStyle}>
+                        <span className={titleStyle}>장점:</span>
+                        <span>{advantages}</span>
+                    </li>
+                    <li className={listStyle}>
+                        <span className={titleStyle}>소속:</span>
+                        <span>{team}</span>
+                    </li>
+                    <li className={listStyle}>
+                        <span className={titleStyle}>포지션:</span>
+                        <span>{position}</span>
+                    </li>
+                    <li className={listStyle}>
+                        <span className={titleStyle}>레슨 경험:</span>
+                        <span>{lessonExperience}</span>
+                    </li>
+                    <li className={listStyle}>
+                        <span className={titleStyle}>주 발(사용발):</span>
+                        <span>{mainFoot}</span>
                     </li>
                 </ul>
             </div>
             <Divider />
-            <div className="px-4">
-                <div className="mb-2 text-lg font-bold">이력</div>
-                <div>
-                    {coachInfo.record.map((el, idx) => (
-                        <div
-                            key={idx}
-                            className="px-2 my-2 bg-egPurple-superLght"
-                        >
-                            <span className="mr-4">{el.date}</span>
-                            <span className="font-bold">{el.title}</span>
+            <div>
+                <ul>
+                    <li className="flex mb-1">
+                        <div className=" w-28">레슨명</div>
+                        <div className="">{classInfo.lessonName}</div>
+                    </li>
+                    <li className="flex mb-1">
+                        <div className=" w-28">입금여부</div>
+                        <div className="">{classInfo.deposit ? 'O' : 'X'}</div>
+                    </li>
+                    <li className="flex justify-between mb-4">
+                        <div className=" w-28">회차추가</div>
+                        <div className="">
+                            {classInfo.remainingRounds}/{classInfo.paymentRound}
                         </div>
-                    ))}
-                </div>
+                        <div className="flex">
+                            <button
+                                onClick={() => setSeeMore(!seeMore)}
+                                className="px-2 py-1 border rounded-md text-egPurple-default border-egPurple-default"
+                            >
+                                내역보기
+                                {seeMore ? (
+                                    <IoIosArrowUp className="inline ml-1" />
+                                ) : (
+                                    <IoIosArrowDown className="inline ml-1" />
+                                )}
+                            </button>
+                            <BasicModal
+                                ModalBtn={
+                                    <button className="px-[10px] py-1 ml-2 border rounded-md text-egPurple-default border-egPurple-default">
+                                        +
+                                    </button>
+                                }
+                                ModalTitle={'회차추가'}
+                                ModalContents={
+                                    <div className="p-4">
+                                        <div className="flex mb-2">
+                                            <span className="mr-4 text-lg font-semibold">날짜</span>
+                                            <input
+                                                type="date"
+                                                className="w-40 border rounded-md border-egPurple-default"
+                                            />
+                                        </div>
+
+                                        <div className="flex mb-2">
+                                            <span className="mr-4 text-lg font-semibold">횟수</span>
+                                            <input
+                                                type="number"
+                                                min="0"
+                                                max="99"
+                                                className="w-40 border rounded-md border-egPurple-default"
+                                            />
+                                        </div>
+                                        <div className="flex mb-2">
+                                            <span className="mr-4 text-lg font-semibold">사유</span>
+                                            <textarea
+                                                name="opinion"
+                                                cols={30}
+                                                rows={3}
+                                                maxLength={30}
+                                                placeholder="사유는 30글자 내로 작성하세요"
+                                                className="border rounded-md border-egPurple-default"
+                                            ></textarea>
+                                        </div>
+                                    </div>
+                                }
+                                ModalFooterExitBtn={'취소'}
+                                ModalFooterActiveBtn={'제출'}
+                            />
+
+                            <BasicModal
+                                ModalBtn={
+                                    <button className="px-[10px] py-1 ml-1 border rounded-md text-egPurple-default border-egPurple-default">
+                                        -
+                                    </button>
+                                }
+                                ModalTitle={'회차차감'}
+                                ModalContents={
+                                    <div className="p-4">
+                                        <div className="flex mb-2">
+                                            <span className="mr-4 text-lg font-semibold">날짜</span>
+                                            <input
+                                                type="date"
+                                                className="w-40 border rounded-md border-egPurple-default"
+                                            />
+                                        </div>
+
+                                        <div className="flex mb-2">
+                                            <span className="mr-4 text-lg font-semibold">횟수</span>
+                                            <input
+                                                type="number"
+                                                min="-99"
+                                                max="0"
+                                                className="w-40 border rounded-md border-egPurple-default"
+                                            />
+                                        </div>
+                                        <div className="flex mb-2">
+                                            <span className="mr-4 text-lg font-semibold">사유</span>
+                                            <textarea
+                                                name="opinion"
+                                                cols={30}
+                                                rows={3}
+                                                maxLength={30}
+                                                placeholder="사유는 30글자 내로 작성하세요"
+                                                className="border rounded-md border-egPurple-default"
+                                            ></textarea>
+                                        </div>
+                                    </div>
+                                }
+                                ModalFooterExitBtn={'취소'}
+                                ModalFooterActiveBtn={'제출'}
+                            />
+                        </div>
+                    </li>
+                    {seeMore &&
+                        classInfo.reasonList.map((el) => (
+                            <li className="flex mb-2 border-b border-egPurple-light">
+                                <div className="w-36"></div>
+                                <div className="flex w-full">
+                                    <div className="w-1/3">{el.count}</div>
+                                    <div className="w-1/3">{el.reson}</div>
+                                    <div className="w-1/3">{el.date}</div>
+                                </div>
+                            </li>
+                        ))}
+                    <li className="flex mb-1">
+                        <div className="mt-[9px] w-28">마케팅 동의</div>
+                        <div
+                            onClick={() => setMarketingPrivacy(!marketingPrivacy)}
+                            className="flex items-center justify-center"
+                        >
+                            <span>개인정보 수집 및 이용 동의</span>
+                            <EgCheckBox checked={marketingPrivacy} />
+                        </div>
+                        <div
+                            onClick={() => setMarketingEvent(!marketingEvent)}
+                            className="flex items-center justify-center"
+                        >
+                            <span>소식 수신 및 이벤트 참여</span>
+                            <EgCheckBox checked={marketingEvent} />
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
     );

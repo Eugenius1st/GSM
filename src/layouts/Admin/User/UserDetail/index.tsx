@@ -3,26 +3,53 @@ import MemoCard from 'components/Cards/MemoCard';
 // Common
 import Divider from 'components/Common/Divider';
 // images
-import coach_son from 'assets/coach/coach_son.jpeg';
-// Admin Coach Components
-import CoachProfileCard from 'layouts/Admin/Coach/Components/CoachProfileCard';
+import user1 from 'assets/user/user1.png';
+// Admin User Components
+import UserProfileCard from 'layouts/Admin/User/Components/UserProfileCard';
 
 const UserDetail = () => {
-    const coachInfo = {
-        thumbnail: coach_son,
+    const userInfo = {
+        thumbnail: user1,
         name: '손흥민',
-        birth: '1998-08-25',
         gender: 'man',
-        duty: false,
-        license: ['자격증1', '자격증2', '자격증3'],
-        record: [
-            { date: 2001, title: '프로선수출신' },
-            { date: 1990, title: '명문고' },
-            { date: 1995, title: '명문중' },
-        ],
+        birth: '990101-1******',
+        height: 60,
+        weight: 170,
+        phone: '010-1234-1234',
+        parentsPhone: '010-9876-9876',
+        soccerSkills: '1년 미만',
+        advantages: '장점',
+        team: '갤로핑FC',
+        position: '미드필더',
+        lessonExperience: '',
+        mainFoot: '왼발',
+        classInfo: {
+            lessonName: '엘리트반',
+            deposit: true,
+            remainingRounds: 8,
+            paymentRound: 10,
+            reasonList: [
+                { count: '+1', date: '2024-03-11', reson: '컴플레인' },
+                { count: '-1', date: '2024-03-18', reson: '당일불참 처리' },
+            ],
+        },
+        marketingConsent: {
+            privacy: true,
+            event: false,
+        },
     };
-    const coachMemo = {
-        salary: '3000 만원',
+    const userMemo = {
+        feedback: [
+            {
+                date: '2024-03-07',
+                content: '왼발 자세 보완 필요',
+            },
+            { date: '2024-03-07', content: '왼발 자세 보완 필요' },
+            { date: '2024-03-07', content: '왼발 자세 보완 필요' },
+            { date: '2024-03-07', content: '왼발 자세 보완 필요' },
+            { date: '2024-03-05', content: '드리블 훌륭' },
+            { date: '2024-03-04', content: '드리블 매우 훌륭' },
+        ],
         significant: [
             {
                 date: '2024-03-07',
@@ -38,13 +65,13 @@ const UserDetail = () => {
     };
     return (
         <div className="eg-admin-wrapper">
-            <div className="eg-title">코치관리</div>
+            <div className="eg-title">회원관리</div>
             <div className="text-sm text-right">Edit</div>
-            <CoachProfileCard coachInfo={coachInfo} />
+            <UserProfileCard userInfo={userInfo} />
             <Divider />
             <MemoCard
-                tab={['임금', '특이사항']}
-                memo={coachMemo}
+                tab={['피드백', '특이사항']}
+                memo={userMemo}
             />
         </div>
     );
