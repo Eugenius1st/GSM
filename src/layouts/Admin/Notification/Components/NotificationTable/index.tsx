@@ -1,3 +1,4 @@
+// Material UI
 import * as React from 'react';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -17,122 +18,164 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { IoFilterSharp } from 'react-icons/io5';
 import { visuallyHidden } from '@mui/utils';
-
-// Common
-import SearchBar from 'components/Common/SearchBar';
-
-//hooks
-import { Link } from 'react-router-dom';
-
-// images
-import user1 from 'assets/user/user1.jpg';
-import user2 from 'assets/user/user2.png';
-import user3 from 'assets/user/user3.jpeg';
-import user4 from 'assets/user/user4.png';
-
 // Buttons
-import WhiteBtn from 'components/Buttons/WhiteBtn';
 import PurpleBtn from 'components/Buttons/PurpleBtn';
-
+// Modals
+import AlarmModal from 'components/Modals/AlarmModal';
 // colors
 import colors from 'assets/colors/palette';
 // icons
-import { RiUserForbidFill } from 'react-icons/ri';
-
+import { FaBell } from 'react-icons/fa';
 interface Data {
     id: number;
-    profile: string;
+    lesson: string;
     name: string;
-    age: number;
-    team?: string;
+    expiration: number;
+    remainingRounds: number | '0';
+    paymentRound: number | '0';
+    deposit: number;
 }
 
-const rows = [
+interface InitialData {
+    id: number;
+    lesson: string;
+    name: string;
+    expiration: number;
+    remainingRounds: number | '0';
+    paymentRound: number | '0';
+    deposit: boolean;
+}
+
+const initialData: InitialData[] = [
     {
         id: 1,
-        profile: user1,
-        name: '안유진',
-        age: 27,
-        team: '전의초',
+        name: '손흥민',
+        lesson: '엘리트',
+        expiration: 7,
+        remainingRounds: 5,
+        paymentRound: 10,
+        deposit: false,
     },
     {
         id: 2,
-        profile: user3,
-        name: '손상훈',
-        age: 24,
-        team: '갤로핑FC',
+        name: '김민재',
+        lesson: '엘리트',
+        expiration: 5,
+        remainingRounds: 5,
+        paymentRound: 10,
+        deposit: false,
     },
     {
         id: 3,
-        profile: user4,
-        name: '최보미',
-        age: 28,
-        team: '효성초',
+        name: '홍길동',
+        lesson: '엘리트',
+        expiration: 3,
+        remainingRounds: 5,
+        paymentRound: 10,
+        deposit: true,
     },
     {
         id: 4,
-        profile: user1,
-        name: '안유진',
-        age: 27,
-        team: '전의중',
+        name: '손흥민',
+        lesson: '엘리트',
+        expiration: 7,
+        remainingRounds: 5,
+        paymentRound: 10,
+        deposit: true,
     },
     {
         id: 5,
-        profile: user3,
-        name: '손상훈',
-        age: 24,
-        team: '갤로핑FC',
+        name: '김민재',
+        lesson: '엘리트',
+        expiration: 5,
+        remainingRounds: 5,
+        paymentRound: 10,
+        deposit: true,
     },
     {
         id: 6,
-        profile: user4,
-        name: '최보미',
-        age: 28,
-        team: '갤로핑FC',
+        name: '홍길동',
+        lesson: '엘리트',
+        expiration: 3,
+        remainingRounds: 5,
+        paymentRound: 10,
+        deposit: true,
     },
     {
         id: 7,
-        profile: user1,
-        name: '안유진',
-        age: 27,
-        team: '갤로핑FC',
+        name: '손흥민',
+        lesson: '엘리트',
+        expiration: 7,
+        remainingRounds: 5,
+        paymentRound: 10,
+        deposit: true,
     },
     {
         id: 8,
-        profile: user2,
-        name: '손상훈',
-        age: 24,
-        team: '갤로핑FC',
+        name: '김민재',
+        lesson: '엘리트',
+        expiration: 5,
+        remainingRounds: 5,
+        paymentRound: 10,
+        deposit: true,
     },
     {
         id: 9,
-        profile: user3,
-        name: '최보미',
-        age: 28,
-        team: '갤로핑FC',
+        name: '홍길동',
+        lesson: '엘리트',
+        expiration: 3,
+        remainingRounds: 5,
+        paymentRound: 10,
+        deposit: false,
     },
     {
         id: 10,
-        profile: user1,
-        name: '안유진',
-        age: 27,
-        team: '갤로핑FC',
+        name: '손흥민',
+        lesson: '기본기·어린이',
+        expiration: 7,
+        remainingRounds: 5,
+        paymentRound: 10,
+        deposit: false,
     },
     {
         id: 11,
-        profile: user2,
-        name: '손상훈',
-        age: 24,
-        team: '갤로핑FC',
+        name: '김민재',
+        lesson: '기본기·어린이',
+        expiration: 5,
+        remainingRounds: 5,
+        paymentRound: 10,
+        deposit: false,
     },
     {
         id: 12,
-        profile: user3,
-        name: '최보미',
-        age: 28,
-        team: '갤로핑FC',
+        name: '홍길동',
+        lesson: '기본기·어린이',
+        expiration: 3,
+        remainingRounds: 5,
+        paymentRound: 10,
+        deposit: false,
     },
 ];
+
+function DataProcess(DataList: InitialData[]) {
+    const NewData: Data[] = []; // NewData 배열의 타입을 Data로 선언
+    DataList.forEach((el) => {
+        // forEach로 변경
+        NewData.push({
+            // push 메서드 사용
+            id: el.id,
+            name: el.name,
+            lesson: el.lesson,
+            remainingRounds: el.remainingRounds,
+            paymentRound: el.paymentRound,
+            expiration: el.expiration,
+            deposit: el.deposit ? 1 : 0,
+        });
+    });
+    return NewData;
+}
+
+const rows = DataProcess(initialData);
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
@@ -179,24 +222,29 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
     {
-        id: 'profile',
-        numeric: false,
-        label: 'profile',
-    },
-    {
         id: 'name',
         numeric: false,
-        label: 'Name',
+        label: '이름',
     },
     {
-        id: 'team',
+        id: 'lesson',
         numeric: false,
-        label: 'Team',
+        label: '수업명',
     },
     {
-        id: 'age',
+        id: 'deposit',
         numeric: false,
-        label: 'Age',
+        label: '입금여부',
+    },
+    {
+        id: 'remainingRounds',
+        numeric: false,
+        label: '잔여회차',
+    },
+    {
+        id: 'expiration',
+        numeric: false,
+        label: '만료',
     },
 ];
 
@@ -210,14 +258,19 @@ interface EnhancedTableProps {
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-    const { egPurple } = colors;
+    const { egPurple, egBlack } = colors;
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
     const createSortHandler = (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
     };
 
     return (
-        <TableHead sx={{ '.MuiTableCell-root': { background: egPurple.superLight } }}>
+        <TableHead
+            sx={{
+                '.MuiTableCell-root': { background: egPurple.superLight },
+                '.MuiTableCell-head': { border: `1px solid ${egBlack.light}` },
+            }}
+        >
             <TableRow>
                 <TableCell
                     align="left"
@@ -235,8 +288,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                 </TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
-                        align="left"
-                        sx={{ paddingX: 0, width: '1rem' }}
+                        sx={{ width: '5rem', paddingX: 0 }}
+                        align="center"
                         key={headCell.id}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
@@ -258,10 +311,10 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                     </TableCell>
                 ))}
                 <TableCell
-                    sx={{ paddingX: 0, width: '1rem' }}
-                    align="left"
+                    sx={{ width: '5rem', paddingX: 0 }}
+                    align="center"
                 >
-                    정보 보기
+                    알림 전송
                 </TableCell>
             </TableRow>
         </TableHead>
@@ -283,8 +336,6 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                 ...(numSelected > 0 && {
                     bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
                 }),
-                display: 'flex',
-                justifyContent: 'space-between',
             }}
         >
             {numSelected > 0 ? (
@@ -298,7 +349,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                 </Typography>
             ) : (
                 <Typography
-                    sx={{ fontWeight: 'bold' }}
+                    sx={{ flex: '1 1 100%', fontWeight: 'bold' }}
                     variant="subtitle1"
                     id="tableTitle"
                     component="div"
@@ -306,35 +357,29 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                     회원정보
                 </Typography>
             )}
-
             {numSelected > 0 ? (
-                <Tooltip title="Delete">
-                    <IconButton>
-                        <span className="text-base text-egPurple-default">비활성화</span>
-                        <RiUserForbidFill className="w-5 h-5 text-egPurple-default" />
+                <Tooltip title="Add">
+                    <IconButton sx={{ fontSize: '0.8rem' }}>
+                        <PurpleBtn content="선택 알림 전송" />
                     </IconButton>
                 </Tooltip>
             ) : (
-                <div className="flex">
-                    <SearchBar />
-
-                    <Tooltip title="Filter list">
-                        <IconButton>
-                            <IoFilterSharp />
-                        </IconButton>
-                    </Tooltip>
-                </div>
+                <Tooltip title="Filter list">
+                    <IconButton>
+                        <IoFilterSharp />
+                    </IconButton>
+                </Tooltip>
             )}
         </Toolbar>
     );
 }
 export default function EnhancedTable() {
     const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<keyof Data>('team');
+    const [orderBy, setOrderBy] = React.useState<keyof Data>('expiration');
     const [selected, setSelected] = React.useState<readonly number[]>([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const { egPurple } = colors;
+    const { egPurple, egBlack } = colors;
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -423,7 +468,10 @@ export default function EnhancedTable() {
                                         tabIndex={-1}
                                         key={row.id}
                                         selected={isItemSelected}
-                                        sx={{ cursor: 'pointer' }}
+                                        sx={{
+                                            '.MuiTableCell-body': { border: `1px solid ${egBlack.light}` },
+                                            cursor: 'pointer',
+                                        }}
                                     >
                                         <TableCell padding="checkbox">
                                             <Checkbox
@@ -435,19 +483,8 @@ export default function EnhancedTable() {
                                             />
                                         </TableCell>
                                         <TableCell
+                                            sx={{ paddingX: 0 }}
                                             align="center"
-                                            sx={{ paddingX: 0, width: '1rem' }}
-                                        >
-                                            <img
-                                                className="object-cover rounded-full w-14 h-14"
-                                                src={row.profile}
-                                                alt={row.name}
-                                            />
-                                        </TableCell>
-
-                                        <TableCell
-                                            align="left"
-                                            sx={{ paddingX: 0, width: '1rem' }}
                                             component="th"
                                             id={labelId}
                                             scope="row"
@@ -455,27 +492,35 @@ export default function EnhancedTable() {
                                             {row.name}
                                         </TableCell>
                                         <TableCell
-                                            align="left"
-                                            sx={{ paddingX: 0, width: '1rem' }}
+                                            sx={{ paddingX: 0 }}
+                                            align="center"
                                         >
-                                            {row.team}
+                                            {row.lesson}
                                         </TableCell>
                                         <TableCell
-                                            align="left"
-                                            sx={{ paddingX: 0, width: '1rem' }}
+                                            align="center"
+                                            sx={{ paddingX: 0 }}
                                         >
-                                            {row.age} 세
+                                            {row.deposit ? 'O' : 'X'}
                                         </TableCell>
                                         <TableCell
-                                            sx={{ paddingX: 0, marginX: 0 }}
-                                            align="left"
+                                            align="center"
+                                            sx={{ paddingX: 0 }}
                                         >
-                                            <Link to={`/admin/user/${row.id}`}>
-                                                <WhiteBtn
-                                                    content="정보보기"
-                                                    width="18"
-                                                />
-                                            </Link>
+                                            {row.remainingRounds}/{row.paymentRound}
+                                        </TableCell>
+                                        <TableCell
+                                            align="center"
+                                            sx={{ paddingX: 0 }}
+                                        >
+                                            D-{row.expiration}
+                                        </TableCell>
+
+                                        <TableCell
+                                            sx={{ paddingX: 0 }}
+                                            align="center"
+                                        >
+                                            <AlarmModal />
                                         </TableCell>
                                     </TableRow>
                                 );
@@ -503,6 +548,9 @@ export default function EnhancedTable() {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
+            <div className="text-end">
+                <PurpleBtn content="선택 알림 전송" />
+            </div>
         </Box>
     );
 }

@@ -105,10 +105,6 @@ const Home = () => {
                 ))}
             </div>
             <Divider />
-            <TitleBar
-                title="알림 및 안내"
-                navigationURL="/admin/notification"
-            />
         </div>
     );
 };

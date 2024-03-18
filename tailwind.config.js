@@ -6,7 +6,7 @@ module.exports = {
             colors: {
                 egPurple: {
                     default: '#6B00FF',
-                    semilLght: '#6B00FF75',
+                    semiLght: '#6B00FF75',
                     light: '#E3DAF2',
                     superLght: '#F6F0FF',
                 },
@@ -19,7 +19,7 @@ module.exports = {
                 },
                 egBlack: {
                     default: '#252525',
-                    semilLght: '#505050',
+                    semiLght: '#505050',
                     light: '#B5B5B5',
                     superLght: '#E1E1E1',
                 },

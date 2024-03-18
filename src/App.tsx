@@ -8,6 +8,7 @@ import AdminUser from 'layouts/Admin/User';
 import AdminUserDetail from 'layouts/Admin/User/UserDetail';
 import AdminClass from 'layouts/Admin/Class';
 import AdminClassDetail from 'layouts/Admin/Class/ClassDetail';
+import AdminNotifiaction from 'layouts/Admin/Notification';
 // hooks
 import { Route, Routes } from 'react-router-dom';
 
@@ -49,6 +50,10 @@ const App = () => {
             <Route
                 path="/admin/class/:calssId"
                 element={<AdminClassDetail />}
+            />
+            <Route
+                path="/admin/notification"
+                element={<AdminNotifiaction />}
             />
         </Routes>
     );

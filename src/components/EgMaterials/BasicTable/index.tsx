@@ -33,7 +33,12 @@ const BasicTable = () => {
                         <TableCell align="right">Protein&nbsp;(g)</TableCell>
                     </TableRow>
                 </TableHead>
-                <TableBody sx={{ '.MuiTableRow-hover:hover': { background: egPurple.superLight } }}>
+                <TableBody
+                    sx={{
+                        '.MuiTableRow-hover:hover': { background: `${egPurple.superLight} !important` },
+                        '.Mui-selected': { background: `${egPurple.superLight} !important` },
+                    }}
+                >
                     {rows.map((row) => (
                         <TableRow
                             key={row.name}

@@ -58,7 +58,12 @@ const EgPageTable = ({ columns, rows }: EgPageTableType) => {
                             ))}
                         </TableRow>
                     </TableHead>
-                    <TableBody sx={{ '.MuiTableRow-hover:hover': { background: egPurple.superLight } }}>
+                    <TableBody
+                        sx={{
+                            '.MuiTableRow-hover:hover': { background: `${egPurple.superLight} !important` },
+                            '.Mui-selected': { background: `${egPurple.superLight} !important` },
+                        }}
+                    >
                         {rows
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row: any, idx: number) => {

@@ -5,6 +5,8 @@ import ClassCard from 'layouts/Admin/Class/Components/ClassCard';
 // images
 import class_adult_man from 'assets/class/class_adult_man.jpeg';
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
+// Modals
+import ClassAddModal from 'components/Modals/ClassAddModal';
 
 const Class = () => {
     const location = useLocation().pathname;
@@ -48,8 +50,9 @@ const Class = () => {
     ];
     return (
         <div className="eg-admin-wrapper">
-            <div className="flex items-center justify-start eg-title">
-                <span>수업관리</span>
+            <div className="flex items-center justify-between">
+                <div className="eg-title">수업관리</div>
+                <ClassAddModal />
             </div>
             {classInfo.map((el, idx) => (
                 <Link

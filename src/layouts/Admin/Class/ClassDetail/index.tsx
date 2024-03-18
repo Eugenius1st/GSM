@@ -4,7 +4,7 @@ import ViewUserCard from 'layouts/Admin/Class/Components/ViewUserCard';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 // Cards
 import ClassCard from 'layouts/Admin/Class/Components/ClassCard';
-// Button
+// Buttons
 import PurpleBtn from 'components/Buttons/PurpleBtn';
 // images
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
@@ -12,10 +12,12 @@ import user1 from 'assets/user/user1.jpg';
 import user2 from 'assets/user/user2.png';
 import user3 from 'assets/user/user3.jpeg';
 import user4 from 'assets/user/user4.png';
-
 // Commons
 import Divider from 'components/Common/Divider';
 import WhiteBtn from 'components/Buttons/WhiteBtn';
+// Modals
+import DeleteModal from 'components/Modals/DeleteModal';
+import EditModal from 'components/Modals/EditModal';
 
 const ClassDetail = () => {
     const classInfo = {
@@ -48,10 +50,16 @@ const ClassDetail = () => {
 
     return (
         <div className="eg-admin-wrapper">
-            <div className="flex items-center justify-start eg-title">
-                <span>수업관리</span>
-                <MdOutlineArrowForwardIos className="w-4 h-4 mx-1" />
-                <span> 수업정보</span>
+            <div className="flex items-center justify-between eg-title">
+                <div className="flex items-center">
+                    <span>수업관리</span>
+                    <MdOutlineArrowForwardIos className="w-4 h-4 mx-1" />
+                    <span> 수업정보</span>
+                </div>
+                <div className="flex">
+                    <EditModal />
+                    <DeleteModal />
+                </div>
             </div>
             <div>
                 <ClassCard classInfo={classInfo} />

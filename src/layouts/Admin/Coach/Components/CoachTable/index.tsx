@@ -34,6 +34,9 @@ import PurpleBtn from 'components/Buttons/PurpleBtn';
 // colors
 import colors from 'assets/colors/palette';
 
+// icons
+import { RiUserForbidFill } from 'react-icons/ri';
+
 interface Data {
     id: number;
     profile: string;
@@ -298,17 +301,18 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
             ) : (
                 <Typography
                     sx={{ flex: '1 1 100%', fontWeight: 'bold' }}
-                    variant="h6"
+                    variant="subtitle1"
                     id="tableTitle"
                     component="div"
                 >
-                    코치관리
+                    코치 정보
                 </Typography>
             )}
             {numSelected > 0 ? (
                 <Tooltip title="Delete">
                     <IconButton>
-                        <RiDeleteBin6Fill />
+                        <span className="text-base text-egPurple-default">비활성화</span>
+                        <RiUserForbidFill className="w-5 h-5 text-egPurple-default" />
                     </IconButton>
                 </Tooltip>
             ) : (
@@ -397,7 +401,12 @@ export default function EnhancedTable() {
                             onRequestSort={handleRequestSort}
                             rowCount={rows.length}
                         />
-                        <TableBody sx={{ '.MuiTableRow-hover:hover': { background: egPurple.superLight } }}>
+                        <TableBody
+                            sx={{
+                                '.MuiTableRow-hover:hover': { background: `${egPurple.superLight} !important` },
+                                '.Mui-selected': { background: `${egPurple.superLight} !important` },
+                            }}
+                        >
                             {visibleRows.map((row, index) => {
                                 const isItemSelected = isSelected(row.id);
                                 const labelId = `enhanced-table-checkbox-${index}`;
