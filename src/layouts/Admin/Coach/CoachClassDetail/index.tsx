@@ -1,12 +1,12 @@
 // Coach Components
-import CoachViewUserCard from '../Components/CoachViewUserCard';
+import CoachViewUserCard from 'layouts/Admin/Coach/Components/CoachViewUserCard';
 // Icons
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 // Cards
-import CoachClassCard from '../Components/CoachClassCard';
+import CoachClassCard from 'layouts/Admin/Coach/Components/CoachClassCard';
 // images
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
-import user1 from 'assets/user/user1.png';
+import user1 from 'assets/user/user1.jpg';
 import user2 from 'assets/user/user2.png';
 import user3 from 'assets/user/user3.jpeg';
 import user4 from 'assets/user/user4.png';

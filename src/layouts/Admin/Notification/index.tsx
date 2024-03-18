@@ -1,7 +1,8 @@
 // Buttons
 import WhiteBtn from 'components/Buttons/WhiteBtn';
 // Eg Components
-import CoachTable from 'layouts/Admin/Coach/Components/CoachTable';
+import EgPageTable from 'components/EgMaterials/PageTable';
+import NotifiactionTable from 'layouts/Admin/Notification/Components/NotificationTable';
 // images
 import coach_son from 'assets/coach/coach_son.jpeg';
 import coach_kim from 'assets/coach/coach_kim.jpeg';
@@ -13,7 +14,7 @@ export interface ColumnType {
     minWidth?: number;
     align?: 'center' | 'left' | 'right' | 'inherit' | 'justify' | undefined;
 }
-const Coach = () => {
+const Notification = () => {
     const coachesInfoCol: ColumnType[] = [
         { id: 'id', label: 'id', minWidth: 100, align: 'left' },
         { id: 'thumnail', label: 'Profile', minWidth: 100, align: 'left' },
@@ -49,12 +50,13 @@ const Coach = () => {
             classBtn: true,
         },
     ];
+
     return (
         <div className="mb-2 eg-admin-wrapper">
-            <div className="eg-title">코치관리</div>
-            <CoachTable />
+            <div className="eg-title">알림 및 안내</div>
+            <NotifiactionTable />
         </div>
     );
 };
 
-export default Coach;
+export default Notification;

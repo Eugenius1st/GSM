@@ -6,11 +6,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+// colors
+import colors from 'assets/colors/palette';
 
 function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
     return { name, calories, fat, carbs, protein };
 }
-
+const { egPurple } = colors;
 const rows = [
     { name: '1', calories: 3, fat: 3, carbs: 3, protein: 3 },
     createData('Eclair', 262, 16.0, 24, 6.0),
@@ -31,7 +33,12 @@ const BasicTable = () => {
                         <TableCell align="right">Protein&nbsp;(g)</TableCell>
                     </TableRow>
                 </TableHead>
-                <TableBody>
+                <TableBody
+                    sx={{
+                        '.MuiTableRow-hover:hover': { background: `${egPurple.superLight} !important` },
+                        '.Mui-selected': { background: `${egPurple.superLight} !important` },
+                    }}
+                >
                     {rows.map((row) => (
                         <TableRow
                             key={row.name}

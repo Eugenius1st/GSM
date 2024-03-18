@@ -1,4 +1,4 @@
-interface CoachClassInfoType {
+interface ClassInfoType {
     id: number;
     classImage: string;
     title: string;
@@ -10,11 +10,11 @@ interface CoachClassInfoType {
     notice?: string;
 }
 
-interface ClassInfoType {
-    classInfo: CoachClassInfoType;
+interface ClasCardType {
+    classInfo: ClassInfoType;
 }
 
-const CoachClassCard = ({ classInfo }: ClassInfoType) => {
+const ClassCard = ({ classInfo }: ClasCardType) => {
     const titleStyle = 'mr-4 text-xl font-bold';
     const subTitleStyle = 'mr-4 text-base font-bold';
     const descriptionStyle = 'text-base font-base';
@@ -69,4 +69,4 @@ const CoachClassCard = ({ classInfo }: ClassInfoType) => {
     );
 };
 
-export default CoachClassCard;
+export default ClassCard;

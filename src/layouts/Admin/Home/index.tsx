@@ -11,7 +11,7 @@ import coach_kim from 'assets/coach/coach_kim.jpeg';
 import coach_hong from 'assets/coach/coach_hong.jpeg';
 import class_adult_man from 'assets/class/class_adult_man.jpeg';
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
-import user1 from 'assets/user/user1.png';
+import user1 from 'assets/user/user1.jpg';
 import user2 from 'assets/user/user2.png';
 import user3 from 'assets/user/user3.jpeg';
 import user4 from 'assets/user/user4.png';
@@ -62,7 +62,7 @@ const Home = () => {
         <div className="eg-admin-wrapper">
             <TitleBar
                 title="회원관리"
-                navigationURL="/admin/user-management"
+                navigationURL="/admin/user"
             />
             <EgPageTable
                 columns={usersInfoCol}
@@ -71,7 +71,7 @@ const Home = () => {
             <Divider />
             <TitleBar
                 title="코치관리"
-                navigationURL="/admin/coach-management"
+                navigationURL="/admin/coach"
             />
             <div className="flex justify-between">
                 {coachInfo.map((el, idx) => (
@@ -89,7 +89,7 @@ const Home = () => {
             <Divider />
             <TitleBar
                 title="수업관리"
-                navigationURL="/admin/class-management"
+                navigationURL="/admin/class"
             />
             <div className="flex justify-between">
                 {classInfo.map((el, idx) => (
@@ -105,10 +105,6 @@ const Home = () => {
                 ))}
             </div>
             <Divider />
-            <TitleBar
-                title="알림 및 안내"
-                navigationURL="/admin/notification"
-            />
         </div>
     );
 };

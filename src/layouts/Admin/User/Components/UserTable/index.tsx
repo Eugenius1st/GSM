@@ -16,16 +16,19 @@ import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { IoFilterSharp } from 'react-icons/io5';
-import { RiDeleteBin6Fill } from 'react-icons/ri';
 import { visuallyHidden } from '@mui/utils';
+
+// Common
+import SearchBar from 'components/Common/SearchBar';
 
 //hooks
 import { Link } from 'react-router-dom';
 
 // images
-import coach_son from 'assets/coach/coach_son.jpeg';
-import coach_kim from 'assets/coach/coach_kim.jpeg';
-import coach_hong from 'assets/coach/coach_hong.jpeg';
+import user1 from 'assets/user/user1.jpg';
+import user2 from 'assets/user/user2.png';
+import user3 from 'assets/user/user3.jpeg';
+import user4 from 'assets/user/user4.png';
 
 // Buttons
 import WhiteBtn from 'components/Buttons/WhiteBtn';
@@ -33,7 +36,6 @@ import PurpleBtn from 'components/Buttons/PurpleBtn';
 
 // colors
 import colors from 'assets/colors/palette';
-
 // icons
 import { RiUserForbidFill } from 'react-icons/ri';
 
@@ -41,94 +43,94 @@ interface Data {
     id: number;
     profile: string;
     name: string;
-    birth: number;
-    level: number;
+    age: number;
+    team?: string;
 }
 
 const rows = [
     {
         id: 1,
-        profile: coach_son,
-        name: '손흥민',
-        birth: 1998,
-        level: 1,
+        profile: user1,
+        name: '안유진',
+        age: 27,
+        team: '전의초',
     },
     {
         id: 2,
-        profile: coach_kim,
-        name: '김민재',
-        birth: 2000,
-        level: 2,
+        profile: user3,
+        name: '손상훈',
+        age: 24,
+        team: '갤로핑FC',
     },
     {
         id: 3,
-        profile: coach_hong,
-        name: '홍길동',
-        birth: 1978,
-        level: 3,
+        profile: user4,
+        name: '최보미',
+        age: 28,
+        team: '효성초',
     },
     {
         id: 4,
-        profile: coach_son,
-        name: '손흥민',
-        birth: 1998,
-        level: 4,
+        profile: user1,
+        name: '안유진',
+        age: 27,
+        team: '전의중',
     },
     {
         id: 5,
-        profile: coach_kim,
-        name: '김민재',
-        birth: 2000,
-        level: 5,
+        profile: user3,
+        name: '손상훈',
+        age: 24,
+        team: '갤로핑FC',
     },
     {
         id: 6,
-        profile: coach_hong,
-        name: '홍길동',
-        birth: 1978,
-        level: 6,
+        profile: user4,
+        name: '최보미',
+        age: 28,
+        team: '갤로핑FC',
     },
     {
         id: 7,
-        profile: coach_son,
-        name: '손흥민',
-        birth: 1998,
-        level: 1,
+        profile: user1,
+        name: '안유진',
+        age: 27,
+        team: '갤로핑FC',
     },
     {
         id: 8,
-        profile: coach_kim,
-        name: '김민재',
-        birth: 2000,
-        level: 7,
+        profile: user2,
+        name: '손상훈',
+        age: 24,
+        team: '갤로핑FC',
     },
     {
         id: 9,
-        profile: coach_hong,
-        name: '홍길동',
-        birth: 1978,
-        level: 1,
+        profile: user3,
+        name: '최보미',
+        age: 28,
+        team: '갤로핑FC',
     },
     {
         id: 10,
-        profile: coach_son,
-        name: '손흥민',
-        birth: 1998,
-        level: 1,
+        profile: user1,
+        name: '안유진',
+        age: 27,
+        team: '갤로핑FC',
     },
     {
         id: 11,
-        profile: coach_kim,
-        name: '김민재',
-        birth: 2000,
-        level: 1,
+        profile: user2,
+        name: '손상훈',
+        age: 24,
+        team: '갤로핑FC',
     },
     {
         id: 12,
-        profile: coach_hong,
-        name: '홍길동',
-        birth: 1978,
-        level: 1,
+        profile: user3,
+        name: '최보미',
+        age: 28,
+        team: '갤로핑FC',
     },
 ];
 
@@ -187,14 +189,14 @@ const headCells: readonly HeadCell[] = [
         label: 'Name',
     },
     {
-        id: 'level',
+        id: 'team',
         numeric: false,
-        label: 'Level',
+        label: 'Team',
     },
     {
-        id: 'birth',
+        id: 'age',
         numeric: false,
-        label: 'Birth',
+        label: 'Age',
     },
 ];
 
@@ -218,7 +220,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         <TableHead sx={{ '.MuiTableCell-root': { background: egPurple.superLight } }}>
             <TableRow>
                 <TableCell
-                    align="center"
+                    align="left"
                     padding="checkbox"
                 >
                     <Checkbox
@@ -233,9 +235,9 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                 </TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
-                        sx={{ paddingX: 0 }}
-                        key={headCell.id}
                         align="left"
+                        sx={{ paddingX: 0, width: '1rem' }}
+                        key={headCell.id}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         <TableSortLabel
@@ -256,16 +258,10 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                     </TableCell>
                 ))}
                 <TableCell
-                    sx={{ paddingX: 0 }}
-                    align="center"
+                    sx={{ paddingX: 0, width: '1rem' }}
+                    align="left"
                 >
                     정보 보기
-                </TableCell>
-                <TableCell
-                    sx={{ paddingX: 0 }}
-                    align="center"
-                >
-                    수업 보기
                 </TableCell>
             </TableRow>
         </TableHead>
@@ -287,6 +283,8 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                 ...(numSelected > 0 && {
                     bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
                 }),
+                display: 'flex',
+                justifyContent: 'space-between',
             }}
         >
             {numSelected > 0 ? (
@@ -300,14 +298,15 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                 </Typography>
             ) : (
                 <Typography
-                    sx={{ flex: '1 1 100%', fontWeight: 'bold' }}
+                    sx={{ fontWeight: 'bold' }}
                     variant="subtitle1"
                     id="tableTitle"
                     component="div"
                 >
-                    코치 정보
+                    회원정보
                 </Typography>
             )}
+
             {numSelected > 0 ? (
                 <Tooltip title="Delete">
                     <IconButton>
@@ -316,18 +315,22 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                     </IconButton>
                 </Tooltip>
             ) : (
-                <Tooltip title="Filter list">
-                    <IconButton>
-                        <IoFilterSharp />
-                    </IconButton>
-                </Tooltip>
+                <div className="flex">
+                    <SearchBar />
+
+                    <Tooltip title="Filter list">
+                        <IconButton>
+                            <IoFilterSharp />
+                        </IconButton>
+                    </Tooltip>
+                </div>
             )}
         </Toolbar>
     );
 }
 export default function EnhancedTable() {
     const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<keyof Data>('level');
+    const [orderBy, setOrderBy] = React.useState<keyof Data>('team');
     const [selected, setSelected] = React.useState<readonly number[]>([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -432,8 +435,8 @@ export default function EnhancedTable() {
                                             />
                                         </TableCell>
                                         <TableCell
-                                            sx={{ paddingX: 0 }}
                                             align="center"
+                                            sx={{ paddingX: 0, width: '1rem' }}
                                         >
                                             <img
                                                 className="object-cover rounded-full w-14 h-14"
@@ -443,33 +446,33 @@ export default function EnhancedTable() {
                                         </TableCell>
 
                                         <TableCell
-                                            sx={{ paddingX: 0 }}
+                                            align="left"
+                                            sx={{ paddingX: 0, width: '1rem' }}
                                             component="th"
                                             id={labelId}
                                             scope="row"
                                         >
                                             {row.name}
                                         </TableCell>
-                                        <TableCell sx={{ paddingX: 0 }}>{row.level} lv</TableCell>
-                                        <TableCell sx={{ paddingX: 0 }}>{row.birth}</TableCell>
                                         <TableCell
-                                            sx={{ paddingX: 0 }}
-                                            align="center"
+                                            align="left"
+                                            sx={{ paddingX: 0, width: '1rem' }}
                                         >
-                                            <Link to={`/admin/coach/${row.id}`}>
-                                                <WhiteBtn
-                                                    content="정보보기"
-                                                    width="18"
-                                                />
-                                            </Link>
+                                            {row.team}
                                         </TableCell>
                                         <TableCell
-                                            sx={{ paddingX: 0 }}
-                                            align="center"
+                                            align="left"
+                                            sx={{ paddingX: 0, width: '1rem' }}
                                         >
-                                            <Link to={`/admin/coach/coach-class/${row.id}`}>
+                                            {row.age} 세
+                                        </TableCell>
+                                        <TableCell
+                                            sx={{ paddingX: 0, marginX: 0 }}
+                                            align="left"
+                                        >
+                                            <Link to={`/admin/user/${row.id}`}>
                                                 <WhiteBtn
-                                                    content="수업보기"
+                                                    content="정보보기"
                                                     width="18"
                                                 />
                                             </Link>
