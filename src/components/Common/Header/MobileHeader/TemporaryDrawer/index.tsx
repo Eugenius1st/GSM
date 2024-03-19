@@ -12,8 +12,13 @@ import ListItemText from '@mui/material/ListItemText';
 import { Link } from 'react-router-dom';
 // icons
 import { FiMenu } from 'react-icons/fi';
-import { FaInbox } from 'react-icons/fa';
-import { IoMdMail } from 'react-icons/io';
+import { FaBook } from 'react-icons/fa6';
+import { IoHomeSharp } from 'react-icons/io5';
+import { MdOutlineSportsSoccer } from 'react-icons/md';
+import { FaUserAlt } from 'react-icons/fa';
+import { GoBellFill } from 'react-icons/go';
+// images
+import galloping_purple_logo from 'assets/logo/galloping_purple_logo.jpg';
 
 export default function TemporaryDrawer() {
     const [open, setOpen] = React.useState(false);
@@ -22,11 +27,11 @@ export default function TemporaryDrawer() {
         setOpen(newOpen);
     };
     const adminListItems = [
-        { title: 'HOME', link: '/admin' },
-        { title: '회원관리', link: '/admin/user' },
-        { title: '코치관리', link: '/admin/coach' },
-        { title: '수업관리', link: '/admin/class' },
-        { title: '알림 및 안내', link: '/admin/notification' },
+        { title: 'HOME', link: '/admin', icon: <IoHomeSharp /> },
+        { title: '회원관리', link: '/admin/user', icon: <FaUserAlt /> },
+        { title: '코치관리', link: '/admin/coach', icon: <MdOutlineSportsSoccer /> },
+        { title: '수업관리', link: '/admin/class', icon: <FaBook /> },
+        { title: '알림 및 안내', link: '/admin/notification', icon: <GoBellFill /> },
     ];
 
     const DrawerList = (
@@ -36,14 +41,28 @@ export default function TemporaryDrawer() {
             onClick={toggleDrawer(false)}
         >
             <List>
+                <div className="flex items-center p-2">
+                    <img
+                        src={galloping_purple_logo}
+                        alt="galloping_purple_logo"
+                        className="w-10 h-10 rounded-full"
+                    />
+                    <div className="ml-6 text-2xl font-bold text-egPurple-default">GSM</div>
+                </div>
+            </List>
+            <Divider />
+            <List>
                 {adminListItems.map((el, idx) => (
                     <ListItem
                         key={idx}
                         disablePadding
                     >
-                        <Link to={el.link}>
+                        <Link
+                            to={el.link}
+                            className="w-full py-2"
+                        >
                             <ListItemButton>
-                                <ListItemIcon>{idx % 2 === 0 ? <FaInbox /> : <IoMdMail />}</ListItemIcon>
+                                <ListItemIcon>{el.icon}</ListItemIcon>
                                 <ListItemText primary={el.title} />
                             </ListItemButton>
                         </Link>
@@ -51,19 +70,6 @@ export default function TemporaryDrawer() {
                 ))}
             </List>
             <Divider />
-            <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                    <ListItem
-                        key={text}
-                        disablePadding
-                    >
-                        <ListItemButton>
-                            <ListItemIcon>{index % 2 === 0 ? <FaInbox /> : <IoMdMail />}</ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
         </Box>
     );
 
