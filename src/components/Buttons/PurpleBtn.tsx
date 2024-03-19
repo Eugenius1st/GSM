@@ -1,13 +1,14 @@
 interface PurpleBtnType {
     width?: string | 'fit';
     content: string;
+    style?: string;
     func?: () => void;
 }
-const PurpleBtn = ({ content, width, func }: PurpleBtnType) => {
+const PurpleBtn = ({ content, width, style, func }: PurpleBtnType) => {
     return (
         <button
             onClick={func}
-            className={`px-4 py-2 m-1 rounded-md bg-egPurple-default text-egWhite-default w-${width}`}
+            className={`${style} px-4 py-2 m-1 rounded-md bg-egPurple-default text-egWhite-default w-${width}`}
         >
             {content}
         </button>

@@ -11,18 +11,16 @@ const EgCheckBox = ({ checked }: CheckedType) => {
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
     const { egPurple } = colors;
     return (
-        <div>
-            <Checkbox
-                {...label}
-                checked={checked}
-                sx={{
-                    // color: egPurple.default,
-                    '&.Mui-checked': {
-                        color: egPurple.default,
-                    },
-                }}
-            />
-        </div>
+        <Checkbox
+            {...label}
+            checked={checked}
+            sx={{
+                // color: egPurple.default,
+                '&.Mui-checked': {
+                    color: egPurple.default,
+                },
+            }}
+        />
     );
 };
 export default EgCheckBox;

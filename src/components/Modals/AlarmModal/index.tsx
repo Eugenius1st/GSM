@@ -19,7 +19,7 @@ const AlarmModal = () => {
     const [tab, setTab] = useState(tabList[0]);
     const [isShow, setIsShow] = useState(false);
     const activeTab = 'text-egWhite-default bg-egPurple-default font-base';
-    const inactiveTab = 'text-egPurple-default bg-egGrey-default font-base hover:bg-egPurple-light';
+    const inactiveTab = 'text-egPurple-default bg-egGrey-semiLight font-base hover:bg-egPurple-light';
     return (
         <div onClick={(e) => e.stopPropagation()}>
             <WhiteBtn

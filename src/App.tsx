@@ -1,4 +1,4 @@
-// layouts
+// layouts Admin
 import AdminHome from 'layouts/Admin/Home';
 import AdminCoach from 'layouts/Admin/Coach';
 import AdminCoachDetail from 'layouts/Admin/Coach/CoachDetail';
@@ -9,6 +9,9 @@ import AdminUserDetail from 'layouts/Admin/User/UserDetail';
 import AdminClass from 'layouts/Admin/Class';
 import AdminClassDetail from 'layouts/Admin/Class/ClassDetail';
 import AdminNotifiaction from 'layouts/Admin/Notification';
+// layouts Login
+import Login from 'layouts/Login';
+import Logout from 'layouts/Logout';
 // hooks
 import { Route, Routes } from 'react-router-dom';
 
@@ -54,6 +57,14 @@ const App = () => {
             <Route
                 path="/admin/notification"
                 element={<AdminNotifiaction />}
+            />
+            <Route
+                path="/logout"
+                element={<Logout />}
+            />
+            <Route
+                path="/"
+                element={<Login />}
             />
         </Routes>
     );
