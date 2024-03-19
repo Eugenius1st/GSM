@@ -1,8 +1,9 @@
+// hooks
+import * as React from 'react';
+import { useState } from 'react';
 // Buttons
 import PurpleBtn from 'components/Buttons/PurpleBtn';
 import WhiteBtn from 'components/Buttons/WhiteBtn';
-// hooks
-import { useState } from 'react';
 // icons
 import { CgClose } from 'react-icons/cg';
 
@@ -20,31 +21,27 @@ const AlarmModal = () => {
     const activeTab = 'text-egWhite-default bg-egPurple-default font-base';
     const inactiveTab = 'text-egPurple-default bg-egGrey-default font-base hover:bg-egPurple-light';
     return (
-        <div>
-            <div className="">
-                <WhiteBtn
-                    content="알림 전송"
-                    width="18"
-                    func={() => setIsShow(true)}
-                />
-            </div>
+        <div onClick={(e) => e.stopPropagation()}>
+            <WhiteBtn
+                content="알림 전송"
+                func={() => setIsShow(true)}
+            />
             {isShow ? (
                 <div className="fixed flex justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
                     <div className="fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg">
                         <div className="flex justify-between mx-2 mb-4">
-                            <div className="mb-2 text-xl font-bold">안내 메세지</div>
-
+                            <div className="mb-2 text-xl font-bold">알림 메세지 전송</div>
                             <CgClose onClick={() => setIsShow(false)} />
                         </div>
                         <div className="flex justify-start mb-2">
                             {tabList.map((el, idx) => (
-                                <button
+                                <div
                                     key={idx}
                                     onClick={() => setTab(el)}
                                     className={`px-4 py-2 ml-2 rounded-md ${tab === el ? activeTab : inactiveTab}`}
                                 >
                                     {el}
-                                </button>
+                                </div>
                             ))}
                         </div>
                         <div>
