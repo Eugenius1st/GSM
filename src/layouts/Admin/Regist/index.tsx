@@ -11,8 +11,8 @@ import DatePicker from 'components/EgMaterials/DatePicker';
 import { FaCamera } from 'react-icons/fa';
 import { FaUser } from 'react-icons/fa6';
 import { AiOutlineCalendar } from 'react-icons/ai';
-import { BsPlusSquare } from 'react-icons/bs';
-import { PiMinusSquare } from 'react-icons/pi';
+import { CiSquarePlus } from 'react-icons/ci';
+import { CiSquareMinus } from 'react-icons/ci';
 // colors
 import colors from 'assets/colors/palette';
 
@@ -27,6 +27,10 @@ const Regist = () => {
             <FaCamera />
         </div>
     );
+    const handleRecordDelete = (idx: number) => {
+        const newArray = soccerRecord.filter((el, index) => index !== idx);
+        setSoccerRecord(newArray);
+    };
     return (
         <div className="eg-regist-wrapper">
             <div className="eg-title">관리자 등록</div>
@@ -155,29 +159,23 @@ const Regist = () => {
                             <div className="flex items-center">
                                 <DatePicker content={'시작날짜'} />
                                 <DatePicker content={'종료날짜'} />
-                                {idx < soccerRecord.length ? (
-                                    <BsPlusSquare
-                                        onClick={() =>
-                                            soccerRecord.length <= 3 &&
-                                            setSoccerRecord([
-                                                ...soccerRecord,
-                                                { record: '', startDate: '', endDate: '' },
-                                            ])
-                                        }
-                                        className={'w-6 h-6 mr-1 text-egPurple-semiLght hover:text-egPurple-default'}
-                                    />
-                                ) : (
-                                    <PiMinusSquare
-                                        onClick={() =>
-                                            soccerRecord.length <= 3 &&
-                                            setSoccerRecord([
-                                                ...soccerRecord,
-                                                { record: '', startDate: '', endDate: '' },
-                                            ])
-                                        }
+                                {idx < soccerRecord.length - 1 ? (
+                                    <CiSquareMinus
+                                        onClick={() => soccerRecord.length <= 3 && handleRecordDelete(idx)}
                                         className={
                                             'w-8 h-8 mr-1 text-egGrey-default-semiLght hover:text-egGrey-default-default'
                                         }
+                                    />
+                                ) : (
+                                    <CiSquarePlus
+                                        onClick={() =>
+                                            soccerRecord.length <= 3 &&
+                                            setSoccerRecord([
+                                                ...soccerRecord,
+                                                { record: '', startDate: '', endDate: '' },
+                                            ])
+                                        }
+                                        className={'w-8 h-8 mr-1 text-egPurple-semiLght hover:text-egPurple-default'}
                                     />
                                 )}
                             </div>
@@ -191,7 +189,7 @@ const Regist = () => {
                             maxLength={30}
                             className="w-full focus:outline-none text-egBlack-default"
                         />
-                        <BsPlusSquare className="w-6 h-6 mr-1 text-egPurple-semiLght hover:text-egPurple-default" />
+                        <CiSquarePlus className="w-8 h-8 mr-1 text-egPurple-semiLght hover:text-egPurple-default" />
                     </div>
                 </div>
                 <button type="submit">제출</button>
