@@ -14,7 +14,7 @@ module.exports = {
                     default: '#ffffff',
                 },
                 egGrey: {
-                    default: '#777777',
+                    default: '#8c8c8c',
                     semiLight: '#F3F3F3',
                     light: '#F9F9F9',
                 },

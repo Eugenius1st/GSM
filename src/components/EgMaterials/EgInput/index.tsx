@@ -9,16 +9,15 @@ import colors from 'assets/colors/palette';
 interface EgInputType {
     width?: string | '100%';
     label: string;
+    type?: string | 'text';
     placeholder?: string;
-    func?: React.ReactNode;
+    func?: (value: string) => void;
 }
 
-export default function EgInput({ width, label, placeholder, func }: EgInputType) {
+export default function EgInput({ width, type, label, placeholder, func }: EgInputType) {
     const { egPurple } = colors;
-    const [idValue, setIdValue] = useState('');
     return (
         <Box
-            component="form"
             sx={{
                 '& .MuiTextField-root': { width: '100%' },
             }}
@@ -38,9 +37,9 @@ export default function EgInput({ width, label, placeholder, func }: EgInputType
                         },
                     }}
                     label={label}
+                    type={type}
                     placeholder={placeholder}
-                    onChange={(e) => setIdValue(e.target.value)}
-                    value={idValue}
+                    onChange={(e) => func && func(e.target.value)}
                 />
             </div>
         </Box>

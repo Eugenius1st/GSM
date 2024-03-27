@@ -57,10 +57,12 @@
 .eg-title {
     @apply text-xl font-bold my-4;
 }
-
-/* admin */
-.eg-admin-wrapper {
+.eg-default-wrapper {
     @apply max-w-screen-md m-auto p-2 mt-16 mb-8;
+}
+/* regist */
+.eg-regist-wrapper {
+    @apply max-w-lg m-auto p-2 mt-16 mb-8;
 }
 
 /* login */

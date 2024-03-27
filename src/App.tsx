@@ -1,3 +1,5 @@
+// hooks
+import { Route, Routes } from 'react-router-dom';
 // layouts Admin
 import AdminHome from 'layouts/Admin/Home';
 import AdminCoach from 'layouts/Admin/Coach';
@@ -8,16 +10,17 @@ import AdminUser from 'layouts/Admin/User';
 import AdminUserDetail from 'layouts/Admin/User/UserDetail';
 import AdminClass from 'layouts/Admin/Class';
 import AdminClassDetail from 'layouts/Admin/Class/ClassDetail';
+import AdminRegist from 'layouts/Admin/Regist';
 import AdminNotifiaction from 'layouts/Admin/Notification';
+// layouts User
+import UserHome from 'layouts/User/Home';
 // layouts Login
 import Login from 'layouts/Login';
 import Logout from 'layouts/Logout';
-// hooks
-import { Route, Routes } from 'react-router-dom';
-
 const App = () => {
     return (
         <Routes>
+            {/* admin */}
             <Route
                 path="/admin"
                 element={<AdminHome />}
@@ -55,9 +58,19 @@ const App = () => {
                 element={<AdminClassDetail />}
             />
             <Route
+                path="/admin/regist"
+                element={<AdminRegist />}
+            />
+            <Route
                 path="/admin/notification"
                 element={<AdminNotifiaction />}
             />
+            {/* user */}
+            <Route
+                path="/user"
+                element={<UserHome />}
+            />
+            {/* login */}
             <Route
                 path="/logout"
                 element={<Logout />}

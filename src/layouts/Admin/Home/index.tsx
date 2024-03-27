@@ -59,7 +59,7 @@ const Home = () => {
         { thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 30, infoBtn: '정보보기' },
     ];
     return (
-        <div className="eg-admin-wrapper">
+        <div className="eg-default-wrapper">
             <TitleBar
                 title="회원관리"
                 navigationURL="/admin/user"

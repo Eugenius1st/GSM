@@ -64,7 +64,7 @@ const UserDetail = () => {
         ],
     };
     return (
-        <div className="eg-admin-wrapper">
+        <div className="eg-default-wrapper">
             <div className="eg-title">회원관리</div>
             <div className="text-sm text-right">Edit</div>
             <UserProfileCard userInfo={userInfo} />

@@ -37,7 +37,7 @@ const CoachDetail = () => {
         ],
     };
     return (
-        <div className="eg-admin-wrapper">
+        <div className="eg-default-wrapper">
             <div className="eg-title">코치관리</div>
             <div className="text-sm text-right">Edit</div>
             <CoachProfileCard coachInfo={coachInfo} />

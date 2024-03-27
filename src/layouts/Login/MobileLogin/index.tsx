@@ -11,7 +11,7 @@ const MobileLogin = () => {
     const navigate = useNavigate();
     const [autoLogin, setAutoLogin] = useState(false);
     return (
-        <div className="eg-admin-wrapper">
+        <div className="eg-default-wrapper">
             <div className="w-full h-full px-10 pt-24 bg-white rounded-2xl">
                 <div className="mb-4 font-semibold">WELCOM BACK</div>
                 <div className="mb-8 text-sm">서비스 이용을 원하신다면, 로그인을 해주세요.</div>
@@ -41,7 +41,7 @@ const MobileLogin = () => {
                     func={() => navigate('/admin')}
                     content="로그인"
                     width="full"
-                    style="py-3"
+                    customStyle="py-3"
                 />
             </div>
         </div>

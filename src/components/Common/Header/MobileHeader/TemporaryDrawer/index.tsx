@@ -17,6 +17,7 @@ import { IoHomeSharp } from 'react-icons/io5';
 import { MdOutlineSportsSoccer } from 'react-icons/md';
 import { FaUserAlt } from 'react-icons/fa';
 import { GoBellFill } from 'react-icons/go';
+import { FiLogIn } from 'react-icons/fi';
 // images
 import galloping_purple_logo from 'assets/logo/galloping_purple_logo.jpg';
 
@@ -31,6 +32,7 @@ export default function TemporaryDrawer() {
         { title: '회원관리', link: '/admin/user', icon: <FaUserAlt /> },
         { title: '코치관리', link: '/admin/coach', icon: <MdOutlineSportsSoccer /> },
         { title: '수업관리', link: '/admin/class', icon: <FaBook /> },
+        { title: '사용 등록', link: '/admin/regist', icon: <FiLogIn /> },
         { title: '알림 및 안내', link: '/admin/notification', icon: <GoBellFill /> },
     ];
 

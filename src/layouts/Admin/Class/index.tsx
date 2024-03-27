@@ -49,7 +49,7 @@ const Class = () => {
         },
     ];
     return (
-        <div className="eg-admin-wrapper">
+        <div className="eg-default-wrapper">
             <div className="flex items-center justify-between">
                 <div className="eg-title">수업관리</div>
                 <ClassAddModal />
