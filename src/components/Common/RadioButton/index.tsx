@@ -1,5 +1,7 @@
 import { useState } from 'react';
-
+// icons
+import { MdOutlineCheckBox } from 'react-icons/md';
+import { MdCheckBoxOutlineBlank } from 'react-icons/md';
 interface RadioButtonType {
     checked: boolean;
     value: string;
@@ -16,22 +18,41 @@ const RadioButton = ({ RadioBtnList }: RadioBtnListType) => {
         setCurRadio(event.target.value);
     };
     return (
-        <fieldset>
+        <fieldset className="flex">
             {RadioBtnList.map((el, idx) => (
                 <label
                     key={idx}
-                    className="mr-8"
                     htmlFor={`${idx}`}
                 >
-                    <input
-                        id={`${idx}`}
-                        type="radio"
-                        name={el.name}
-                        value={el.value}
-                        checked={curRadio === el.value}
-                        onChange={handleRadioChange}
-                    />
-                    <span className={curRadio === el.value ? 'text-egBlack-semiLght ml-2' : 'ml-2'}>{el.name}</span>
+                    {curRadio === el.value ? (
+                        <div className="flex items-center mr-8">
+                            <input
+                                id={`${idx}`}
+                                type="radio"
+                                name={el.name}
+                                value={el.value}
+                                checked={curRadio === el.value}
+                                onChange={handleRadioChange}
+                                className="hidden"
+                            />
+                            <MdOutlineCheckBox />
+                            <span className="ml-2">{el.name}</span>
+                        </div>
+                    ) : (
+                        <div className="flex items-center mr-8 ">
+                            <input
+                                id={`${idx}`}
+                                type="radio"
+                                name={el.name}
+                                value={el.value}
+                                checked={curRadio === el.value}
+                                onChange={handleRadioChange}
+                                className="hidden"
+                            />
+                            <MdCheckBoxOutlineBlank />
+                            <span className="ml-2">{el.name}</span>
+                        </div>
+                    )}
                 </label>
             ))}
         </fieldset>

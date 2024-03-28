@@ -1,5 +1,8 @@
 // hook
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+// recoil
+import { useRecoilValue } from 'recoil';
+import { IsMobileAtom } from 'atom/isMobile';
 // utility
 import ImageUploader from 'utility/ImageUploader';
 // Common
@@ -10,13 +13,15 @@ import DatePicker from 'components/EgMaterials/DatePicker';
 // icons
 import { FaCamera } from 'react-icons/fa';
 import { FaUser } from 'react-icons/fa6';
-import { AiOutlineCalendar } from 'react-icons/ai';
 import { CiSquarePlus } from 'react-icons/ci';
 import { CiSquareMinus } from 'react-icons/ci';
 // colors
 import colors from 'assets/colors/palette';
 
 const Regist = () => {
+    // 웹 앱 구분
+    const isMobile = useRecoilValue(IsMobileAtom);
+    // 데이터
     const [gender, setGender] = useState('성별');
     const [soccerRecord, setSoccerRecord] = useState([{ record: '', startDate: '', endDate: '' }]);
 
@@ -148,18 +153,32 @@ const Regist = () => {
                     {soccerRecord.map((el, idx) => (
                         <div
                             key={idx}
-                            className="pl-3 py-2 border border-egGrey-default text-egGrey-default mt-[-0.9px] flex justify-between items-center"
+                            className={
+                                isMobile
+                                    ? 'pl-3 py-2 border border-egGrey-default text-egGrey-default mt-[-0.9px]'
+                                    : 'pl-3 py-2 border border-egGrey-default text-egGrey-default mt-[-0.9px] flex justify-between items-center'
+                            }
                         >
                             <input
                                 placeholder="이력사항"
                                 type="text"
                                 maxLength={20}
-                                className="w-1/2 focus:outline-none text-egBlack-default"
+                                className="focus:outline-none text-egBlack-default"
                             />
-                            <div className="flex items-center">
-                                <DatePicker content={'시작날짜'} />
-                                <DatePicker content={'종료날짜'} />
-                                {idx < soccerRecord.length - 1 ? (
+                            <div className={isMobile ? 'flex items-center mt-2 justify-between' : 'flex items-center'}>
+                                <div className="flex">
+                                    <DatePicker
+                                        content={'시작날짜'}
+                                        range="month"
+                                        isMobile={isMobile}
+                                    />
+                                    <DatePicker
+                                        content={'종료날짜'}
+                                        range="month"
+                                        isMobile={isMobile}
+                                    />
+                                </div>
+                                {idx < soccerRecord.length - 1 || soccerRecord.length === 3 ? (
                                     <CiSquareMinus
                                         onClick={() => soccerRecord.length <= 3 && handleRecordDelete(idx)}
                                         className={
@@ -192,7 +211,12 @@ const Regist = () => {
                         <CiSquarePlus className="w-8 h-8 mr-1 text-egPurple-semiLght hover:text-egPurple-default" />
                     </div>
                 </div>
-                <button type="submit">제출</button>
+                <button
+                    type="submit"
+                    className="w-full py-2 mt-10 rounded-md bg-egGrey-semiLight text-egPurple-default"
+                >
+                    등록하기
+                </button>
             </form>
         </div>
     );

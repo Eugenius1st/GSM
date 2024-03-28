@@ -1,6 +1,9 @@
 // hooks
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+// recoil
+import { useRecoilValue } from 'recoil';
+import { IsMobileAtom } from 'atom/isMobile';
 // material UI
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -22,20 +25,11 @@ interface EgPhotoCardType {
 
 const EgPhotoCard = ({ id, name, image, birthYear, describe, imageY, type }: EgPhotoCardType) => {
     const { egWhite, egPurple } = colors;
-    const location = useLocation().pathname;
-    const [mobileView, setMobileView] = useState(false);
-    useEffect(() => {
-        function handleMobileView() {
-            setMobileView(window.innerWidth < 500);
-        }
-        window.addEventListener('resize', handleMobileView);
-        handleMobileView();
-        return () => window.removeEventListener('resize', handleMobileView);
-    }, [location]);
+    const isMobile = useRecoilValue(IsMobileAtom);
     return (
         <Card sx={{ width: '100%', mx: 1 }}>
             <CardMedia
-                sx={{ height: mobileView ? '7rem' : imageY }}
+                sx={{ height: isMobile ? '7rem' : imageY }}
                 image={image}
                 title="green iguana"
             />
@@ -63,15 +57,15 @@ const EgPhotoCard = ({ id, name, image, birthYear, describe, imageY, type }: EgP
                 </Typography>
             </CardContent>
             {type && type === 'coach' ? (
-                <CardActions sx={{ display: mobileView ? 'block' : 'flex', justifyContent: 'end' }}>
+                <CardActions sx={{ display: isMobile ? 'block' : 'flex', justifyContent: 'end' }}>
                     <Button
                         size="small"
                         sx={{
                             color: egPurple.default,
                             background: egWhite.default,
                             border: `1px solid ${egPurple.light}`,
-                            marginLeft: mobileView ? '0.5rem' : '0',
-                            fontSize: mobileView ? '10px' : '14px',
+                            marginLeft: isMobile ? '0.5rem' : '0',
+                            fontSize: isMobile ? '10px' : '14px',
                         }}
                     >
                         정보보기
@@ -81,7 +75,7 @@ const EgPhotoCard = ({ id, name, image, birthYear, describe, imageY, type }: EgP
                         sx={{
                             color: egPurple.default,
                             background: egPurple.superLight,
-                            fontSize: mobileView ? '10px' : '14px',
+                            fontSize: isMobile ? '10px' : '14px',
                         }}
                     >
                         수업보기

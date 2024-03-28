@@ -1,6 +1,10 @@
 // hooks
+import React, { KeyboardEvent } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+// recoil
+import { useRecoilState } from 'recoil';
+import { LoginAtomSelector } from 'atom/auth';
 // Commons
 import EgInput from 'components/EgMaterials/EgInput';
 import EgCheckBox from 'components/EgMaterials/CheckBox';
@@ -9,7 +13,26 @@ import WhiteBtn from 'components/Buttons/WhiteBtn';
 
 const MobileLogin = () => {
     const navigate = useNavigate();
+    const [loginState, setLoginSelector] = useRecoilState(LoginAtomSelector);
+    const [loginID, setLoginID] = useState('');
+    const [loginPW, setLoginPW] = useState('');
     const [autoLogin, setAutoLogin] = useState(false);
+    const loginHandler = (ID: string, PW: string) => {
+        if (ID === 'user' && PW === '1111') {
+            setLoginSelector('user');
+            navigate('/user');
+        } else if (ID === 'admin' && PW === '1111') {
+            setLoginSelector('admin');
+            navigate('/admin');
+        } else {
+            alert('아이디, 비밀번호를 확인하세요');
+        }
+    };
+    const handleOnKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            loginHandler(loginID, loginPW); // Enter 입력이 되면 클릭 이벤트 실행
+        }
+    };
     return (
         <div className="eg-default-wrapper">
             <div className="w-full h-full px-10 pt-24 bg-white rounded-2xl">
@@ -19,13 +42,17 @@ const MobileLogin = () => {
                     <div className="mb-4 ">
                         <EgInput
                             label="ID"
+                            type="id"
                             placeholder="ID"
+                            func={setLoginID}
                         />
                     </div>
                     <div className="mb-4">
                         <EgInput
                             label="PASSWORD"
+                            type="password"
                             placeholder="PASSWORD"
+                            func={setLoginPW}
                         />
                     </div>
                 </div>
@@ -38,7 +65,7 @@ const MobileLogin = () => {
                 </div>
 
                 <WhiteBtn
-                    func={() => navigate('/admin')}
+                    func={() => loginHandler(loginID, loginPW)}
                     content="로그인"
                     width="full"
                     customStyle="py-3"

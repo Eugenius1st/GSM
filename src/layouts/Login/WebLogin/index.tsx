@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // recoil
 import { useRecoilState } from 'recoil';
-import { LoginAtom, LoginAtomSelector } from 'atom/auth';
+import { LoginAtomSelector } from 'atom/auth';
 // Commons
 import EgInput from 'components/EgMaterials/EgInput';
 import EgCheckBox from 'components/EgMaterials/CheckBox';
@@ -35,7 +35,6 @@ const WebLogin = () => {
             loginHandler(loginID, loginPW); // Enter 입력이 되면 클릭 이벤트 실행
         }
     };
-
     return (
         <div className="w-screen h-screen bg-top bg-cover bg-login-bg z-[0] relative">
             <div className="fixed z-0 w-screen h-screen bg-black opacity-30"></div>

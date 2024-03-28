@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 // recoil
 import { useRecoilValue } from 'recoil';
-import { LoginAtom } from 'atom/auth';
+import { LoginAtomSelector } from 'atom/auth';
 // Buttons
 import PurpleBtn from 'components/Buttons/PurpleBtn';
 import WhiteBtn from 'components/Buttons/WhiteBtn';
@@ -17,7 +17,7 @@ import galloping_purple_logo from 'assets/logo/galloping_purple_logo.jpg';
 const WebHeader = () => {
     const location = useLocation().pathname;
     const locationList = location.split('/');
-    const loginState = useRecoilValue(LoginAtom);
+    const loginState = useRecoilValue(LoginAtomSelector);
     const tabActiveStyle = 'text-egPurple-default border-b-2 border-egPurple-default pb-1';
     const adminListItems = [
         { title: 'HOME', link: '/admin' },
@@ -27,6 +27,7 @@ const WebHeader = () => {
         { title: '사용 등록', link: '/admin/regist' },
         { title: '알림 및 안내', link: '/admin/notification' },
     ];
+
     return (
         <div className="fixed top-0 z-50 w-screen border-b-2 bg-egWhite-default">
             {loginState ? (

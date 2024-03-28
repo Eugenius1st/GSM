@@ -1,4 +1,3 @@
-import Login from 'layouts/Login';
 import { atom, selector } from 'recoil';
 
 export const LoginAtom = atom({

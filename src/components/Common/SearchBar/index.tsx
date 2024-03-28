@@ -14,8 +14,8 @@ const SearchBar = () => {
         >
             <TextField
                 sx={{
-                    width: '20rem',
-                    paddingRight: '2`rem',
+                    width: '13rem',
+                    paddingRight: '2rem',
                     paddingTop: '0.5rem',
                 }}
                 variant="standard"
