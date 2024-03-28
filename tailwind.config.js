@@ -14,7 +14,8 @@ module.exports = {
                     default: '#ffffff',
                 },
                 egGrey: {
-                    default: '#F3F3F3',
+                    default: '#8c8c8c',
+                    semiLight: '#F3F3F3',
                     light: '#F9F9F9',
                 },
                 egBlack: {
@@ -26,6 +27,9 @@ module.exports = {
                 egRed: { default: '#DA1E28', semiLihgt: '#DA1E2840', light: '#FBE8E9' },
                 egGreen: { default: '#35CF61', light: '#EBFAEF' },
                 egYellow: { default: '#FED74C', semiLight: '#FED74C50', light: '#FFFBED' },
+            },
+            backgroundImage: {
+                'login-bg': "url('assets/login/login_bg.jpeg')",
             },
         },
     },

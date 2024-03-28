@@ -1,22 +1,30 @@
 // hooks
 import { Link, useLocation } from 'react-router-dom';
+// recoil
+import { useRecoilState } from 'recoil';
+import { IsMobileSelector } from 'atom/isMobile';
+import { IsTabletSelector } from 'atom/isTablet';
+
 // Header Components
 import WebHeader from 'components/Common/Header/WebHeader';
 import MobileHeader from 'components/Common/Header/MobileHeader';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 const Header = () => {
     const location = useLocation().pathname;
-    const [miniSideNav, setMiniSidenav] = useState(false);
+    const [isMobile, setIsMobile] = useRecoilState<boolean>(IsMobileSelector);
+    const [, setIsTablet] = useRecoilState<boolean>(IsTabletSelector);
+
     useEffect(() => {
-        function handleMiniSidenav() {
-            setMiniSidenav(window.innerWidth < 768);
+        function handleResize() {
+            setIsMobile(window.innerWidth < 768);
+            setIsTablet(window.innerWidth < 1400);
         }
-        window.addEventListener('resize', handleMiniSidenav);
-        handleMiniSidenav();
-        return () => window.removeEventListener('resize', handleMiniSidenav);
+        window.addEventListener('resize', handleResize);
+        handleResize();
+        return () => window.removeEventListener('resize', handleResize);
     }, [location]);
-    return <>{miniSideNav ? <MobileHeader /> : <WebHeader />}</>;
+    return <>{isMobile ? <MobileHeader /> : <WebHeader />}</>;
 };
 
 export default Header;

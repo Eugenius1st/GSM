@@ -52,7 +52,7 @@ const Notification = () => {
     ];
 
     return (
-        <div className="mb-2 eg-admin-wrapper">
+        <div className="mb-2 eg-default-wrapper">
             <div className="eg-title">알림 및 안내</div>
             <NotifiactionTable />
         </div>

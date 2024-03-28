@@ -1,13 +1,10 @@
 // hooks
 import { useState } from 'react';
-
-// buttons
+// Buttons
 import PurpleBtn from 'components/Buttons/PurpleBtn';
-
 //icons
 import { MdEdit } from 'react-icons/md';
 import { MdDelete } from 'react-icons/md';
-
 //type
 interface FeedbackType {
     date: string;
@@ -31,7 +28,7 @@ export interface MemoCardType {
 const MemoCard = ({ tab, memo }: MemoCardType) => {
     const [memoTab, setMemoTab] = useState(tab[0]);
     const activeTab = 'text-egWhite-default bg-egPurple-default font-base';
-    const inactiveTab = 'text-egPurple-default bg-egGrey-default font-base hover:bg-egPurple-light';
+    const inactiveTab = 'text-egPurple-default bg-egGrey-semiLight font-base hover:bg-egPurple-light';
     return (
         <div>
             <div>

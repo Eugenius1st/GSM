@@ -8,7 +8,8 @@
     /* egWhite */
     --egWhite-default: #ffffff;
     /* egGrey */
-    --egGrey-default: #f3f3f3;
+    --egGrey-default: #9e9e9e;
+    --egGrey-semiLght: #f3f3f3;
     --egGrey-light: #f9f9f9;
     /* egBlack */
     --egBlack-default: #252525;
@@ -56,8 +57,15 @@
 .eg-title {
     @apply text-xl font-bold my-4;
 }
-
-/* admin */
-.eg-admin-wrapper {
+.eg-default-wrapper {
     @apply max-w-screen-md m-auto p-2 mt-16 mb-8;
+}
+/* regist */
+.eg-regist-wrapper {
+    @apply max-w-lg m-auto p-2 mt-16 mb-8;
+}
+
+/* login */
+.eg-login-wrapper {
+    @apply max-w-screen-lg m-auto pt-20;
 }

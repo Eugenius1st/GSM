@@ -327,6 +327,7 @@ interface EnhancedTableToolbarProps {
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     const { numSelected } = props;
+    const { egPurple, egWhite } = colors;
 
     return (
         <Toolbar
@@ -359,8 +360,16 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
             )}
             {numSelected > 0 ? (
                 <Tooltip title="Add">
-                    <IconButton sx={{ fontSize: '0.8rem' }}>
-                        <PurpleBtn content="선택 알림 전송" />
+                    <IconButton
+                        sx={{
+                            fontSize: '1rem',
+                            background: egPurple.default,
+                            borderRadius: '5px',
+                            color: egWhite.default,
+                            px: '0.7rem',
+                        }}
+                    >
+                        선택 알림 전송
                     </IconButton>
                 </Tooltip>
             ) : (
@@ -399,7 +408,6 @@ export default function EnhancedTable() {
     const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
         const selectedIndex = selected.indexOf(id);
         let newSelected: readonly number[] = [];
-
         if (selectedIndex === -1) {
             newSelected = newSelected.concat(selected, id);
         } else if (selectedIndex === 0) {

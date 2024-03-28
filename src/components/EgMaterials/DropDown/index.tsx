@@ -9,16 +9,17 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import colors from 'assets/colors/palette';
 interface itemListType {
     item: string;
-    bgColor: string | '#ffffff';
+    bgColor?: string | '#ffffff';
 }
 interface DropDownModalType {
     itemList: itemListType[];
+    borderColor?: string;
 }
 
-export default function DropDownModal({ itemList }: DropDownModalType) {
+export default function DropDownModal({ itemList, borderColor }: DropDownModalType) {
     const { egPurple, egWhite } = colors;
     const [value, setValue] = React.useState(itemList[0].item);
-    const [bgColor, setBgColor] = React.useState(egWhite.default);
+    const [bgColor, setBgColor] = React.useState<string | undefined>(egWhite.default);
 
     const handleChange = (event: SelectChangeEvent) => {
         setValue(event.target.value as string);
@@ -41,9 +42,9 @@ export default function DropDownModal({ itemList }: DropDownModalType) {
                     value={value}
                     onChange={handleChange}
                     sx={{
-                        width: '5rem',
+                        width: '100%',
                         height: '2.6rem',
-                        border: `1px solid ${egPurple.default}`,
+                        border: borderColor ? `1px solid ${borderColor}` : `1px solid ${egPurple.default}`,
                         background: bgColor,
                     }}
                 >

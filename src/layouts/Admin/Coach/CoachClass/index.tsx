@@ -49,7 +49,7 @@ const CoachClass = () => {
         },
     ];
     return (
-        <div className="eg-admin-wrapper">
+        <div className="eg-default-wrapper">
             <div className="flex items-center justify-start eg-title">
                 <span>코치관리</span>
                 <MdOutlineArrowForwardIos className="w-4 h-4 mx-1" />
