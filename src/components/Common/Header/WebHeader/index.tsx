@@ -1,6 +1,5 @@
 //hooks
 import { Link, useLocation } from 'react-router-dom';
-import { useState } from 'react';
 // recoil
 import { useRecoilValue } from 'recoil';
 import { LoginAtomSelector } from 'atom/auth';
@@ -38,6 +37,7 @@ const WebHeader = () => {
                                 <div className="flex items-center">
                                     <img
                                         src={galloping_purple_logo}
+                                        alt="galloping_purple_logo"
                                         className="inline w-10 h-10 mr-2 rounded-full"
                                     />
                                     <h1 className="text-lg font-bold text-egPurple-default">GSM</h1>
@@ -75,15 +75,19 @@ const WebHeader = () => {
                                 <div className="flex items-center">
                                     <img
                                         src={galloping_purple_logo}
+                                        alt="galloping_purple_logo"
                                         className="inline w-10 h-10 mr-2 rounded-full"
                                     />
                                     <h1 className="text-lg font-bold text-egPurple-default">GSM</h1>
                                 </div>
                             </Link>
-
                             <div className="flex items-centers">
-                                <VscBellDot className="mr-2 w-7 h-7 text-egPurple-default" />
-                                <FaUserCircle className="w-7 h-7 text-egPurple-default" />
+                                <Link to="/user/alarm">
+                                    <VscBellDot className="mr-2 w-7 h-7 text-egPurple-default" />
+                                </Link>
+                                <Link to="/user/mypage">
+                                    <FaUserCircle className="w-7 h-7 text-egPurple-default" />
+                                </Link>
                                 {/* <span className="mr-2">홍길동</span> */}
                             </div>
                         </div>
@@ -92,6 +96,7 @@ const WebHeader = () => {
                             <div className="flex items-center">
                                 <img
                                     src={galloping_purple_logo}
+                                    alt="galloping_purple_logo"
                                     className="inline w-10 h-10 mr-2 rounded-full"
                                 />
                                 <h1 className="text-lg font-bold text-egPurple-default">GSM</h1>
@@ -110,6 +115,7 @@ const WebHeader = () => {
                         <div className="flex items-center">
                             <img
                                 src={galloping_purple_logo}
+                                alt="galloping_purple_logo"
                                 className="inline w-10 h-10 mr-2 rounded-full"
                             />
                             <h1 className="text-lg font-bold text-egPurple-default">GSM</h1>

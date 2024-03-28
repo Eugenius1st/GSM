@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
@@ -18,6 +17,7 @@ import { MdOutlineSportsSoccer } from 'react-icons/md';
 import { FaUserAlt } from 'react-icons/fa';
 import { GoBellFill } from 'react-icons/go';
 import { FiLogIn } from 'react-icons/fi';
+
 // images
 import galloping_purple_logo from 'assets/logo/galloping_purple_logo.jpg';
 
