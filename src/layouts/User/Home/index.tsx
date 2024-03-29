@@ -9,6 +9,8 @@ import class_adult_man from 'assets/class/class_adult_man.jpeg';
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
 // Commons
 import Divider from 'components/Common/Divider';
+// Modlas
+import ReadFeedbackModal from 'components/Modals/ReadFeedbackModal';
 const User = () => {
     const userInfo = {
         thumbnail: user1,
@@ -84,6 +86,7 @@ const User = () => {
                     <Link to="/user/class">전체수업 보기</Link>
                 </div>
             </div>
+            {/* 피드백 모달  <ReadFeedbackModal />*/}
             {classInfo.map((el, idx) => (
                 <ClassCard
                     classInfo={el}
