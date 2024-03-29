@@ -9,15 +9,16 @@ import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
 import DropDown from 'components/EgMaterials/DropDown';
 // Material UI
 import PaginationRounded from 'components/EgMaterials/Pagenation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Class = () => {
+    const [curPage, setCurPage] = useState(1);
     const location = useLocation().pathname;
     const classInfo = [
         {
             id: 1,
             classImage: class_adult_man,
-            title: '성인남성반',
+            title: '성인남성반1',
             date: '2024-03-09',
             location: '수원점',
             attendCount: '8/10',
@@ -26,7 +27,7 @@ const Class = () => {
         {
             id: 2,
             classImage: class_adult_woman,
-            title: '성인여성반',
+            title: '성인여성반2',
             date: '2024-03-09',
             location: '수원점',
             attendCount: '8/10',
@@ -35,7 +36,7 @@ const Class = () => {
         {
             id: 3,
             classImage: class_adult_man,
-            title: '성인남성반',
+            title: '성인남성반3',
             date: '2024-03-09',
             location: '수원점',
             attendCount: '8/10',
@@ -44,7 +45,7 @@ const Class = () => {
         {
             id: 4,
             classImage: class_adult_woman,
-            title: '성인여성반',
+            title: '성인여성반4',
             date: '2024-03-09',
             location: '수원점',
             attendCount: '8/10',
@@ -53,7 +54,7 @@ const Class = () => {
         {
             id: 3,
             classImage: class_adult_man,
-            title: '성인남성반',
+            title: '성인남성반5',
             date: '2024-03-09',
             location: '수원점',
             attendCount: '8/10',
@@ -62,7 +63,7 @@ const Class = () => {
         {
             id: 4,
             classImage: class_adult_woman,
-            title: '성인여성반',
+            title: '성인여성반6',
             date: '2024-03-09',
             location: '수원점',
             attendCount: '8/10',
@@ -71,7 +72,7 @@ const Class = () => {
         {
             id: 5,
             classImage: class_adult_man,
-            title: '성인남성반',
+            title: '성인남성반7',
             date: '2024-03-09',
             location: '수원점',
             attendCount: '8/10',
@@ -80,7 +81,7 @@ const Class = () => {
         {
             id: 9,
             classImage: class_adult_woman,
-            title: '성인여성반',
+            title: '성인여성반8',
             date: '2024-03-09',
             location: '수원점',
             attendCount: '8/10',
@@ -89,7 +90,7 @@ const Class = () => {
         {
             id: 6,
             classImage: class_adult_man,
-            title: '성인남성반',
+            title: '성인남성반9',
             date: '2024-03-09',
             location: '수원점',
             attendCount: '8/10',
@@ -98,13 +99,20 @@ const Class = () => {
         {
             id: 7,
             classImage: class_adult_woman,
-            title: '성인여성반',
+            title: '성인여성반10',
             date: '2024-03-09',
             location: '수원점',
             attendCount: '8/10',
             waiting: 4,
         },
     ];
+    const [curClassInfo, setCurClassInfo] = useState(classInfo.slice(0, 4));
+    useEffect(() => {
+        const newClassInfo = classInfo.slice((curPage - 1) * 4, (curPage - 1) * 4 + 4);
+        setCurClassInfo(newClassInfo);
+    }, [curPage]);
+
+    console.log(curClassInfo);
 
     return (
         <div className="eg-default-wrapper">
@@ -120,7 +128,7 @@ const Class = () => {
                     ]}
                 />
             </div>
-            {classInfo.map((el, idx) => (
+            {curClassInfo.map((el, idx) => (
                 <Link
                     key={idx}
                     to={`${location}/${el.id}`}
@@ -130,10 +138,11 @@ const Class = () => {
             ))}
             <div className="flex justify-center">
                 <PaginationRounded
-                    pageList={classInfo}
                     totalItems={classInfo.length}
                     itemsPerPage={4}
-                    currentPage={1}
+                    curPage={curPage}
+                    setCurPage={setCurPage}
+                    // onPageChange={() => }
                 />
             </div>
         </div>

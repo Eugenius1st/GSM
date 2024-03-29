@@ -1,32 +1,39 @@
+// hooks
+import { useState } from 'react';
 import * as React from 'react';
+
+// Material UI
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
 interface PaginationRoundedType {
-    pageList: any;
     totalItems: number;
     itemsPerPage: number;
-    currentPage: number;
+    curPage: number;
+    setCurPage: (page: number) => void;
     onPageChange?: any;
 }
 
 export default function PaginationRounded({
-    pageList,
     totalItems,
     itemsPerPage,
-    currentPage,
+    curPage,
+    setCurPage,
     onPageChange,
 }: PaginationRoundedType) {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
-    const handleChange = (e: React.ChangeEvent<unknown>) => {
-        console.log(e.target);
+    const handleChange = (e: React.ChangeEvent<unknown>, page: number) => {
+        // 현재 페이지 변경
+        setCurPage(page);
+        // 페이지 불러오는 함수면 될듯
+        // onPageChange();
     };
     return (
         <Stack spacing={2}>
             <Pagination
                 count={totalPages}
-                page={currentPage}
-                onChange={(e) => handleChange(e)}
+                page={curPage}
+                onChange={handleChange}
                 shape="rounded"
             />
         </Stack>
