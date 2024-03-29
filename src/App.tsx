@@ -14,6 +14,11 @@ import AdminRegist from 'layouts/Admin/Regist';
 import AdminNotifiaction from 'layouts/Admin/Notification';
 // layouts User
 import UserHome from 'layouts/User/Home';
+import UserClass from 'layouts/User/Class';
+import UserClassDetail from 'layouts/User/Class/ClassDetail';
+import UserMypage from 'layouts/User/Mypage';
+import UserAlarm from 'layouts/User/Alarm';
+// import User
 // layouts Login
 import Login from 'layouts/Login';
 import Logout from 'layouts/Logout';
@@ -69,6 +74,22 @@ const App = () => {
             <Route
                 path="/user"
                 element={<UserHome />}
+            />
+            <Route
+                path="/user/class"
+                element={<UserClass />}
+            />{' '}
+            <Route
+                path="/user/class/:classId"
+                element={<UserClassDetail />}
+            />
+            <Route
+                path="/user/mypage"
+                element={<UserMypage />}
+            />
+            <Route
+                path="/user/alarm"
+                element={<UserAlarm />}
             />
             {/* login */}
             <Route

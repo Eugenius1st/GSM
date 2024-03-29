@@ -7,6 +7,8 @@ import class_adult_man from 'assets/class/class_adult_man.jpeg';
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
 // Modals
 import ClassAddModal from 'components/Modals/ClassAddModal';
+// Material UI
+import Pagenation from 'components/EgMaterials/Pagenation';
 
 const Class = () => {
     const location = useLocation().pathname;
@@ -62,6 +64,14 @@ const Class = () => {
                     <ClassCard classInfo={el} />
                 </Link>
             ))}
+            <div className="flex justify-center">
+                <Pagenation
+                    totalItems={classInfo.length}
+                    curPage={1}
+                    itemsPerPage={4}
+                    setCurPage={() => console.log()}
+                />
+            </div>
         </div>
     );
 };
