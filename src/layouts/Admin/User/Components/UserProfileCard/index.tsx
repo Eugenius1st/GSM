@@ -167,13 +167,13 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                                 )}
                             </button>
                             <BasicModal
-                                ModalBtn={
+                                modalBtn={
                                     <button className="px-[10px] py-1 ml-2 border rounded-md text-egPurple-default border-egPurple-default">
                                         +
                                     </button>
                                 }
-                                ModalTitle={'회차추가'}
-                                ModalContents={
+                                modalTitle={'회차추가'}
+                                modalContents={
                                     <div className="p-4">
                                         <div className="flex mb-2">
                                             <span className="mr-4 text-lg font-semibold">날짜</span>
@@ -206,18 +206,18 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                                         </div>
                                     </div>
                                 }
-                                ModalFooterExitBtn={'취소'}
-                                ModalFooterActiveBtn={'제출'}
+                                modalFooterExitBtn={'취소'}
+                                modalFooterActiveBtn={'제출'}
                             />
 
                             <BasicModal
-                                ModalBtn={
+                                modalBtn={
                                     <button className="px-[10px] py-1 ml-1 border rounded-md text-egPurple-default border-egPurple-default">
                                         -
                                     </button>
                                 }
-                                ModalTitle={'회차차감'}
-                                ModalContents={
+                                modalTitle={'회차차감'}
+                                modalContents={
                                     <div className="p-4">
                                         <div className="flex mb-2">
                                             <span className="mr-4 text-lg font-semibold">날짜</span>
@@ -250,8 +250,8 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                                         </div>
                                     </div>
                                 }
-                                ModalFooterExitBtn={'취소'}
-                                ModalFooterActiveBtn={'제출'}
+                                modalFooterExitBtn={'취소'}
+                                modalFooterActiveBtn={'제출'}
                             />
                         </div>
                     </li>

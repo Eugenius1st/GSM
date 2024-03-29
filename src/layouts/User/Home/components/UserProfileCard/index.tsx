@@ -1,3 +1,6 @@
+// Modals
+import ReadFeedbackModal from 'components/Modals/ReadFeedbackModal';
+
 interface reasonList {
     count?: string;
     date?: string;
@@ -68,10 +71,14 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                         </span>
                     </div>
                     <div className="flex justify-end">
-                        <div className="flex items-center p-2 py-1 text-white rounded-md w-fit bg-egPurple-semiLght">
-                            <div className="w-4 h-4 mr-2 rounded-full bg-egPurple-default"></div>
-                            <button> 내 피드백 보기</button>
-                        </div>
+                        <ReadFeedbackModal
+                            modalBtn={
+                                <div className="flex items-center p-2 py-1 text-white rounded-md w-fit bg-egPurple-semiLght">
+                                    <div className="w-4 h-4 mr-2 rounded-full bg-egPurple-default"></div>
+                                    <button> 내 피드백 보기</button>
+                                </div>
+                            }
+                        />
                     </div>
                 </div>
             </div>

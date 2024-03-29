@@ -86,7 +86,6 @@ const User = () => {
                     <Link to="/user/class">전체수업 보기</Link>
                 </div>
             </div>
-            {/* 피드백 모달  <ReadFeedbackModal />*/}
             {classInfo.map((el, idx) => (
                 <ClassCard
                     classInfo={el}

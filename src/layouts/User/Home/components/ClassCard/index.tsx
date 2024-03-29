@@ -1,4 +1,7 @@
+// hooks
+import React from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface ClassInfoType {
     id: number;
@@ -21,16 +24,21 @@ const ClassCard = ({ classInfo }: ClasCardType) => {
     const titleStyle = 'mr-4 text-xl font-bold';
     const subTitleStyle = 'mr-4 text-base font-bold';
     const descriptionStyle = 'text-base font-base';
+    const navigation = useNavigate();
     const [attendState, setAttendState] = useState(classInfo.attend);
+    const attendHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
+        setAttendState(!attendState);
+    };
     return (
-        <div>
-            <div className="relative flex items-center p-4 border rounded-lg shadow-md bg-egPurple-superLght">
+        <div onClick={() => navigation(`/user/class/${classInfo.id}`)}>
+            <div className="relative z-0 flex items-center p-4 border rounded-lg shadow-md bg-egPurple-superLght">
                 <button
-                    onClick={() => setAttendState(!attendState)}
+                    onClick={(e) => attendHandler(e)}
                     className={
                         attendState
-                            ? 'absolute px-6 py-2 rounded-md top-2 right-2 bg-egPurple-default text-egWhite-default'
-                            : 'absolute px-6 py-2 rounded-md top-2 right-2 bg-egGrey-default text-egWhite-default'
+                            ? 'absolute z-10 px-6 py-2 rounded-md top-2 right-2 bg-egPurple-default text-egWhite-default'
+                            : 'absolute z-10 px-6 py-2 rounded-md top-2 right-2 bg-egGrey-default text-egWhite-default'
                     }
                 >
                     참석
