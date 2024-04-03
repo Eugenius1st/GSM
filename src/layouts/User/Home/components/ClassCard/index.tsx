@@ -32,7 +32,7 @@ const ClassCard = ({ classInfo }: ClasCardType) => {
     };
     return (
         <div onClick={() => navigation(`/user/class/${classInfo.id}`)}>
-            <div className="relative z-0 flex items-center p-4 border rounded-lg shadow-md bg-egPurple-superLght">
+            <div className="relative z-0 flex items-center p-4 border rounded-lg shadow-md bg-egPurple-superLight">
                 <button
                     onClick={(e) => attendHandler(e)}
                     className={

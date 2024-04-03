@@ -1,5 +1,5 @@
 // Commons
-import TagCard from 'components/Common/TagCard';
+import TagCard from 'components/Common/Tags/TagCard';
 import Divider from 'components/Common/Divider';
 
 const ResearchInfo = () => {
@@ -58,7 +58,6 @@ const ResearchInfo = () => {
                 <div className="mt-1 mb-2">기술적 능력 선택(3가지 이상)</div>
                 <TagCard tagList={physicalSkill} />
             </div>
-
             <Divider />
             {/* 개선 희망점 */}
             <div className="px-6 py-1 m-auto border w-fit border-egGrey-default">개선 희망점</div>

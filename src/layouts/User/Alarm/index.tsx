@@ -89,7 +89,7 @@ const Alarm = () => {
                 <div
                     className={
                         el.read
-                            ? 'flex items-center w-full px-3 py-3 rounded-md bg-egPurple-superLght'
+                            ? 'flex items-center w-full px-3 py-3 rounded-md bg-egPurple-superLight'
                             : 'flex items-center w-full px-3 py-3 rounded-md bg-egGrey-light'
                     }
                 >

@@ -22,7 +22,7 @@ const ClassCard = ({ classInfo }: ClasCardType) => {
     const descriptionStyle = 'text-base font-base';
     return (
         <div>
-            <div className="relative flex items-center p-4 border rounded-lg shadow-md bg-egPurple-superLght">
+            <div className="relative flex items-center p-4 border rounded-lg shadow-md bg-egPurple-superLight">
                 <div>
                     <img
                         src={classInfo.classImage}

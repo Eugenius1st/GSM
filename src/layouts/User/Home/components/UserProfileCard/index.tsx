@@ -55,7 +55,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                     alt="coach_son"
                     className="object-cover h-40 mr-4 rounded-full min-w-40"
                 />
-                <div className="flex flex-col w-full p-4 rounded-md bg-egPurple-superLght">
+                <div className="flex flex-col w-full p-4 rounded-md bg-egPurple-superLight">
                     <div className={infoStyle}>
                         <span className={titleStyle}>이름:</span>
                         <span>{name}</span>

@@ -57,7 +57,7 @@ const AlarmModal = () => {
                                             value={el.message}
                                             readOnly
                                             placeholder="사유는 30글자 내로 작성하세요"
-                                            className="w-11/12 p-2 my-4 text-lg border rounded-md bg-egPurple-superLght border-egPurple-default"
+                                            className="w-11/12 p-2 my-4 text-lg border rounded-md bg-egPurple-superLight border-egPurple-default"
                                         ></textarea>
                                     )
                             )}

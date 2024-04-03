@@ -8,7 +8,7 @@ module.exports = {
                     default: '#6B00FF',
                     semiLght: '#6B00FF75',
                     light: '#E3DAF2',
-                    superLght: '#F6F0FF',
+                    superLight: '#F6F0FF',
                 },
                 egWhite: {
                     default: '#ffffff',
@@ -22,7 +22,7 @@ module.exports = {
                     default: '#252525',
                     semiLght: '#505050',
                     light: '#B5B5B5',
-                    superLght: '#E1E1E1',
+                    superLight: '#E1E1E1',
                 },
                 egRed: { default: '#DA1E28', semiLihgt: '#DA1E2840', light: '#FBE8E9' },
                 egGreen: { default: '#35CF61', light: '#EBFAEF' },
