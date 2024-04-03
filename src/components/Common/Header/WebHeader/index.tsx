@@ -1,5 +1,6 @@
 //hooks
 import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
 // recoil
 import { useRecoilValue } from 'recoil';
 import { LoginAtomSelector } from 'atom/auth';
@@ -9,9 +10,10 @@ import WhiteBtn from 'components/Buttons/WhiteBtn';
 // icons
 import { FaUserCircle } from 'react-icons/fa';
 import { VscBellDot } from 'react-icons/vsc';
-
 // images
 import galloping_purple_logo from 'assets/logo/galloping_purple_logo.jpg';
+// Header Components
+import SubTab from 'components/Common/Header/components/SubTab';
 
 const WebHeader = () => {
     const location = useLocation().pathname;
@@ -23,9 +25,22 @@ const WebHeader = () => {
         { title: '회원관리', link: '/admin/user' },
         { title: '코치관리', link: '/admin/coach' },
         { title: '수업관리', link: '/admin/class' },
-        { title: '사용 등록', link: '/admin/regist' },
+        {
+            title: '사용 등록',
+            link: '/admin/regist',
+            subTabs: [
+                { title: '관리자 등록', link: '/admin/regist' },
+                { title: '회원 등록', link: '/admin/regist/user' },
+            ],
+        },
         { title: '알림 및 안내', link: '/admin/notification' },
     ];
+    const [hoveredTab, setHoveredTab] = useState('');
+    const tabHoverHandler = (tab: string) => {
+        if (tab === '사용 등록') {
+            setHoveredTab(tab);
+        } else return;
+    };
 
     return (
         <div className="fixed top-0 z-50 w-screen border-b-2 bg-egWhite-default">
@@ -44,12 +59,17 @@ const WebHeader = () => {
                                 </div>
                             </Link>
 
-                            <ul className="grid grid-cols-6 gap-2">
+                            <ul className="grid grid-cols-6 gap-2 ">
                                 {adminListItems.map((el, idx) => {
                                     const linkParts = el.link.split('/');
                                     const thirdPartOfLink = linkParts[2];
                                     return (
-                                        <li key={idx}>
+                                        <li
+                                            key={idx}
+                                            onMouseOver={() => tabHoverHandler(el.title)}
+                                            onMouseLeave={() => setHoveredTab('')}
+                                            className="relative"
+                                        >
                                             <Link
                                                 to={el.link}
                                                 className={`${
@@ -60,6 +80,14 @@ const WebHeader = () => {
                                             >
                                                 {el.title}
                                             </Link>
+                                            {hoveredTab && el.subTabs && (
+                                                <div className="absolute w-full h-24">
+                                                    <SubTab
+                                                        tabs={el.subTabs}
+                                                        func={() => tabHoverHandler(el.title)}
+                                                    />
+                                                </div>
+                                            )}
                                         </li>
                                     );
                                 })}
