@@ -35,8 +35,8 @@ const RadioButton = ({ RadioBtnList }: RadioBtnListType) => {
                                 onChange={handleRadioChange}
                                 className="hidden"
                             />
-                            <MdOutlineCheckBox />
-                            <span className="ml-2">{el.name}</span>
+                            <MdOutlineCheckBox className="text-egPurple-default" />
+                            <span className="ml-2 text-egPurple-default">{el.name}</span>
                         </div>
                     ) : (
                         <div className="flex items-center mr-8 ">

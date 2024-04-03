@@ -1,0 +1,46 @@
+import React, { useState } from 'react';
+
+interface CheckboxGroupProps {
+    options: string[];
+    onChange: (selectedOptions: string[]) => void;
+}
+
+const CheckboxGroup: React.FC<CheckboxGroupProps> = ({ options, onChange }) => {
+    const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+    const optionStyle = 'w-full p-2 border border-egGrey-default mt-[-1px]';
+    const handleCheckboxChange = (option: string) => {
+        const currentIndex = selectedOptions.indexOf(option);
+        const newSelectedOptions = [...selectedOptions];
+
+        if (currentIndex === -1) {
+            newSelectedOptions.push(option);
+        } else {
+            newSelectedOptions.splice(currentIndex, 1);
+        }
+
+        setSelectedOptions(newSelectedOptions);
+        onChange(newSelectedOptions);
+    };
+
+    return (
+        <div>
+            {options.map((option, index) => (
+                <div
+                    key={index}
+                    className={optionStyle}
+                >
+                    <input
+                        type="checkbox"
+                        id={option}
+                        checked={selectedOptions.includes(option)}
+                        onChange={() => handleCheckboxChange(option)}
+                        className="mr-2"
+                    />
+                    <label htmlFor={option}>{option}</label>
+                </div>
+            ))}
+        </div>
+    );
+};
+
+export default CheckboxGroup;

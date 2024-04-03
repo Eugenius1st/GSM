@@ -1,5 +1,5 @@
 // hooks
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // User Regist Components
 import TermsAgree from 'layouts/Admin/Regist/UserRegist//TermsAgree';
 import BasicInfo from 'layouts/Admin/Regist/UserRegist/BasicInfo';
@@ -22,6 +22,10 @@ const UserRegist = () => {
     function handlePreview() {
         if (registStage > 1) setRegistStage(registStage - 1);
     }
+    const [stageBarStyle, setStageBarStyle] = useState(`h-2 rounded-lg bg-egPurple-default absolue w-1/5`);
+    useEffect(() => {
+        setStageBarStyle(`h-2 rounded-lg bg-egPurple-default absolue w-${registStage}/5`);
+    }, [registStage]);
     return (
         <div className="eg-regist-wrapper">
             <div className="mt-10">
@@ -40,7 +44,7 @@ const UserRegist = () => {
                     </div>
                 </div>
                 <div className="relative h-2 mt-5 rounded-lg bg-egGrey-semiLight">
-                    <div className={`h-2 rounded-lg bg-egPurple-default absolue w-${registStage}/5`}></div>
+                    <div className={stageBarStyle}></div>
                 </div>
             </div>
             {registStage < 4 && (
