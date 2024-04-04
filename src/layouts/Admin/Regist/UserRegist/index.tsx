@@ -25,7 +25,9 @@ const UserRegist = () => {
     const [stageBarStyle, setStageBarStyle] = useState(`h-2 rounded-lg bg-egPurple-default absolue w-1/5`);
     useEffect(() => {
         setStageBarStyle(`h-2 rounded-lg bg-egPurple-default absolue w-${registStage}/5`);
+        window.scrollTo(0, 0);
     }, [registStage]);
+
     return (
         <div className="eg-regist-wrapper">
             <div className="mt-10">

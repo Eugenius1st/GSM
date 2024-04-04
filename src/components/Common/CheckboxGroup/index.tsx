@@ -1,5 +1,8 @@
+// hooks
 import React, { useState } from 'react';
-
+// icons
+import { MdOutlineCheckBox } from 'react-icons/md';
+import { MdOutlineCheckBoxOutlineBlank } from 'react-icons/md';
 interface CheckboxGroupProps {
     options: string[];
     onChange: (selectedOptions: string[]) => void;
@@ -21,7 +24,6 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = ({ options, onChange }) => {
         setSelectedOptions(newSelectedOptions);
         onChange(newSelectedOptions);
     };
-
     return (
         <div>
             {options.map((option, index) => (
@@ -34,9 +36,25 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = ({ options, onChange }) => {
                         id={option}
                         checked={selectedOptions.includes(option)}
                         onChange={() => handleCheckboxChange(option)}
-                        className="mr-2"
+                        className="hidden"
                     />
-                    <label htmlFor={option}>{option}</label>
+                    {selectedOptions.includes(option) ? (
+                        <label
+                            htmlFor={option}
+                            className="flex items-center "
+                        >
+                            <MdOutlineCheckBox className="mr-2 text-egPurple-default" />
+                            {option}
+                        </label>
+                    ) : (
+                        <label
+                            htmlFor={option}
+                            className="flex items-center text-egGrey-default"
+                        >
+                            <MdOutlineCheckBoxOutlineBlank className="mr-2" />
+                            {option}
+                        </label>
+                    )}
                 </div>
             ))}
         </div>
