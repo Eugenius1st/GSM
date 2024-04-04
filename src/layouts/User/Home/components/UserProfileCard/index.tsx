@@ -2,7 +2,8 @@
 import { useState, useEffect } from 'react';
 // icons
 import { FaRegMessage } from 'react-icons/fa6';
-
+// Modals
+import ReadFeedbackModal from 'components/Modals/ReadFeedbackModal';
 interface UserProfileCardType {
     isMobile: boolean;
     thumbnail: string;
@@ -56,9 +57,14 @@ const UserProfileCard = ({ isMobile, thumbnail, name, birth, classInfo }: UserPr
                             {classInfo.remainingRounds} / {classInfo.paymentRound}
                         </div>
                     </div>
-                    <div className="flex items-center justify-center py-2 mt-2 rounded-md text-egPurple-default bg-egGrey-semiLight">
-                        <FaRegMessage className="mr-3" />내 피드백 보기
-                    </div>
+
+                    <ReadFeedbackModal
+                        modalBtn={
+                            <button className="flex items-center justify-center w-full py-2 mt-2 rounded-md text-egPurple-default bg-egGrey-semiLight">
+                                <FaRegMessage className="mr-3" />내 피드백 보기
+                            </button>
+                        }
+                    />
                 </div>
             </div>
         </div>

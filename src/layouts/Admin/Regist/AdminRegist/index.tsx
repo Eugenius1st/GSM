@@ -170,7 +170,7 @@ const AdminRegist = () => {
                             key={idx}
                             className={
                                 isMobile
-                                    ? 'pl-3 py-2 border border-egGrey-default text-egGrey-default'
+                                    ? 'pl-3 py-2 border border-egGrey-default text-egGrey-default mt-[-1px]'
                                     : 'pl-3 py-2 border border-egGrey-default text-egGrey-default flex justify-between items-center'
                             }
                         >

@@ -1,6 +1,6 @@
 // hooks
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // recoil
 import { useRecoilValue } from 'recoil';
 import { IsMobileAtom } from 'atom/isMobile';
@@ -26,8 +26,12 @@ interface EgPhotoCardType {
 const EgPhotoCard = ({ id, name, image, birthYear, describe, imageY, type }: EgPhotoCardType) => {
     const { egWhite, egPurple } = colors;
     const isMobile = useRecoilValue(IsMobileAtom);
+    const navigate = useNavigate();
     return (
-        <Card sx={{ width: '100%', mx: 1 }}>
+        <Card
+            sx={{ width: '100%', mx: 1 }}
+            onClick={() => type === 'class' && navigate(`/admin/class/${id}`)}
+        >
             <CardMedia
                 sx={{ height: isMobile ? '7rem' : imageY }}
                 image={image}
@@ -67,6 +71,7 @@ const EgPhotoCard = ({ id, name, image, birthYear, describe, imageY, type }: EgP
                             marginLeft: isMobile ? '0.5rem' : '0',
                             fontSize: isMobile ? '10px' : '14px',
                         }}
+                        onClick={() => navigate(`/admin/coach/${id}`)}
                     >
                         정보보기
                     </Button>
@@ -77,6 +82,7 @@ const EgPhotoCard = ({ id, name, image, birthYear, describe, imageY, type }: EgP
                             background: egPurple.superLight,
                             fontSize: isMobile ? '10px' : '14px',
                         }}
+                        onClick={() => navigate(`/admin/coach/coach-class/${id}`)}
                     >
                         수업보기
                     </Button>

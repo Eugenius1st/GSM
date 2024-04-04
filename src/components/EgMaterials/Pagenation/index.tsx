@@ -11,7 +11,7 @@ interface PaginationRoundedType {
     totalItems: number;
     itemsPerPage: number;
     curPage: number;
-    setCurPage: (page: number) => void;
+    setCurPage?: (page: number) => void;
     onPageChange?: any;
 }
 
@@ -26,7 +26,7 @@ export default function PaginationRounded({
     const totalPages = Math.ceil(totalItems / itemsPerPage);
     const handleChange = (e: React.ChangeEvent<unknown>, page: number) => {
         // 현재 페이지 변경
-        setCurPage(page);
+        if (setCurPage) setCurPage(page);
         // 페이지 불러오는 함수면 될듯
         // onPageChange();
     };

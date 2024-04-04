@@ -11,11 +11,19 @@ import { CgClose } from 'react-icons/cg';
 
 const ClassAddModal = () => {
     const [isShow, setIsShow] = useState(false);
+    const handleShowModal = () => {
+        setIsShow(true);
+        document.body.style.overflow = 'hidden';
+    };
+    const handleCloseModal = () => {
+        setIsShow(false);
+        document.body.style.overflow = 'unset';
+    };
     return (
         <div>
             <WhiteBtn
                 content="+ 수업 추가"
-                func={() => setIsShow(true)}
+                func={handleShowModal}
             />
 
             {isShow ? (
@@ -23,7 +31,7 @@ const ClassAddModal = () => {
                     <div className="fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg">
                         <div className="flex justify-between">
                             <div className="mb-2 text-lg font-bold">수업 추가하기</div>
-                            <CgClose onClick={() => setIsShow(false)} />
+                            <CgClose onClick={handleCloseModal} />
                         </div>
                         <div className="p-4">
                             <div className="flex mb-2">
@@ -33,14 +41,14 @@ const ClassAddModal = () => {
                                     type="number"
                                     min="0"
                                     max="99"
-                                    className="w-40 p-1 border rounded-md border-egPurple-semiLght"
+                                    className="w-40 p-1 border rounded-md border-egGrey-default"
                                 />
                             </div>
                             <div className="flex mb-2">
                                 <span className="w-20 mr-4 text-lg font-semibold">날짜</span>
                                 <input
                                     type="date"
-                                    className="w-40 p-1 border rounded-md border-egPurple-semiLght"
+                                    className="w-40 p-1 border rounded-md border-egGrey-default"
                                 />
                             </div>
 
@@ -76,7 +84,7 @@ const ClassAddModal = () => {
                                     type="number"
                                     min="0"
                                     max="99"
-                                    className="w-40 p-1 border rounded-md border-egPurple-semiLght"
+                                    className="w-40 p-1 border rounded-md border-egGrey-default"
                                 />
                             </div>
                             <div className="flex mb-2">
@@ -87,7 +95,7 @@ const ClassAddModal = () => {
                                     type="number"
                                     min="0"
                                     max="99"
-                                    className="w-40 p-1 border rounded-md border-egPurple-semiLght"
+                                    className="w-40 p-1 border rounded-md border-egGrey-default"
                                 />
                             </div>
                             <div className="flex mb-2">
@@ -98,13 +106,13 @@ const ClassAddModal = () => {
                                     rows={4}
                                     maxLength={100}
                                     placeholder="안내사항은 100글자 내로 작성하세요"
-                                    className="p-1 border rounded-md border-egPurple-semiLght"
+                                    className="p-1 border rounded-md border-egGrey-default"
                                 ></textarea>
                             </div>
                         </div>
                     </div>
                     <button
-                        onClick={() => setIsShow(false)}
+                        onClick={handleCloseModal}
                         className="absolute top-0 z-0 w-screen h-screen"
                     ></button>
                 </div>

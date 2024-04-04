@@ -1,3 +1,5 @@
+// hooks
+import { useLocation } from 'react-router-dom';
 // Commons
 import Divider from 'components/Common/Divider';
 // Eg Components
@@ -25,6 +27,7 @@ export interface ColumnType {
 }
 
 const Home = () => {
+    const location = useLocation().pathname;
     const coachInfo = [
         { id: 1, name: '손흥민', birthYear: 1998, image: coach_son, type: 'coach' },
         { id: 2, name: '김민재', birthYear: 2000, image: coach_kim, type: 'coach' },
@@ -47,16 +50,16 @@ const Home = () => {
         { id: 'infoBtn', label: '정보보기', minWidth: 30, align: 'center' },
     ];
     const usersInfoRow = [
-        { thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 30, infoBtn: '정보보기' },
-        { thumnail: user2, name: '상훈손', age: '20', align: 'center', minWidth: 30, infoBtn: '정보보기' },
-        { thumnail: user3, name: '최보미', age: '20', align: 'center', minWidth: 30, infoBtn: '정보보기' },
-        { thumnail: user4, name: '조영준', age: '7', align: 'center', minWidth: 30, infoBtn: '정보보기' },
-        { thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 30, infoBtn: '정보보기' },
-        { thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 30, infoBtn: '정보보기' },
-        { thumnail: user3, name: '최보미', age: '20', align: 'center', minWidth: 30, infoBtn: '정보보기' },
-        { thumnail: user4, name: '조영준', age: '7', align: 'center', minWidth: 30, infoBtn: '정보보기' },
-        { thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 30, infoBtn: '정보보기' },
-        { thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 30, infoBtn: '정보보기' },
+        { userId: 1, thumnail: user1, name: '안유진z', age: '27', align: 'center', minWidth: 30, infoBtn: '정보보기' },
+        { userId: 2, thumnail: user2, name: '상훈손', age: '20', align: 'center', minWidth: 30, infoBtn: '정보보기' },
+        { userId: 3, thumnail: user3, name: '최보미', age: '20', align: 'center', minWidth: 30, infoBtn: '정보보기' },
+        { userId: 4, thumnail: user4, name: '조영준', age: '7', align: 'center', minWidth: 30, infoBtn: '정보보기' },
+        { userId: 5, thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 30, infoBtn: '정보보기' },
+        { userId: 6, thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 30, infoBtn: '정보보기' },
+        { userId: 7, thumnail: user3, name: '최보미', age: '20', align: 'center', minWidth: 30, infoBtn: '정보보기' },
+        { userId: 8, thumnail: user4, name: '조영준', age: '7', align: 'center', minWidth: 30, infoBtn: '정보보기' },
+        { userId: 9, thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 30, infoBtn: '정보보기' },
+        { userId: 10, thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 30, infoBtn: '정보보기' },
     ];
     return (
         <div className="eg-default-wrapper">
@@ -67,6 +70,7 @@ const Home = () => {
             <EgPageTable
                 columns={usersInfoCol}
                 rows={usersInfoRow}
+                btnLink={`${location}/user`}
             />
             <Divider />
             <TitleBar

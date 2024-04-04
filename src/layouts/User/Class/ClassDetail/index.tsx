@@ -54,24 +54,17 @@ const ClassDetail = () => {
                 </div>
             </div>
             <div>
-                <ClassCard
-                    classInfo={classInfo}
-                    isMobile={isMobile}
-                />
+                <ClassCard classInfo={classInfo} />
+            </div>
+
+            <div className="p-4 border shadow-md border-egGrey-default">
+                <div className="mb-4 text-lg font-bold">참석자 명단</div>
+                <ViewUserCard attendInfo={attendInfo} />
             </div>
 
             <Divider />
-            <div className="text-lg font-bold">참석자 명단</div>
-
-            <Divider />
-            <ViewUserCard attendInfo={attendInfo} />
-
-            <Divider />
-            <div className="text-lg font-bold">대기자 명단</div>
-
-            <Divider />
+            <div className="p-4 mb-4 text-lg font-bold">대기자 명단</div>
             <ViewUserCard attendInfo={waitingInfo} />
-
             <Divider />
         </div>
     );

@@ -56,7 +56,7 @@ const User = () => {
             location: '수원점',
             attendCount: '8/10',
             waiting: 4,
-            attend: false,
+            attend: true,
         },
         {
             id: 2,
@@ -76,7 +76,7 @@ const User = () => {
             location: '수원점',
             attendCount: '8/10',
             waiting: 4,
-            attend: false,
+            attend: true,
         },
     ];
     return (
@@ -91,7 +91,7 @@ const User = () => {
                 classInfo={userInfo.classInfo}
             />
             <Divider />
-            <div className="flex items-center justify-end mb-4 font-bold text-egPurple-default">
+            <div className="flex items-center justify-end mb-4 text-egPurple-default">
                 <Link
                     to="/user/class"
                     className="flex items-center"
@@ -102,7 +102,6 @@ const User = () => {
             {classInfo.map((el, idx) => (
                 <ClassCard
                     classInfo={el}
-                    isMobile={isMobile}
                     key={idx}
                 />
             ))}

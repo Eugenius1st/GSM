@@ -42,14 +42,15 @@ const UserViewUserCard = ({ attendInfo }: AttendInfoType) => {
                     key={idx}
                     className="flex items-center p-2 "
                 >
-                    <img
-                        src={el.profile}
-                        className="object-cover w-12 h-12 mr-4 rounded-full"
-                    />
+                    <div>
+                        <img
+                            src={el.profile}
+                            className="object-cover w-12 h-12 mr-4 rounded-full"
+                        />
+                    </div>
                     <div className="flex w-full">
-                        <div className="m-auto font-bold">
-                            {el.name} / {el.age}
-                        </div>
+                        <div className="ml-16 ">{el.name}</div>
+                        <div className="ml-16 text-egGrey-default">{el.age}00 년생</div>
                     </div>
                 </div>
             ))}

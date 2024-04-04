@@ -11,17 +11,25 @@ import { CgClose } from 'react-icons/cg';
 
 const MemoModal = ({ tab = ['피드백', '특이사항'], memo }: MemoCardType) => {
     const [isShow, setIsShow] = useState(false);
+    const handleShowModal = () => {
+        setIsShow(true);
+        document.body.style.overflow = 'hidden';
+    };
+    const handleCloseModal = () => {
+        setIsShow(false);
+        document.body.style.overflow = 'unset';
+    };
     return (
         <div>
             <PurpleBtn
                 content="메모"
-                func={() => setIsShow(true)}
+                func={handleShowModal}
             />
             {isShow ? (
                 <div className="fixed flex justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
                     <div className="fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg">
                         <div className="flex justify-end">
-                            <CgClose onClick={() => setIsShow(false)} />
+                            <CgClose onClick={handleCloseModal} />
                         </div>
                         <MemoCard
                             tab={tab}
@@ -29,7 +37,7 @@ const MemoModal = ({ tab = ['피드백', '특이사항'], memo }: MemoCardType) 
                         />
                     </div>
                     <button
-                        onClick={() => setIsShow(false)}
+                        onClick={handleCloseModal}
                         className="absolute top-0 z-0 w-screen h-screen"
                     ></button>
                 </div>

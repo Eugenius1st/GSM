@@ -20,6 +20,7 @@ const Header = () => {
             setIsMobile(window.innerWidth < 768);
             setIsTablet(window.innerWidth < 1400);
         }
+        window.scrollTo(0, 0);
         window.addEventListener('resize', handleResize);
         handleResize();
         return () => window.removeEventListener('resize', handleResize);

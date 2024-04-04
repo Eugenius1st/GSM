@@ -10,10 +10,18 @@ import { MdEdit } from 'react-icons/md';
 
 const EditModal = () => {
     const [isShow, setIsShow] = useState(false);
+    const handleShowModal = () => {
+        setIsShow(true);
+        document.body.style.overflow = 'hidden';
+    };
+    const handleCloseModal = () => {
+        setIsShow(false);
+        document.body.style.overflow = 'unset';
+    };
     return (
         <div>
             <div
-                onClick={() => setIsShow(true)}
+                onClick={handleShowModal}
                 className="flex items-center ml-2"
             >
                 <span className="text-sm">수정</span>
@@ -23,13 +31,13 @@ const EditModal = () => {
                 <div className="fixed flex justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
                     <div className="fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg">
                         <div className="flex items-center justify-end">
-                            <CgClose onClick={() => setIsShow(false)} />
+                            <CgClose onClick={handleCloseModal} />
                         </div>
                         <div className="my-8 text-base font-bold text-center">수정 하시겠습니까?</div>
                         <div className="flex justify-end text-sm">
                             <WhiteBtn
                                 content={'취소'}
-                                func={() => setIsShow(true)}
+                                func={handleShowModal}
                             />
 
                             <div>
@@ -38,7 +46,7 @@ const EditModal = () => {
                         </div>
                     </div>
                     <button
-                        onClick={() => setIsShow(false)}
+                        onClick={handleCloseModal}
                         className="absolute top-0 z-0 w-screen h-screen"
                     ></button>
                 </div>

@@ -144,10 +144,7 @@ const Class = () => {
                     key={idx}
                     to={`${location}/${el.id}`}
                 >
-                    <ClassCard
-                        classInfo={el}
-                        isMobile={isMobile}
-                    />
+                    <ClassCard classInfo={el} />
                 </Link>
             ))}
             <div className="flex justify-center">

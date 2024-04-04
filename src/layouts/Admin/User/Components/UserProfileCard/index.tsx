@@ -1,6 +1,7 @@
 // hooks
 import { useState } from 'react';
-
+import { useRecoilValue } from 'recoil';
+import { IsMobileSelector } from 'atom/isMobile';
 // EgMetrials
 import EgCheckBox from 'components/EgMaterials/CheckBox';
 
@@ -72,6 +73,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
         classInfo,
         marketingConsent,
     } = userInfo;
+    const isMobile = useRecoilValue(IsMobileSelector);
     const titleStyle = 'mr-2 font-bold my-1';
     const listStyle = 'inline-block w-56';
     const [seeMore, setSeeMore] = useState(false);
@@ -142,16 +144,16 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
             <div>
                 <ul>
                     <li className="flex mb-1">
-                        <div className=" w-28">레슨명</div>
+                        <div className="font-bold w-28">레슨명</div>
                         <div className="">{classInfo.lessonName}</div>
                     </li>
                     <li className="flex mb-1">
-                        <div className=" w-28">입금여부</div>
+                        <div className="font-bold w-28">입금여부</div>
                         <div className="">{classInfo.deposit ? 'O' : 'X'}</div>
                     </li>
                     <li className="flex justify-between mb-4">
-                        <div className=" w-28">회차추가</div>
-                        <div className="">
+                        <div className="flex">
+                            <div className="font-bold w-28">회차추가</div>
                             {classInfo.remainingRounds}/{classInfo.paymentRound}
                         </div>
                         <div className="flex">
@@ -270,20 +272,22 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                             </li>
                         ))}
                     <li className="flex mb-1">
-                        <div className="mt-[9px] w-28">마케팅 동의</div>
-                        <div
-                            onClick={() => setMarketingPrivacy(!marketingPrivacy)}
-                            className="flex items-center justify-center"
-                        >
-                            <span>개인정보 수집 및 이용 동의</span>
-                            <EgCheckBox checked={marketingPrivacy} />
-                        </div>
-                        <div
-                            onClick={() => setMarketingEvent(!marketingEvent)}
-                            className="flex items-center justify-center"
-                        >
-                            <span>소식 수신 및 이벤트 참여</span>
-                            <EgCheckBox checked={marketingEvent} />
+                        <div className="mt-[9px] w-28 font-bold flex-shrink-0">마케팅 동의</div>
+                        <div>
+                            <div
+                                onClick={() => setMarketingPrivacy(!marketingPrivacy)}
+                                className="inline-block w-56"
+                            >
+                                <span>개인정보 수집 및 이용 동의</span>
+                                <EgCheckBox checked={marketingPrivacy} />
+                            </div>
+                            <div
+                                onClick={() => setMarketingEvent(!marketingEvent)}
+                                className="inline-block w-56"
+                            >
+                                <span>소식 수신 및 이벤트 참여</span>
+                                <EgCheckBox checked={marketingEvent} />
+                            </div>
                         </div>
                     </li>
                 </ul>

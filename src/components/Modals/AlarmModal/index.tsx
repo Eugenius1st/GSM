@@ -18,20 +18,28 @@ const AlarmModal = () => {
     const tabList = ['입금 안내', '준비물 안내', '차감 안내', '만료 안내'];
     const [tab, setTab] = useState(tabList[0]);
     const [isShow, setIsShow] = useState(false);
+    const handleShowModal = () => {
+        setIsShow(true);
+        document.body.style.overflow = 'hidden';
+    };
+    const handleCloseModal = () => {
+        setIsShow(false);
+        document.body.style.overflow = 'unset';
+    };
     const activeTab = 'text-egWhite-default bg-egPurple-default font-base';
     const inactiveTab = 'text-egPurple-default bg-egGrey-semiLight font-base hover:bg-egPurple-light';
     return (
         <div onClick={(e) => e.stopPropagation()}>
             <WhiteBtn
                 content="알림 전송"
-                func={() => setIsShow(true)}
+                func={handleShowModal}
             />
             {isShow ? (
                 <div className="fixed flex justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
                     <div className="fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg">
                         <div className="flex justify-between mx-2 mb-4">
                             <div className="mb-2 text-xl font-bold">알림 메세지 전송</div>
-                            <CgClose onClick={() => setIsShow(false)} />
+                            <CgClose onClick={handleCloseModal} />
                         </div>
                         <div className="flex justify-start mb-2">
                             {tabList.map((el, idx) => (
@@ -65,16 +73,16 @@ const AlarmModal = () => {
                         <div className="flex justify-end mt-4">
                             <WhiteBtn
                                 content="취소"
-                                func={() => setIsShow(false)}
+                                func={handleCloseModal}
                             />
                             <PurpleBtn
                                 content="보내기"
-                                func={() => setIsShow(false)}
+                                func={handleCloseModal}
                             />
                         </div>
                     </div>
                     <button
-                        onClick={() => setIsShow(false)}
+                        onClick={handleCloseModal}
                         className="absolute top-0 z-0 w-screen h-screen"
                     ></button>
                 </div>

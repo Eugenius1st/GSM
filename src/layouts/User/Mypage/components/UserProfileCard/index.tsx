@@ -22,7 +22,6 @@ const UserProfileCard = ({ isMobile, thumbnail, name, birth, classInfo }: UserPr
             window.removeEventListener('scroll', onScroll);
         };
     }, []);
-    console.log(position);
     return (
         // <div className="fixed w-[15rem] p-4 border h-full border-egGrey-default">
         <div

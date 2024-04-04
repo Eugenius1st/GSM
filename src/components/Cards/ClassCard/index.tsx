@@ -2,6 +2,8 @@
 import React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { IsMobileSelector } from 'atom/isMobile';
 
 interface ClassInfoType {
     id: number;
@@ -17,13 +19,14 @@ interface ClassInfoType {
 }
 
 interface ClasCardType {
+    title?: string;
     classInfo: ClassInfoType;
-    isMobile?: boolean;
 }
 
-const ClassCard = ({ classInfo, isMobile }: ClasCardType) => {
+const ClassCard = ({ title, classInfo }: ClasCardType) => {
+    let isMobile = useRecoilValue(IsMobileSelector);
     const infoStyle = 'mb-2 pb-1 flex border-b border-egGrey-default';
-    const titleStyle = isMobile ? 'mr-2 w-20' : 'mr-2 w-20 ';
+    const titleStyle = isMobile ? 'mr-2 w-24 flex-shrink-0' : 'mr-2 w-20 ';
     const highLight = 'px-1 bg-egPurple-superLight';
     const navigation = useNavigate();
     const [attendState, setAttendState] = useState(classInfo.attend);
@@ -34,7 +37,7 @@ const ClassCard = ({ classInfo, isMobile }: ClasCardType) => {
     return (
         <div onClick={() => navigation(`/user/class/${classInfo.id}`)}>
             <div className="relative z-0 p-4 mb-4 border shadow-md border-egGrey-default">
-                <div className="mb-2 text-lg font-bold">내 수업</div>
+                {classInfo.attend && <div className="mb-2 text-lg font-bold">내 수업</div>}
 
                 {classInfo.attend && (
                     <button
