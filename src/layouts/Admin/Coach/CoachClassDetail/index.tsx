@@ -3,7 +3,7 @@ import CoachViewUserCard from 'layouts/Admin/Coach/Components/CoachViewUserCard'
 // Icons
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 // Cards
-import CoachClassCard from 'layouts/Admin/Coach/Components/CoachClassCard';
+import CoachClassCard from 'components/Cards/ClassCard';
 // images
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
 import user1 from 'assets/user/user1.jpg';
@@ -21,7 +21,7 @@ const CoachClassDetail = () => {
         title: '성인남성반',
         date: '2024-03-09',
         location: '수원점',
-        attend: '8/10',
+        attendCount: '8/10',
         waiting: 4,
         coaches: ['안유진', '최보미'],
         notice: '신장 00cm 제한입니다. 조건에 맞지 않는 신청시, 취소됩니다.',

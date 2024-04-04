@@ -59,7 +59,7 @@ const CoachProfileCard = ({ coachInfo }: InfoType) => {
                     {coachInfo.record.map((el, idx) => (
                         <div
                             key={idx}
-                            className="px-2 my-2 bg-egPurple-superLght"
+                            className="px-2 my-2 bg-egPurple-superLight"
                         >
                             <span className="mr-4">{el.date}</span>
                             <span className="font-bold">{el.title}</span>

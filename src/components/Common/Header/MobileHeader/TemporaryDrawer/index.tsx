@@ -32,7 +32,15 @@ export default function TemporaryDrawer() {
         { title: '회원관리', link: '/admin/user', icon: <FaUserAlt /> },
         { title: '코치관리', link: '/admin/coach', icon: <MdOutlineSportsSoccer /> },
         { title: '수업관리', link: '/admin/class', icon: <FaBook /> },
-        { title: '사용 등록', link: '/admin/regist', icon: <FiLogIn /> },
+        {
+            title: '사용 등록',
+            link: '/admin/regist',
+            icon: <FiLogIn />,
+            subTabs: [
+                { title: '관리자 등록', link: '/admin/regist' },
+                { title: '회원 등록', link: '/admin/regist/user' },
+            ],
+        },
         { title: '알림 및 안내', link: '/admin/notification', icon: <GoBellFill /> },
     ];
 
@@ -55,23 +63,35 @@ export default function TemporaryDrawer() {
             <Divider />
             <List>
                 {adminListItems.map((el, idx) => (
-                    <ListItem
-                        key={idx}
-                        disablePadding
-                    >
-                        <Link
-                            to={el.link}
-                            className="w-full py-2"
-                        >
-                            <ListItemButton>
-                                <ListItemIcon>{el.icon}</ListItemIcon>
-                                <ListItemText primary={el.title} />
-                            </ListItemButton>
-                        </Link>
-                    </ListItem>
+                    <div key={`${el.title}`}>
+                        <ListItem disablePadding>
+                            <Link
+                                to={el.link}
+                                className="w-full"
+                            >
+                                <ListItemButton>
+                                    <ListItemIcon>{el.icon}</ListItemIcon>
+                                    <ListItemText primary={el.title} />
+                                </ListItemButton>
+                            </Link>
+                        </ListItem>
+                        {el.subTabs && (
+                            <div className="mb-5">
+                                {el.subTabs.map((tab) => (
+                                    <Link
+                                        to={tab.link}
+                                        key={`${tab.title}`}
+                                    >
+                                        <div className="px-2 py-1 pl-16 hover:bg-egGrey-semiLight text-egGrey-default">
+                                            <span className="mr-2">·</span> {tab.title}
+                                        </div>
+                                    </Link>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 ))}
             </List>
-            <Divider />
         </Box>
     );
 

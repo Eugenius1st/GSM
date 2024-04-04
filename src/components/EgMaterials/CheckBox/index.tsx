@@ -6,14 +6,16 @@ import Checkbox from '@mui/material/Checkbox';
 import colors from 'assets/colors/palette';
 interface CheckedType {
     checked: boolean;
+    func?: () => void;
 }
-const EgCheckBox = ({ checked }: CheckedType) => {
+const EgCheckBox = ({ checked, func }: CheckedType) => {
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
     const { egPurple } = colors;
     return (
         <Checkbox
             {...label}
             checked={checked}
+            onClick={func}
             sx={{
                 // color: egPurple.default,
                 '&.Mui-checked': {

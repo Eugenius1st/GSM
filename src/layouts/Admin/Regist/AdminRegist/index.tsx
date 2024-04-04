@@ -1,5 +1,5 @@
 // hook
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 // recoil
 import { useRecoilValue } from 'recoil';
 import { IsMobileAtom } from 'atom/isMobile';
@@ -18,7 +18,7 @@ import { CiSquareMinus } from 'react-icons/ci';
 // colors
 import colors from 'assets/colors/palette';
 
-const Regist = () => {
+const AdminRegist = () => {
     // 웹 앱 구분
     const isMobile = useRecoilValue(IsMobileAtom);
     // 데이터
@@ -26,7 +26,7 @@ const Regist = () => {
     const [soccerRecord, setSoccerRecord] = useState([{ record: '', startDate: '', endDate: '' }]);
 
     const { egGrey } = colors;
-    const inputStyle = 'w-full p-2 border border-egGrey-default mt-[-0.9px]';
+    const inputStyle = 'w-full p-2 border border-egGrey-default my-1';
     const uploadBtn = (
         <div className="absolute bottom-0 right-0 p-2 rounded-full bg-egPurple-default text-egWhite-default w-fit">
             <FaCamera />
@@ -38,7 +38,9 @@ const Regist = () => {
     };
     return (
         <div className="eg-regist-wrapper">
-            <div className="eg-title">관리자 등록</div>
+            <div className="flex items-center justify-start eg-title">
+                <span> 관리자 등록</span>
+            </div>
             <div className="relative">
                 <ImageUploader
                     uploadCustomBtn={uploadBtn}
@@ -53,12 +55,16 @@ const Regist = () => {
             <form className="mt-16">
                 {/* id, pw */}
                 <div>
+                    <label htmlFor="id">ID</label>
                     <input
+                        id="id"
                         type="id"
                         placeholder="ID"
                         className={inputStyle}
                     />
+                    <label htmlFor="password">PASSWORD</label>
                     <input
+                        id="password"
                         type="password"
                         placeholder="PASSWORD"
                         className={inputStyle}
@@ -66,23 +72,28 @@ const Regist = () => {
                 </div>
 
                 {/* user personal info */}
-                <div className="mt-8 mb-2">
+                <div className="mt-8">
+                    <label htmlFor="name">이름</label>
                     <input
+                        id="name"
                         type="name"
                         placeholder="이름"
                         className={inputStyle}
                     />
+
+                    <label htmlFor="birth">생년월일</label>
                     <input
-                        type="name"
+                        type="birth"
                         placeholder="생년월일"
                         className={inputStyle}
                     />
-                    <div className="relative">
+                    <div className="my-1">성별</div>
+                    <div className="relative mb-1">
                         <div
                             className={
                                 gender === '성별'
-                                    ? 'w-full p-2 border text-egGrey-default border-egGrey-default mt-[-0.9px]'
-                                    : 'w-full p-2 border border-egGrey-default mt-[-0.9px]'
+                                    ? 'w-full p-2 border text-egGrey-default border-egGrey-default'
+                                    : 'w-full p-2 border border-egGrey-default'
                             }
                         >
                             {gender}
@@ -110,7 +121,9 @@ const Regist = () => {
                             </div>
                         </div>
                     </div>
+                    <label htmlFor="phone">연락처</label>
                     <input
+                        id="phone"
                         type="name"
                         placeholder="연락처"
                         className={inputStyle}
@@ -119,15 +132,16 @@ const Regist = () => {
 
                 {/* 등급 */}
                 <div className="mt-8 mb-2">
+                    <div className="mb-1">등급</div>
                     <CustomDropdown
                         placehorder="등급"
-                        formStyle="px-3 py-2 border border-egGrey-default text-egGrey-default mt-[-0.9px] flex flex-col"
+                        formStyle="px-3 py-2 border border-egGrey-default text-egGrey-default flex flex-col"
                         itemList={['Level1', 'Level2', 'Level3', 'Level4']}
-                        inputStyle="px-3 py-2 border border-egGrey-default text-egGrey-default mt-[-0.9px]"
+                        inputStyle="px-3 py-2 border border-egGrey-default text-egGrey-default"
                         itemStyle=""
                     />
-                    <div className="px-3 py-2 border border-egGrey-default text-egGrey-default mt-[-0.9px]">
-                        <div className="px-1 mb-2">군필여부</div>
+                    <div className="my-1">군필여부</div>
+                    <div className="px-3 py-2 border border-egGrey-default text-egGrey-default">
                         <RadioButton
                             RadioBtnList={[
                                 {
@@ -150,13 +164,14 @@ const Regist = () => {
                     </div>
 
                     {/* 직접 선택 및 입력 */}
+                    <div className="my-1">이력사항</div>
                     {soccerRecord.map((el, idx) => (
                         <div
                             key={idx}
                             className={
                                 isMobile
-                                    ? 'pl-3 py-2 border border-egGrey-default text-egGrey-default mt-[-0.9px]'
-                                    : 'pl-3 py-2 border border-egGrey-default text-egGrey-default mt-[-0.9px] flex justify-between items-center'
+                                    ? 'pl-3 py-2 border border-egGrey-default text-egGrey-default mt-[-1px]'
+                                    : 'pl-3 py-2 border border-egGrey-default text-egGrey-default flex justify-between items-center'
                             }
                         >
                             <input
@@ -200,9 +215,10 @@ const Regist = () => {
                             </div>
                         </div>
                     ))}
-
+                    <div className="my-1">자격증</div>
                     <div className="pl-3 py-2 border border-egGrey-default text-egGrey-default mt-[-1px] flex justify-between">
                         <input
+                            id="cetrificate"
                             placeholder="자격증"
                             type="text"
                             maxLength={30}
@@ -222,4 +238,4 @@ const Regist = () => {
     );
 };
 
-export default Regist;
+export default AdminRegist;

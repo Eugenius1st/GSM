@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 // Icons
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 // Cards
-import CoachClassCard from 'layouts/Admin/Coach/Components/CoachClassCard';
+import ClassCard from 'components/Cards/ClassCard';
 // images
 import class_adult_man from 'assets/class/class_adult_man.jpeg';
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
@@ -17,7 +17,7 @@ const CoachClass = () => {
             title: '성인남성반',
             date: '2024-03-09',
             location: '수원점',
-            attend: '8/10',
+            attendCount: '8/10',
             waiting: 4,
         },
         {
@@ -26,7 +26,7 @@ const CoachClass = () => {
             title: '성인여성반',
             date: '2024-03-09',
             location: '수원점',
-            attend: '8/10',
+            attendCount: '8/10',
             waiting: 4,
         },
         {
@@ -35,7 +35,7 @@ const CoachClass = () => {
             title: '성인남성반',
             date: '2024-03-09',
             location: '수원점',
-            attend: '8/10',
+            attendCount: '8/10',
             waiting: 4,
         },
         {
@@ -44,7 +44,7 @@ const CoachClass = () => {
             title: '성인여성반',
             date: '2024-03-09',
             location: '수원점',
-            attend: '8/10',
+            attendCount: '8/10',
             waiting: 4,
         },
     ];
@@ -61,7 +61,7 @@ const CoachClass = () => {
                         key={idx}
                         to={`${location}/${el.id}`}
                     >
-                        <CoachClassCard classInfo={el} />
+                        <ClassCard classInfo={el} />
                     </Link>
                 ))}
             </div>

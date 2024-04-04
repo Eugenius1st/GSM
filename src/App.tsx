@@ -10,7 +10,8 @@ import AdminUser from 'layouts/Admin/User';
 import AdminUserDetail from 'layouts/Admin/User/UserDetail';
 import AdminClass from 'layouts/Admin/Class';
 import AdminClassDetail from 'layouts/Admin/Class/ClassDetail';
-import AdminRegist from 'layouts/Admin/Regist';
+import AdminRegist from 'layouts/Admin/Regist/AdminRegist';
+import AdminRegistUser from 'layouts/Admin/Regist/UserRegist';
 import AdminNotifiaction from 'layouts/Admin/Notification';
 // layouts User
 import UserHome from 'layouts/User/Home';
@@ -65,6 +66,10 @@ const App = () => {
             <Route
                 path="/admin/regist"
                 element={<AdminRegist />}
+            />
+            <Route
+                path="/admin/regist/user"
+                element={<AdminRegistUser />}
             />
             <Route
                 path="/admin/notification"

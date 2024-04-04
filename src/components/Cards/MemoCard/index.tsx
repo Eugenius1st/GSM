@@ -42,7 +42,7 @@ const MemoCard = ({ tab, memo }: MemoCardType) => {
                     </button>
                 ))}
             </div>
-            <div className="p-2 px-2 mt-2 border-2 border-egPurple-superLght ">
+            <div className="p-2 px-2 mt-2 border-2 border-egPurple-superLight ">
                 <div className="overflow-y-auto rounded-md max-h-80">
                     {memoTab === tab[0] && (
                         <div>
@@ -52,7 +52,7 @@ const MemoCard = ({ tab, memo }: MemoCardType) => {
                                 memo?.feedback?.map((el, idx) => (
                                     <div
                                         key={idx}
-                                        className="relative w-full px-4 py-1 mb-4 rounded-lg bg-egPurple-superLght"
+                                        className="relative w-full px-4 py-1 mb-4 rounded-lg bg-egPurple-superLight"
                                     >
                                         <div className="w-11/12 text-base">{el.content}</div>
                                         <div className="text-xs text-right">{el.date}</div>

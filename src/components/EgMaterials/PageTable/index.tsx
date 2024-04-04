@@ -1,3 +1,5 @@
+// hooks
+import { useNavigate } from 'react-router-dom';
 // materialUI
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
@@ -21,10 +23,12 @@ import colors from 'assets/colors/palette';
 interface EgPageTableType {
     rows: any;
     columns: ColumnType[];
+    btnLink?: string;
 }
 
-const EgPageTable = ({ columns, rows }: EgPageTableType) => {
+const EgPageTable = ({ columns, rows, btnLink }: EgPageTableType) => {
     const { egPurple } = colors;
+    const navigate = useNavigate();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -90,7 +94,17 @@ const EgPageTable = ({ columns, rows }: EgPageTableType) => {
                                                             />
                                                         </div>
                                                     ) : column.id === 'infoBtn' ? (
-                                                        <WhiteBtn content={row.infoBtn} />
+                                                        <WhiteBtn
+                                                            content={row.infoBtn}
+                                                            func={() =>
+                                                                btnLink &&
+                                                                (rows[idx].userId
+                                                                    ? navigate(`${btnLink}/${rows[idx].userId}`)
+                                                                    : rows[idx].coachId
+                                                                    ? navigate(`${btnLink}/${rows[idx].coachId}`)
+                                                                    : navigate('/admin'))
+                                                            }
+                                                        />
                                                     ) : (
                                                         <div>{value}</div>
                                                     )}

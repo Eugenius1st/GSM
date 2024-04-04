@@ -3,7 +3,7 @@ import ViewUserCard from 'layouts/Admin/Class/Components/ViewUserCard';
 // Icons
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 // Cards
-import ClassCard from 'layouts/Admin/Class/Components/ClassCard';
+import ClassCard from 'components/Cards/ClassCard';
 // Buttons
 import PurpleBtn from 'components/Buttons/PurpleBtn';
 // images
@@ -26,7 +26,7 @@ const ClassDetail = () => {
         title: '성인남성반',
         date: '2024-03-09',
         location: '수원점',
-        attend: '8/10',
+        attendCount: '8/10',
         waiting: 4,
         coaches: ['안유진', '최보미'],
         notice: '신장 00cm 제한입니다. 조건에 맞지 않는 신청시, 취소됩니다.',
@@ -80,7 +80,6 @@ const ClassDetail = () => {
             <Divider />
             <div className="flex justify-end">
                 <WhiteBtn content="대기자 추가" />
-
                 <PurpleBtn content="참석자 추가" />
             </div>
         </div>

@@ -1,7 +1,9 @@
 // hooks
 import { Link, useLocation } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { IsMobileSelector } from 'atom/isMobile';
 // Admin Class Component
-import ClassCard from 'layouts/User/Class/components/ClassCard';
+import ClassCard from 'components/Cards/ClassCard';
 // images
 import class_adult_man from 'assets/class/class_adult_man.jpeg';
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
@@ -14,6 +16,7 @@ import { useEffect, useState } from 'react';
 const Class = () => {
     const [curPage, setCurPage] = useState(1);
     const location = useLocation().pathname;
+    const isMobile = useRecoilValue(IsMobileSelector);
     const classInfo = [
         {
             id: 1,
@@ -23,6 +26,7 @@ const Class = () => {
             location: '수원점',
             attendCount: '8/10',
             waiting: 4,
+            attend: true,
         },
         {
             id: 2,
@@ -32,6 +36,7 @@ const Class = () => {
             location: '수원점',
             attendCount: '8/10',
             waiting: 4,
+            attend: false,
         },
         {
             id: 3,
@@ -41,6 +46,7 @@ const Class = () => {
             location: '수원점',
             attendCount: '8/10',
             waiting: 4,
+            attend: false,
         },
         {
             id: 4,
@@ -50,6 +56,7 @@ const Class = () => {
             location: '수원점',
             attendCount: '8/10',
             waiting: 4,
+            attend: false,
         },
         {
             id: 3,
@@ -59,6 +66,7 @@ const Class = () => {
             location: '수원점',
             attendCount: '8/10',
             waiting: 4,
+            attend: false,
         },
         {
             id: 4,
@@ -68,6 +76,7 @@ const Class = () => {
             location: '수원점',
             attendCount: '8/10',
             waiting: 4,
+            attend: false,
         },
         {
             id: 5,
@@ -77,6 +86,7 @@ const Class = () => {
             location: '수원점',
             attendCount: '8/10',
             waiting: 4,
+            attend: false,
         },
         {
             id: 9,
@@ -86,6 +96,7 @@ const Class = () => {
             location: '수원점',
             attendCount: '8/10',
             waiting: 4,
+            attend: false,
         },
         {
             id: 6,
@@ -95,6 +106,7 @@ const Class = () => {
             location: '수원점',
             attendCount: '8/10',
             waiting: 4,
+            attend: false,
         },
         {
             id: 7,
@@ -104,6 +116,7 @@ const Class = () => {
             location: '수원점',
             attendCount: '8/10',
             waiting: 4,
+            attend: false,
         },
     ];
     const [curClassInfo, setCurClassInfo] = useState(classInfo.slice(0, 4));
@@ -112,11 +125,9 @@ const Class = () => {
         setCurClassInfo(newClassInfo);
     }, [curPage]);
 
-    console.log(curClassInfo);
-
     return (
         <div className="eg-default-wrapper">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-4">
                 <div className="eg-title">전체수업</div>
                 <DropDown
                     itemList={[
