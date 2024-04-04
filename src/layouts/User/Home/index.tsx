@@ -1,19 +1,24 @@
 // hooks
 import { Link } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { IsMobileSelector } from 'atom/isMobile';
 // User Components
 import UserProfileCard from 'layouts/User/Home/components/UserProfileCard';
-import ClassCard from 'layouts/User/Home/components/ClassCard';
+import ClassCard from 'components/Cards/ClassCard';
 // images
-import user1 from 'assets/user/user1.jpg';
+import user5 from 'assets/user/user5.jpeg';
 import class_adult_man from 'assets/class/class_adult_man.jpeg';
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
 // Commons
 import Divider from 'components/Common/Divider';
-// Modlas
+// Icons
+import { IoIosArrowForward } from 'react-icons/io';
+// Modals
 import ReadFeedbackModal from 'components/Modals/ReadFeedbackModal';
 const User = () => {
+    const isMobile = useRecoilValue(IsMobileSelector);
     const userInfo = {
-        thumbnail: user1,
+        thumbnail: user5,
         name: '손흥민',
         gender: 'man',
         birth: '990101-1******',
@@ -76,19 +81,28 @@ const User = () => {
     ];
     return (
         <div className="eg-default-wrapper">
-            <div className="eg-title">반갑습니다, 손이경님</div>
+            <div className="eg-title">내 수업 관리</div>
             <Divider />
-            <UserProfileCard userInfo={userInfo} />
+            <UserProfileCard
+                isMobile={isMobile}
+                thumbnail={userInfo.thumbnail}
+                name={userInfo.name}
+                birth={userInfo.birth}
+                classInfo={userInfo.classInfo}
+            />
             <Divider />
-            <div className="flex items-center justify-between my-4">
-                <div className="text-lg font-bold">내 수업</div>
-                <div className="text-egPurple-default">
-                    <Link to="/user/class">전체수업 보기</Link>
-                </div>
+            <div className="flex items-center justify-end mb-4 font-bold text-egPurple-default">
+                <Link
+                    to="/user/class"
+                    className="flex items-center"
+                >
+                    <div>전체수업</div> <IoIosArrowForward />
+                </Link>
             </div>
             {classInfo.map((el, idx) => (
                 <ClassCard
                     classInfo={el}
+                    isMobile={isMobile}
                     key={idx}
                 />
             ))}

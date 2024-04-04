@@ -1,12 +1,7 @@
-// Buttons
-import PurpleBtn from 'components/Buttons/PurpleBtn';
-import WhiteBtn from 'components/Buttons/WhiteBtn';
-// Modals
-import MemoModal from 'components/Modals/MemoModal';
-// Eg Components
-import DropDown from 'components/EgMaterials/DropDown';
 // colors
 import colors from 'assets/colors/palette';
+// Buttons
+import GreyBorderBtn from 'components/Buttons/GreyBorderBtn';
 
 interface AttendUserType {
     profile: string;
@@ -18,7 +13,6 @@ interface AttendInfoType {
     attendInfo: AttendUserType[];
 }
 const UserViewUserCard = ({ attendInfo }: AttendInfoType) => {
-    const { egPurple, egWhite, egRed, egYellow, egGreen, egBlack } = colors;
     const userMemo = {
         feedback: [
             { date: '2024-03-07', content: '3골 넣음' },
@@ -42,20 +36,28 @@ const UserViewUserCard = ({ attendInfo }: AttendInfoType) => {
         ],
     };
     return (
-        <div className="px-2 ">
+        <div className="px-2">
             {attendInfo.map((el, idx) => (
                 <div
                     key={idx}
-                    className="flex items-center justify-between mb-3"
+                    className="flex items-center p-2 "
                 >
                     <img
                         src={el.profile}
                         className="object-cover w-12 h-12 mr-4 rounded-full"
                     />
-                    <div className="mr-4">{el.name}</div>
-                    <div className=""> {el.age} 세</div>
+                    <div className="flex w-full">
+                        <div className="m-auto font-bold">
+                            {el.name} / {el.age}
+                        </div>
+                    </div>
                 </div>
             ))}
+            {attendInfo.length > 5 && (
+                <div className="flex justify-center mt-5">
+                    <GreyBorderBtn content="더보기" />
+                </div>
+            )}
         </div>
     );
 };

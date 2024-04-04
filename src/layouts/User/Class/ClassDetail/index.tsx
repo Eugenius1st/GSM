@@ -1,7 +1,10 @@
+// hooks
+import { useRecoilValue } from 'recoil';
+import { IsMobileSelector } from 'atom/isMobile';
 // Class Components
 import ViewUserCard from 'layouts/User/Class/components/ViewUserCard';
 // Cards
-import ClassCard from 'layouts/Admin/Class/Components/ClassCard';
+import ClassCard from 'components/Cards/ClassCard';
 // images
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
 import user1 from 'assets/user/user1.jpg';
@@ -12,14 +15,17 @@ import user4 from 'assets/user/user4.png';
 import Divider from 'components/Common/Divider';
 
 const ClassDetail = () => {
+    const isMobile = useRecoilValue(IsMobileSelector);
+
     const classInfo = {
         id: 1,
         classImage: class_adult_woman,
-        title: '성인남성반',
+        title: '성인남성반1',
         date: '2024-03-09',
         location: '수원점',
-        attend: '8/10',
+        attendCount: '8/10',
         waiting: 4,
+        attend: true,
         coaches: ['안유진', '최보미'],
         notice: '신장 00cm 제한입니다. 조건에 맞지 않는 신청시, 취소됩니다.',
     };
@@ -48,7 +54,10 @@ const ClassDetail = () => {
                 </div>
             </div>
             <div>
-                <ClassCard classInfo={classInfo} />
+                <ClassCard
+                    classInfo={classInfo}
+                    isMobile={isMobile}
+                />
             </div>
 
             <Divider />

@@ -63,11 +63,8 @@ export default function TemporaryDrawer() {
             <Divider />
             <List>
                 {adminListItems.map((el, idx) => (
-                    <>
-                        <ListItem
-                            key={idx}
-                            disablePadding
-                        >
+                    <div key={`${el.title}`}>
+                        <ListItem disablePadding>
                             <Link
                                 to={el.link}
                                 className="w-full"
@@ -83,7 +80,7 @@ export default function TemporaryDrawer() {
                                 {el.subTabs.map((tab) => (
                                     <Link
                                         to={tab.link}
-                                        key={tab.title}
+                                        key={`${tab.title}`}
                                     >
                                         <div className="px-2 py-1 pl-16 hover:bg-egGrey-semiLight text-egGrey-default">
                                             <span className="mr-2">·</span> {tab.title}
@@ -92,7 +89,7 @@ export default function TemporaryDrawer() {
                                 ))}
                             </div>
                         )}
-                    </>
+                    </div>
                 ))}
             </List>
         </Box>
