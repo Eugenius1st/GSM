@@ -73,7 +73,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
         classInfo,
         marketingConsent,
     } = userInfo;
-    const isMobile = useRecoilValue(IsMobileSelector);
+    let isMobile = useRecoilValue(IsMobileSelector);
     const titleStyle = 'mr-2 font-bold my-1';
     const listStyle = 'inline-block w-56';
     const [seeMore, setSeeMore] = useState(false);

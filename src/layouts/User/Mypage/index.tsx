@@ -11,7 +11,7 @@ import user5 from 'assets/user/user5.jpeg';
 // Commons
 import Divider from 'components/Common/Divider';
 const MyPage = () => {
-    const isMobile = useRecoilValue(IsMobileSelector);
+    let isMobile = useRecoilValue(IsMobileSelector);
     const userInfo = {
         thumbnail: user5,
         name: '손흥민',

@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react';
 const Class = () => {
     const [curPage, setCurPage] = useState(1);
     const location = useLocation().pathname;
-    const isMobile = useRecoilValue(IsMobileSelector);
+    let isMobile = useRecoilValue(IsMobileSelector);
     const classInfo = [
         {
             id: 1,

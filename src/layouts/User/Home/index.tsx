@@ -16,7 +16,7 @@ import { IoIosArrowForward } from 'react-icons/io';
 // Modals
 import ReadFeedbackModal from 'components/Modals/ReadFeedbackModal';
 const User = () => {
-    const isMobile = useRecoilValue(IsMobileSelector);
+    let isMobile = useRecoilValue(IsMobileSelector);
     const userInfo = {
         thumbnail: user5,
         name: '손흥민',

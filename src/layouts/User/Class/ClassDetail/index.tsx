@@ -15,7 +15,7 @@ import user4 from 'assets/user/user4.png';
 import Divider from 'components/Common/Divider';
 
 const ClassDetail = () => {
-    const isMobile = useRecoilValue(IsMobileSelector);
+    let isMobile = useRecoilValue(IsMobileSelector);
 
     const classInfo = {
         id: 1,

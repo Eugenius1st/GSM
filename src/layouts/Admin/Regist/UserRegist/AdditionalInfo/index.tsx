@@ -9,7 +9,7 @@ import CheckboxGroup from 'components/Common/CheckboxGroup';
 
 const AdditionalInfo = () => {
     // 웹 앱 구분
-    const isMobile = useRecoilValue(IsMobileAtom);
+    let isMobile = useRecoilValue(IsMobileAtom);
     // 데이터
     const [mainFoot, setMainFoot] = useState('주 발');
     const [soccerRecord, setSoccerRecord] = useState([{ record: '', startDate: '', endDate: '' }]);

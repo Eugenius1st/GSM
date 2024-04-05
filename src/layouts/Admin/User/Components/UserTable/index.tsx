@@ -17,28 +17,24 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { IoFilterSharp } from 'react-icons/io5';
 import { visuallyHidden } from '@mui/utils';
-
 // Common
 import SearchBar from 'components/Common/SearchBar';
-
 //hooks
 import { Link } from 'react-router-dom';
-
+import { useRecoilValue } from 'recoil';
+import { IsMobileSelector } from 'atom/isMobile';
 // images
 import user1 from 'assets/user/user1.jpg';
 import user2 from 'assets/user/user2.png';
 import user3 from 'assets/user/user3.jpeg';
 import user4 from 'assets/user/user4.png';
-
 // Buttons
 import WhiteBtn from 'components/Buttons/WhiteBtn';
 import PurpleBtn from 'components/Buttons/PurpleBtn';
-
 // colors
 import colors from 'assets/colors/palette';
 // icons
 import { RiUserForbidFill } from 'react-icons/ri';
-
 interface Data {
     id: number;
     profile: string;
@@ -211,6 +207,7 @@ interface EnhancedTableProps {
 
 function EnhancedTableHead(props: EnhancedTableProps) {
     const { egPurple } = colors;
+    let isMobile = useRecoilValue(IsMobileSelector);
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
     const createSortHandler = (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
@@ -233,10 +230,14 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                         }}
                     />
                 </TableCell>
+
                 {headCells.map((headCell) => (
                     <TableCell
                         align="left"
-                        sx={{ paddingX: 0, width: '1rem' }}
+                        sx={{
+                            paddingX: 0,
+                            width: 'fit-content',
+                        }}
                         key={headCell.id}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
@@ -258,7 +259,10 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                     </TableCell>
                 ))}
                 <TableCell
-                    sx={{ paddingX: 0, width: '1rem' }}
+                    sx={{
+                        paddingX: 0,
+                        width: '1rem',
+                    }}
                     align="left"
                 >
                     정보 보기
@@ -436,7 +440,10 @@ export default function EnhancedTable() {
                                         </TableCell>
                                         <TableCell
                                             align="center"
-                                            sx={{ paddingX: 0, width: '1rem' }}
+                                            sx={{
+                                                paddingX: 0,
+                                                width: '1rem',
+                                            }}
                                         >
                                             <img
                                                 className="object-cover rounded-full w-14 h-14"
@@ -444,7 +451,6 @@ export default function EnhancedTable() {
                                                 alt={row.name}
                                             />
                                         </TableCell>
-
                                         <TableCell
                                             align="left"
                                             sx={{ paddingX: 0, width: '1rem' }}
@@ -467,7 +473,10 @@ export default function EnhancedTable() {
                                             {row.age} 세
                                         </TableCell>
                                         <TableCell
-                                            sx={{ paddingX: 0, marginX: 0 }}
+                                            sx={{
+                                                paddingX: 0,
+                                                marginX: 0,
+                                            }}
                                             align="left"
                                         >
                                             <Link to={`/admin/user/${row.id}`}>
