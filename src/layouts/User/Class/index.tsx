@@ -7,7 +7,7 @@ import ClassCard from 'components/Cards/ClassCard';
 // images
 import class_adult_man from 'assets/class/class_adult_man.jpeg';
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
-// Commons
+// Common
 import DropDown from 'components/EgMaterials/DropDown';
 // Material UI
 import PaginationRounded from 'components/EgMaterials/Pagenation';
@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react';
 const Class = () => {
     const [curPage, setCurPage] = useState(1);
     const location = useLocation().pathname;
-    const isMobile = useRecoilValue(IsMobileSelector);
+    let isMobile = useRecoilValue(IsMobileSelector);
     const classInfo = [
         {
             id: 1,

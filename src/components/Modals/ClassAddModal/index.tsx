@@ -8,8 +8,10 @@ import MemoCard from 'components/Cards/MemoCard';
 import WhiteBtn from 'components/Buttons/WhiteBtn';
 // icons
 import { CgClose } from 'react-icons/cg';
+import { CiSquarePlus } from 'react-icons/ci';
 
 const ClassAddModal = () => {
+    const classList = ['엘리트반', '성인반', '취미반'];
     const [isShow, setIsShow] = useState(false);
     const handleShowModal = () => {
         setIsShow(true);
@@ -34,21 +36,49 @@ const ClassAddModal = () => {
                             <CgClose onClick={handleCloseModal} />
                         </div>
                         <div className="p-4">
+                            <div className="flex items-center mb-2">
+                                <label
+                                    htmlFor="className"
+                                    className="w-20 mr-4 text-lg font-semibold"
+                                >
+                                    수업명
+                                </label>
+                                <select
+                                    name="className"
+                                    id="className"
+                                    className="w-32 p-1 border rounded-md border-egGrey-default"
+                                >
+                                    {classList.map((el, idx) => (
+                                        <option
+                                            key={idx}
+                                            value={el}
+                                        >
+                                            {el}
+                                        </option>
+                                    ))}
+                                </select>
+                                <CiSquarePlus className="w-6 h-6 ml-2" />
+                            </div>
                             <div className="flex mb-2">
-                                <span className="w-20 mr-4 text-lg font-semibold">수업명</span>
+                                <span className="w-20 mr-4 text-lg font-semibold">시작 날짜</span>
                                 <input
-                                    placeholder="수업명"
-                                    type="number"
-                                    min="0"
-                                    max="99"
-                                    className="w-40 p-1 border rounded-md border-egGrey-default"
+                                    type="date"
+                                    className="w-32 p-1 mr-2 border rounded-md border-egGrey-default"
+                                />
+                                <input
+                                    type="time"
+                                    className="w-32 p-1 border rounded-md border-egGrey-default"
                                 />
                             </div>
                             <div className="flex mb-2">
-                                <span className="w-20 mr-4 text-lg font-semibold">날짜</span>
+                                <span className="w-20 mr-4 text-lg font-semibold">종료 날짜</span>
                                 <input
                                     type="date"
-                                    className="w-40 p-1 border rounded-md border-egGrey-default"
+                                    className="w-32 p-1 mr-2 border rounded-md border-egGrey-default"
+                                />
+                                <input
+                                    type="time"
+                                    className="w-32 p-1 border rounded-md border-egGrey-default"
                                 />
                             </div>
 

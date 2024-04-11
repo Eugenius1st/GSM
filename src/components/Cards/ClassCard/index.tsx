@@ -1,7 +1,6 @@
 // hooks
 import React from 'react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { IsMobileSelector } from 'atom/isMobile';
 
@@ -28,14 +27,13 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
     const infoStyle = 'mb-2 pb-1 flex border-b border-egGrey-default';
     const titleStyle = isMobile ? 'mr-2 w-24 flex-shrink-0' : 'mr-2 w-20 ';
     const highLight = 'px-1 bg-egPurple-superLight';
-    const navigation = useNavigate();
     const [attendState, setAttendState] = useState(classInfo.attend);
     const attendHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
         setAttendState(!attendState);
     };
     return (
-        <div onClick={() => navigation(`/user/class/${classInfo.id}`)}>
+        <div>
             <div className="relative z-0 p-4 mb-4 border shadow-md border-egGrey-default">
                 {classInfo.attend && <div className="mb-2 text-lg font-bold">내 수업</div>}
 

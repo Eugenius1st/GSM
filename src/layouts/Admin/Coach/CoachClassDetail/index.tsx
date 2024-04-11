@@ -11,7 +11,7 @@ import user2 from 'assets/user/user2.png';
 import user3 from 'assets/user/user3.jpeg';
 import user4 from 'assets/user/user4.png';
 
-// Commons
+// Common
 import Divider from 'components/Common/Divider';
 
 const CoachClassDetail = () => {

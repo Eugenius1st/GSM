@@ -9,14 +9,14 @@ import ClassCard from 'components/Cards/ClassCard';
 import user5 from 'assets/user/user5.jpeg';
 import class_adult_man from 'assets/class/class_adult_man.jpeg';
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
-// Commons
+// Common
 import Divider from 'components/Common/Divider';
 // Icons
 import { IoIosArrowForward } from 'react-icons/io';
 // Modals
 import ReadFeedbackModal from 'components/Modals/ReadFeedbackModal';
 const User = () => {
-    const isMobile = useRecoilValue(IsMobileSelector);
+    let isMobile = useRecoilValue(IsMobileSelector);
     const userInfo = {
         thumbnail: user5,
         name: '손흥민',
@@ -100,10 +100,12 @@ const User = () => {
                 </Link>
             </div>
             {classInfo.map((el, idx) => (
-                <ClassCard
-                    classInfo={el}
+                <Link
                     key={idx}
-                />
+                    to={`/user/class/${el.id}`}
+                >
+                    <ClassCard classInfo={el} />
+                </Link>
             ))}
         </div>
     );

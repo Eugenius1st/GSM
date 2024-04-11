@@ -1,6 +1,6 @@
 // hooks
 import { useLocation } from 'react-router-dom';
-// Commons
+// Common
 import Divider from 'components/Common/Divider';
 // Eg Components
 import EgPageTable from 'components/EgMaterials/PageTable';

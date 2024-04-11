@@ -1,4 +1,4 @@
-// Commons
+// Common
 import TagCard from 'components/Common/Tags/TagCard';
 import Divider from 'components/Common/Divider';
 

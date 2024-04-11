@@ -5,7 +5,7 @@ import { useRecoilValue } from 'recoil';
 import { IsMobileAtom } from 'atom/isMobile';
 // utility
 import ImageUploader from 'utility/ImageUploader';
-// Commons
+// Common
 import Divider from 'components/Common/Divider';
 import Divideline from 'components/Common/Divideline';
 // icons
@@ -16,7 +16,7 @@ import colors from 'assets/colors/palette';
 
 const BasicInfo = () => {
     // 웹 앱 구분
-    const isMobile = useRecoilValue(IsMobileAtom);
+    let isMobile = useRecoilValue(IsMobileAtom);
     // 데이터
     const [gender, setGender] = useState('성별');
     const [parents, setParents] = useState('');

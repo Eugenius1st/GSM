@@ -25,7 +25,7 @@ interface EgPhotoCardType {
 
 const EgPhotoCard = ({ id, name, image, birthYear, describe, imageY, type }: EgPhotoCardType) => {
     const { egWhite, egPurple } = colors;
-    const isMobile = useRecoilValue(IsMobileAtom);
+    let isMobile = useRecoilValue(IsMobileAtom);
     const navigate = useNavigate();
     return (
         <Card

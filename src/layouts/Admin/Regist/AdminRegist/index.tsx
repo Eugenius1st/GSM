@@ -20,7 +20,7 @@ import colors from 'assets/colors/palette';
 
 const AdminRegist = () => {
     // 웹 앱 구분
-    const isMobile = useRecoilValue(IsMobileAtom);
+    let isMobile = useRecoilValue(IsMobileAtom);
     // 데이터
     const [gender, setGender] = useState('성별');
     const [soccerRecord, setSoccerRecord] = useState([{ record: '', startDate: '', endDate: '' }]);

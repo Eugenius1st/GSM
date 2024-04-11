@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 // recoil
 import { useRecoilState } from 'recoil';
 import { LoginAtomSelector } from 'atom/auth';
-// Commons
+// Common
 import EgInput from 'components/EgMaterials/EgInput';
 import EgCheckBox from 'components/EgMaterials/CheckBox';
 // Buttons

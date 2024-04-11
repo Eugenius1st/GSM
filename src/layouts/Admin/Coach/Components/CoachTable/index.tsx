@@ -18,22 +18,22 @@ import Tooltip from '@mui/material/Tooltip';
 import { IoFilterSharp } from 'react-icons/io5';
 import { RiDeleteBin6Fill } from 'react-icons/ri';
 import { visuallyHidden } from '@mui/utils';
-
 //hooks
 import { Link } from 'react-router-dom';
-
 // images
 import coach_son from 'assets/coach/coach_son.jpeg';
 import coach_kim from 'assets/coach/coach_kim.jpeg';
 import coach_hong from 'assets/coach/coach_hong.jpeg';
-
+// Common
+import SearchBar from 'components/Common/SearchBar';
+import SelectMenu from 'components/Common/SelectMenu';
+// Eg Components
+import DropDownModal from 'components/EgMaterials/DropDown';
 // Buttons
 import WhiteBtn from 'components/Buttons/WhiteBtn';
 import PurpleBtn from 'components/Buttons/PurpleBtn';
-
 // colors
 import colors from 'assets/colors/palette';
-
 // icons
 import { RiUserForbidFill } from 'react-icons/ri';
 
@@ -287,6 +287,8 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                 ...(numSelected > 0 && {
                     bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
                 }),
+                display: 'flex',
+                justifyContent: 'space-between',
             }}
         >
             {numSelected > 0 ? (
@@ -300,14 +302,15 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                 </Typography>
             ) : (
                 <Typography
-                    sx={{ flex: '1 1 100%', fontWeight: 'bold' }}
+                    sx={{ fontWeight: 'bold' }}
                     variant="subtitle1"
                     id="tableTitle"
                     component="div"
                 >
-                    코치 정보
+                    코치정보
                 </Typography>
             )}
+
             {numSelected > 0 ? (
                 <Tooltip title="Delete">
                     <IconButton>
@@ -316,11 +319,29 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                     </IconButton>
                 </Tooltip>
             ) : (
-                <Tooltip title="Filter list">
-                    <IconButton>
-                        <IoFilterSharp />
-                    </IconButton>
-                </Tooltip>
+                <div className="flex">
+                    <div className="mr-2">
+                        <SelectMenu menuList={['이름', '소속']} />
+                    </div>
+
+                    <SearchBar />
+                    <DropDownModal
+                        itemList={[
+                            {
+                                item: 'ALL',
+                            },
+                            {
+                                item: '엘리트반',
+                            },
+                            {
+                                item: '취미반',
+                            },
+                            {
+                                item: '성인반',
+                            },
+                        ]}
+                    />
+                </div>
             )}
         </Toolbar>
     );
