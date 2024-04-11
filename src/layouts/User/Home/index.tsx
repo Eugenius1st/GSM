@@ -100,10 +100,12 @@ const User = () => {
                 </Link>
             </div>
             {classInfo.map((el, idx) => (
-                <ClassCard
-                    classInfo={el}
+                <Link
                     key={idx}
-                />
+                    to={`/user/class/${el.id}`}
+                >
+                    <ClassCard classInfo={el} />
+                </Link>
             ))}
         </div>
     );
