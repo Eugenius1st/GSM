@@ -1,6 +1,6 @@
 // hooks
 import { useState } from 'react';
-// Commons
+// Common
 import EgCheckBox from 'components/EgMaterials/CheckBox';
 import Divideline from 'components/Common/Divideline';
 import Divider from 'components/Common/Divider';

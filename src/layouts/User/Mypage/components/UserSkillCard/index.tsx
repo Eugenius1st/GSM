@@ -1,4 +1,4 @@
-// Common Components
+// Common
 import PurpleTag from 'components/Common/Tags/PurpleTag';
 import Divider from 'components/Common/Divider';
 

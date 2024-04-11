@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { IsMobileSelector } from 'atom/isMobile';
-// EgMetrials
+// Eg Components
 import EgCheckBox from 'components/EgMaterials/CheckBox';
 
 // Common

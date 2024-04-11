@@ -9,7 +9,7 @@ import ClassCard from 'components/Cards/ClassCard';
 import user5 from 'assets/user/user5.jpeg';
 import class_adult_man from 'assets/class/class_adult_man.jpeg';
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
-// Commons
+// Common
 import Divider from 'components/Common/Divider';
 // Icons
 import { IoIosArrowForward } from 'react-icons/io';

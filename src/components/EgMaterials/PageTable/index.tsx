@@ -1,6 +1,6 @@
 // hooks
 import { useNavigate } from 'react-router-dom';
-// materialUI
+// Material UI
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';

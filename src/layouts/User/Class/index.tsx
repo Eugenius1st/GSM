@@ -7,7 +7,7 @@ import ClassCard from 'components/Cards/ClassCard';
 // images
 import class_adult_man from 'assets/class/class_adult_man.jpeg';
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
-// Commons
+// Common
 import DropDown from 'components/EgMaterials/DropDown';
 // Material UI
 import PaginationRounded from 'components/EgMaterials/Pagenation';

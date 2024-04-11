@@ -5,7 +5,7 @@ import { useRecoilValue } from 'recoil';
 import { IsMobileAtom } from 'atom/isMobile';
 // utility
 import ImageUploader from 'utility/ImageUploader';
-// Commons
+// Common
 import Divider from 'components/Common/Divider';
 import Divideline from 'components/Common/Divideline';
 // icons

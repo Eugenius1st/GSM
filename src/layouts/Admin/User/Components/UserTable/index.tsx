@@ -19,6 +19,9 @@ import { IoFilterSharp } from 'react-icons/io5';
 import { visuallyHidden } from '@mui/utils';
 // Common
 import SearchBar from 'components/Common/SearchBar';
+import SelectMenu from 'components/Common/SelectMenu';
+// Eg Components
+import DropDownModal from 'components/EgMaterials/DropDown';
 //hooks
 import { Link } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
@@ -320,13 +323,27 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                 </Tooltip>
             ) : (
                 <div className="flex">
-                    <SearchBar />
+                    <div className="mr-2">
+                        <SelectMenu menuList={['이름', '소속']} />
+                    </div>
 
-                    <Tooltip title="Filter list">
-                        <IconButton>
-                            <IoFilterSharp />
-                        </IconButton>
-                    </Tooltip>
+                    <SearchBar />
+                    <DropDownModal
+                        itemList={[
+                            {
+                                item: 'ALL',
+                            },
+                            {
+                                item: '엘리트반',
+                            },
+                            {
+                                item: '취미반',
+                            },
+                            {
+                                item: '성인반',
+                            },
+                        ]}
+                    />
                 </div>
             )}
         </Toolbar>

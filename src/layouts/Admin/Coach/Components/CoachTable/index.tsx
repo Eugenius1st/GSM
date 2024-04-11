@@ -316,11 +316,13 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                     </IconButton>
                 </Tooltip>
             ) : (
-                <Tooltip title="Filter list">
-                    <IconButton>
-                        <IoFilterSharp />
-                    </IconButton>
-                </Tooltip>
+                <></>
+                // 필터링 버튼
+                // <Tooltip title="Filter list">
+                //     <IconButton>
+                //         <IoFilterSharp />
+                //     </IconButton>
+                // </Tooltip>
             )}
         </Toolbar>
     );

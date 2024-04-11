@@ -8,7 +8,7 @@ import UserAdditionalCard from 'layouts/User/Mypage/components/UserAdditionalCar
 import UserSkillCard from 'layouts/User/Mypage/components/UserSkillCard';
 //images
 import user5 from 'assets/user/user5.jpeg';
-// Commons
+// Common
 import Divider from 'components/Common/Divider';
 const MyPage = () => {
     let isMobile = useRecoilValue(IsMobileSelector);

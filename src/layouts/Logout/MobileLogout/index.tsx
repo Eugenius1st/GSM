@@ -1,7 +1,7 @@
 // hooks
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// Commons
+// Common
 import EgInput from 'components/EgMaterials/EgInput';
 import EgCheckBox from 'components/EgMaterials/CheckBox';
 // Buttons
