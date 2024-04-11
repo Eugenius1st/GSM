@@ -144,7 +144,7 @@ const MenuButton = styled(BaseMenuButton)(
   font-weight: 600;
   font-size: 0.875rem;
   line-height: 1.5;
-  padding: 8px 16px;
+  padding: 4px 8px;
   border-radius: 8px;
   color: white;
   transition: all 150ms ease;

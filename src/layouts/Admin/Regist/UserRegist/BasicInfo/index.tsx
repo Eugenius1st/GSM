@@ -7,7 +7,8 @@ import { IsMobileAtom } from 'atom/isMobile';
 import ImageUploader from 'utility/ImageUploader';
 // Common
 import Divider from 'components/Common/Divider';
-import Divideline from 'components/Common/Divideline';
+// Modals
+import ResidenceSearchModal from 'components/Modals/ResidenceSearchModal';
 // icons
 import { FaCamera } from 'react-icons/fa';
 import { FaUser } from 'react-icons/fa6';
@@ -149,13 +150,18 @@ const BasicInfo = () => {
                         </div>
                     </div>
                     {/* 주소 */}
-                    <label htmlFor="address">주소</label>
-                    <input
-                        id="address"
-                        type="address"
-                        placeholder="주소"
-                        className="w-full p-2 mt-1 border border-egGrey-default"
-                    />
+                    <label htmlFor="address">주소?</label>
+                    <div className="relative">
+                        <input
+                            id="address"
+                            type="address"
+                            placeholder="주소"
+                            className="w-full p-2 mt-1 border border-egGrey-default"
+                        />
+                        <div className="absolute right-[5px] top-[10px]">
+                            <ResidenceSearchModal />
+                        </div>
+                    </div>
                     <input
                         id="detail_address"
                         type="address"

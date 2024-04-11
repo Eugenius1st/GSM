@@ -25,7 +25,7 @@ const ClassDetail = () => {
         classImage: class_adult_woman,
         title: '성인남성반',
         date: '2024-03-09',
-        location: '수원점',
+        location: '수원월드컵점',
         attendCount: '8/10',
         waiting: 4,
         coaches: ['안유진', '최보미'],

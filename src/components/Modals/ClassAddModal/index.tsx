@@ -8,11 +8,26 @@ import MemoCard from 'components/Cards/MemoCard';
 import WhiteBtn from 'components/Buttons/WhiteBtn';
 // icons
 import { CgClose } from 'react-icons/cg';
-import { CiSquarePlus } from 'react-icons/ci';
+import { FiPlus } from 'react-icons/fi';
+import { IoMdSearch } from 'react-icons/io';
+// Modals
+import BasicModal from '../BasicModal';
 
 const ClassAddModal = () => {
     const classList = ['엘리트반', '성인반', '취미반'];
     const [isShow, setIsShow] = useState(false);
+    const [isSearched, setIsSearched] = useState(false);
+    const searchedCoachs = [
+        { id: 1, name: '손상훈', birth: '1997' },
+        { id: 1, name: '손삼훈', birth: '1997' },
+        { id: 1, name: '송상흥', birth: '1997' },
+        { id: 1, name: '손상훈', birth: '1997' },
+        { id: 1, name: '손삼훈', birth: '1997' },
+        { id: 1, name: '송상흥', birth: '1997' },
+        { id: 1, name: '손상훈', birth: '1997' },
+        { id: 1, name: '손삼훈', birth: '1997' },
+        { id: 1, name: '송상흥', birth: '1997' },
+    ];
     const handleShowModal = () => {
         setIsShow(true);
         document.body.style.overflow = 'hidden';
@@ -57,7 +72,30 @@ const ClassAddModal = () => {
                                         </option>
                                     ))}
                                 </select>
-                                <CiSquarePlus className="w-6 h-6 ml-2" />
+                                <BasicModal
+                                    modalBtn={
+                                        <button className="flex items-center p-1 ml-2 border rounded-md border-egPurple-default hover:bg-egPurple-superLight">
+                                            <div className="text-sm">수업 추가</div>
+                                            <FiPlus className="w-4 h-4 text-egPurple-default " />
+                                            <div></div>
+                                        </button>
+                                    }
+                                    modalTitle={'수업 추가'}
+                                    modalContents={
+                                        <div className="p-2">
+                                            <div>추가하실 수업명을 입력하세요 (최대 15글자)</div>
+                                            <input
+                                                placeholder="수업명"
+                                                maxLength={15}
+                                                type="text"
+                                                className="w-full p-2 my-4 border border-egPurple-default"
+                                            />
+                                        </div>
+                                    }
+                                    modalFooterExitBtn={'취소'}
+                                    modalFooterActiveBtn={'입력'}
+                                    modalScrollStayFlag={false}
+                                />
                             </div>
                             <div className="flex mb-2">
                                 <span className="w-20 mr-4 text-lg font-semibold">시작 날짜</span>
@@ -104,7 +142,7 @@ const ClassAddModal = () => {
                                         value="Suwon"
                                         className="w-4 h-4 mr-1"
                                     />
-                                    <label htmlFor="Suwon">수원점</label>
+                                    <label htmlFor="Suwon">수원월드컵점</label>
                                 </div>
                             </div>
                             <div className="flex mb-2">
@@ -117,15 +155,49 @@ const ClassAddModal = () => {
                                     className="w-40 p-1 border rounded-md border-egGrey-default"
                                 />
                             </div>
-                            <div className="flex mb-2">
+                            <div className="flex items-center mb-2">
                                 <span className="w-20 mr-4 text-lg font-semibold">참석 코치</span>
-
-                                <input
-                                    placeholder="코치 이름"
-                                    type="number"
-                                    min="0"
-                                    max="99"
-                                    className="w-40 p-1 border rounded-md border-egGrey-default"
+                                <div className="w-40 h-8 p-1 border rounded-md border-egGrey-default">
+                                    <div className="flex items-center px-1 text-sm rounded-sm bg-egBlack-superLight w-fit">
+                                        손상훈 <CgClose />
+                                    </div>
+                                </div>
+                                <BasicModal
+                                    modalBtn={
+                                        <button className="flex items-center p-1 ml-2 border rounded-md border-egPurple-default hover:bg-egPurple-superLight">
+                                            <div className="mr-1 text-sm">코치 검색</div>
+                                            <IoMdSearch className="w-4 h-4 text-egPurple-default" />
+                                        </button>
+                                    }
+                                    modalTitle={'코치 검색'}
+                                    modalContents={
+                                        <div className="p-2">
+                                            <div>찾으시는 코치의 이름을 입력하세요 (최대 10글자)</div>
+                                            <div className="flex items-center w-full mt-4 border border-egPurple-default">
+                                                <input
+                                                    type="text"
+                                                    minLength={10}
+                                                    className="w-full p-2 border-none focus:outline-none"
+                                                />
+                                                <IoMdSearch
+                                                    onClick={() => setIsSearched(!isSearched)}
+                                                    className="w-6 h-6 mx-2 text-egPurple-default"
+                                                />
+                                            </div>
+                                            {isSearched && (
+                                                <div className="h-40 py-1 overflow-y-auto border shadow-lg rounded-b-md">
+                                                    {searchedCoachs.map((el) => (
+                                                        <div className="flex px-4 py-1 hover:bg-egGrey-light">
+                                                            {el.name} ({el.birth})
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    }
+                                    // modalFooterExitBtn={'취소'}
+                                    // modalFooterActiveBtn={'입력'}
+                                    modalScrollStayFlag={false}
                                 />
                             </div>
                             <div className="flex mb-2">

@@ -322,8 +322,8 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                     </IconButton>
                 </Tooltip>
             ) : (
-                <div className="flex">
-                    <div className="mr-2">
+                <div className="flex items-center">
+                    <div className="mr-1">
                         <SelectMenu menuList={['이름', '소속']} />
                     </div>
 

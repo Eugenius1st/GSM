@@ -12,6 +12,7 @@ interface BasicModalType {
     modalContents?: React.ReactNode;
     modalFooterExitBtn?: string;
     modalFooterActiveBtn?: string;
+    modalScrollStayFlag?: boolean;
 }
 
 const BasicModal = ({
@@ -20,6 +21,7 @@ const BasicModal = ({
     modalContents,
     modalFooterExitBtn,
     modalFooterActiveBtn,
+    modalScrollStayFlag = true,
 }: BasicModalType) => {
     const [isShow, setIsShow] = useState(false);
     const handleShowModal = () => {
@@ -28,7 +30,7 @@ const BasicModal = ({
     };
     const handleCloseModal = () => {
         setIsShow(false);
-        document.body.style.overflow = 'unset';
+        if (modalScrollStayFlag) document.body.style.overflow = 'unset';
     };
     return (
         <div>
@@ -45,7 +47,7 @@ const BasicModal = ({
                             {modalFooterExitBtn && (
                                 <WhiteBtn
                                     content={modalFooterExitBtn}
-                                    func={handleShowModal}
+                                    func={handleCloseModal}
                                 />
                             )}
                             {modalFooterActiveBtn && (
