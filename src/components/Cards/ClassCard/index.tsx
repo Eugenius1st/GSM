@@ -39,6 +39,7 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
 
                 {classInfo.attend && (
                     <button
+                        type="button"
                         onClick={(e) => attendHandler(e)}
                         className={
                             attendState

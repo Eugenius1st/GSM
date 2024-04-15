@@ -34,6 +34,7 @@ const MemoCard = ({ tab, memo }: MemoCardType) => {
             <div>
                 {tab.map((el, idx) => (
                     <button
+                        type="button"
                         key={idx}
                         onClick={() => setMemoTab(el)}
                         className={`px-4 py-2 ml-2 rounded-md ${memoTab === el ? activeTab : inactiveTab}`}

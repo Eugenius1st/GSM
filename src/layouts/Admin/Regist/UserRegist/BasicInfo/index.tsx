@@ -88,6 +88,7 @@ const BasicInfo = () => {
                         <div className={gender === '성별' ? 'w-full text-egGrey-default' : 'w-full'}>{gender}</div>
                         <div className="absolute right-0 flex justify-end top-1">
                             <button
+                                type="button"
                                 onClick={() => setGender('남자')}
                                 className={
                                     gender === '남자'
@@ -98,6 +99,7 @@ const BasicInfo = () => {
                                 남자
                             </button>
                             <button
+                                type="button"
                                 onClick={() => setGender('여자')}
                                 className={
                                     gender === '여자'
@@ -128,6 +130,7 @@ const BasicInfo = () => {
                         />
                         <div className="absolute right-0 flex mb-1 top-2">
                             <button
+                                type="button"
                                 onClick={() => setParents('부')}
                                 className={
                                     parents === '부'
@@ -138,6 +141,7 @@ const BasicInfo = () => {
                                 부
                             </button>
                             <button
+                                type="button"
                                 onClick={() => setParents('모')}
                                 className={
                                     parents === '모'

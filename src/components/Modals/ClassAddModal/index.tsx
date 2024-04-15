@@ -15,6 +15,7 @@ import BasicModal from '../BasicModal';
 
 const ClassAddModal = () => {
     const classList = ['엘리트반', '성인반', '취미반'];
+    const [selectedClass, setSelecteClass] = useState('');
     const [isShow, setIsShow] = useState(false);
     const [isSearched, setIsSearched] = useState(false);
     const searchedCoachs = [
@@ -62,6 +63,7 @@ const ClassAddModal = () => {
                                     name="className"
                                     id="className"
                                     className="w-32 p-1 border rounded-md border-egGrey-default"
+                                    onChange={(e) => setSelecteClass(e.target.value)}
                                 >
                                     {classList.map((el, idx) => (
                                         <option
@@ -97,6 +99,33 @@ const ClassAddModal = () => {
                                     modalScrollStayFlag={false}
                                 />
                             </div>
+                            {selectedClass === '엘리트반' && (
+                                <div className="flex mb-2 items">
+                                    <span className="w-20 mr-4 text-lg font-semibold">수업분류</span>
+
+                                    <div className="flex items-center mr-2">
+                                        <input
+                                            type="radio"
+                                            id="skills"
+                                            name="classification"
+                                            value="skills"
+                                            className="w-4 h-4 mr-1"
+                                        />
+                                        <label htmlFor="skills">실기 수업</label>
+                                    </div>
+                                    <div className="flex items-center mr-2">
+                                        <input
+                                            type="radio"
+                                            id="theory"
+                                            name="classification"
+                                            value="theory"
+                                            className="w-4 h-4 mr-1"
+                                            defaultChecked={true}
+                                        />
+                                        <label htmlFor="theory">이론 수업</label>
+                                    </div>
+                                </div>
+                            )}
                             <div className="flex mb-2">
                                 <span className="w-20 mr-4 text-lg font-semibold">시작 날짜</span>
                                 <input
