@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 interface CustomDropdownType {
     placehorder?: string;
     formStyle?: string;
-    itemList: string[];
+    itemList: string[] | number[];
     inputStyle?: string;
     itemStyle?: string;
 }

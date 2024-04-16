@@ -24,7 +24,7 @@ export default function BasicDatePicker({ content, range, isMobile }: BasicDateP
         else dateString = year + '/' + month + '/' + day;
         setCurDate(dateString);
     };
-
+    console.log('curDate', curDate);
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             {isMobile ? (

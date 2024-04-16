@@ -1,5 +1,5 @@
 //hooks
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 // recoil
 import { useRecoilValue } from 'recoil';
@@ -16,6 +16,7 @@ import galloping_purple_logo from 'assets/logo/galloping_purple_logo.jpg';
 import SubTab from 'components/Common/Header/components/SubTab';
 
 const WebHeader = () => {
+    const navigate = useNavigate();
     const location = useLocation().pathname;
     const locationList = location.split('/');
     const loginState = useRecoilValue(LoginAtomSelector);
@@ -131,8 +132,10 @@ const WebHeader = () => {
                             </div>
 
                             <div>
-                                <WhiteBtn content="SignUp" />
-                                <PurpleBtn content="Login" />
+                                <PurpleBtn
+                                    content="Login"
+                                    func={() => navigate('/')}
+                                />
                             </div>
                         </div>
                     )}
@@ -151,8 +154,10 @@ const WebHeader = () => {
                     </Link>
 
                     <div>
-                        <WhiteBtn content="SignUp" />
-                        <PurpleBtn content="Login" />
+                        <PurpleBtn
+                            content="Login"
+                            func={() => navigate('/')}
+                        />
                     </div>
                 </div>
             )}

@@ -154,7 +154,7 @@ const BasicInfo = () => {
                         </div>
                     </div>
                     {/* 주소 */}
-                    <label htmlFor="address">주소?</label>
+                    <label htmlFor="address">주소</label>
                     <div className="relative">
                         <input
                             id="address"
