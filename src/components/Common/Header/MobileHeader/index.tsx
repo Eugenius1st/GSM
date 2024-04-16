@@ -1,5 +1,5 @@
 //hooks
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 // recoil
 import { useRecoilValue } from 'recoil';
 import { LoginAtomSelector } from 'atom/auth';
@@ -17,6 +17,7 @@ import galloping_purple_logo from 'assets/logo/galloping_purple_logo.jpg';
 
 const MobileHeader = () => {
     const loginState = useRecoilValue(LoginAtomSelector);
+    const navigate = useNavigate();
 
     return (
         <div className="fixed top-0 z-50 w-screen border-b-2 bg-egWhite-default">
@@ -64,8 +65,10 @@ const MobileHeader = () => {
                             </div>
 
                             <div>
-                                <WhiteBtn content="SignUp" />
-                                <PurpleBtn content="Login" />
+                                <PurpleBtn
+                                    content="Login"
+                                    func={() => navigate('/')}
+                                />
                             </div>
                         </div>
                     )}
@@ -84,8 +87,10 @@ const MobileHeader = () => {
                     </Link>
 
                     <div>
-                        <WhiteBtn content="SignUp" />
-                        <PurpleBtn content="Login" />
+                        <PurpleBtn
+                            content="Login"
+                            func={() => navigate('/')}
+                        />
                     </div>
                 </div>
             )}

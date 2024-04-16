@@ -58,7 +58,7 @@ const ResidenceSearchModal = () => {
                         </div>
 
                         <MapSearch
-                            residence={residence}
+                            // residence={residence}
                             setResidence={setResidence}
                         />
                         <div className="flex justify-between">

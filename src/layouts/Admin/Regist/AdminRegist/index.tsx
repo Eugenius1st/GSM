@@ -22,9 +22,38 @@ const AdminRegist = () => {
     // 웹 앱 구분
     let isMobile = useRecoilValue(IsMobileAtom);
     // 데이터
+    const [adminId, setAdminId] = useState('');
+    const [adminPw, setAdminPw] = useState('');
+    const [role, setRole] = useState('admin');
+    const [scope, setScope] = useState(['gsm']);
+    const [photo, setPhoto] = useState('');
+    const [name, setName] = useState('');
     const [gender, setGender] = useState('성별');
-    const [soccerRecord, setSoccerRecord] = useState([{ record: '', startDate: '', endDate: '' }]);
+    const [birth, setBirth] = useState('');
+    const [level, setLevel] = useState(1);
+    const [mobile, setMobile] = useState('');
+    const [duty, setDuty] = useState('');
+    const [license, setLicense] = useState([]);
 
+    const [soccerRecord, setSoccerRecord] = useState([{ record: '', startDate: '', endDate: '' }]);
+    console.log(
+        {
+            id: adminId,
+            password: adminPw,
+            role: role,
+            scope: scope,
+            photo: photo,
+            name: name,
+            gender: gender,
+            birth: birth,
+            lv: level,
+            mobile: mobile,
+            duty: duty,
+            license: license,
+        },
+        'soccerRecord는왜안해?',
+        soccerRecord
+    );
     const { egGrey } = colors;
     const inputStyle = 'w-full p-2 border border-egGrey-default my-1';
     const uploadBtn = (
@@ -61,6 +90,8 @@ const AdminRegist = () => {
                         type="id"
                         placeholder="ID"
                         className={inputStyle}
+                        value={adminId}
+                        onChange={(e) => setAdminId(e.target.value)}
                     />
                     <label htmlFor="password">PASSWORD</label>
                     <input
@@ -68,6 +99,8 @@ const AdminRegist = () => {
                         type="password"
                         placeholder="PASSWORD"
                         className={inputStyle}
+                        value={adminPw}
+                        onChange={(e) => setAdminPw(e.target.value)}
                     />
                 </div>
 
@@ -79,14 +112,18 @@ const AdminRegist = () => {
                         type="name"
                         placeholder="이름"
                         className={inputStyle}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                     />
 
                     <label htmlFor="birth">생년월일</label>
-                    <input
-                        type="birth"
-                        placeholder="생년월일"
-                        className={inputStyle}
-                    />
+                    <div className={inputStyle}>
+                        <DatePicker
+                            content={'시작날짜'}
+                            range="month"
+                            isMobile={isMobile}
+                        />
+                    </div>
                     <div className="my-1">성별</div>
                     <div className="relative mb-1">
                         <div
@@ -100,9 +137,9 @@ const AdminRegist = () => {
                         </div>
                         <div className="absolute right-0 flex justify-end top-1">
                             <div
-                                onClick={() => setGender('남자')}
+                                onClick={() => setGender('male')}
                                 className={
-                                    gender === '남자'
+                                    gender === 'male'
                                         ? 'px-3 py-1 mr-1 border rounded-md border-egPurple-default text-egPurple-default'
                                         : 'px-3 py-1 mr-1 border rounded-md border-egGrey-default text-egGrey-default'
                                 }
@@ -110,9 +147,9 @@ const AdminRegist = () => {
                                 남자
                             </div>
                             <div
-                                onClick={() => setGender('여자')}
+                                onClick={() => setGender('female')}
                                 className={
-                                    gender === '여자'
+                                    gender === 'female'
                                         ? 'px-3 py-1 mr-1 border rounded-md border-egPurple-default text-egPurple-default'
                                         : 'px-3 py-1 mr-1 border rounded-md border-egGrey-default text-egGrey-default'
                                 }
@@ -127,6 +164,8 @@ const AdminRegist = () => {
                         type="name"
                         placeholder="연락처"
                         className={inputStyle}
+                        value={adminPw}
+                        onChange={(e) => setMobile(e.target.value)}
                     />
                 </div>
 
@@ -136,7 +175,7 @@ const AdminRegist = () => {
                     <CustomDropdown
                         placehorder="등급"
                         formStyle="px-3 py-2 border border-egGrey-default text-egGrey-default flex flex-col"
-                        itemList={['Level1', 'Level2', 'Level3', 'Level4']}
+                        itemList={[1, 2, 3, 4]}
                         inputStyle="px-3 py-2 border border-egGrey-default text-egGrey-default"
                         itemStyle=""
                     />
@@ -156,7 +195,7 @@ const AdminRegist = () => {
                                 },
                                 {
                                     checked: false,
-                                    value: '면제/',
+                                    value: '면제',
                                     name: '비대상',
                                 },
                             ]}
