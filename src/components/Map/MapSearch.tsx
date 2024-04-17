@@ -279,7 +279,6 @@ export default function MapSearch({ setResidence }: MapSearchProps) {
             }
         });
     }
-    console.log(markers);
 
     // 키워드 입력 이벤트 핸들러
     const handleKeyword = (e: React.ChangeEvent<HTMLInputElement>) => {

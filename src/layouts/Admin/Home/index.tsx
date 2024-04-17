@@ -61,7 +61,6 @@ const Home = () => {
         { userId: 9, thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 30, infoBtn: '정보보기' },
         { userId: 10, thumnail: user1, name: '안유진', age: '27', align: 'center', minWidth: 30, infoBtn: '정보보기' },
     ];
-    console.log(process.env.REACT_APP_API_URL, 'process.env.REACT_APP_API_URL');
 
     return (
         <div className="eg-default-wrapper">

@@ -7,13 +7,15 @@ interface CustomDropdownType {
     itemList: string[] | number[];
     inputStyle?: string;
     itemStyle?: string;
+    func?: (item: any) => void;
 }
 
-const CustomDropdown = ({ placehorder, formStyle, itemList, inputStyle, itemStyle }: CustomDropdownType) => {
+const CustomDropdown = ({ placehorder, formStyle, itemList, inputStyle, itemStyle, func }: CustomDropdownType) => {
     const [curValue, setCurValue] = useState('');
 
     const handleValueChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setCurValue(event.target.value);
+        if (func) func(event.target.value);
     };
     return (
         <div className={formStyle}>

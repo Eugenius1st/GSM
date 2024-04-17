@@ -2,40 +2,51 @@
 import React, { KeyboardEvent } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// recoil
-import { useRecoilState } from 'recoil';
-import { LoginAtomSelector } from 'atom/auth';
+import { useMutation } from '@tanstack/react-query';
+// api
+import { loginPost, PostLoginType } from 'api/login';
 // Common
 import EgInput from 'components/EgMaterials/EgInput';
 import EgCheckBox from 'components/EgMaterials/CheckBox';
 // Buttons
 import WhiteBtn from 'components/Buttons/WhiteBtn';
-
-const MobileLogin = () => {
-    const navigate = useNavigate();
-    const [loginState, setLoginSelector] = useRecoilState(LoginAtomSelector);
+export interface WebLoginType {
+    loginAtom: any;
+    setLoginSelector: any;
+}
+const MobileLogin = ({ loginAtom, setLoginSelector }: WebLoginType) => {
+    // const navigate = useNavigate();
     const [loginID, setLoginID] = useState('');
     const [loginPW, setLoginPW] = useState('');
     const [autoLogin, setAutoLogin] = useState(false);
-    const loginHandler = (ID: string, PW: string) => {
-        if (ID === 'user' && PW === '1111') {
-            setLoginSelector('user');
-            navigate('/user');
-        } else if (ID === 'admin' && PW === '1111') {
-            setLoginSelector('admin');
-            navigate('/admin');
-        } else {
-            alert('아이디, 비밀번호를 확인하세요');
-        }
+
+    // POST 요청을 보낼 함수 정의
+    const mutation = useMutation({
+        mutationFn: ({ requestUrl, id, pw }: PostLoginType) => {
+            return loginPost({ requestUrl: requestUrl, id: id, pw: pw, successFunc: setLoginSelector });
+        },
+    });
+    const handleSubmit = () => {
+        // POST 요청에 보낼 데이터
+        mutation.mutate({
+            requestUrl: '/auth/login',
+            id: loginID,
+            pw: loginPW,
+            successFunc: setLoginSelector,
+        });
     };
     const handleOnKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            loginHandler(loginID, loginPW); // Enter 입력이 되면 클릭 이벤트 실행
+            handleSubmit(); // Enter 입력이 되면 클릭 이벤트 실행
         }
     };
+
     return (
         <div className="eg-default-wrapper">
-            <div className="w-full h-full px-10 pt-24 bg-white rounded-2xl">
+            <div
+                className="w-full h-full px-10 pt-24 bg-white rounded-2xl"
+                onKeyDown={handleOnKeyPress}
+            >
                 <div className="mb-4 font-semibold">WELCOM BACK</div>
                 <div className="mb-8 text-sm">서비스 이용을 원하신다면, 로그인을 해주세요.</div>
                 <div>
@@ -65,7 +76,7 @@ const MobileLogin = () => {
                 </div>
 
                 <WhiteBtn
-                    func={() => loginHandler(loginID, loginPW)}
+                    func={() => handleSubmit()}
                     content="로그인"
                     width="full"
                     customStyle="py-3"

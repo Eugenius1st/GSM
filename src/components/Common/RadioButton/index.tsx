@@ -10,12 +10,14 @@ interface RadioButtonType {
 
 interface RadioBtnListType {
     RadioBtnList: RadioButtonType[];
+    func?: (radio: any) => void;
 }
 
-const RadioButton = ({ RadioBtnList }: RadioBtnListType) => {
+const RadioButton = ({ RadioBtnList, func }: RadioBtnListType) => {
     const [curRadio, setCurRadio] = useState('');
     const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCurRadio(event.target.value);
+        if (func) func(event.target.value);
     };
     return (
         <fieldset className="flex">

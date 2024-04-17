@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 // recoil
 import { useRecoilValue } from 'recoil';
-import { LoginAtomSelector } from 'atom/auth';
+import { LoginStateSelector } from 'atom/auth';
 // Buttons
 import PurpleBtn from 'components/Buttons/PurpleBtn';
 import WhiteBtn from 'components/Buttons/WhiteBtn';
@@ -19,7 +19,7 @@ const WebHeader = () => {
     const navigate = useNavigate();
     const location = useLocation().pathname;
     const locationList = location.split('/');
-    const loginState = useRecoilValue(LoginAtomSelector);
+    const loginState = useRecoilValue(LoginStateSelector);
     const tabActiveStyle = 'text-egPurple-default border-b-2 border-egPurple-default pb-1';
     const adminListItems = [
         { title: 'HOME', link: '/admin' },

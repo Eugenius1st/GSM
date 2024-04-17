@@ -1,8 +1,12 @@
 // hook
 import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 // recoil
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import { IsMobileAtom } from 'atom/isMobile';
+import { LoginAtomSelector, LoginStateSelector } from 'atom/auth';
+// api
+import { registPost } from 'api/regist';
 // utility
 import ImageUploader from 'utility/ImageUploader';
 // Common
@@ -15,46 +19,52 @@ import { FaCamera } from 'react-icons/fa';
 import { FaUser } from 'react-icons/fa6';
 import { CiSquarePlus } from 'react-icons/ci';
 import { CiSquareMinus } from 'react-icons/ci';
-// colors
-import colors from 'assets/colors/palette';
+// Commons
+import NavigateModal from 'components/Modals/NavigateModal';
+
+export interface RequestBodyType {
+    id: string;
+    password: string;
+    role: string;
+    scope: string[];
+    photo: string;
+    name: string;
+    gender: string;
+    birth: string;
+    lv: number;
+    mobile: string;
+    duty: string;
+    license: string[];
+}
+
+export interface PostDataType {
+    requestUrl: string;
+    requestBody: RequestBodyType;
+    successFunc?: (data: any) => void;
+}
 
 const AdminRegist = () => {
     // 웹 앱 구분
     let isMobile = useRecoilValue(IsMobileAtom);
-    // 데이터
+    const [isLoginAuth, setIsLoginAuth] = useRecoilState(LoginAtomSelector);
+    const [isLoginStateAuth, setIsLoginStateAuth] = useRecoilState(LoginStateSelector);
+
     const [adminId, setAdminId] = useState('');
     const [adminPw, setAdminPw] = useState('');
     const [role, setRole] = useState('admin');
     const [scope, setScope] = useState(['gsm']);
-    const [photo, setPhoto] = useState('');
+    const [photo, setPhoto] = useState('any-photo-url');
     const [name, setName] = useState('');
     const [gender, setGender] = useState('성별');
     const [birth, setBirth] = useState('');
     const [level, setLevel] = useState(1);
     const [mobile, setMobile] = useState('');
     const [duty, setDuty] = useState('');
-    const [license, setLicense] = useState([]);
-
+    const [tempLicense, setTempLicense] = useState('');
+    const [license, setLicense] = useState<string[]>(['']);
+    const [isSuccess, setIsSuccess] = useState<boolean>(true);
     const [soccerRecord, setSoccerRecord] = useState([{ record: '', startDate: '', endDate: '' }]);
-    console.log(
-        {
-            id: adminId,
-            password: adminPw,
-            role: role,
-            scope: scope,
-            photo: photo,
-            name: name,
-            gender: gender,
-            birth: birth,
-            lv: level,
-            mobile: mobile,
-            duty: duty,
-            license: license,
-        },
-        'soccerRecord는왜안해?',
-        soccerRecord
-    );
-    const { egGrey } = colors;
+
     const inputStyle = 'w-full p-2 border border-egGrey-default my-1';
     const uploadBtn = (
         <div className="absolute bottom-0 right-0 p-2 rounded-full bg-egPurple-default text-egWhite-default w-fit">
@@ -65,6 +75,53 @@ const AdminRegist = () => {
         const newArray = soccerRecord.filter((el, index) => index !== idx);
         setSoccerRecord(newArray);
     };
+    const handleLicenseDelete = (idx: number) => {
+        const newArray = license.filter((el, index) => index !== idx);
+        setLicense(newArray);
+        setTempLicense('');
+    };
+    const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // 입력된 값에서 숫자만 추출하여 저장
+        const cleaned = e.target.value.replace(/\D/g, '');
+        // 정규식을 사용하여 전화번호 형식에 맞게 하이픈 추가
+        const regex = /^(\d{2,3})(\d{3,4})(\d{4})$/;
+        const formatted = cleaned.replace(regex, '$1-$2-$3');
+        // 변경된 전화번호를 상태에 저장
+        setMobile(formatted);
+    };
+
+    // POST 요청을 보낼 함수 정의
+    const mutation = useMutation({
+        mutationFn: ({ requestUrl, requestBody, successFunc }: PostDataType) => {
+            return registPost({ requestUrl: requestUrl, requestBody: requestBody, successFunc: successFunc });
+        },
+    });
+
+    const handleSubmit = () => {
+        // POST 요청에 보낼 데이터
+        const sliceLicense = license.length > 0 ? license.slice(1) : license;
+        const numberLevel = Number(level);
+        const requestBody = {
+            id: adminId,
+            password: adminPw,
+            role: role,
+            scope: scope,
+            photo: photo,
+            name: name,
+            gender: gender,
+            birth: birth,
+            lv: numberLevel,
+            mobile: mobile,
+            duty: duty,
+            license: sliceLicense,
+        };
+        mutation.mutate({
+            requestUrl: '/auth/signup/admin',
+            requestBody: requestBody,
+            successFunc: setIsSuccess,
+        });
+    };
+
     return (
         <div className="eg-regist-wrapper">
             <div className="flex items-center justify-start eg-title">
@@ -117,11 +174,14 @@ const AdminRegist = () => {
                     />
 
                     <label htmlFor="birth">생년월일</label>
-                    <div className={inputStyle}>
+                    <div className="my-1">
                         <DatePicker
-                            content={'시작날짜'}
-                            range="month"
-                            isMobile={isMobile}
+                            content={'생년월일'}
+                            range="day"
+                            customStyle={
+                                'flex items-center py-1 h-10 my-1 border border-egGrey-default text-egGrey-default width-40'
+                            }
+                            func={setBirth}
                         />
                     </div>
                     <div className="my-1">성별</div>
@@ -164,8 +224,8 @@ const AdminRegist = () => {
                         type="name"
                         placeholder="연락처"
                         className={inputStyle}
-                        value={adminPw}
-                        onChange={(e) => setMobile(e.target.value)}
+                        value={mobile}
+                        onChange={(e) => handlePhoneNumberChange(e)}
                     />
                 </div>
 
@@ -178,6 +238,7 @@ const AdminRegist = () => {
                         itemList={[1, 2, 3, 4]}
                         inputStyle="px-3 py-2 border border-egGrey-default text-egGrey-default"
                         itemStyle=""
+                        func={setLevel}
                     />
                     <div className="my-1">군필여부</div>
                     <div className="px-3 py-2 border border-egGrey-default text-egGrey-default">
@@ -199,6 +260,7 @@ const AdminRegist = () => {
                                     name: '비대상',
                                 },
                             ]}
+                            func={setDuty}
                         />
                     </div>
 
@@ -224,11 +286,17 @@ const AdminRegist = () => {
                                     <DatePicker
                                         content={'시작날짜'}
                                         range="month"
+                                        customStyle={
+                                            'flex rounded-md items-center py-1 pr-1 mr-1 border border-egGrey-default text-egGrey-default width-40'
+                                        }
                                         isMobile={isMobile}
                                     />
                                     <DatePicker
                                         content={'종료날짜'}
                                         range="month"
+                                        customStyle={
+                                            'flex rounded-md items-center py-1 pr-1 mr-1 border border-egGrey-default text-egGrey-default width-40'
+                                        }
                                         isMobile={isMobile}
                                     />
                                 </div>
@@ -255,23 +323,73 @@ const AdminRegist = () => {
                         </div>
                     ))}
                     <div className="my-1">자격증</div>
-                    <div className="pl-3 py-2 border border-egGrey-default text-egGrey-default mt-[-1px] flex justify-between">
-                        <input
-                            id="cetrificate"
-                            placeholder="자격증"
-                            type="text"
-                            maxLength={30}
-                            className="w-full focus:outline-none text-egBlack-default"
-                        />
-                        <CiSquarePlus className="w-8 h-8 mr-1 text-egPurple-semiLght hover:text-egPurple-default" />
-                    </div>
+
+                    {license.map((el, idx) => (
+                        <div
+                            key={idx}
+                            className={
+                                isMobile
+                                    ? 'mt-[-1px] flex justify-between pl-3 py-1 border border-egGrey-default text-egGrey-default'
+                                    : 'flex mt-[-1px] justify-between pl-3 py-1 border border-egGrey-default text-egGrey-default'
+                            }
+                        >
+                            <input
+                                placeholder="자격증"
+                                type="text"
+                                maxLength={20}
+                                className="focus:outline-none text-egBlack-default"
+                                value={license[idx] ? license[idx] : license.length > 3 ? '' : tempLicense}
+                                onChange={(e) => setTempLicense(e.target.value)}
+                            />
+                            <div className={isMobile ? 'flex items-center justify-between' : 'flex items-center'}>
+                                {license[idx] ? (
+                                    <div className="flex">
+                                        <CiSquareMinus
+                                            onClick={() => license.length <= 4 && handleLicenseDelete(idx)}
+                                            className={
+                                                'w-8 h-8 mr-1 text-egGrey-default-semiLght hover:text-egGrey-default-default'
+                                            }
+                                        />
+                                    </div>
+                                ) : (
+                                    <div className="flex">
+                                        <CiSquarePlus
+                                            onClick={() => {
+                                                if (license.length < 4 && tempLicense) {
+                                                    setLicense([...license, tempLicense]);
+                                                    setTempLicense('');
+                                                }
+                                            }}
+                                            className={
+                                                'w-8 h-8 mr-1 text-egPurple-semiLght hover:text-egPurple-default'
+                                            }
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    ))}
                 </div>
-                <button
-                    type="submit"
-                    className="w-full py-2 mt-10 rounded-md bg-egGrey-semiLight text-egPurple-default"
-                >
-                    등록하기
-                </button>
+                <div>
+                    <NavigateModal
+                        modalBtn={
+                            <button
+                                type="button"
+                                className="w-full py-2 mt-10 rounded-md bg-egPurple-default text-egWhite-default"
+                                onClick={handleSubmit}
+                            >
+                                등록하기
+                            </button>
+                        }
+                        // modalTitle={'회원가입'}
+                        modalContents={'회원가입이 완료되었습니다.'}
+                        modalFooterActiveBtn={'로그인'}
+                        modalScrollStayFlag={true}
+                        modalFooterExitBtn={'취소'}
+                        isSuccess={isSuccess}
+                        navigateUrl={'/'}
+                    />
+                </div>
             </form>
         </div>
     );

@@ -14,13 +14,11 @@ const SubTab = ({ tabs, func }: SubTabType) => {
     return (
         <div className="absolute z-20 w-32 mt-3 rounded-md shadow-md bg-egWhite-default">
             {tabs.map((el, idx) => (
-                <Link to={el.link}>
-                    <div
-                        key={idx}
-                        className="px-3 py-2 hover:text-egPurple-default"
-                    >
-                        {el.title}
-                    </div>
+                <Link
+                    to={el.link}
+                    key={idx}
+                >
+                    <div className="px-3 py-2 hover:text-egPurple-default">{el.title}</div>
                 </Link>
             ))}
         </div>

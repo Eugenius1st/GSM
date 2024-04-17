@@ -2,7 +2,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 // recoil
 import { useRecoilValue } from 'recoil';
-import { LoginAtomSelector } from 'atom/auth';
+import { LoginStateSelector } from 'atom/auth';
 // Temporary Drawer
 import TemporaryDrawer from 'components/Common/Header/MobileHeader/TemporaryDrawer';
 // Buttons
@@ -16,7 +16,7 @@ import { VscBellDot } from 'react-icons/vsc';
 import galloping_purple_logo from 'assets/logo/galloping_purple_logo.jpg';
 
 const MobileHeader = () => {
-    const loginState = useRecoilValue(LoginAtomSelector);
+    const loginState = useRecoilValue(LoginStateSelector);
     const navigate = useNavigate();
 
     return (
