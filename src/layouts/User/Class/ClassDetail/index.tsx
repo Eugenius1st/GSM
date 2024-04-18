@@ -53,9 +53,7 @@ const ClassDetail = () => {
                     <span> 수업정보</span>
                 </div>
             </div>
-            <div>
-                <ClassCard classInfo={classInfo} />
-            </div>
+            <div>{/* <ClassCard classInfo={classInfo} /> */}</div>
 
             <div className="p-4 border shadow-md border-egGrey-default">
                 <div className="mb-4 text-lg font-bold">참석자 명단</div>

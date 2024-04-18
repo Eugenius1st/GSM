@@ -40,9 +40,7 @@ const CoachClassDetail = () => {
                 <MdOutlineArrowForwardIos className="w-4 h-4 mx-1" />
                 <span> 수업정보</span>
             </div>
-            <div>
-                <CoachClassCard classInfo={classInfo} />
-            </div>
+            <div>{/* <CoachClassCard classInfo={classInfo} /> */}</div>
             <Divider />
             <div className="text-lg font-bold">참석자 명단</div>
             <Divider />

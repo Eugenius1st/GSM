@@ -26,12 +26,14 @@ const Login = () => {
     }, [loginAtom]);
     useEffect(() => {
         // admin 의 키값인 lv 이 tempUser에 있는 경우, admin으로
-        if (tempUserInfo && 'lv' in tempUserInfo) {
+        if (tempUserInfo && tempUserInfo.lv) {
             setStateSelector('admin');
             navigate('/admin');
-        } else if (tempUserInfo && !('lv' in tempUserInfo)) {
+        } else if (tempUserInfo && !tempUserInfo.lv) {
             setStateSelector('user');
             navigate('/user');
+        } else {
+            return;
         }
     }, [tempUserInfo]);
     return (

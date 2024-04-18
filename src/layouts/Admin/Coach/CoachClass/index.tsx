@@ -61,7 +61,7 @@ const CoachClass = () => {
                         key={idx}
                         to={`${location}/${el.id}`}
                     >
-                        <ClassCard classInfo={el} />
+                        {/* <ClassCard classInfo={el} /> */}
                     </Link>
                 ))}
             </div>

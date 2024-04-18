@@ -61,7 +61,7 @@ const Class = () => {
                     key={idx}
                     to={`${location}/${el.id}`}
                 >
-                    <ClassCard classInfo={el} />
+                    {/* <ClassCard classInfo={el} /> */}
                 </Link>
             ))}
             <div className="flex justify-center">

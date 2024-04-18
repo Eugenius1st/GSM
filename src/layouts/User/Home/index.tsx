@@ -104,7 +104,7 @@ const User = () => {
                     key={idx}
                     to={`/user/class/${el.id}`}
                 >
-                    <ClassCard classInfo={el} />
+                    {/* <ClassCard classInfo={el} /> */}
                 </Link>
             ))}
         </div>

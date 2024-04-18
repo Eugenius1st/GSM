@@ -18,7 +18,7 @@ export async function loginPost({ requestUrl, id, pw, successFunc }: PostLoginTy
             }
         );
         console.log('로그인 되었습니다');
-        console.log(response);
+        // console.log(response);
         if (successFunc) successFunc(response.data);
     } catch (error: any) {
         if (error.response) {

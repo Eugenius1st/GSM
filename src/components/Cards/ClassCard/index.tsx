@@ -1,20 +1,24 @@
 // hooks
 import React from 'react';
-import { useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useState, useEffect } from 'react';
+// recoil
+import { useRecoilValue, useRecoilState } from 'recoil';
 import { IsMobileSelector } from 'atom/isMobile';
+import { LoginAtomSelector } from 'atom/auth';
+// api
+import { decode } from 'api/decode';
 
 interface ClassInfoType {
-    id: number;
-    classImage: string;
-    title: string;
-    date: string;
-    location: string;
-    attendCount: string;
-    waiting: number;
-    coaches?: string[];
-    notice?: string;
-    attend?: boolean;
+    _id: string;
+    name: string;
+    place: string;
+    startTime: string;
+    endTime: string;
+    type: string;
+    amount: number;
+    students: string[];
+    attendance: number;
+    reserved: number;
 }
 
 interface ClasCardType {
@@ -24,17 +28,28 @@ interface ClasCardType {
 
 const ClassCard = ({ title, classInfo }: ClasCardType) => {
     let isMobile = useRecoilValue(IsMobileSelector);
+    const [loginAtom, setLoginSelector] = useRecoilState(LoginAtomSelector);
+    const [userId, setUserId] = useState<any>('');
     const infoStyle = 'mb-2 pb-1 flex border-b border-egGrey-default';
     const titleStyle = isMobile ? 'mr-2 w-24 flex-shrink-0' : 'mr-2 w-20 ';
     const highLight = 'px-1 bg-egPurple-superLight';
-    const [attendState, setAttendState] = useState(classInfo.attend);
+    const [attendState, setAttendState] = useState(false);
+    // api
+    useEffect(() => {
+        // user Id  확인
+        if (!(loginAtom === 'initial')) {
+            const newUserInfo = decode(loginAtom.accessToken);
+            setUserId(newUserInfo.login_id);
+            if (classInfo && classInfo?.students.includes(userId)) setAttendState(true);
+        }
+    }, [loginAtom]);
     const attendHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
-        setAttendState(!attendState);
+        // setAttendState(!attendState);
     };
     return (
         <div>
-            <div className="relative z-0 p-4 mb-4 border shadow-md border-egGrey-default">
+            {/* <div className="relative z-0 p-4 mb-4 border shadow-md border-egGrey-default">
                 {classInfo.attend && <div className="mb-2 text-lg font-bold">내 수업</div>}
 
                 {classInfo.attend && (
@@ -105,7 +120,7 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
                         </div>
                     )}
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };

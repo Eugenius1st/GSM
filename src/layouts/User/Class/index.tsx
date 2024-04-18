@@ -1,7 +1,11 @@
 // hooks
 import { Link, useLocation } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
+import { useQuery } from '@tanstack/react-query';
 import { IsMobileSelector } from 'atom/isMobile';
+// api
+import { registGet } from 'api/basic';
+
 // Admin Class Component
 import ClassCard from 'components/Cards/ClassCard';
 // images
@@ -17,106 +21,19 @@ const Class = () => {
     const [curPage, setCurPage] = useState(1);
     const location = useLocation().pathname;
     let isMobile = useRecoilValue(IsMobileSelector);
+    const [allClass, setAllClass] = useState('');
     const classInfo = [
         {
-            id: 1,
-            classImage: class_adult_man,
-            title: '성인남성반1',
-            date: '2024-03-09',
-            location: '수원월드컵점',
-            attendCount: '8/10',
-            waiting: 4,
-            attend: true,
-        },
-        {
-            id: 2,
-            classImage: class_adult_woman,
-            title: '성인여성반2',
-            date: '2024-03-09',
-            location: '수원월드컵점',
-            attendCount: '8/10',
-            waiting: 4,
-            attend: false,
-        },
-        {
-            id: 3,
-            classImage: class_adult_man,
-            title: '성인남성반3',
-            date: '2024-03-09',
-            location: '수원월드컵점',
-            attendCount: '8/10',
-            waiting: 4,
-            attend: false,
-        },
-        {
-            id: 4,
-            classImage: class_adult_woman,
-            title: '성인여성반4',
-            date: '2024-03-09',
-            location: '수원월드컵점',
-            attendCount: '8/10',
-            waiting: 4,
-            attend: false,
-        },
-        {
-            id: 3,
-            classImage: class_adult_man,
-            title: '성인남성반5',
-            date: '2024-03-09',
-            location: '수원월드컵점',
-            attendCount: '8/10',
-            waiting: 4,
-            attend: false,
-        },
-        {
-            id: 4,
-            classImage: class_adult_woman,
-            title: '성인여성반6',
-            date: '2024-03-09',
-            location: '수원월드컵점',
-            attendCount: '8/10',
-            waiting: 4,
-            attend: false,
-        },
-        {
-            id: 5,
-            classImage: class_adult_man,
-            title: '성인남성반7',
-            date: '2024-03-09',
-            location: '수원월드컵점',
-            attendCount: '8/10',
-            waiting: 4,
-            attend: false,
-        },
-        {
-            id: 9,
-            classImage: class_adult_woman,
-            title: '성인여성반8',
-            date: '2024-03-09',
-            location: '수원월드컵점',
-            attendCount: '8/10',
-            waiting: 4,
-            attend: false,
-        },
-        {
-            id: 6,
-            classImage: class_adult_man,
-            title: '성인남성반9',
-            date: '2024-03-09',
-            location: '수원월드컵점',
-            attendCount: '8/10',
-            waiting: 4,
-            attend: false,
-        },
-        {
-            id: 7,
-            classImage: class_adult_woman,
-            title: '성인여성반10',
-            date: '2024-03-09',
-            location: '수원월드컵점',
-            attendCount: '8/10',
-            waiting: 4,
-            attend: false,
+            _id: '6618990be356eb8c32bafaea',
+            name: '성인반',
+            place: '판교 1호점',
+            startTime: '2024-04-12T01:41:56.439Z',
+            endTime: '2024-04-12T03:41:56.439Z',
+            type: '실기',
+            amount: 10,
+            students: ['660d0d5b5ebeba8327d41bef', '660e0235153f4436a008be02', '6618bf50eeef910e01e80245'],
+            attendance: 3,
+            reserved: 0,
         },
     ];
     const [curClassInfo, setCurClassInfo] = useState(classInfo.slice(0, 4));
@@ -124,6 +41,30 @@ const Class = () => {
         const newClassInfo = classInfo.slice((curPage - 1) * 4, (curPage - 1) * 4 + 4);
         setCurClassInfo(newClassInfo);
     }, [curPage]);
+
+    // GET 요청을 보낼 함수 정의
+    // const { data, error, isLoading } = useQuery(['classData'], registGet({ requestUrl: '/class?page=1&take=10' }), {
+    //     onSuccess: (data) => {
+    //         console.log(data);
+    //     },
+    //     // staleTime: 10000,
+    // });
+    // const queryfetch = useQuery(['allClassData'], ()=>registGet({ requestUrl: '/class?page=1&take=10' }), {
+    //     onSuccess: (data: any)=> {
+    //       console.log(data)
+    //     },
+    //     staleTime:10000
+    //   })
+
+    const { data, error, isLoading } = useQuery({
+        queryKey: ['allClassData'],
+        queryFn: () => registGet({ requestUrl: `/class?page=${curPage}&take=${curPage + 4}` }),
+        staleTime: 5 * 1000,
+    });
+
+    useEffect(() => {
+        setAllClass(data);
+    }, []);
 
     return (
         <div className="eg-default-wrapper">
@@ -142,9 +83,9 @@ const Class = () => {
             {curClassInfo.map((el, idx) => (
                 <Link
                     key={idx}
-                    to={`${location}/${el.id}`}
+                    to={`${location}/${el._id}`}
                 >
-                    <ClassCard classInfo={el} />
+                    {/* <ClassCard classInfo={el} /> */}
                 </Link>
             ))}
             <div className="flex justify-center">

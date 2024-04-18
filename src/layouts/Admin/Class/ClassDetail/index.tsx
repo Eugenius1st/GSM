@@ -61,9 +61,7 @@ const ClassDetail = () => {
                     <DeleteModal />
                 </div>
             </div>
-            <div>
-                <ClassCard classInfo={classInfo} />
-            </div>
+            <div>{/* <ClassCard classInfo={classInfo} /> */}</div>
 
             <Divider />
             <div className="text-lg font-bold">참석자 명단</div>
