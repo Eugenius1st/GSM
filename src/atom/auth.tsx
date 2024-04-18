@@ -1,10 +1,14 @@
 import { atom, selector } from 'recoil';
+import { recoilPersist } from 'recoil-persist';
+// admin, user token 저장
+const { persistAtom } = recoilPersist(); // ✔
 
-// 회원 정보저장
 export const LoginAtom = atom<any>({
     key: 'LoginAtom', // unique ID (with respect to other atoms/selectors)
-    default: '',
+    default: 'initial',
+    effects_UNSTABLE: [persistAtom], // ✔
 });
+
 export const LoginAtomSelector = selector({
     key: 'LoginAtomSelector',
     // get: 원본훼손X
@@ -17,7 +21,7 @@ export const LoginAtomSelector = selector({
     set: ({ set, get }, newValue) => {
         if (newValue) {
             set(LoginAtom, newValue);
-            localStorage.setItem('loginAtom', JSON.stringify(newValue));
+            // localStorage.setItem('loginAtom', JSON.stringify(newValue));
         }
     },
 });
@@ -25,7 +29,8 @@ export const LoginAtomSelector = selector({
 // admin, user 로그인 상태 구분
 export const LoginState = atom<any>({
     key: 'LoginState', // unique ID (with respect to other atoms/selectors)
-    default: '',
+    default: 'initial',
+    effects_UNSTABLE: [persistAtom], // ✔
 });
 export const LoginStateSelector = selector({
     key: 'LoginStateSelector',
@@ -35,7 +40,7 @@ export const LoginStateSelector = selector({
     set: ({ set, get }, newValue) => {
         if (newValue) {
             set(LoginState, newValue);
-            localStorage.setItem('state', newValue);
+            // localStorage.setItem('state', newValue);
         }
     },
 });

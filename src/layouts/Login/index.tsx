@@ -1,3 +1,5 @@
+// hooks
+import { useNavigate } from 'react-router-dom';
 // recoil
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { LoginAtomSelector, LoginStateSelector } from 'atom/auth';
@@ -8,20 +10,30 @@ import { IsTabletSelector } from 'atom/isTablet';
 // Login Components
 import WebLogin from 'layouts/Login/WebLogin';
 import MobileLogin from 'layouts/Login/MobileLogin';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Login = () => {
+    const navigate = useNavigate();
     const isTablet = useRecoilValue(IsTabletSelector);
     const [loginAtom, setLoginSelector] = useRecoilState(LoginAtomSelector);
     const [loginState, setStateSelector] = useRecoilState(LoginStateSelector);
-    let userInfo;
+    const [tempUserInfo, setTempUserInfo] = useState<any>('');
     useEffect(() => {
-        if (loginAtom) {
-            userInfo = decode(loginAtom.accessToken);
+        if (!(loginAtom === 'initial')) {
+            const newUserInfo = decode(loginAtom.accessToken);
+            setTempUserInfo(newUserInfo);
         }
     }, [loginAtom]);
-    console.log(userInfo);
-
+    useEffect(() => {
+        // admin 의 키값인 lv 이 tempUser에 있는 경우, admin으로
+        if (tempUserInfo && 'lv' in tempUserInfo) {
+            setStateSelector('admin');
+            navigate('/admin');
+        } else if (tempUserInfo && !('lv' in tempUserInfo)) {
+            setStateSelector('user');
+            navigate('/user');
+        }
+    }, [tempUserInfo]);
     return (
         <>
             {isTablet ? (

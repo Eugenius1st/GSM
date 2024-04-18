@@ -2,8 +2,8 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 // recoil
-import { useRecoilValue } from 'recoil';
-import { LoginStateSelector } from 'atom/auth';
+import { useRecoilState } from 'recoil';
+import { LoginAtomSelector, LoginStateSelector } from 'atom/auth';
 // Buttons
 import PurpleBtn from 'components/Buttons/PurpleBtn';
 import WhiteBtn from 'components/Buttons/WhiteBtn';
@@ -14,12 +14,14 @@ import { VscBellDot } from 'react-icons/vsc';
 import galloping_purple_logo from 'assets/logo/galloping_purple_logo.jpg';
 // Header Components
 import SubTab from 'components/Common/Header/components/SubTab';
+import LoginHeader from 'components/Common/Header/components/LoginHeader';
 
 const WebHeader = () => {
     const navigate = useNavigate();
     const location = useLocation().pathname;
     const locationList = location.split('/');
-    const loginState = useRecoilValue(LoginStateSelector);
+    const [loginAtom, setLoginSelector] = useRecoilState(LoginAtomSelector);
+    const [loginState, setStateSelector] = useRecoilState(LoginStateSelector);
     const tabActiveStyle = 'text-egPurple-default border-b-2 border-egPurple-default pb-1';
     const adminListItems = [
         { title: 'HOME', link: '/admin' },
@@ -41,6 +43,11 @@ const WebHeader = () => {
         if (tab === '사용 등록') {
             setHoveredTab(tab);
         } else return;
+    };
+    const handleLogout = () => {
+        setLoginSelector('initial');
+        setStateSelector('initial');
+        navigate('/');
     };
 
     return (
@@ -94,8 +101,10 @@ const WebHeader = () => {
                                 })}
                             </ul>
                             <div className="flex items-centers">
-                                <FaUserCircle className="w-7 h-7 text-egPurple-default" />
-                                {/* <span className="mr-2">홍길동</span> */}
+                                <WhiteBtn
+                                    content="Logout"
+                                    func={() => handleLogout()}
+                                />
                             </div>
                         </div>
                     ) : loginState === 'user' ? (
@@ -121,45 +130,11 @@ const WebHeader = () => {
                             </div>
                         </div>
                     ) : (
-                        <div className="flex items-center justify-between max-w-screen-xl p-2 m-auto ">
-                            <div className="flex items-center">
-                                <img
-                                    src={galloping_purple_logo}
-                                    alt="galloping_purple_logo"
-                                    className="inline w-10 h-10 mr-2 rounded-full"
-                                />
-                                <h1 className="text-lg font-bold text-egPurple-default">GSM</h1>
-                            </div>
-
-                            <div>
-                                <PurpleBtn
-                                    content="Login"
-                                    func={() => navigate('/')}
-                                />
-                            </div>
-                        </div>
+                        <LoginHeader />
                     )}
                 </div>
             ) : (
-                <div className="flex items-center justify-between max-w-screen-xl p-2 m-auto ">
-                    <Link to="/admin">
-                        <div className="flex items-center">
-                            <img
-                                src={galloping_purple_logo}
-                                alt="galloping_purple_logo"
-                                className="inline w-10 h-10 mr-2 rounded-full"
-                            />
-                            <h1 className="text-lg font-bold text-egPurple-default">GSM</h1>
-                        </div>
-                    </Link>
-
-                    <div>
-                        <PurpleBtn
-                            content="Login"
-                            func={() => navigate('/')}
-                        />
-                    </div>
-                </div>
+                <LoginHeader />
             )}
         </div>
     );

@@ -1,8 +1,9 @@
 //hooks
 import { Link, useNavigate } from 'react-router-dom';
 // recoil
-import { useRecoilValue } from 'recoil';
-import { LoginStateSelector } from 'atom/auth';
+// recoil
+import { useRecoilState } from 'recoil';
+import { LoginAtomSelector, LoginStateSelector } from 'atom/auth';
 // Temporary Drawer
 import TemporaryDrawer from 'components/Common/Header/MobileHeader/TemporaryDrawer';
 // Buttons
@@ -11,12 +12,14 @@ import WhiteBtn from 'components/Buttons/WhiteBtn';
 // icons
 import { FaUserCircle } from 'react-icons/fa';
 import { VscBellDot } from 'react-icons/vsc';
-
 // images
 import galloping_purple_logo from 'assets/logo/galloping_purple_logo.jpg';
+// HeaderComponents
+import LoginHeader from 'components/Common/Header/components/LoginHeader';
 
 const MobileHeader = () => {
-    const loginState = useRecoilValue(LoginStateSelector);
+    const [loginAtom, setLoginAtom] = useRecoilState(LoginAtomSelector);
+    const [loginState, setLoginState] = useRecoilState(LoginStateSelector);
     const navigate = useNavigate();
 
     return (
@@ -54,45 +57,11 @@ const MobileHeader = () => {
                             </div>
                         </div>
                     ) : (
-                        <div className="flex items-center justify-between max-w-screen-xl p-2 m-auto ">
-                            <div className="flex items-center">
-                                <img
-                                    src={galloping_purple_logo}
-                                    alt="galloping_purple_logo"
-                                    className="inline w-10 h-10 mr-2 rounded-full"
-                                />
-                                <h1 className="text-lg font-bold text-egPurple-default">GSM</h1>
-                            </div>
-
-                            <div>
-                                <PurpleBtn
-                                    content="Login"
-                                    func={() => navigate('/')}
-                                />
-                            </div>
-                        </div>
+                        <LoginHeader />
                     )}
                 </div>
             ) : (
-                <div className="flex items-center justify-between max-w-screen-xl p-2 m-auto ">
-                    <Link to="/admin">
-                        <div className="flex items-center">
-                            <img
-                                src={galloping_purple_logo}
-                                alt="galloping_purple_logo"
-                                className="inline w-10 h-10 mr-2 rounded-full"
-                            />
-                            <h1 className="text-lg font-bold text-egPurple-default">GSM</h1>
-                        </div>
-                    </Link>
-
-                    <div>
-                        <PurpleBtn
-                            content="Login"
-                            func={() => navigate('/')}
-                        />
-                    </div>
-                </div>
+                <LoginHeader />
             )}
         </div>
     );

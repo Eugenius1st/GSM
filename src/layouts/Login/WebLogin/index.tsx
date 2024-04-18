@@ -95,13 +95,13 @@ const WebLogin = ({ loginAtom, setLoginSelector }: WebLoginType) => {
                                 />
                             </div>
                         </div>
-                        <div
+                        {/* <div
                             onClick={() => setAutoLogin(!autoLogin)}
                             className="flex items-center mb-2 w-fit"
                         >
                             <EgCheckBox checked={autoLogin} />
                             <span>자동 로그인</span>
-                        </div>
+                        </div> */}
 
                         <WhiteBtn
                             func={() => handleSubmit()}
