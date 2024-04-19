@@ -83,7 +83,7 @@ const WebHeader = () => {
                                                 className={`${
                                                     locationList[2] === thirdPartOfLink
                                                         ? tabActiveStyle
-                                                        : 'text-egBlack-semiLght'
+                                                        : 'text-egBlack-semiLight'
                                                 }`}
                                             >
                                                 {el.title}

@@ -40,12 +40,12 @@ const DeleteModal = () => {
                         </div>
                         <div className="my-4">
                             <div className="mb-2 font-bold">삭제 하시겠습니까?</div>
-                            <div className="mb-4 text-base text-egBlack-semiLght">[ 삭제하기 ] 를 입력하세요</div>
+                            <div className="mb-4 text-base text-egBlack-semiLight">[ 삭제하기 ] 를 입력하세요</div>
                             <input
                                 onChange={(e) => setDeleteInput(e.target.value)}
                                 value={deleteInput}
                                 placeholder="삭제하기"
-                                className="w-full p-2 mb-4 text-base border rounded-md border-egPurple-semiLght"
+                                className="w-full p-2 mb-4 text-base border rounded-md border-egPurple-semiLight"
                             />
                         </div>
                         <div className="flex justify-end text-base">

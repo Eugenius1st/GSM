@@ -4,74 +4,44 @@ import { useRecoilValue } from 'recoil';
 import { useQuery } from '@tanstack/react-query';
 import { IsMobileSelector } from 'atom/isMobile';
 // api
-import { registGet } from 'api/basic';
-
-// Admin Class Component
-import ClassCard from 'components/Cards/ClassCard';
-// images
-import class_adult_man from 'assets/class/class_adult_man.jpeg';
-import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
+import { requestGet } from 'api/basic';
 // Common
 import DropDown from 'components/EgMaterials/DropDown';
 // Material UI
 import PaginationRounded from 'components/EgMaterials/Pagenation';
 import { useEffect, useState } from 'react';
+// Cards
+import ClassCard from 'components/Cards/ClassCard';
+import { ClassInfoType } from 'components/Cards/ClassCard';
+import EmptyCard from 'components/Cards/EmptyCard';
 
 const Class = () => {
     const [curPage, setCurPage] = useState(1);
     const location = useLocation().pathname;
     let isMobile = useRecoilValue(IsMobileSelector);
-    const [allClass, setAllClass] = useState('');
-    const classInfo = [
-        {
-            _id: '6618990be356eb8c32bafaea',
-            name: '성인반',
-            place: '판교 1호점',
-            startTime: '2024-04-12T01:41:56.439Z',
-            endTime: '2024-04-12T03:41:56.439Z',
-            type: '실기',
-            amount: 10,
-            students: ['660d0d5b5ebeba8327d41bef', '660e0235153f4436a008be02', '6618bf50eeef910e01e80245'],
-            attendance: 3,
-            reserved: 0,
-        },
-    ];
-    const [curClassInfo, setCurClassInfo] = useState(classInfo.slice(0, 4));
-    useEffect(() => {
-        const newClassInfo = classInfo.slice((curPage - 1) * 4, (curPage - 1) * 4 + 4);
-        setCurClassInfo(newClassInfo);
-    }, [curPage]);
+    const [allClass, setAllClass] = useState<ClassInfoType[]>([]);
 
     // GET 요청을 보낼 함수 정의
-    // const { data, error, isLoading } = useQuery(['classData'], registGet({ requestUrl: '/class?page=1&take=10' }), {
-    //     onSuccess: (data) => {
-    //         console.log(data);
-    //     },
-    //     // staleTime: 10000,
-    // });
-    // const queryfetch = useQuery(['allClassData'], ()=>registGet({ requestUrl: '/class?page=1&take=10' }), {
-    //     onSuccess: (data: any)=> {
-    //       console.log(data)
-    //     },
-    //     staleTime:10000
-    //   })
-
     const { data, error, isLoading } = useQuery({
         queryKey: ['allClassData'],
-        queryFn: () => registGet({ requestUrl: `/class?page=${curPage}&take=${curPage + 4}` }),
-        staleTime: 5 * 1000,
+        queryFn: () =>
+            requestGet({
+                requestUrl: `/class?page=${curPage}&take=${curPage + 4}`,
+                // successFunc: () => console.log(data),
+            }),
+        staleTime: 500,
     });
 
     useEffect(() => {
         setAllClass(data);
-    }, []);
-
+    }, [data]);
     return (
         <div className="eg-default-wrapper">
             <div className="flex items-center justify-between mb-4">
                 <div className="eg-title">전체수업</div>
                 <DropDown
                     itemList={[
+                        { item: '전체' },
                         { item: '엘리트반' },
                         { item: '기본기반' },
                         { item: '어린이반' },
@@ -80,23 +50,32 @@ const Class = () => {
                     ]}
                 />
             </div>
-            {curClassInfo.map((el, idx) => (
-                <Link
-                    key={idx}
-                    to={`${location}/${el._id}`}
-                >
-                    {/* <ClassCard classInfo={el} /> */}
-                </Link>
-            ))}
-            <div className="flex justify-center">
-                <PaginationRounded
-                    totalItems={classInfo.length}
-                    itemsPerPage={4}
-                    curPage={curPage}
-                    setCurPage={setCurPage}
-                    // onPageChange={() => }
-                />
-            </div>
+            {allClass && allClass.length > 0 ? (
+                <>
+                    {allClass.map((el, idx) => (
+                        <Link
+                            key={idx}
+                            to={`${location}/${el._id}`}
+                        >
+                            <ClassCard classInfo={el} />
+                        </Link>
+                    ))}
+                </>
+            ) : (
+                <EmptyCard content="수업 준비중 입니다" />
+            )}
+
+            {allClass && allClass.length > 0 && (
+                <div className="flex justify-center">
+                    <PaginationRounded
+                        totalItems={allClass.length}
+                        itemsPerPage={4}
+                        curPage={curPage}
+                        setCurPage={setCurPage}
+                        // onPageChange={() => }
+                    />
+                </div>
+            )}
         </div>
     );
 };

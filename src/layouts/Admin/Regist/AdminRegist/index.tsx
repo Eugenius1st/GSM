@@ -304,7 +304,7 @@ const AdminRegist = () => {
                                     <CiSquareMinus
                                         onClick={() => soccerRecord.length <= 3 && handleRecordDelete(idx)}
                                         className={
-                                            'w-8 h-8 mr-1 text-egGrey-default-semiLght hover:text-egGrey-default-default'
+                                            'w-8 h-8 mr-1 text-egGrey-default-semiLight hover:text-egGrey-default-default'
                                         }
                                     />
                                 ) : (
@@ -316,7 +316,7 @@ const AdminRegist = () => {
                                                 { record: '', startDate: '', endDate: '' },
                                             ])
                                         }
-                                        className={'w-8 h-8 mr-1 text-egPurple-semiLght hover:text-egPurple-default'}
+                                        className={'w-8 h-8 mr-1 text-egPurple-semiLight hover:text-egPurple-default'}
                                     />
                                 )}
                             </div>
@@ -347,7 +347,7 @@ const AdminRegist = () => {
                                         <CiSquareMinus
                                             onClick={() => license.length <= 4 && handleLicenseDelete(idx)}
                                             className={
-                                                'w-8 h-8 mr-1 text-egGrey-default-semiLght hover:text-egGrey-default-default'
+                                                'w-8 h-8 mr-1 text-egGrey-default-semiLight hover:text-egGrey-default-default'
                                             }
                                         />
                                     </div>
@@ -361,7 +361,7 @@ const AdminRegist = () => {
                                                 }
                                             }}
                                             className={
-                                                'w-8 h-8 mr-1 text-egPurple-semiLght hover:text-egPurple-default'
+                                                'w-8 h-8 mr-1 text-egPurple-semiLight hover:text-egPurple-default'
                                             }
                                         />
                                     </div>

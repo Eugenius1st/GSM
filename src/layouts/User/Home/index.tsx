@@ -11,6 +11,8 @@ import class_adult_man from 'assets/class/class_adult_man.jpeg';
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
 // Common
 import Divider from 'components/Common/Divider';
+// Cards
+import EmptyCard from 'components/Cards/EmptyCard';
 // Icons
 import { IoIosArrowForward } from 'react-icons/io';
 // Modals
@@ -107,6 +109,7 @@ const User = () => {
                     {/* <ClassCard classInfo={el} /> */}
                 </Link>
             ))}
+            <EmptyCard content="수강중인 수업이 없습니다" />
         </div>
     );
 };

@@ -181,7 +181,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                                             <span className="mr-4 text-lg font-semibold">날짜</span>
                                             <input
                                                 type="date"
-                                                className="w-40 p-1 border rounded-md border-egPurple-semiLght"
+                                                className="w-40 p-1 border rounded-md border-egPurple-semiLight"
                                             />
                                         </div>
 
@@ -192,7 +192,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                                                 type="number"
                                                 min="0"
                                                 max="99"
-                                                className="w-40 p-1 border rounded-md border-egPurple-semiLght"
+                                                className="w-40 p-1 border rounded-md border-egPurple-semiLight"
                                             />
                                         </div>
                                         <div className="flex mb-2">
@@ -203,7 +203,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                                                 rows={3}
                                                 maxLength={30}
                                                 placeholder="사유는 30글자 내로 작성하세요"
-                                                className="p-1 border rounded-md border-egPurple-semiLght"
+                                                className="p-1 border rounded-md border-egPurple-semiLight"
                                             ></textarea>
                                         </div>
                                     </div>
@@ -225,7 +225,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                                             <span className="mr-4 text-lg font-semibold">날짜</span>
                                             <input
                                                 type="date"
-                                                className="w-40 p-1 border rounded-md border-egPurple-semiLght"
+                                                className="w-40 p-1 border rounded-md border-egPurple-semiLight"
                                             />
                                         </div>
 
@@ -236,7 +236,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                                                 type="number"
                                                 min="-99"
                                                 max="0"
-                                                className="w-40 p-1 border rounded-md border-egPurple-semiLght"
+                                                className="w-40 p-1 border rounded-md border-egPurple-semiLight"
                                             />
                                         </div>
                                         <div className="flex mb-2">
@@ -247,7 +247,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                                                 rows={3}
                                                 maxLength={30}
                                                 placeholder="사유는 30글자 내로 작성하세요"
-                                                className="p-1 border rounded-md border-egPurple-semiLght"
+                                                className="p-1 border rounded-md border-egPurple-semiLight"
                                             ></textarea>
                                         </div>
                                     </div>
