@@ -20,7 +20,7 @@ const WebHeader = () => {
     const navigate = useNavigate();
     const location = useLocation().pathname;
     const locationList = location.split('/');
-    const [loginAtom, setLoginSelector] = useRecoilState(LoginAtomSelector);
+    // const [loginAtom, setLoginSelector] = useRecoilState(LoginAtomSelector);
     const [loginState, setStateSelector] = useRecoilState(LoginStateSelector);
     const tabActiveStyle = 'text-egPurple-default border-b-2 border-egPurple-default pb-1';
     const adminListItems = [
@@ -44,11 +44,11 @@ const WebHeader = () => {
             setHoveredTab(tab);
         } else return;
     };
-    const handleLogout = () => {
-        setLoginSelector('initial');
-        setStateSelector('initial');
-        navigate('/');
-    };
+    // const handleLogout = () => {
+    //     setLoginSelector('initial');
+    //     setStateSelector('initial');
+    //     navigate('/');
+    // };
 
     return (
         <div className="fixed top-0 z-50 w-screen border-b-2 bg-egWhite-default">
@@ -103,7 +103,7 @@ const WebHeader = () => {
                             <div className="flex items-centers">
                                 <WhiteBtn
                                     content="Logout"
-                                    func={() => handleLogout()}
+                                    func={() => navigate('logout')}
                                 />
                             </div>
                         </div>
