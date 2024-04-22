@@ -39,7 +39,6 @@ const UserViewUserCard = ({ attendInfo = [] }: AttendInfoType) => {
             { date: '2024-03-04', content: '아이들 이름 외울 필요 있음' },
         ],
     };
-    console.log(attendInfo);
     return (
         <div className="px-2">
             {attendInfo.length > 0 ? (

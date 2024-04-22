@@ -1,4 +1,5 @@
 // hooks
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { useQuery } from '@tanstack/react-query';
@@ -9,7 +10,6 @@ import { requestGet } from 'api/basic';
 import DropDown from 'components/EgMaterials/DropDown';
 // Material UI
 import PaginationRounded from 'components/EgMaterials/Pagenation';
-import { useEffect, useState } from 'react';
 // Cards
 import ClassCard from 'components/Cards/ClassCard';
 import { ClassInfoType } from 'components/Cards/ClassCard';
@@ -29,7 +29,7 @@ const Class = () => {
                 requestUrl: `/class?page=${curPage}&take=${curPage + 4}`,
                 // successFunc: () => console.log(data),
             }),
-        staleTime: 500,
+        staleTime: 5 * 1000,
     });
 
     useEffect(() => {
