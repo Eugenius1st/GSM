@@ -18,44 +18,6 @@ import EmptyCard from 'components/Cards/EmptyCard';
 const Class = () => {
     const location = useLocation().pathname;
     const [curPage, setCurPage] = useState(1);
-    const classInfo = [
-        {
-            id: 1,
-            classImage: class_adult_man,
-            title: '성인남성반',
-            date: '2024-03-09',
-            location: '수원월드컵점',
-            attendCount: '8/10',
-            waiting: 4,
-        },
-        {
-            id: 2,
-            classImage: class_adult_woman,
-            title: '성인여성반',
-            date: '2024-03-09',
-            location: '수원월드컵점',
-            attendCount: '8/10',
-            waiting: 4,
-        },
-        {
-            id: 3,
-            classImage: class_adult_man,
-            title: '성인남성반',
-            date: '2024-03-09',
-            location: '수원월드컵점',
-            attendCount: '8/10',
-            waiting: 4,
-        },
-        {
-            id: 4,
-            classImage: class_adult_woman,
-            title: '성인여성반',
-            date: '2024-03-09',
-            location: '수원월드컵점',
-            attendCount: '8/10',
-            waiting: 4,
-        },
-    ];
     const [allClass, setAllClass] = useState<ClassInfoType[]>([]);
     // GET 요청을 보낼 함수 정의
     const { data, error, isLoading } = useQuery({

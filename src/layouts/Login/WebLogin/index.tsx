@@ -1,7 +1,9 @@
 // hooks
 import React, { KeyboardEvent, useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
+// recoil
+import { AutoLoginSelector } from 'atom/auth';
+import { useRecoilState } from 'recoil';
 // api
 import { loginPost, PostLoginType } from 'api/login';
 // Common
@@ -21,8 +23,8 @@ const WebLogin = ({ loginAtom, setLoginSelector }: WebLoginType) => {
     // const navigate = useNavigate();
     const [loginID, setLoginID] = useState('');
     const [loginPW, setLoginPW] = useState('');
-    const [autoLogin, setAutoLogin] = useState(false);
-
+    const [autoLogin, setAutoLogin] = useRecoilState(AutoLoginSelector);
+    console.log('autoLogin', autoLogin);
     // POST 요청을 보낼 함수 정의
     const mutation = useMutation({
         mutationFn: ({ requestUrl, id, pw }: PostLoginType) => {
@@ -95,13 +97,13 @@ const WebLogin = ({ loginAtom, setLoginSelector }: WebLoginType) => {
                                 />
                             </div>
                         </div>
-                        {/* <div
+                        <div
                             onClick={() => setAutoLogin(!autoLogin)}
                             className="flex items-center mb-2 w-fit"
                         >
                             <EgCheckBox checked={autoLogin} />
                             <span>자동 로그인</span>
-                        </div> */}
+                        </div>
 
                         <WhiteBtn
                             func={() => handleSubmit()}

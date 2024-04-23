@@ -43,7 +43,7 @@ const ClassDetail = () => {
                 return Promise.resolve('');
             }
         },
-        staleTime: 5 * 1000,
+        staleTime: 500,
     });
 
     // DELETE 요청을 보낼 함수 정의

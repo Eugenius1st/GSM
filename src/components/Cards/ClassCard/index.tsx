@@ -75,27 +75,48 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
     // GET coachId 로 코치 정보 조회
     const searchCoach = async () => {
         if (classInfo) {
-            const coachRequests = classInfo.coaches?.map((coach) => requestGet({ requestUrl: `/admin/${coach}` }));
+            const coachRequests = classInfo.coaches?.map((coach: any) =>
+                requestGet({ requestUrl: `/admin/${coach._id}` })
+            );
             if (coachRequests) {
                 const coachResponses = await Promise.all(coachRequests);
                 if (coachResponses) {
                     setCoachesInfo(coachResponses);
-                    // const coachNames = coachResponses.map((coachInfo) => coachInfo.name);
-                    // setAttendCoach(coachNames);
                 }
             }
         }
     };
+
     // POST 수업추가 요청을 보낼 함수 정의
     const mutation = useMutation({
         mutationFn: ({ requestUrl, data, successFunc }: any) => {
             return requestPost({
                 requestUrl: requestUrl,
                 data: data,
+                successFunc: successFunc,
             });
-            // return requestPost({ requestUrl: requestUrl, id: id, pw: pw, successFunc: setLoginSelector });
         },
     });
+    // POST 요청 및 기존 coach 배열에 이미 있는 id 인지 확인하는 함수
+    const handleAddCoaches = (coachInfo: any) => {
+        const isIdMatch = coachesInfo.some((coach: any) => coach._id === coachInfo._id);
+
+        if (!isIdMatch) {
+            mutation.mutate({
+                requestUrl: '/class/coach',
+                data: {
+                    coachId: coachInfo._id,
+                    classId: classId,
+                },
+                successFunc: setIsPostSuccess,
+            });
+            const updatedCoaches = [...coachesInfo, coachInfo];
+            setCoachesInfo(updatedCoaches);
+        } else {
+            alert('이미 추가한 코치입니다.');
+        }
+    };
+    console.log('ispost', classInfo);
 
     // DELETE 요청을 보낼 함수 정의
     const handleDelete = (idx: number) => {
@@ -106,14 +127,14 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
         }
     };
     const deleteSubmit = async (id: string, idx: number) => {
-        // requestDelete({
-        //     requestUrl: `${process.env.REACT_APP_API_URL}/class/${classId}`,
-        //     data:{
-        //         "coachId": "string",
-        //         "classId": "string"
-        //       },
-        //     flagCheckFunc: setDeleteState,
-        // });
+        requestDelete({
+            requestUrl: `${process.env.REACT_APP_API_URL}/class/coach`,
+            data: {
+                coachId: id,
+                classId: classId,
+            },
+            flagCheckFunc: setDeleteState,
+        });
         setDeleteState(true);
         handleDelete(idx);
     };
@@ -125,39 +146,6 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
         }
     }, [classInfo]);
 
-    // POST 요청 및 기존 coach 배열에 이미 있는 id 인지 확인하는 함수
-    const handleAddCoaches = (coachInfo: any) => {
-        const isIdMatch = coachesInfo.some((coach: any) => coach._id === coachInfo._id);
-        console.log('요청 전 ID 미리보기', { coachId: coachInfo._id, classId: classId });
-
-        if (!isIdMatch) {
-            // _id가 일치하지 않는 경우에만 추가
-            axios
-                .post(
-                    `${process.env.REACT_APP_API_URL}/class/coach`,
-                    { coachId: coachInfo._id, classId: classId },
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    }
-                )
-                .then((res) => console.log('res', res))
-                .catch((err) => console.log('err', err));
-            // mutation.mutate({
-            //     requestUrl: '/class/coach',
-            //     data: {
-            //         coachId: coachInfo._id,
-            //         classId: classId,
-            //     },
-            //     successFunc: setIsPostSuccess,
-            // });
-            // const updatedCoaches = [...coachesInfo, coachInfo];
-            // setCoachesInfo(updatedCoaches);
-        } else {
-            alert('이미 추가한 코치입니다.');
-        }
-    };
     return (
         <div>
             {classInfo ? (
@@ -231,12 +219,12 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
                                     <span className={highLight}>참가코치</span>
                                 </div>
                                 <div>
-                                    {coachesInfo.length > 0 ? (
-                                        <div>
+                                    {coachesInfo && coachesInfo.length > 0 ? (
+                                        <div className="flex w-full ">
                                             {coachesInfo.map((el: any, idx: number) => (
                                                 <div
                                                     key={idx}
-                                                    className="flex items-center px-1 rounded-md bg-egBlack-superLight"
+                                                    className="flex items-center px-1 mr-2 rounded-md bg-egBlack-superLight"
                                                 >
                                                     <div className="mr-1">{el.name}</div>
                                                     <IoClose onClick={() => deleteSubmit(el._id, idx)} />
