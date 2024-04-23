@@ -1,13 +1,25 @@
 import axios from 'axios';
 
-const axiosInstance = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-    timeout: 5000, // 요청 타임아웃 설정 (ms)
-    headers: {
-        'Content-Type': 'application/json', // 기본 헤더 설정
-        //   'Authorization': 'Bearer token' // 예시: 인증 토큰 설정
-    },
-});
+// 단순 요청으로 인증값이 필요없는 경우
+export const axiosApi = (url: string, options: any) => {
+    const instance = axios.create({
+        baseURL: url,
+        // headers: { Authorization: 'Bearer ' + token },
+        ...options,
+    });
+    return instance;
+};
+
+// post, delete등 api요청 시 인증값이 필요한 경우
+// const axiosAuthApi = (url, options) => {
+//     const token = '토큰 값'
+//     const instance = axios.create({
+//       baseURL: url,
+//       headers: { Authorization: 'Bearer ' + token },
+//       ...options,
+//     })
+//     return instance
+//   }
 
 // 기본 설정을 사용하여 인스턴스로 요청 보내기
 // axiosInstance.get('/endpoint')

@@ -1,18 +1,27 @@
 // hooks
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { useMutation } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
-import { requestGet } from 'api/basic';
+import { requestGet, requestPost } from 'api/basic';
+import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 // recoil
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { IsMobileSelector } from 'atom/isMobile';
-import { LoginAtomSelector } from 'atom/auth';
+import { LoginAtomSelector, LoginStateSelector } from 'atom/auth';
 // api
 import { decode } from 'api/decode';
 import { dateConverter } from 'api/dateConverter';
+import { requestDelete } from 'api/basic';
 // Card
 import EmptyCard from 'components/Cards/EmptyCard';
+// Modals
+import AddCoachModal from 'components/Modals/CoachAddModal';
+// icons
+import { IoMdSearch } from 'react-icons/io';
+import { IoClose } from 'react-icons/io5';
+import { FaPlus } from 'react-icons/fa6';
 
 export interface ClassInfoType {
     _id: string;
@@ -37,14 +46,19 @@ interface ClasCardType {
 }
 
 const ClassCard = ({ title, classInfo }: ClasCardType) => {
+    const { classId } = useParams();
     let isMobile = useRecoilValue(IsMobileSelector);
+    const [loginState, setLoginState] = useRecoilState(LoginStateSelector);
     const [loginAtom, setLoginSelector] = useRecoilState(LoginAtomSelector);
     const [userId, setUserId] = useState<any>('');
-    const infoStyle = 'mb-2 pb-1 flex border-b border-egGrey-default';
+    const infoStyle = 'mb-2 pb-1 flex border-b border-egGrey-default items-center';
     const titleStyle = isMobile ? 'mr-2 w-24 flex-shrink-0' : 'mr-2 w-20 ';
     const highLight = 'px-1 bg-egPurple-superLight';
     const [attendState, setAttendState] = useState(false);
-    const [attendCoach, setAttendCoach] = useState<any>([]);
+    const [coachesInfo, setCoachesInfo] = useState<any>([]);
+    const [isPostSuccess, setIsPostSuccess] = useState(false);
+    const [deleteState, setDeleteState] = useState(false);
+
     // api
     useEffect(() => {
         // user Id  확인
@@ -58,30 +72,96 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
         e.stopPropagation();
     };
 
-    // 코치 추가, 일반 axios
+    // GET coachId 로 코치 정보 조회
     const searchCoach = async () => {
         if (classInfo) {
             const coachRequests = classInfo.coaches?.map((coach) => requestGet({ requestUrl: `/admin/${coach}` }));
             if (coachRequests) {
                 const coachResponses = await Promise.all(coachRequests);
                 if (coachResponses) {
-                    const coachNames = coachResponses.map((coachInfo) => coachInfo.name);
-                    setAttendCoach(coachNames);
+                    setCoachesInfo(coachResponses);
+                    // const coachNames = coachResponses.map((coachInfo) => coachInfo.name);
+                    // setAttendCoach(coachNames);
                 }
             }
         }
     };
+    // POST 수업추가 요청을 보낼 함수 정의
+    const mutation = useMutation({
+        mutationFn: ({ requestUrl, data, successFunc }: any) => {
+            return requestPost({
+                requestUrl: requestUrl,
+                data: data,
+            });
+            // return requestPost({ requestUrl: requestUrl, id: id, pw: pw, successFunc: setLoginSelector });
+        },
+    });
 
+    // DELETE 요청을 보낼 함수 정의
+    const handleDelete = (idx: number) => {
+        const newCoachesInfo = [...coachesInfo];
+        if (newCoachesInfo.length > 0) {
+            newCoachesInfo.splice(idx, 1);
+            setCoachesInfo(newCoachesInfo);
+        }
+    };
+    const deleteSubmit = async (id: string, idx: number) => {
+        // requestDelete({
+        //     requestUrl: `${process.env.REACT_APP_API_URL}/class/${classId}`,
+        //     data:{
+        //         "coachId": "string",
+        //         "classId": "string"
+        //       },
+        //     flagCheckFunc: setDeleteState,
+        // });
+        setDeleteState(true);
+        handleDelete(idx);
+    };
+
+    // 렌더링 관련
     useEffect(() => {
         if (classInfo) {
             searchCoach();
         }
     }, [classInfo]);
 
+    // POST 요청 및 기존 coach 배열에 이미 있는 id 인지 확인하는 함수
+    const handleAddCoaches = (coachInfo: any) => {
+        const isIdMatch = coachesInfo.some((coach: any) => coach._id === coachInfo._id);
+        console.log('요청 전 ID 미리보기', { coachId: coachInfo._id, classId: classId });
+
+        if (!isIdMatch) {
+            // _id가 일치하지 않는 경우에만 추가
+            axios
+                .post(
+                    `${process.env.REACT_APP_API_URL}/class/coach`,
+                    { coachId: coachInfo._id, classId: classId },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    }
+                )
+                .then((res) => console.log('res', res))
+                .catch((err) => console.log('err', err));
+            // mutation.mutate({
+            //     requestUrl: '/class/coach',
+            //     data: {
+            //         coachId: coachInfo._id,
+            //         classId: classId,
+            //     },
+            //     successFunc: setIsPostSuccess,
+            // });
+            // const updatedCoaches = [...coachesInfo, coachInfo];
+            // setCoachesInfo(updatedCoaches);
+        } else {
+            alert('이미 추가한 코치입니다.');
+        }
+    };
     return (
         <div>
             {classInfo ? (
-                <div className="relative z-0 p-4 mb-4 border shadow-md border-egGrey-default">
+                <div className="relative p-4 mb-4 border shadow-md z-100 border-egGrey-default">
                     {attendState && <div className="mb-2 text-lg font-bold">내 수업</div>}
 
                     {attendState && (
@@ -150,9 +230,42 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
                                 <div className={titleStyle}>
                                     <span className={highLight}>참가코치</span>
                                 </div>
-                                <div>{attendCoach.length > 0 ? attendCoach.join(', ') + ' 코치' : '코치 배정중'} </div>
+                                <div>
+                                    {coachesInfo.length > 0 ? (
+                                        <div>
+                                            {coachesInfo.map((el: any, idx: number) => (
+                                                <div
+                                                    key={idx}
+                                                    className="flex items-center px-1 rounded-md bg-egBlack-superLight"
+                                                >
+                                                    <div className="mr-1">{el.name}</div>
+                                                    <IoClose onClick={() => deleteSubmit(el._id, idx)} />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="text-egGrey-default">코치 배정중</div>
+                                    )}{' '}
+                                </div>
+                                <div>
+                                    <AddCoachModal
+                                        modalBtn={
+                                            <button className="flex items-center px-2 py-1 ml-2 border rounded-md bg-egPurple-superLight hover:bg-egPurple-semiLight text-egPurple-default">
+                                                <FaPlus className="w-4 h-4 mr-1" />
+                                                <div className="text-sm ">추가</div>
+                                            </button>
+                                        }
+                                        modalTitle={'코치 검색'}
+                                        modalContents={'찾으시는 코치의 이름을 입력하세요(최대 10글자)'}
+                                        // modalFooterExitBtn={'취소'}
+                                        // modalFooterActiveBtn={'입력'}
+                                        modalActiveFunc={handleAddCoaches}
+                                        modalScrollStayFlag={false}
+                                    />
+                                </div>
                             </div>
                         )}
+
                         {classInfo?.notice && (
                             <div className={infoStyle}>
                                 <div className={titleStyle}>

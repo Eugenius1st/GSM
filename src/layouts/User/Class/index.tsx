@@ -26,7 +26,7 @@ const Class = () => {
         queryKey: ['allClassData'],
         queryFn: () =>
             requestGet({
-                requestUrl: `/class?page=${curPage}&take=${curPage + 4}`,
+                requestUrl: `/class?page=${curPage}&take=${4}`,
                 // successFunc: () => console.log(data),
             }),
         staleTime: 5 * 1000,

@@ -10,6 +10,7 @@ import AdminUser from 'layouts/Admin/User';
 import AdminUserDetail from 'layouts/Admin/User/UserDetail';
 import AdminClass from 'layouts/Admin/Class';
 import AdminClassDetail from 'layouts/Admin/Class/ClassDetail';
+import AdminClassEdit from 'layouts/Admin/Class/ClassEdit';
 import AdminRegist from 'layouts/Admin/Regist/AdminRegist';
 import AdminRegistUser from 'layouts/Admin/Regist/UserRegist';
 import AdminNotifiaction from 'layouts/Admin/Notification';
@@ -60,8 +61,12 @@ const App = () => {
                 element={<AdminClass />}
             />
             <Route
-                path="/admin/class/:calssId"
+                path="/admin/class/:classId"
                 element={<AdminClassDetail />}
+            />
+            <Route
+                path="/admin/class/edit/:classId"
+                element={<AdminClassEdit />}
             />
             <Route
                 path="/admin/regist"

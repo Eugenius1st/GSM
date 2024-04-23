@@ -62,7 +62,7 @@ const AdminRegist = () => {
     const [duty, setDuty] = useState('');
     const [tempLicense, setTempLicense] = useState('');
     const [license, setLicense] = useState<string[]>(['']);
-    const [isSuccess, setIsSuccess] = useState<boolean>(true);
+    const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const [soccerRecord, setSoccerRecord] = useState([{ record: '', startDate: '', endDate: '' }]);
 
     const inputStyle = 'w-full p-2 border border-egGrey-default my-1';

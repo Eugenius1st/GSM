@@ -6,8 +6,10 @@ import PurpleBtn from 'components/Buttons/PurpleBtn';
 // icons
 import { CgClose } from 'react-icons/cg';
 import { MdDelete } from 'react-icons/md';
-
-const DeleteModal = () => {
+interface DeleteModalType {
+    deleteFunc?: () => void;
+}
+const DeleteModal = ({ deleteFunc }: DeleteModalType) => {
     const [isShow, setIsShow] = useState(false);
     const handleShowModal = () => {
         setIsShow(true);
@@ -20,6 +22,10 @@ const DeleteModal = () => {
     const [deleteInput, setDeleteInput] = useState('');
     function handleInitial() {
         setDeleteInput('');
+        if (deleteFunc) {
+            deleteFunc();
+        }
+
         setIsShow(false);
     }
 
@@ -48,13 +54,13 @@ const DeleteModal = () => {
                                 className="w-full p-2 mb-4 text-base border rounded-md border-egPurple-semiLight"
                             />
                         </div>
-                        <div className="flex justify-end text-base">
+                        <div className="flex justify-end text-base font-normal">
                             <WhiteBtn
                                 content={'취소'}
                                 func={handleCloseModal}
                             />
 
-                            <div>
+                            <div className="font-normal">
                                 <PurpleBtn
                                     content={'삭제'}
                                     func={() => deleteInput === '삭제하기' && handleInitial()}

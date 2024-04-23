@@ -15,7 +15,7 @@ import EmptyCard from 'components/Cards/EmptyCard';
 import PaginationRounded from 'components/EgMaterials/Pagenation';
 import { PathOrFileDescriptor } from 'fs';
 
-interface SearchModalType {
+interface CoachAddModalType {
     modalBtn: React.ReactNode;
     modalTitle?: string;
     modalContents?: string | React.ReactNode;
@@ -34,7 +34,7 @@ export interface AdminDataType {
     _id: string;
 }
 
-const SearchModal = ({
+const CoachAddModal = ({
     modalBtn,
     modalTitle,
     modalContents,
@@ -42,7 +42,7 @@ const SearchModal = ({
     modalFooterActiveBtn,
     modalActiveFunc,
     modalScrollStayFlag = true,
-}: SearchModalType) => {
+}: CoachAddModalType) => {
     const [isShow, setIsShow] = useState(false);
     const [queryEnabled, setQueryEnabled] = useState(false);
     const [searchInput, setSearchInput] = useState('');
@@ -52,20 +52,21 @@ const SearchModal = ({
     const [curPage, setCurPage] = useState(1);
     const handleShowModal = () => {
         setIsShow(true);
-        document.body.style.overflow = 'hidden';
+        // document.body.style.overflow = 'hidden';
     };
     const handleCloseModal = () => {
         setIsShow(false);
-        if (modalScrollStayFlag) document.body.style.overflow = 'unset';
+        // if (modalScrollStayFlag) document.body.style.overflow = 'unset';
     };
     // GET 요청을 보낼 함수 정의
     const { data, error, isLoading, refetch } = useQuery({
-        queryKey: ['searchAdmin'],
+        queryKey: ['searchCoach'],
         queryFn: () => {
             if (searchInput) {
                 return requestGet({
                     requestUrl: `/admin/search/${searchInput}?with_head=true&take=${itemsPerPage}&page=${curPage}`,
                     successFunc: setSearchedData,
+                    flagCheckFunc: setIsSearched,
                 });
             } else {
                 // searchInput이 undefined일 때에 대한 처리
@@ -75,21 +76,23 @@ const SearchModal = ({
         staleTime: 100,
         enabled: queryEnabled, // enabled 옵션을 사용하여 쿼리를 활성화 또는 비활성화합니다.
     });
+
     const handleButtonClick = () => {
-        // 버튼 클릭 시에만 쿼리를 활성화하도록 설정합니다.
+        // GET 요청 버튼 클릭 시에만 쿼리를 활성화하도록 설정합니다.
         if (searchInput) {
             setQueryEnabled(true);
             refetch();
         }
     };
+
     const handleActive = (data: AdminDataType) => {
-        if (modalActiveFunc) {
+        if (modalActiveFunc && isSearched) {
             modalActiveFunc(data);
             handleCloseModal();
         }
     };
     return (
-        <div>
+        <div className="z-10">
             <div onClick={handleShowModal}>{modalBtn}</div>
             {isShow ? (
                 <div className="fixed flex justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
@@ -179,4 +182,4 @@ const SearchModal = ({
     );
 };
 
-export default SearchModal;
+export default CoachAddModal;

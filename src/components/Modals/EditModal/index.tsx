@@ -7,8 +7,11 @@ import PurpleBtn from 'components/Buttons/PurpleBtn';
 import { CgClose } from 'react-icons/cg';
 import { MdDelete } from 'react-icons/md';
 import { MdEdit } from 'react-icons/md';
+interface EditModalType {
+    activeFunc?: () => void;
+}
 
-const EditModal = () => {
+const EditModal = ({ activeFunc }: EditModalType) => {
     const [isShow, setIsShow] = useState(false);
     const handleShowModal = () => {
         setIsShow(true);
@@ -17,6 +20,10 @@ const EditModal = () => {
     const handleCloseModal = () => {
         setIsShow(false);
         document.body.style.overflow = 'unset';
+    };
+    const handleActive = () => {
+        if (activeFunc) activeFunc();
+        handleCloseModal();
     };
     return (
         <div>
@@ -41,7 +48,10 @@ const EditModal = () => {
                             />
 
                             <div>
-                                <PurpleBtn content={'수정'} />
+                                <PurpleBtn
+                                    content={'수정'}
+                                    func={handleActive}
+                                />
                             </div>
                         </div>
                     </div>

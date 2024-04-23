@@ -26,7 +26,7 @@ import WhiteBtn from 'components/Buttons/WhiteBtn';
 import DeleteModal from 'components/Modals/DeleteModal';
 import EditModal from 'components/Modals/EditModal';
 
-const ClassDetail = () => {
+const ClassEdit = () => {
     const navigate = useNavigate();
     const { classId } = useParams();
     const [curClass, setCurClass] = useState<ClassInfoType | undefined>();
@@ -52,10 +52,6 @@ const ClassDetail = () => {
             requestUrl: `${process.env.REACT_APP_API_URL}/class/${classId}`,
             flagCheckFunc: setDeleteState,
         });
-    };
-
-    const editActive = () => {
-        navigate(`/admin/class/edit/${classId}`);
     };
 
     useEffect(() => {
@@ -88,10 +84,8 @@ const ClassDetail = () => {
                     <span>수업관리</span>
                     <MdOutlineArrowForwardIos className="w-4 h-4 mx-1" />
                     <span> 수업정보</span>
-                </div>
-                <div className="flex">
-                    <EditModal activeFunc={editActive} />
-                    <DeleteModal deleteFunc={deleteSubmit} />
+                    <MdOutlineArrowForwardIos className="w-4 h-4 mx-1" />
+                    <span> 수업수정</span>
                 </div>
             </div>
             <div>
@@ -112,18 +106,10 @@ const ClassDetail = () => {
 
             <Divider />
             <div className="flex justify-end">
-                <WhiteBtn content="대기자 추가" />
-                <PurpleBtn content="참석자 추가" />
+                <PurpleBtn content="수정 완료" />
             </div>
-            {/* {deleteState && (
-                <BasicAlert
-                    alertContents="수업을 삭제하시겠습니까?"
-                    alertFooterActiveFunc={handleClean}
-                    alertFooterActiveBtn="확인"
-                />
-            ) } */}
         </div>
     );
 };
 
-export default ClassDetail;
+export default ClassEdit;
