@@ -2,8 +2,12 @@ import * as React from 'react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
+// hooks
+import { useEffect } from 'react';
 
 interface BasicDatePickerTyle {
+    defaultBirth?: any;
     content?: string;
     range?: 'year' | 'month' | 'day';
     isMobile?: boolean;
@@ -11,8 +15,16 @@ interface BasicDatePickerTyle {
     func?: (date: any) => void;
 }
 
-export default function BasicDatePicker({ content, range, func, customStyle, isMobile }: BasicDatePickerTyle) {
+export default function BasicDatePicker({
+    defaultBirth,
+    content,
+    range,
+    func,
+    customStyle,
+    isMobile,
+}: BasicDatePickerTyle) {
     const [curDate, setCurDate] = React.useState('');
+
     let currentDate = (value: any) => {
         let selectedDate = new Date(value.$d);
         let year = selectedDate.getFullYear();
@@ -23,8 +35,16 @@ export default function BasicDatePicker({ content, range, func, customStyle, isM
         else if (range === 'month') dateString = year + '/' + month;
         else dateString = year + '/' + month + '/' + day;
         setCurDate(dateString);
+
         if (func) func(selectedDate);
     };
+    useEffect(() => {
+        if (defaultBirth) {
+            const newDefaultBirth = dayjs(defaultBirth);
+            currentDate(newDefaultBirth);
+        }
+    }, [defaultBirth]);
+
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             {isMobile ? (

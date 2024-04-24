@@ -1,12 +1,16 @@
-// hook
-import { useState } from 'react';
+// hooks
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
 // recoil
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { IsMobileAtom } from 'atom/isMobile';
 import { LoginAtomSelector, LoginStateSelector } from 'atom/auth';
 // api
-import { registPost } from 'api/regist';
+import { requestGet, requestPatch } from 'api/basic';
+// Cards
+import EmptyCard from 'components/Cards/EmptyCard';
 // utility
 import ImageUploader from 'utility/ImageUploader';
 // Common
@@ -23,10 +27,6 @@ import { CiSquareMinus } from 'react-icons/ci';
 import NavigateModal from 'components/Modals/NavigateModal';
 
 export interface RequestBodyType {
-    id: string;
-    password: string;
-    role: string;
-    scope: string[];
     photo: string;
     name: string;
     gender: string;
@@ -37,26 +37,24 @@ export interface RequestBodyType {
     license: string[];
 }
 
-export interface PostDataType {
+export interface PatchDataType {
     requestUrl: string;
-    requestBody: RequestBodyType;
+    data: RequestBodyType;
     successFunc?: (data: any) => void;
 }
 
-const AdminRegist = () => {
+const CoachEdit = () => {
     // 웹 앱 구분
     let isMobile = useRecoilValue(IsMobileAtom);
-    const [isLoginAuth, setIsLoginAuth] = useRecoilState(LoginAtomSelector);
-    const [isLoginStateAuth, setIsLoginStateAuth] = useRecoilState(LoginStateSelector);
-
-    const [adminId, setAdminId] = useState('');
-    const [adminPw, setAdminPw] = useState('');
+    const { coachId } = useParams();
+    const [curCoach, setCurCoach] = useState();
     const [role, setRole] = useState('admin');
     const [scope, setScope] = useState(['gsm']);
     const [photo, setPhoto] = useState('any-photo-url');
     const [name, setName] = useState('');
     const [gender, setGender] = useState('성별');
     const [birth, setBirth] = useState('');
+    const [defaultBirth, setDefaultBirth] = useState('');
     const [level, setLevel] = useState(1);
     const [mobile, setMobile] = useState('');
     const [duty, setDuty] = useState('');
@@ -90,21 +88,44 @@ const AdminRegist = () => {
         setMobile(formatted);
     };
 
-    // POST 요청을 보낼 함수 정의
+    // GET 요청을 보낼 함수 정의
+    const { data, error, isLoading, refetch } = useQuery({
+        queryKey: ['coachEdit'],
+        queryFn: () => {
+            return requestGet({
+                requestUrl: `/admin/${coachId}`,
+                successFunc: setCurCoach,
+                // flagCheckFunc: setIsSearched,
+            });
+        },
+        staleTime: 100,
+        // enabled: queryEnabled, // enabled 옵션을 사용하여 쿼리를 활성화 또는 비활성화합니다.
+    });
+    useEffect(() => {
+        if (curCoach) {
+            const { photo, name, gender, birth, lv, mobile, duty, license } = curCoach;
+            setPhoto(photo);
+            setName(name);
+            setGender(gender);
+            setBirth(birth);
+            setDefaultBirth(birth);
+            setLevel(lv);
+            setMobile(mobile);
+            setDuty(duty);
+            setLicense(license);
+        }
+    }, [curCoach]);
+    // PATCH 요청을 보낼 함수 정의
     const mutation = useMutation({
-        mutationFn: ({ requestUrl, requestBody, successFunc }: PostDataType) => {
-            return registPost({ requestUrl: requestUrl, requestBody: requestBody, successFunc: successFunc });
+        mutationFn: ({ requestUrl, data, successFunc }: PatchDataType) => {
+            return requestPatch({ requestUrl: requestUrl, data: data, successFunc: successFunc });
         },
     });
 
     const handleSubmit = () => {
-        // POST 요청에 보낼 데이터
+        // PATCH 요청에 보낼 데이터
         const numberLevel = Number(level);
-        const requestBody = {
-            id: adminId,
-            password: adminPw,
-            role: role,
-            scope: scope,
+        const data = {
             photo: photo,
             name: name,
             gender: gender,
@@ -115,11 +136,12 @@ const AdminRegist = () => {
             license: license,
         };
         mutation.mutate({
-            requestUrl: '/auth/signup/admin',
-            requestBody: requestBody,
+            requestUrl: `/admin/${coachId}`,
+            data: data,
             successFunc: setIsSuccess,
         });
     };
+
     return (
         <div className="eg-regist-wrapper">
             <div className="flex items-center justify-start eg-title">
@@ -137,28 +159,6 @@ const AdminRegist = () => {
                 />
             </div>
             <form className="mt-16">
-                {/* id, pw */}
-                <div>
-                    <label htmlFor="id">ID</label>
-                    <input
-                        id="id"
-                        type="id"
-                        placeholder="ID"
-                        className={inputStyle}
-                        value={adminId}
-                        onChange={(e) => setAdminId(e.target.value)}
-                    />
-                    <label htmlFor="password">PASSWORD</label>
-                    <input
-                        id="password"
-                        type="password"
-                        placeholder="PASSWORD"
-                        className={inputStyle}
-                        value={adminPw}
-                        onChange={(e) => setAdminPw(e.target.value)}
-                    />
-                </div>
-
                 {/* user personal info */}
                 <div className="mt-8">
                     <label htmlFor="name">이름</label>
@@ -174,6 +174,7 @@ const AdminRegist = () => {
                     <label htmlFor="birth">생년월일</label>
                     <div className="my-1">
                         <DatePicker
+                            defaultBirth={defaultBirth}
                             content={'생년월일'}
                             range="day"
                             customStyle={
@@ -191,7 +192,7 @@ const AdminRegist = () => {
                                     : 'w-full p-2 border border-egGrey-default'
                             }
                         >
-                            {gender}
+                            {gender === 'male' ? '남성' : gender === 'female' ? '여성' : '성별'}
                         </div>
                         <div className="absolute right-0 flex justify-end top-1">
                             <div
@@ -232,6 +233,7 @@ const AdminRegist = () => {
                     <div className="mb-1">등급</div>
                     <CustomDropdown
                         placehorder="등급"
+                        defaltValue={level}
                         formStyle="px-3 py-2 border border-egGrey-default text-egGrey-default flex flex-col"
                         itemList={[1, 2, 3, 4]}
                         inputStyle="px-3 py-2 border border-egGrey-default text-egGrey-default"
@@ -243,18 +245,18 @@ const AdminRegist = () => {
                         <RadioButton
                             RadioBtnList={[
                                 {
-                                    checked: false,
+                                    checked: duty === '군필',
                                     value: '군필',
                                     name: '군필',
                                 },
                                 {
-                                    checked: false,
+                                    checked: duty === '미필',
                                     value: '미필',
                                     name: '미필',
                                 },
                                 {
-                                    checked: false,
-                                    value: '면제',
+                                    checked: duty === '비대상',
+                                    value: '비대상',
                                     name: '비대상',
                                 },
                             ]}
@@ -405,12 +407,12 @@ const AdminRegist = () => {
                             </button>
                         }
                         // modalTitle={'회원가입'}
-                        modalContents={'회원가입이 완료되었습니다.'}
-                        modalFooterActiveBtn={'로그인'}
+                        modalContents={'수정이 완료되었습니다.'}
+                        modalFooterActiveBtn={'확인'}
                         modalScrollStayFlag={true}
-                        modalFooterExitBtn={'취소'}
+                        // modalFooterExitBtn={'취소'}
                         isSuccess={isSuccess}
-                        navigateUrl={'/'}
+                        navigateUrl={`/admin/coach/${coachId}`}
                     />
                 </div>
             </form>
@@ -418,4 +420,4 @@ const AdminRegist = () => {
     );
 };
 
-export default AdminRegist;
+export default CoachEdit;

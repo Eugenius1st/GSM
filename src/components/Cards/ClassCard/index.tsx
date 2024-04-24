@@ -37,7 +37,7 @@ export interface ClassInfoType {
     reserved: number;
     coaches?: string[];
     notice?: string;
-    attendanceReservation?: any;
+    attendancereservations?: any;
 }
 
 interface ClasCardType {
@@ -116,7 +116,6 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
             alert('이미 추가한 코치입니다.');
         }
     };
-    console.log('ispost', classInfo);
 
     // DELETE 요청을 보낼 함수 정의
     const handleDelete = (idx: number) => {
@@ -145,7 +144,6 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
             searchCoach();
         }
     }, [classInfo]);
-
     return (
         <div>
             {classInfo ? (
@@ -204,9 +202,9 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
                                     <span className={highLight}>참석</span>
                                 </div>
                                 <div>
-                                    {classInfo?.attendanceReservation
-                                        ? classInfo?.attendanceReservation.length
-                                        : classInfo?.attendance}
+                                    {classInfo?.attendancereservations && classInfo?.attendancereservations > 0
+                                        ? classInfo?.attendancereservations.length
+                                        : 0}
                                     /{classInfo?.amount} (대기자{classInfo?.reserved ? classInfo?.reserved : 0} 명){' '}
                                 </div>
                             </div>

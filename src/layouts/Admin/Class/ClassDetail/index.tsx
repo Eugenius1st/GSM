@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
 // api
-import { requestGet, requestDelete, RegistDeleteType } from 'api/basic';
+import { requestGet, requestDelete } from 'api/basic';
 // Class Components
 import ViewUserCard from 'layouts/Admin/Class/Components/ViewUserCard';
 // Icons
@@ -115,13 +115,6 @@ const ClassDetail = () => {
                 <WhiteBtn content="대기자 추가" />
                 <PurpleBtn content="참석자 추가" />
             </div>
-            {/* {deleteState && (
-                <BasicAlert
-                    alertContents="수업을 삭제하시겠습니까?"
-                    alertFooterActiveFunc={handleClean}
-                    alertFooterActiveBtn="확인"
-                />
-            ) } */}
         </div>
     );
 };

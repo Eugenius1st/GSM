@@ -36,101 +36,106 @@ import PurpleBtn from 'components/Buttons/PurpleBtn';
 import colors from 'assets/colors/palette';
 // icons
 import { RiUserForbidFill } from 'react-icons/ri';
+// Cards
+import EmptyCard from 'components/Cards/EmptyCard';
 
-interface Data {
-    id: number;
-    profile: string;
+interface RowDataType {
+    _id: number;
+    photo: string;
     name: string;
     birth: number;
-    level: number;
+    lv: number;
+}
+interface TableRowDataType {
+    tableRowData: RowDataType[];
 }
 
-const rows = [
-    {
-        id: 1,
-        profile: coach_son,
-        name: '손흥민',
-        birth: 1998,
-        level: 1,
-    },
-    {
-        id: 2,
-        profile: coach_kim,
-        name: '김민재',
-        birth: 2000,
-        level: 2,
-    },
-    {
-        id: 3,
-        profile: coach_hong,
-        name: '홍길동',
-        birth: 1978,
-        level: 3,
-    },
-    {
-        id: 4,
-        profile: coach_son,
-        name: '손흥민',
-        birth: 1998,
-        level: 4,
-    },
-    {
-        id: 5,
-        profile: coach_kim,
-        name: '김민재',
-        birth: 2000,
-        level: 5,
-    },
-    {
-        id: 6,
-        profile: coach_hong,
-        name: '홍길동',
-        birth: 1978,
-        level: 6,
-    },
-    {
-        id: 7,
-        profile: coach_son,
-        name: '손흥민',
-        birth: 1998,
-        level: 1,
-    },
-    {
-        id: 8,
-        profile: coach_kim,
-        name: '김민재',
-        birth: 2000,
-        level: 7,
-    },
-    {
-        id: 9,
-        profile: coach_hong,
-        name: '홍길동',
-        birth: 1978,
-        level: 1,
-    },
-    {
-        id: 10,
-        profile: coach_son,
-        name: '손흥민',
-        birth: 1998,
-        level: 1,
-    },
-    {
-        id: 11,
-        profile: coach_kim,
-        name: '김민재',
-        birth: 2000,
-        level: 1,
-    },
-    {
-        id: 12,
-        profile: coach_hong,
-        name: '홍길동',
-        birth: 1978,
-        level: 1,
-    },
-];
+// const rows = [
+//     {
+//         _id: 1,
+//         photo: coach_son,
+//         name: '손흥민',
+//         birth: 1998,
+//         lv: 1,
+//     },
+//     {
+//         _id: 2,
+//         photo: coach_kim,
+//         name: '김민재',
+//         birth: 2000,
+//         lv: 2,
+//     },
+//     {
+//         _id: 3,
+//         photo: coach_hong,
+//         name: '홍길동',
+//         birth: 1978,
+//         lv: 3,
+//     },
+//     {
+//         _id: 4,
+//         photo: coach_son,
+//         name: '손흥민',
+//         birth: 1998,
+//         lv: 4,
+//     },
+//     {
+//         _id: 5,
+//         photo: coach_kim,
+//         name: '김민재',
+//         birth: 2000,
+//         lv: 5,
+//     },
+//     {
+//         _id: 6,
+//         photo: coach_hong,
+//         name: '홍길동',
+//         birth: 1978,
+//         lv: 6,
+//     },
+//     {
+//         _id: 7,
+//         photo: coach_son,
+//         name: '손흥민',
+//         birth: 1998,
+//         lv: 1,
+//     },
+//     {
+//         _id: 8,
+//         photo: coach_kim,
+//         name: '김민재',
+//         birth: 2000,
+//         lv: 7,
+//     },
+//     {
+//         _id: 9,
+//         photo: coach_hong,
+//         name: '홍길동',
+//         birth: 1978,
+//         lv: 1,
+//     },
+//     {
+//         _id: 10,
+//         photo: coach_son,
+//         name: '손흥민',
+//         birth: 1998,
+//         lv: 1,
+//     },
+//     {
+//         _id: 11,
+//         photo: coach_kim,
+//         name: '김민재',
+//         birth: 2000,
+//         lv: 1,
+//     },
+//     {
+//         _id: 12,
+//         photo: coach_hong,
+//         name: '홍길동',
+//         birth: 1978,
+//         lv: 1,
+//     },
+// ];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
@@ -170,16 +175,16 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
 }
 
 interface HeadCell {
-    id: keyof Data;
+    id: keyof RowDataType;
     label: string;
     numeric: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
     {
-        id: 'profile',
+        id: 'photo',
         numeric: false,
-        label: 'profile',
+        label: 'photo',
     },
     {
         id: 'name',
@@ -187,9 +192,9 @@ const headCells: readonly HeadCell[] = [
         label: 'Name',
     },
     {
-        id: 'level',
+        id: 'lv',
         numeric: false,
-        label: 'Level',
+        label: 'lv',
     },
     {
         id: 'birth',
@@ -200,7 +205,7 @@ const headCells: readonly HeadCell[] = [
 
 interface EnhancedTableProps {
     numSelected: number;
-    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
+    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof RowDataType) => void;
     onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
     order: Order;
     orderBy: string;
@@ -210,7 +215,7 @@ interface EnhancedTableProps {
 function EnhancedTableHead(props: EnhancedTableProps) {
     const { egPurple } = colors;
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-    const createSortHandler = (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
+    const createSortHandler = (property: keyof RowDataType) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
     };
 
@@ -345,15 +350,20 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         </Toolbar>
     );
 }
-export default function EnhancedTable() {
+export default function EnhancedTable({ tableRowData }: TableRowDataType) {
+    const [rowData, setRowData] = React.useState(tableRowData);
     const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<keyof Data>('level');
+    const [orderBy, setOrderBy] = React.useState<keyof RowDataType>('lv');
     const [selected, setSelected] = React.useState<readonly number[]>([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const { egPurple } = colors;
+    // Table Body 렌더링 관련
+    React.useEffect(() => {
+        if (tableRowData) setRowData(tableRowData);
+    }, [tableRowData]);
 
-    const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
+    const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof RowDataType) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
@@ -361,7 +371,7 @@ export default function EnhancedTable() {
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            const newSelected = rows.map((n) => n.id);
+            const newSelected = tableRowData.map((n) => n._id);
             setSelected(newSelected);
             return;
         }
@@ -384,141 +394,133 @@ export default function EnhancedTable() {
         setSelected(newSelected);
     };
 
-    const handleChangePage = (event: unknown, newPage: number) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
     const isSelected = (id: number) => selected.indexOf(id) !== -1;
 
-    // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-    const visibleRows = React.useMemo(
-        () =>
-            stableSort(rows, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-        [order, orderBy, page, rowsPerPage]
-    );
+    // Avoid a layout jump when reaching the last page with empty tableRowData.
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - tableRowData.length) : 0;
 
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer sx={{ overflowY: 'scroll' }}>
-                    <Table
-                        sx={{ minWidth: 440 }}
-                        aria-labelledby="tableTitle"
-                        size="small"
-                    >
-                        <EnhancedTableHead
-                            numSelected={selected.length}
-                            order={order}
-                            orderBy={orderBy}
-                            onSelectAllClick={handleSelectAllClick}
-                            onRequestSort={handleRequestSort}
-                            rowCount={rows.length}
-                        />
-                        <TableBody
-                            sx={{
-                                '.MuiTableRow-hover:hover': { background: `${egPurple.superLight} !important` },
-                                '.Mui-selected': { background: `${egPurple.superLight} !important` },
-                            }}
+                    {tableRowData && tableRowData.length > 0 ? (
+                        <Table
+                            sx={{ minWidth: 440 }}
+                            aria-labelledby="tableTitle"
+                            size="small"
                         >
-                            {visibleRows.map((row, index) => {
-                                const isItemSelected = isSelected(row.id);
-                                const labelId = `enhanced-table-checkbox-${index}`;
+                            <EnhancedTableHead
+                                numSelected={selected.length}
+                                order={order}
+                                orderBy={orderBy}
+                                onSelectAllClick={handleSelectAllClick}
+                                onRequestSort={handleRequestSort}
+                                rowCount={tableRowData.length}
+                            />
+                            <TableBody
+                                sx={{
+                                    '.MuiTableRow-hover:hover': { background: `${egPurple.superLight} !important` },
+                                    '.Mui-selected': { background: `${egPurple.superLight} !important` },
+                                }}
+                            >
+                                {rowData.map((row, index) => {
+                                    const isItemSelected = isSelected(row._id);
+                                    const labelId = `enhanced-table-checkbox-${index}`;
+                                    return (
+                                        <TableRow
+                                            hover
+                                            onClick={(event) => handleClick(event, row._id)}
+                                            role="checkbox"
+                                            aria-checked={isItemSelected}
+                                            tabIndex={-1}
+                                            key={row._id}
+                                            selected={isItemSelected}
+                                            sx={{ cursor: 'pointer' }}
+                                        >
+                                            <TableCell padding="checkbox">
+                                                <Checkbox
+                                                    color="primary"
+                                                    checked={isItemSelected}
+                                                    inputProps={{
+                                                        'aria-labelledby': labelId,
+                                                    }}
+                                                />
+                                            </TableCell>
+                                            <TableCell
+                                                sx={{ paddingX: 0 }}
+                                                align="center"
+                                            >
+                                                <img
+                                                    className="object-cover rounded-full w-14 h-14"
+                                                    src={row.photo}
+                                                    alt={row.name}
+                                                />
+                                            </TableCell>
 
-                                return (
+                                            <TableCell
+                                                sx={{ paddingX: 0 }}
+                                                component="th"
+                                                id={labelId}
+                                                scope="row"
+                                            >
+                                                {row.name}
+                                            </TableCell>
+                                            <TableCell sx={{ paddingX: 0 }}>{row.lv} lv</TableCell>
+                                            <TableCell sx={{ paddingX: 0 }}>{row.birth}</TableCell>
+                                            <TableCell
+                                                sx={{ paddingX: 0 }}
+                                                align="center"
+                                            >
+                                                <Link to={`/admin/coach/${row._id}`}>
+                                                    <WhiteBtn
+                                                        content="정보보기"
+                                                        width="18"
+                                                    />
+                                                </Link>
+                                            </TableCell>
+                                            <TableCell
+                                                sx={{ paddingX: 0 }}
+                                                align="center"
+                                            >
+                                                <Link to={`/admin/coach/coach-class/${row._id}`}>
+                                                    <WhiteBtn
+                                                        content="수업보기"
+                                                        width="18"
+                                                    />
+                                                </Link>
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                                {emptyRows > 0 && (
                                     <TableRow
-                                        hover
-                                        onClick={(event) => handleClick(event, row.id)}
-                                        role="checkbox"
-                                        aria-checked={isItemSelected}
-                                        tabIndex={-1}
-                                        key={row.id}
-                                        selected={isItemSelected}
-                                        sx={{ cursor: 'pointer' }}
+                                        style={{
+                                            height: 33,
+                                        }}
                                     >
-                                        <TableCell padding="checkbox">
-                                            <Checkbox
-                                                color="primary"
-                                                checked={isItemSelected}
-                                                inputProps={{
-                                                    'aria-labelledby': labelId,
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell
-                                            sx={{ paddingX: 0 }}
-                                            align="center"
-                                        >
-                                            <img
-                                                className="object-cover rounded-full w-14 h-14"
-                                                src={row.profile}
-                                                alt={row.name}
-                                            />
-                                        </TableCell>
-
-                                        <TableCell
-                                            sx={{ paddingX: 0 }}
-                                            component="th"
-                                            id={labelId}
-                                            scope="row"
-                                        >
-                                            {row.name}
-                                        </TableCell>
-                                        <TableCell sx={{ paddingX: 0 }}>{row.level} lv</TableCell>
-                                        <TableCell sx={{ paddingX: 0 }}>{row.birth}</TableCell>
-                                        <TableCell
-                                            sx={{ paddingX: 0 }}
-                                            align="center"
-                                        >
-                                            <Link to={`/admin/coach/${row.id}`}>
-                                                <WhiteBtn
-                                                    content="정보보기"
-                                                    width="18"
-                                                />
-                                            </Link>
-                                        </TableCell>
-                                        <TableCell
-                                            sx={{ paddingX: 0 }}
-                                            align="center"
-                                        >
-                                            <Link to={`/admin/coach/coach-class/${row.id}`}>
-                                                <WhiteBtn
-                                                    content="수업보기"
-                                                    width="18"
-                                                />
-                                            </Link>
-                                        </TableCell>
+                                        <TableCell colSpan={6} />
                                     </TableRow>
-                                );
-                            })}
-                            {emptyRows > 0 && (
-                                <TableRow
-                                    style={{
-                                        height: 33,
-                                    }}
-                                >
-                                    <TableCell colSpan={6} />
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
+                                )}
+                            </TableBody>
+                        </Table>
+                    ) : (
+                        <EmptyCard
+                            content="잠시만 기다려주세요"
+                            customStyle="py-28 text-egPurple-semiLight flex flex-col justify-center items-center  shadow-md"
+                        />
+                    )}
                 </TableContainer>
-                <TablePagination
+                {/* <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
-                    count={rows.length}
+                    count={tableRowData.length}
                     rowsPerPage={rowsPerPage}
                     labelRowsPerPage=""
                     page={page}
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
-                />
+                /> */}
             </Paper>
         </Box>
     );

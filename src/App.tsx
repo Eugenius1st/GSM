@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import AdminHome from 'layouts/Admin/Home';
 import AdminCoach from 'layouts/Admin/Coach';
 import AdminCoachDetail from 'layouts/Admin/Coach/CoachDetail';
+import AdminCoachEdit from 'layouts/Admin/Coach/CoachEdit';
 import AdminCoachClass from 'layouts/Admin/Coach/CoachClass';
 import AdminCoachClassDetail from 'layouts/Admin/Coach/CoachClassDetail';
 import AdminUser from 'layouts/Admin/User';
@@ -39,6 +40,10 @@ const App = () => {
             <Route
                 path="/admin/coach/:coachId"
                 element={<AdminCoachDetail />}
+            />
+            <Route
+                path="/admin/coach/edit/:coachId"
+                element={<AdminCoachEdit />}
             />
             <Route
                 path="/admin/coach/coach-class/:coachId"

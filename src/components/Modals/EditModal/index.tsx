@@ -44,7 +44,7 @@ const EditModal = ({ activeFunc }: EditModalType) => {
                         <div className="flex justify-end text-sm">
                             <WhiteBtn
                                 content={'취소'}
-                                func={handleShowModal}
+                                func={handleCloseModal}
                             />
 
                             <div>

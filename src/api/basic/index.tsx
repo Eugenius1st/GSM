@@ -95,3 +95,34 @@ export async function requestDelete({ requestUrl, data, successFunc, flagCheckFu
         console.error('요청 설정:', error.config);
     }
 }
+
+// PATCH 요청을 보낼 함수 정의
+export async function requestPatch({ requestUrl, data, successFunc, flagCheckFunc }: any) {
+    try {
+        const response = await axios
+            .patch(`${process.env.REACT_APP_API_URL}${requestUrl}`, data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'Access-Control-Request-Method': 'PATCH',
+                },
+            })
+            .then((response) => {
+                console.log('PATCH 요청 되었습니다', response);
+                if (successFunc) successFunc(response.data);
+                if (flagCheckFunc) flagCheckFunc(true);
+            });
+    } catch (error: any) {
+        if (error.response) {
+            console.log('문제', error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+        } else if (error.request) {
+            // 요청이 전송되었지만, 응답이 수신되지 않았습니다.
+            console.log(error.request);
+        } else {
+            // 오류가 발생한 요청을 설정하는 동안 문제가 발생했습니다.
+            console.log('Error', error.message);
+        }
+        console.log(error.config);
+    }
+}
