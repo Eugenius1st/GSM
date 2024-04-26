@@ -233,6 +233,7 @@ const AdminRegist = () => {
                     <CustomDropdown
                         placehorder="등급"
                         formStyle="px-3 py-2 border border-egGrey-default text-egGrey-default flex flex-col"
+                        value={level}
                         itemList={[1, 2, 3, 4]}
                         inputStyle="px-3 py-2 border border-egGrey-default text-egGrey-default"
                         itemStyle=""
@@ -243,17 +244,14 @@ const AdminRegist = () => {
                         <RadioButton
                             RadioBtnList={[
                                 {
-                                    checked: false,
                                     value: '군필',
                                     name: '군필',
                                 },
                                 {
-                                    checked: false,
                                     value: '미필',
                                     name: '미필',
                                 },
                                 {
-                                    checked: false,
                                     value: '면제',
                                     name: '비대상',
                                 },

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 interface CustomDropdownType {
     placehorder?: string;
-    defaltValue?: string | number | undefined;
+    value?: string | number | undefined;
     formStyle?: string;
     itemList: string[] | number[];
     inputStyle?: string;
@@ -13,25 +13,22 @@ interface CustomDropdownType {
 
 const CustomDropdown = ({
     placehorder,
-    defaltValue = '',
+    value,
     formStyle,
     itemList,
     inputStyle,
     itemStyle,
     func,
 }: CustomDropdownType) => {
-    const [curValue, setCurValue] = useState<any>(defaltValue);
-
     const handleValueChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setCurValue(event.target.value);
         if (func) func(event.target.value);
     };
     return (
         <div className={formStyle}>
             <select
-                value={curValue}
+                value={value}
                 onChange={handleValueChange}
-                className={curValue && 'text-egBlack-default'}
+                className={value ? 'text-egBlack-default' : ''}
             >
                 <option
                     value=""

@@ -6,34 +6,128 @@ import { IsMobileAtom } from 'atom/isMobile';
 // utility
 import ImageUploader from 'utility/ImageUploader';
 // Common
+import RadioButton from 'components/Common/RadioButton';
 import Divider from 'components/Common/Divider';
 // Modals
 import ResidenceSearchModal from 'components/Modals/ResidenceSearchModal';
 // icons
 import { FaCamera } from 'react-icons/fa';
 import { FaUser } from 'react-icons/fa6';
-// colors
-import colors from 'assets/colors/palette';
+// Material UI
+import DatePicker from 'components/EgMaterials/DatePicker';
+// Buttons
+import WhiteBtn from 'components/Buttons/WhiteBtn';
+import PurpleBtn from 'components/Buttons/PurpleBtn';
+interface handleState {
+    registStage: number;
+    handleNext: () => void;
+    handlePreview?: () => void;
+    basicInfoData: any;
+    setBasicInfoData: (data: any) => void;
+}
 
-const BasicInfo = () => {
+const BasicInfo = ({ registStage, handleNext, handlePreview, basicInfoData, setBasicInfoData }: handleState) => {
     // 웹 앱 구분
     let isMobile = useRecoilValue(IsMobileAtom);
     // 데이터
-    const [gender, setGender] = useState('성별');
-    const [parents, setParents] = useState('');
-    const [soccerRecord, setSoccerRecord] = useState([{ record: '', startDate: '', endDate: '' }]);
+    const [userID, setUserID] = useState('');
+    const [userPW, setUserPW] = useState('');
+    const [photo, setPhoto] = useState('any-photo-url');
+    const [name, setName] = useState('');
+    const [defaultBirth, setDefaultBirth] = useState('');
+    const [birth, setBirth] = useState('');
+    const [defaultGender, setDefaultGender] = useState('');
+    const [gender, setGender] = useState('');
+    const [phone, setPhone] = useState('');
+    const [phoneFather, setPhoneFather] = useState('');
+    const [phoneMother, setPhoneMother] = useState('');
+    const [residence, setResidence] = useState('');
+    const [residenceSpecific, setResidenceSpecific] = useState('');
 
-    const { egGrey } = colors;
     const inputStyle = 'w-full p-2 border border-egGrey-default mt-1 mb-3';
     const uploadBtn = (
         <div className="absolute bottom-0 right-0 p-2 rounded-full bg-egPurple-default text-egWhite-default w-fit">
             <FaCamera />
         </div>
     );
-    const handleRecordDelete = (idx: number) => {
-        const newArray = soccerRecord.filter((el, index) => index !== idx);
-        setSoccerRecord(newArray);
+    const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>, handlePhone?: (phone: string) => void) => {
+        // 입력된 값에서 숫자만 추출하여 저장
+        const cleaned = e.target.value.replace(/\D/g, '');
+        // 정규식을 사용하여 전화번호 형식에 맞게 하이픈 추가
+        const regex = /^(\d{2,3})(\d{3,4})(\d{4})$/;
+        const formatted = cleaned.replace(regex, '$1-$2-$3');
+        // 변경된 전화번호를 상태에 저장
+        if (handlePhone) handlePhone(formatted);
     };
+
+    function validateInputs() {
+        // id 정규식
+        const idRegex = /^[a-zA-Z0-9_]{5,16}$/;
+        // password 정규식
+        const pwRegex = /^[a-zA-Z0-9!@#$%^&*()\-_=+{};:,<.>?]{8,20}$/;
+        // 각 필드의 유효성 검사
+        if (!idRegex.test(userID)) {
+            alert('ID는 5~16자의 영문 소문자, 숫자, 언더바(_)로만 이루어져야 합니다.');
+            return false;
+        } else if (!pwRegex.test(userPW)) {
+            alert('Password는 8~20자의 영문 대소문자, 숫자, 특수문자로 이루어져야 합니다.');
+            return false;
+        } else if (!photo || !name || !phone || !residence || !residenceSpecific || !birth || !gender) {
+            alert('모든 필수 항목을 입력해주세요.');
+            return false;
+        } else if (!phoneFather && !phoneMother) {
+            const todayYear = new Date().getFullYear();
+            const userBirthYear = new Date(birth).getFullYear();
+            const userAge = todayYear - userBirthYear;
+            if (userAge <= 14) {
+                alert('14세 이하의 경우, 부모님 중 적어도 한 분의 전화번호를 입력해주세요.');
+                return false;
+            }
+        }
+
+        // 모든 조건을 통과하면 true 반환
+        return true;
+    }
+
+    function stageSubmit() {
+        if (validateInputs()) {
+            const validData = {
+                id: userID,
+                password: userPW,
+                role: 'student',
+                scope: ['gsm'],
+                photo: photo,
+                name: name,
+                phone: phone,
+                phoneFather: phoneFather,
+                phoneMother: phoneMother,
+                residence: residence,
+                residenceSpecific: residenceSpecific,
+                birth: birth,
+                gender: gender,
+            };
+            setBasicInfoData(validData);
+            handleNext();
+        }
+    }
+    // 렌더링 atom 저장
+    useEffect(() => {
+        if (basicInfoData) {
+            setUserID(basicInfoData.id);
+            setUserPW(basicInfoData.password);
+            setPhone(basicInfoData.photo);
+            setName(basicInfoData.name);
+            setPhone(basicInfoData.phone);
+            setPhoneFather(basicInfoData.phoneFather);
+            setPhoneMother(basicInfoData.phoneMother);
+            setBirth(basicInfoData.birth);
+            setDefaultBirth(basicInfoData.birth);
+            setGender(basicInfoData.gender);
+            setDefaultGender(basicInfoData.gender);
+            setResidence(basicInfoData.residence);
+            setResidenceSpecific(basicInfoData.residenceSpecific);
+        }
+    }, []);
     return (
         <div>
             <div className="relative">
@@ -50,120 +144,142 @@ const BasicInfo = () => {
             <form className="mt-16">
                 {/* id, pw */}
                 <div>
-                    <label htmlFor="id">ID</label>
+                    <label htmlFor="id">ID *</label>
                     <input
                         id="id"
                         type="id"
                         placeholder="ID"
                         className={inputStyle}
+                        value={userID}
+                        onChange={(e) => setUserID(e.target.value)}
                     />
-                    <label htmlFor="password">PASSWORD</label>
+                    <label htmlFor="password">PASSWORD *</label>
                     <input
                         id="password"
                         type="password"
                         placeholder="PASSWORD"
                         className={inputStyle}
+                        value={userPW}
+                        onChange={(e) => setUserPW(e.target.value)}
                     />
                 </div>
                 <Divider />
                 {/* user personal info */}
                 <div>
-                    <label htmlFor="name">이름</label>
+                    <label htmlFor="name">이름 *</label>
                     <input
                         id="name"
                         type="name"
                         placeholder="이름"
                         className={inputStyle}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                     />
 
-                    <label htmlFor="birth">생년월일</label>
-                    <input
-                        id="birth"
-                        type="birth"
-                        placeholder="생년월일"
-                        className={inputStyle}
-                    />
-                    <div>성별</div>
-                    <div className={inputStyle}>
-                        <div className={gender === '성별' ? 'w-full text-egGrey-default' : 'w-full'}>{gender}</div>
-                        <div className="absolute right-0 flex justify-end top-1">
-                            <button
-                                type="button"
-                                onClick={() => setGender('남자')}
-                                className={
-                                    gender === '남자'
-                                        ? 'px-3 py-1 mr-1 border rounded-md border-egPurple-default text-egPurple-default'
-                                        : 'px-3 py-1 mr-1 border rounded-md border-egGrey-default text-egGrey-default'
-                                }
-                            >
-                                남자
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setGender('여자')}
-                                className={
-                                    gender === '여자'
-                                        ? 'px-3 py-1 mr-1 border rounded-md border-egPurple-default text-egPurple-default'
-                                        : 'px-3 py-1 mr-1 border rounded-md border-egGrey-default text-egGrey-default'
-                                }
-                            >
-                                여자
-                            </button>
-                        </div>
+                    <label htmlFor="birth">생년월일 *</label>
+
+                    <div className="my-1">
+                        <DatePicker
+                            defaultBirth={defaultBirth}
+                            content={'생년월일'}
+                            range="day"
+                            customStyle={
+                                'flex items-center py-1 h-11 my-1 border border-egGrey-default text-egGrey-default width-40'
+                            }
+                            func={setBirth}
+                        />
+                    </div>
+                    <Divider />
+
+                    <div>성별 *</div>
+                    <div className="relative w-full p-2 mt-1 mb-3 border border-egGrey-default">
+                        <RadioButton
+                            RadioBtnList={[
+                                {
+                                    value: 'male',
+                                    name: '남자',
+                                },
+                                {
+                                    value: 'female',
+                                    name: '여자',
+                                },
+                            ]}
+                            func={setGender}
+                            defaultRadio={defaultGender}
+                        />
                     </div>
                     {/* 연락처 */}
-                    <label htmlFor="phone">연락처</label>
+                    <label htmlFor="phone">연락처 *</label>
                     <input
                         id="phone"
                         type="text"
+                        maxLength={13}
                         placeholder="연락처"
                         className={inputStyle}
+                        value={phone}
+                        onChange={(e) => handlePhoneNumberChange(e, setPhone)}
                     />
                     {/* 부모 연락처 */}
-                    <label htmlFor="parents_phone">부모 연락처</label>
+                    <label>부모님 연락처 (14세 이하일 경우, 한 분 입력 필수)</label>
                     <div className="relative">
                         <input
-                            id="parents_phone"
+                            id="phoneFather"
                             type="text"
-                            placeholder="부모 연락처"
-                            className={inputStyle}
+                            maxLength={13}
+                            placeholder="부 연락처"
+                            className="w-full p-2 mt-1 border border-egGrey-default"
+                            value={phoneFather}
+                            onChange={(e) => handlePhoneNumberChange(e, setPhoneFather)}
                         />
-                        <div className="absolute right-0 flex mb-1 top-2">
-                            <button
-                                type="button"
-                                onClick={() => setParents('부')}
+                        <div className="absolute right-0 flex top-2">
+                            <div
                                 className={
-                                    parents === '부'
+                                    phoneFather
                                         ? 'px-3 py-1 mr-1 border rounded-md border-egPurple-default text-egPurple-default'
                                         : 'px-3 py-1 mr-1 border rounded-md border-egGrey-default text-egGrey-default'
                                 }
                             >
                                 부
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setParents('모')}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="relative">
+                        <input
+                            id="phoneMother"
+                            type="text"
+                            maxLength={13}
+                            placeholder="모 연락처"
+                            className="w-full mt-[-1.1px] p-2 border border-egGrey-default mb-4"
+                            value={phoneMother}
+                            onChange={(e) => handlePhoneNumberChange(e, setPhoneMother)}
+                        />
+                        <div className="absolute right-0 flex mb-1 top-[2px]">
+                            <div
                                 className={
-                                    parents === '모'
+                                    phoneMother
                                         ? 'px-3 py-1 mr-1 border rounded-md border-egPurple-default text-egPurple-default'
                                         : 'px-3 py-1 mr-1 border rounded-md border-egGrey-default text-egGrey-default'
                                 }
                             >
                                 모
-                            </button>
+                            </div>
                         </div>
                     </div>
+                    <Divider />
+
                     {/* 주소 */}
-                    <label htmlFor="address">주소</label>
+                    <label htmlFor="address">주소 *</label>
                     <div className="relative">
-                        <input
-                            id="address"
-                            type="address"
-                            placeholder="주소"
-                            className="w-full p-2 mt-1 border border-egGrey-default"
-                        />
-                        <div className="absolute right-[5px] top-[10px]">
-                            <ResidenceSearchModal />
+                        <div className="w-full p-2 mt-1 border border-egGrey-default">
+                            <div className={residence ? 'text-egBlack-default' : 'text-egGrey-default'}>
+                                {residence ? `${residence}` : '주소'}
+                            </div>
+                            <div className="absolute right-[5px] top-[7px]">
+                                <ResidenceSearchModal
+                                    residence={residence}
+                                    setResidence={setResidence}
+                                />
+                            </div>
                         </div>
                     </div>
                     <input
@@ -171,9 +287,34 @@ const BasicInfo = () => {
                         type="address"
                         placeholder="상세 주소"
                         className="w-full mt-[-1px] p-2 border border-egGrey-default"
+                        value={residenceSpecific}
+                        onChange={(e) => setResidenceSpecific(e.target.value)}
                     />
                 </div>
             </form>
+            <Divider />
+            <div className="flex justify-end my-8">
+                {registStage > 1 && registStage < 5 && (
+                    <WhiteBtn
+                        content="이전"
+                        func={handlePreview}
+                    />
+                )}
+                {registStage < 5 && (
+                    <PurpleBtn
+                        content={registStage < 4 ? '다음' : '가입하기'}
+                        // func={validConfirm}
+                        func={stageSubmit}
+                    />
+                )}
+                {registStage === 5 && (
+                    <PurpleBtn
+                        content={'완료'}
+                        func={handleNext}
+                        width="full"
+                    />
+                )}
+            </div>
         </div>
     );
 };

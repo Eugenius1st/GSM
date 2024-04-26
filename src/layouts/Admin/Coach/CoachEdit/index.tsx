@@ -233,7 +233,7 @@ const CoachEdit = () => {
                     <div className="mb-1">등급</div>
                     <CustomDropdown
                         placehorder="등급"
-                        defaltValue={level}
+                        value={level}
                         formStyle="px-3 py-2 border border-egGrey-default text-egGrey-default flex flex-col"
                         itemList={[1, 2, 3, 4]}
                         inputStyle="px-3 py-2 border border-egGrey-default text-egGrey-default"
@@ -245,17 +245,14 @@ const CoachEdit = () => {
                         <RadioButton
                             RadioBtnList={[
                                 {
-                                    checked: duty === '군필',
                                     value: '군필',
                                     name: '군필',
                                 },
                                 {
-                                    checked: duty === '미필',
                                     value: '미필',
                                     name: '미필',
                                 },
                                 {
-                                    checked: duty === '비대상',
                                     value: '비대상',
                                     name: '비대상',
                                 },
