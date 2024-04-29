@@ -1,5 +1,8 @@
 // hook
 import { useState, useEffect } from 'react';
+import { useMutation } from '@tanstack/react-query';
+// api
+import { requestPost } from 'api/basic';
 // recoil
 import { useRecoilValue } from 'recoil';
 import { IsMobileAtom } from 'atom/isMobile';
@@ -44,6 +47,9 @@ const BasicInfo = ({ registStage, handleNext, handlePreview, basicInfoData, setB
     const [residence, setResidence] = useState('');
     const [residenceSpecific, setResidenceSpecific] = useState('');
 
+    const [idValid, setIdValid] = useState({ duplicate: 'initial' });
+    const [isIdConfirm, setIsIdConfirm] = useState(false);
+
     const inputStyle = 'w-full p-2 border border-egGrey-default mt-1 mb-3';
     const uploadBtn = (
         <div className="absolute bottom-0 right-0 p-2 rounded-full bg-egPurple-default text-egWhite-default w-fit">
@@ -62,13 +68,15 @@ const BasicInfo = ({ registStage, handleNext, handlePreview, basicInfoData, setB
 
     function validateInputs() {
         // id 정규식
-        const idRegex = /^[a-zA-Z0-9_]{5,16}$/;
+        const idRegex = /^(?=.*[a-z])(?=.*[0-9])[a-zA-Z0-9_]{5,16}$/;
         // password 정규식
         const pwRegex = /^[a-zA-Z0-9!@#$%^&*()\-_=+{};:,<.>?]{8,20}$/;
         // 각 필드의 유효성 검사
         if (!idRegex.test(userID)) {
             alert('ID는 5~16자의 영문 소문자, 숫자, 언더바(_)로만 이루어져야 합니다.');
             return false;
+        } else if (idValid.duplicate) {
+            alert('ID 중복 확인이 필요합니다.');
         } else if (!pwRegex.test(userPW)) {
             alert('Password는 8~20자의 영문 대소문자, 숫자, 특수문자로 이루어져야 합니다.');
             return false;
@@ -84,10 +92,42 @@ const BasicInfo = ({ registStage, handleNext, handlePreview, basicInfoData, setB
                 return false;
             }
         }
-
         // 모든 조건을 통과하면 true 반환
         return true;
     }
+    // POST요청
+    const mutation = useMutation({
+        mutationFn: ({ requestUrl, data, successFunc }: any) => {
+            return requestPost({
+                requestUrl: requestUrl,
+                data: data,
+                successFunc: successFunc,
+            });
+        },
+    });
+    // ID 중복확인
+    function handleDuplicate() {
+        // id 정규식
+        const idRegex = /^(?=.*[a-z])(?=.*[0-9])[a-zA-Z0-9_]{5,16}$/;
+        if (!idRegex.test(userID)) {
+            alert('ID는 5~16자의 영문 소문자, 숫자가 포함되어야 하고, 언더바(_) 사용 가능합니다.');
+            return false;
+        } else if (userID) {
+            setIsIdConfirm(true);
+            // POST 요청에 보낼 데이터
+            mutation.mutate({
+                requestUrl: '/auth/isduplicate',
+                data: {
+                    id: userID,
+                },
+                successFunc: setIdValid,
+            });
+        }
+    }
+    useEffect(() => {
+        if (idValid.duplicate !== 'initial' && isIdConfirm && !idValid.duplicate) alert('사용가능한 아이디입니다.');
+        else if (idValid.duplicate !== 'initial' && isIdConfirm && idValid.duplicate) alert('중복된 아이디입니다.');
+    }, [idValid.duplicate]);
 
     function stageSubmit() {
         if (validateInputs()) {
@@ -145,14 +185,32 @@ const BasicInfo = ({ registStage, handleNext, handlePreview, basicInfoData, setB
                 {/* id, pw */}
                 <div>
                     <label htmlFor="id">ID *</label>
-                    <input
-                        id="id"
-                        type="id"
-                        placeholder="ID"
-                        className={inputStyle}
-                        value={userID}
-                        onChange={(e) => setUserID(e.target.value)}
-                    />
+                    <div className="relative">
+                        <input
+                            id="id"
+                            type="id"
+                            placeholder="ID"
+                            className={inputStyle}
+                            value={userID}
+                            onChange={(e) => {
+                                setUserID(e.target.value);
+                                setIdValid({ duplicate: 'initial' });
+                                setIsIdConfirm(false);
+                            }}
+                        />
+                        <div className="absolute right-0 flex top-2">
+                            <div
+                                onClick={handleDuplicate}
+                                className={
+                                    isIdConfirm && !idValid.duplicate
+                                        ? 'px-3 py-1 mr-1 border rounded-md border-egPurple-default text-egPurple-default'
+                                        : 'px-3 py-1 mr-1 border rounded-md border-egGrey-default text-egGrey-default'
+                                }
+                            >
+                                중복확인
+                            </div>
+                        </div>
+                    </div>
                     <label htmlFor="password">PASSWORD *</label>
                     <input
                         id="password"
