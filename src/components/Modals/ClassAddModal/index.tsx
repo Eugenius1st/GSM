@@ -20,9 +20,12 @@ import BasicModal from 'components/Modals/BasicModal';
 // Alerts
 import BasicAlert from 'components/Alerts/BasicAlert';
 
-const ClassAddModal = () => {
+interface ClassAddModalType {
+    isSuccess: boolean;
+    setIsSuccess: (isSuccess: boolean) => void;
+}
+const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
     const classList = ['엘리트반', '성인 남성반', '취미반'];
-
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
     const [applicationDeadline, setApplicationDeadline] = useState('');
@@ -31,7 +34,7 @@ const ClassAddModal = () => {
     const [amount, setAmount] = useState('');
     const [coaches, setCoaches] = useState<any>([]);
     const [className, setClassName] = useState(classList[0]);
-    const [isSuccess, setIsSuccess] = useState(false);
+
     const [isShow, setIsShow] = useState(false);
 
     const handleShowModal = () => {
@@ -56,8 +59,9 @@ const ClassAddModal = () => {
             // return requestPost({ requestUrl: requestUrl, id: id, pw: pw, successFunc: setLoginSelector });
         },
     });
-
     const postClass = () => {
+        const coachIdArray = coaches ? coaches.map((coach: { _id: string }) => coach._id) : [];
+
         // POST 요청에 보낼 데이터
         mutation.mutate({
             requestUrl: '/class',
@@ -69,7 +73,7 @@ const ClassAddModal = () => {
                 type: type,
                 name: className,
                 amount: 10,
-                coaches: [],
+                coaches: coachIdArray,
             },
             successFunc: setIsSuccess,
         });

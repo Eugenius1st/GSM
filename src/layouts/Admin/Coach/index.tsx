@@ -7,6 +7,9 @@ import { requestGet } from 'api/basic';
 import CoachTable from 'layouts/Admin/Coach/Components/CoachTable';
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
+// Common
+import SearchBar from 'components/Common/SearchBar';
+import SelectMenu from 'components/Common/SelectMenu';
 export interface RowDataType {
     _id: number;
     photo: string;
@@ -16,9 +19,10 @@ export interface RowDataType {
 }
 const Coach = () => {
     const [curPage, setCurPage] = useState(1);
-    const [searchedData, setSearchedData] = useState([]);
+    const [curAllCoaches, setCurAllCoaches] = useState([]);
+    const [defaultAllCoaches, setDefaultllCoaches] = useState([]);
+    const [allCount, setAllCount] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
-    const [coachesInfo, setCoachesInfo] = useState<any>([]);
     const [tableRowData, setTableRowData] = useState<RowDataType[]>([]);
 
     // GET 요청을 보낼 함수 정의
@@ -27,30 +31,19 @@ const Coach = () => {
         queryFn: () => {
             return requestGet({
                 requestUrl: `/admin?page=${curPage}&take=${itemsPerPage}`,
-                successFunc: setSearchedData,
+                // successFunc: setAllCoaches,
                 // flagCheckFunc: setIsSearched,
             });
         },
-        staleTime: 100,
+        staleTime: 5 * 1000,
         // enabled: queryEnabled, // enabled 옵션을 사용하여 쿼리를 활성화 또는 비활성화합니다.
     });
-    const searchCoach = async () => {
-        if (searchedData) {
-            const coachRequests = searchedData.map((coach: any) => requestGet({ requestUrl: `/admin/${coach._id}` }));
-            if (coachRequests) {
-                const coachResponses = await Promise.all(coachRequests);
-                if (coachResponses) {
-                    setCoachesInfo(coachResponses);
-                }
-            }
-        }
-    };
 
     // Table 에 적합한 Row 형태로 변경하기
     function convertTableRowData() {
         // 코치 정보를 담을 빈 배열 생성
         const rows: RowDataType[] = [];
-        coachesInfo.forEach((coach: RowDataType, index: number) => {
+        curAllCoaches.forEach((coach: RowDataType, index: number) => {
             const { _id, photo, name, birth, lv } = coach; // 원하는 속성들을 추출
             rows.push({
                 _id: _id, // 배열 인덱스를 이용하여 id 부여
@@ -63,30 +56,38 @@ const Coach = () => {
         // 변환된 배열 반환
         setTableRowData(rows);
     }
-
-    // 렌더링 관련
+    // 전체 GET 요청시 렌더링
     useEffect(() => {
-        if (searchedData) {
-            searchCoach();
+        if (data) {
+            setCurAllCoaches(data.result);
+            setDefaultllCoaches(data.result);
+            setAllCount(data.count);
         }
-    }, [searchedData]);
+    }, [data]);
+
+    // 페이지 변경시 함수 호출
     useEffect(() => {
-        if (coachesInfo.length > 0) {
+        refetch();
+    }, [curPage]);
+
+    useEffect(() => {
+        if (curAllCoaches.length > 0) {
             convertTableRowData();
         }
-    }, [coachesInfo]);
+    }, [curAllCoaches]);
 
     return (
         <div className="mb-2 eg-default-wrapper">
             <div className="eg-title">코치관리</div>
+
             <CoachTable tableRowData={tableRowData && tableRowData} />
             <div className="flex justify-center mt-4">
                 <PaginationRounded
-                    totalItems={searchedData.length}
+                    totalItems={allCount ? allCount : 1}
                     itemsPerPage={itemsPerPage}
                     curPage={curPage}
-                    setCurPage={setCurPage}
-                    // onPageChange={() => }
+                    // setCurPage={setCurPage}
+                    setCurPage={(page) => setCurPage(page)}
                 />
             </div>
         </div>

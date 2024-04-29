@@ -15,23 +15,19 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import { IoFilterSharp } from 'react-icons/io5';
-import { RiDeleteBin6Fill } from 'react-icons/ri';
 import { visuallyHidden } from '@mui/utils';
 //hooks
 import { Link } from 'react-router-dom';
-// images
-import coach_son from 'assets/coach/coach_son.jpeg';
-import coach_kim from 'assets/coach/coach_kim.jpeg';
-import coach_hong from 'assets/coach/coach_hong.jpeg';
+import { useQuery } from '@tanstack/react-query';
+// api
+import { requestGet } from 'api/basic';
 // Common
-import SearchBar from 'components/Common/SearchBar';
 import SelectMenu from 'components/Common/SelectMenu';
+import SearchBar from 'components/Common/SearchBar';
 // Eg Components
 import DropDownModal from 'components/EgMaterials/DropDown';
 // Buttons
 import WhiteBtn from 'components/Buttons/WhiteBtn';
-import PurpleBtn from 'components/Buttons/PurpleBtn';
 // colors
 import colors from 'assets/colors/palette';
 // icons
@@ -50,93 +46,6 @@ interface TableRowDataType {
     tableRowData: RowDataType[];
 }
 
-// const rows = [
-//     {
-//         _id: 1,
-//         photo: coach_son,
-//         name: '손흥민',
-//         birth: 1998,
-//         lv: 1,
-//     },
-//     {
-//         _id: 2,
-//         photo: coach_kim,
-//         name: '김민재',
-//         birth: 2000,
-//         lv: 2,
-//     },
-//     {
-//         _id: 3,
-//         photo: coach_hong,
-//         name: '홍길동',
-//         birth: 1978,
-//         lv: 3,
-//     },
-//     {
-//         _id: 4,
-//         photo: coach_son,
-//         name: '손흥민',
-//         birth: 1998,
-//         lv: 4,
-//     },
-//     {
-//         _id: 5,
-//         photo: coach_kim,
-//         name: '김민재',
-//         birth: 2000,
-//         lv: 5,
-//     },
-//     {
-//         _id: 6,
-//         photo: coach_hong,
-//         name: '홍길동',
-//         birth: 1978,
-//         lv: 6,
-//     },
-//     {
-//         _id: 7,
-//         photo: coach_son,
-//         name: '손흥민',
-//         birth: 1998,
-//         lv: 1,
-//     },
-//     {
-//         _id: 8,
-//         photo: coach_kim,
-//         name: '김민재',
-//         birth: 2000,
-//         lv: 7,
-//     },
-//     {
-//         _id: 9,
-//         photo: coach_hong,
-//         name: '홍길동',
-//         birth: 1978,
-//         lv: 1,
-//     },
-//     {
-//         _id: 10,
-//         photo: coach_son,
-//         name: '손흥민',
-//         birth: 1998,
-//         lv: 1,
-//     },
-//     {
-//         _id: 11,
-//         photo: coach_kim,
-//         name: '김민재',
-//         birth: 2000,
-//         lv: 1,
-//     },
-//     {
-//         _id: 12,
-//         photo: coach_hong,
-//         name: '홍길동',
-//         birth: 1978,
-//         lv: 1,
-//     },
-// ];
-
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
         return -1;
@@ -148,31 +57,6 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
 }
 
 type Order = 'asc' | 'desc';
-
-function getComparator<Key extends keyof any>(
-    order: Order,
-    orderBy: Key
-): (a: { [key in Key]: number | string }, b: { [key in Key]: number | string }) => number {
-    return order === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
-function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
-    const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-    stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
-        if (order !== 0) {
-            return order;
-        }
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
-}
 
 interface HeadCell {
     id: keyof RowDataType;
@@ -279,10 +163,71 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
     numSelected: number;
+    defaultRowData: any;
+    setRowData: (data: any) => void;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-    const { numSelected } = props;
+    const { numSelected, defaultRowData, setRowData } = props;
+    const [curPage, setCurPage] = React.useState(1);
+    const [itemsPerPage, setItemsPerPage] = React.useState(10);
+    const [coachSearchInput, setCoachSearchInput] = React.useState('');
+    const [searchedCoach, setSearchedCoach] = React.useState([]);
+    const [coachQueryEnabled, setCoachQueryEnabled] = React.useState(false);
+
+    // GET 요청을 보낼 함수 정의
+    const { data, error, isLoading, refetch } = useQuery({
+        queryKey: ['searchCoach'],
+        queryFn: () => {
+            if (coachSearchInput) {
+                return requestGet({
+                    requestUrl: `/admin/search/${coachSearchInput}?with_head=true&take=${itemsPerPage}&page=${curPage}`,
+                    successFunc: setSearchedCoach,
+                });
+            } else {
+                // searchInput이 undefined일 때에 대한 처리
+                return Promise.resolve([]); // 또는 다른 유효한 값을 반환할 수 있음
+            }
+        },
+        staleTime: 1000,
+        enabled: coachQueryEnabled, // enabled 옵션을 사용하여 쿼리를 활성화 또는 비활성화합니다.
+    });
+    const useHandleButtonClick = () => {
+        // GET 요청 버튼 클릭 시에만 쿼리를 활성화하도록 설정합니다.
+        if (coachSearchInput) {
+            setCurPage(1);
+            setCoachQueryEnabled(true);
+            refetch();
+        }
+    };
+
+    // 검색시 렌더링
+    React.useEffect(() => {
+        convertTableRowData();
+    }, [searchedCoach]);
+    React.useEffect(() => {
+        if (!coachSearchInput) {
+            setRowData(defaultRowData);
+        }
+    }, [coachSearchInput]);
+
+    // Table 에 적합한 Row 형태로 변경하기
+    function convertTableRowData() {
+        // 코치 정보를 담을 빈 배열 생성
+        const rows: RowDataType[] = [];
+        searchedCoach.forEach((coach: RowDataType, index: number) => {
+            const { _id, photo, name, birth, lv } = coach; // 원하는 속성들을 추출
+            rows.push({
+                _id: _id, // 배열 인덱스를 이용하여 id 부여
+                photo: photo, // 사진 속성 그대로 사용
+                name: name, // 이름 속성 그대로 사용
+                birth: new Date(birth).getFullYear(), // 출생일에서 연도만 추출
+                lv: lv, // 레벨 속성 그대로 사용
+            });
+        });
+        // 변환된 배열 반환!!
+        setRowData(rows);
+    }
 
     return (
         <Toolbar
@@ -326,22 +271,29 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
             ) : (
                 <div className="flex items-center">
                     <div className="mr-1">
-                        <SelectMenu menuList={['이름', '소속']} />
+                        <SelectMenu menuList={['이름']} />
                     </div>
-                    <SearchBar />
+                    <SearchBar
+                        searchFunc={useHandleButtonClick}
+                        searchInput={coachSearchInput}
+                        setSearchInput={setCoachSearchInput}
+                    />
                     <DropDownModal
                         itemList={[
                             {
                                 item: 'ALL',
                             },
                             {
-                                item: '엘리트반',
+                                item: 'LV1',
                             },
                             {
-                                item: '취미반',
+                                item: 'LV2',
                             },
                             {
-                                item: '성인반',
+                                item: 'LV3',
+                            },
+                            {
+                                item: 'LV4',
                             },
                         ]}
                     />
@@ -371,7 +323,7 @@ export default function EnhancedTable({ tableRowData }: TableRowDataType) {
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            const newSelected = tableRowData.map((n) => n._id);
+            const newSelected = rowData.map((n) => n._id);
             setSelected(newSelected);
             return;
         }
@@ -397,14 +349,18 @@ export default function EnhancedTable({ tableRowData }: TableRowDataType) {
     const isSelected = (id: number) => selected.indexOf(id) !== -1;
 
     // Avoid a layout jump when reaching the last page with empty tableRowData.
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - tableRowData.length) : 0;
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rowData.length) : 0;
 
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
-                <EnhancedTableToolbar numSelected={selected.length} />
+                <EnhancedTableToolbar
+                    numSelected={selected.length}
+                    defaultRowData={tableRowData}
+                    setRowData={setRowData}
+                />
                 <TableContainer sx={{ overflowY: 'scroll' }}>
-                    {tableRowData && tableRowData.length > 0 ? (
+                    {rowData && rowData.length > 0 ? (
                         <Table
                             sx={{ minWidth: 440 }}
                             aria-labelledby="tableTitle"
@@ -416,7 +372,7 @@ export default function EnhancedTable({ tableRowData }: TableRowDataType) {
                                 orderBy={orderBy}
                                 onSelectAllClick={handleSelectAllClick}
                                 onRequestSort={handleRequestSort}
-                                rowCount={tableRowData.length}
+                                rowCount={rowData.length}
                             />
                             <TableBody
                                 sx={{
@@ -506,7 +462,7 @@ export default function EnhancedTable({ tableRowData }: TableRowDataType) {
                         </Table>
                     ) : (
                         <EmptyCard
-                            content="잠시만 기다려주세요"
+                            content="데이터가 없습니다."
                             customStyle="py-28 text-egPurple-semiLight flex flex-col justify-center items-center  shadow-md"
                         />
                     )}
@@ -514,7 +470,7 @@ export default function EnhancedTable({ tableRowData }: TableRowDataType) {
                 {/* <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
-                    count={tableRowData.length}
+                    count={rowData.length}
                     rowsPerPage={rowsPerPage}
                     labelRowsPerPage=""
                     page={page}

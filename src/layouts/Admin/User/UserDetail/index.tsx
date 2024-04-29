@@ -1,3 +1,7 @@
+// hooks
+import { useState, useEffect } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 // Cards
 import MemoCard from 'components/Cards/MemoCard';
 // Common
@@ -6,8 +10,30 @@ import Divider from 'components/Common/Divider';
 import user1 from 'assets/user/user1.jpg';
 // Admin User Components
 import UserProfileCard from 'layouts/Admin/User/Components/UserProfileCard';
-
+// api
+import { requestGet } from 'api/basic';
+// Modals
+import EditModal from 'components/Modals/EditModal';
 const UserDetail = () => {
+    const { userId } = useParams();
+    const [curUser, setCurUser] = useState();
+    const navigate = useNavigate();
+
+    // GET 요청을 보낼 함수 정의
+    const { data, error, isLoading, refetch } = useQuery({
+        queryKey: ['userDetailInfo'],
+        queryFn: () => {
+            return requestGet({
+                requestUrl: `/student/${userId}`,
+                successFunc: setCurUser,
+                // flagCheckFunc: setIsSearched,
+            });
+        },
+        staleTime: 5 * 1000,
+        // enabled: queryEnabled, // enabled 옵션을 사용하여 쿼리를 활성화 또는 비활성화합니다.
+    });
+
+    console.log(curUser);
     const userInfo = {
         thumbnail: user1,
         name: '손흥민',
@@ -63,10 +89,15 @@ const UserDetail = () => {
             { date: '2024-03-04', content: '아이들 이름 외울 필요 있음' },
         ],
     };
+    const editActive = () => {
+        navigate(`/admin/user/edit/${userId}`);
+    };
     return (
         <div className="eg-default-wrapper">
-            <div className="eg-title">회원관리</div>
-            <div className="text-sm text-right">Edit</div>
+            <div className="flex items-center justify-between">
+                <div className="eg-title">회원관리</div>
+                <EditModal activeFunc={editActive} />
+            </div>
             <UserProfileCard userInfo={userInfo} />
             <Divider />
             <MemoCard

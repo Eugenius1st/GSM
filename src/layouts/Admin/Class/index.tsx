@@ -19,8 +19,12 @@ const Class = () => {
     const location = useLocation().pathname;
     const [curPage, setCurPage] = useState(1);
     const [allClass, setAllClass] = useState<ClassInfoType[]>([]);
+    const [allCount, setAllCount] = useState(1);
+    const [isAddSuccess, setIsAddSuccess] = useState(false);
+
+    // const [allPage, setAllPage]
     // GET 요청을 보낼 함수 정의
-    const { data, error, isLoading } = useQuery({
+    const { data, error, isLoading, refetch } = useQuery({
         queryKey: ['adminAllClassData'],
         queryFn: () =>
             requestGet({
@@ -31,14 +35,25 @@ const Class = () => {
     });
 
     useEffect(() => {
-        setAllClass(data);
+        if (data) {
+            setAllClass(data.result);
+            setAllCount(data.count);
+        }
     }, [data]);
-
+    useEffect(() => {
+        refetch();
+    }, [curPage]);
+    useEffect(() => {
+        if (isAddSuccess) refetch();
+    }, [isAddSuccess]);
     return (
         <div className="eg-default-wrapper">
             <div className="flex items-center justify-between">
                 <div className="eg-title">수업관리</div>
-                <ClassAddModal />
+                <ClassAddModal
+                    isSuccess={isAddSuccess}
+                    setIsSuccess={setIsAddSuccess}
+                />
             </div>
             {allClass && allClass.length > 0 ? (
                 <>
@@ -56,10 +71,10 @@ const Class = () => {
             )}
             <div className="flex justify-center">
                 <Pagenation
-                    totalItems={allClass ? allClass.length : 1}
+                    totalItems={allCount ? allCount : 1}
                     curPage={curPage}
                     itemsPerPage={4}
-                    setCurPage={() => console.log()}
+                    setCurPage={(page) => setCurPage(page)}
                 />
             </div>
         </div>

@@ -29,12 +29,12 @@ const RadioButton = ({ RadioBtnList, defaultRadio, func }: RadioBtnListType) => 
             {RadioBtnList.map((el, idx) => (
                 <label
                     key={idx}
-                    htmlFor={`${idx}`}
+                    htmlFor={`${el.value}`}
                 >
                     {curRadio === el.value ? (
                         <div className="flex items-center mr-8">
                             <input
-                                id={`${idx}`}
+                                id={`${el.value}`}
                                 type="radio"
                                 name={el.name}
                                 value={el.value}
@@ -48,7 +48,7 @@ const RadioButton = ({ RadioBtnList, defaultRadio, func }: RadioBtnListType) => 
                     ) : (
                         <div className="flex items-center mr-8 ">
                             <input
-                                id={`${idx}`}
+                                id={`${el.value}`}
                                 type="radio"
                                 name={el.name}
                                 value={el.value}

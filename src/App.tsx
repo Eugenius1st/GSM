@@ -9,6 +9,7 @@ import AdminCoachClass from 'layouts/Admin/Coach/CoachClass';
 import AdminCoachClassDetail from 'layouts/Admin/Coach/CoachClassDetail';
 import AdminUser from 'layouts/Admin/User';
 import AdminUserDetail from 'layouts/Admin/User/UserDetail';
+import AdminUserEdit from 'layouts/Admin/User/UserEdit';
 import AdminClass from 'layouts/Admin/Class';
 import AdminClassDetail from 'layouts/Admin/Class/ClassDetail';
 import AdminClassEdit from 'layouts/Admin/Class/ClassEdit';
@@ -60,6 +61,10 @@ const App = () => {
             <Route
                 path="/admin/user/:userId"
                 element={<AdminUserDetail />}
+            />
+            <Route
+                path="/admin/user/edit/:classId"
+                element={<AdminUserEdit />}
             />
             <Route
                 path="/admin/class"

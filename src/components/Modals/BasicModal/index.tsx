@@ -12,6 +12,7 @@ interface BasicModalType {
     modalContents?: React.ReactNode | string;
     modalFooterExitBtn?: string;
     modalFooterActiveBtn?: string;
+    modalFooterActiveFunc?: () => void;
     modalScrollStayFlag?: boolean;
 }
 
@@ -21,6 +22,7 @@ const BasicModal = ({
     modalContents,
     modalFooterExitBtn,
     modalFooterActiveBtn,
+    modalFooterActiveFunc,
     modalScrollStayFlag = true,
 }: BasicModalType) => {
     const [isShow, setIsShow] = useState(false);
@@ -52,7 +54,10 @@ const BasicModal = ({
                             )}
                             {modalFooterActiveBtn && (
                                 <div>
-                                    <PurpleBtn content={modalFooterActiveBtn} />
+                                    <PurpleBtn
+                                        content={modalFooterActiveBtn}
+                                        func={modalFooterActiveFunc}
+                                    />
                                 </div>
                             )}
                         </div>

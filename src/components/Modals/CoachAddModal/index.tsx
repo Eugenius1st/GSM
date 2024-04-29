@@ -73,7 +73,7 @@ const CoachAddModal = ({
                 return Promise.resolve([]); // 또는 다른 유효한 값을 반환할 수 있음
             }
         },
-        staleTime: 100,
+        staleTime: 1000,
         enabled: queryEnabled, // enabled 옵션을 사용하여 쿼리를 활성화 또는 비활성화합니다.
     });
 
@@ -91,6 +91,7 @@ const CoachAddModal = ({
             handleCloseModal();
         }
     };
+
     return (
         <div className="z-10">
             <div onClick={handleShowModal}>{modalBtn}</div>
