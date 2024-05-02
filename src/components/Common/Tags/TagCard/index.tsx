@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface TagType {
     _id: string;
@@ -6,11 +6,12 @@ interface TagType {
     category: string;
 }
 interface TagListType {
+    defaultTagList?: TagType[];
     tagList: TagType[];
     func?: (tagList: any) => void;
 }
 
-const TagCard = ({ tagList, func }: TagListType) => {
+const TagCard = ({ tagList, func, defaultTagList }: TagListType) => {
     // 각 태그의 체크 여부를 관리하기 위한 상태
     const [checkedTag, setCheckedTag] = useState<TagType[] | []>([]);
     const tagHandler = (tag: TagType, idx: number) => {
@@ -27,6 +28,9 @@ const TagCard = ({ tagList, func }: TagListType) => {
             setCheckedTag(newTagAdd);
         }
     };
+    useEffect(() => {
+        if (defaultTagList) setCheckedTag(defaultTagList);
+    }, [defaultTagList]);
     return (
         <div>
             {/* 각 태그에 대한 체크박스 생성 */}

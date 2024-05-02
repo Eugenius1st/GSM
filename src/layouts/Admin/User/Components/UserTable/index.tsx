@@ -26,9 +26,9 @@ import DropDownModal from 'components/EgMaterials/DropDown';
 import { Link } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { IsMobileSelector } from 'atom/isMobile';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 // api
-import { requestGet } from 'api/basic';
+import { requestGet, requestPatch } from 'api/basic';
 // Buttons
 import WhiteBtn from 'components/Buttons/WhiteBtn';
 import PurpleBtn from 'components/Buttons/PurpleBtn';
@@ -39,6 +39,11 @@ import { RiUserForbidFill } from 'react-icons/ri';
 // Cards
 import EmptyCard from 'components/Cards/EmptyCard';
 
+interface PatchDataType {
+    requestUrl: string;
+    data?: any;
+    flagCheckFunc?: (data: boolean) => void;
+}
 interface RowDataType {
     _id: number;
     photo: string;
@@ -48,6 +53,8 @@ interface RowDataType {
 }
 interface TableRowDataType {
     tableRowData: RowDataType[];
+    setAllCount: (data: number) => void;
+    defaultAllCount: number;
 }
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -169,13 +176,16 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 interface EnhancedTableToolbarProps {
+    selectedArr: any;
     numSelected: number;
     defaultRowData: any;
     setRowData: (data: any) => void;
+    setAllCount: (data: number) => void;
+    defaultAllCount: number;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-    const { numSelected, defaultRowData, setRowData } = props;
+    const { selectedArr, numSelected, defaultRowData, setRowData, setAllCount, defaultAllCount } = props;
     const [curPage, setCurPage] = React.useState(1);
     const [itemsPerPage, setItemsPerPage] = React.useState(10);
     const [userSearchInput, setUserSearchInput] = React.useState('');
@@ -196,11 +206,12 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                 return Promise.resolve([]); // 또는 다른 유효한 값을 반환할 수 있음
             }
         },
-        staleTime: 1000,
+        staleTime: 5 * 1000,
+
         enabled: userQueryEnabled, // enabled 옵션을 사용하여 쿼리를 활성화 또는 비활성화합니다.
     });
+    // GET 요청 버튼 클릭 시에만 쿼리를 활성화하도록 설정합니다.
     const useHandleButtonClick = () => {
-        // GET 요청 버튼 클릭 시에만 쿼리를 활성화하도록 설정합니다.
         if (userSearchInput) {
             setCurPage(1);
             setCoachQueryEnabled(true);
@@ -210,13 +221,14 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     // 검색시 렌더링
     React.useEffect(() => {
         convertTableRowData();
+        setAllCount(searchedUser.count);
     }, [searchedUser]);
     React.useEffect(() => {
         if (!userSearchInput) {
             setRowData(defaultRowData);
+            setAllCount(defaultAllCount);
         }
     }, [userSearchInput]);
-
     // Table 에 적합한 Row 형태로 변경하기
     function convertTableRowData() {
         // 코치 정보를 담을 빈 배열 생성
@@ -232,12 +244,30 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                     team: team,
                 });
             });
-            console.log('rows', rows);
             // 변환된 배열 반환!!
             setRowData(rows);
         }
     }
+    const [patchCheckFlag, setPatchCheckFlag] = React.useState(false);
+    React.useEffect(() => {
+        console.log('patchCheckFlag: ', patchCheckFlag);
+    }, [patchCheckFlag]);
 
+    // Patch 요청
+    const mutation = useMutation({
+        mutationFn: ({ requestUrl, data, flagCheckFunc }: PatchDataType) => {
+            return requestPatch({ requestUrl: requestUrl, data: data, flagCheckFunc: flagCheckFunc });
+        },
+    });
+    function handleBlock() {
+        selectedArr.forEach((userId: any) => {
+            mutation.mutate({
+                requestUrl: `/auth/block/${userId}`,
+                // data: data,
+                flagCheckFunc: setPatchCheckFlag,
+            });
+        });
+    }
     return (
         <Toolbar
             sx={{
@@ -272,7 +302,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 
             {numSelected > 0 ? (
                 <Tooltip title="Delete">
-                    <IconButton>
+                    <IconButton onClick={handleBlock}>
                         <span className="text-base text-egPurple-default">비활성화</span>
                         <RiUserForbidFill className="w-5 h-5 text-egPurple-default" />
                     </IconButton>
@@ -311,7 +341,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         </Toolbar>
     );
 }
-export default function EnhancedTable({ tableRowData }: TableRowDataType) {
+export default function EnhancedTable({ tableRowData, defaultAllCount, setAllCount }: TableRowDataType) {
     const [rowData, setRowData] = React.useState(tableRowData);
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof RowDataType>('birth');
@@ -343,7 +373,6 @@ export default function EnhancedTable({ tableRowData }: TableRowDataType) {
     const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
         const selectedIndex = selected.indexOf(id);
         let newSelected: readonly number[] = [];
-
         if (selectedIndex === -1) {
             newSelected = newSelected.concat(selected, id);
         } else if (selectedIndex === 0) {
@@ -365,6 +394,9 @@ export default function EnhancedTable({ tableRowData }: TableRowDataType) {
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <EnhancedTableToolbar
+                    defaultAllCount={defaultAllCount}
+                    setAllCount={setAllCount}
+                    selectedArr={selected}
                     numSelected={selected.length}
                     defaultRowData={tableRowData}
                     setRowData={setRowData}

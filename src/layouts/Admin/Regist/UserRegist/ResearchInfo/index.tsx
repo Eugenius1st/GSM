@@ -65,7 +65,7 @@ handleState) => {
                 // flagCheckFunc: setIsSearched,
             });
         },
-        staleTime: 100,
+        staleTime: 5 * 1000,
     });
     useEffect(() => {
         if (searchedData) {

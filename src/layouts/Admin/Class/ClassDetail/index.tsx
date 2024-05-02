@@ -24,15 +24,16 @@ import Divider from 'components/Common/Divider';
 import WhiteBtn from 'components/Buttons/WhiteBtn';
 // Modals
 import DeleteModal from 'components/Modals/DeleteModal';
-import EditModal from 'components/Modals/EditModal';
+import ClassEditModal from 'components/Modals/ClassEditModal';
 
 const ClassDetail = () => {
     const navigate = useNavigate();
     const { classId } = useParams();
     const [curClass, setCurClass] = useState<ClassInfoType | undefined>();
+    const [patchCheckFlag, setPatchCheckFlag] = useState(false);
     const [deleteState, setDeleteState] = useState(false);
     // GET 요청을 보낼 함수 정의
-    const { data, error, isLoading } = useQuery({
+    const { data, error, isLoading, refetch } = useQuery({
         queryKey: ['adminClassDetail'],
         queryFn: () => {
             if (classId) {
@@ -43,7 +44,7 @@ const ClassDetail = () => {
                 return Promise.resolve('');
             }
         },
-        staleTime: 500,
+        staleTime: 5 * 1000,
     });
 
     // DELETE 요청을 보낼 함수 정의
@@ -54,16 +55,18 @@ const ClassDetail = () => {
         });
     };
 
-    const editActive = () => {
-        navigate(`/admin/class/edit/${classId}`);
-    };
-
     useEffect(() => {
         setCurClass(data);
     }, [data]);
     useEffect(() => {
         if (deleteState) navigate(-1);
     }, [deleteState]);
+    useEffect(() => {
+        if (patchCheckFlag) {
+            refetch();
+            setPatchCheckFlag(false);
+        }
+    }, [patchCheckFlag]);
 
     const attendInfo = [
         { profile: user1, name: '홍길동', age: 13, attend: '출석' },
@@ -89,10 +92,17 @@ const ClassDetail = () => {
                     <MdOutlineArrowForwardIos className="w-4 h-4 mx-1" />
                     <span> 수업정보</span>
                 </div>
-                <div className="flex">
-                    <EditModal activeFunc={editActive} />
-                    <DeleteModal deleteFunc={deleteSubmit} />
-                </div>
+                {classId && curClass && (
+                    <div className="flex">
+                        <ClassEditModal
+                            classId={classId}
+                            curClass={curClass}
+                            patchCheckFlag={patchCheckFlag}
+                            setPatchCheckFlag={setPatchCheckFlag}
+                        />
+                        <DeleteModal deleteFunc={deleteSubmit} />
+                    </div>
+                )}
             </div>
             <div>
                 <ClassCard classInfo={curClass} />

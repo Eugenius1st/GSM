@@ -2,17 +2,14 @@
 import React, { KeyboardEvent, useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 // api
-import { requestPost } from 'api/basic';
+import { requestPatch } from 'api/basic';
 // Buttons
 import PurpleBtn from 'components/Buttons/PurpleBtn';
-// Cards
-import MemoCard from 'components/Cards/MemoCard';
-// Buttons
-import WhiteBtn from 'components/Buttons/WhiteBtn';
 // icons
 import { CgClose } from 'react-icons/cg';
 import { FiPlus } from 'react-icons/fi';
 import { IoMdSearch } from 'react-icons/io';
+import { MdEdit } from 'react-icons/md';
 // Modals
 import SearchModal from 'components/Modals/SearchModal';
 import { AdminDataType } from 'components/Modals/SearchModal';
@@ -20,22 +17,23 @@ import BasicModal from 'components/Modals/BasicModal';
 // Alerts
 import BasicAlert from 'components/Alerts/BasicAlert';
 
-interface ClassAddModalType {
-    isSuccess: boolean;
-    setIsSuccess: (isSuccess: boolean) => void;
+interface ClassEditModalType {
+    classId: string;
+    curClass: any;
+    patchCheckFlag: boolean;
+    setPatchCheckFlag: (patchCheckFlag: boolean) => void;
 }
-const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
+const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }: ClassEditModalType) => {
     const classList = ['엘리트반', '성인 남성반', '취미반'];
-    const [startTime, setStartTime] = useState('');
-    const [endTime, setEndTime] = useState('');
-    const [applicationDeadline, setApplicationDeadline] = useState('');
-    const [place, setPlace] = useState('판교 1호점');
-    const [type, setType] = useState('실기');
-    const [amount, setAmount] = useState('');
-    const [coaches, setCoaches] = useState<any>([]);
-    const [className, setClassName] = useState(classList[0]);
-    const [note, setNote] = useState('');
-
+    const [startTime, setStartTime] = useState(curClass.startTime);
+    const [endTime, setEndTime] = useState(curClass.endTime);
+    const [applicationDeadline, setApplicationDeadline] = useState(curClass.applicationDeadline);
+    const [place, setPlace] = useState(curClass.place);
+    const [type, setType] = useState(curClass.type);
+    const [amount, setAmount] = useState(curClass.amount);
+    const [coaches, setCoaches] = useState<any>(curClass.coaches);
+    const [className, setClassName] = useState(curClass.name);
+    const [note, setNote] = useState(curClass.note);
     const [isShow, setIsShow] = useState(false);
 
     const handleShowModal = () => {
@@ -46,26 +44,22 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
         setIsShow(false);
         document.body.style.overflow = 'unset';
     };
-    // POST 수업추가 요청을 보낼 함수 정의
-    const flagCheckFunc = (flag: boolean) => {
-        setIsSuccess(flag);
-    };
+    // PATCH 수업추가 요청을 보낼 함수 정의
     const mutation = useMutation({
-        mutationFn: ({ requestUrl, data, successFunc }: any) => {
-            return requestPost({
+        mutationFn: ({ requestUrl, data, flagCheckFunc }: any) => {
+            return requestPatch({
                 requestUrl: requestUrl,
                 data: data,
                 flagCheckFunc: flagCheckFunc,
             });
-            // return requestPost({ requestUrl: requestUrl, id: id, pw: pw, successFunc: setLoginSelector });
         },
     });
-    const postClass = () => {
-        const coachIdArray = coaches ? coaches.map((coach: { _id: string }) => coach._id) : [];
 
-        // POST 요청에 보낼 데이터
+    const patchClass = () => {
+        const coachIdArray = coaches ? coaches.map((coach: { _id: string }) => coach._id) : [];
+        // PATCH 요청에 보낼 데이터
         mutation.mutate({
-            requestUrl: '/class',
+            requestUrl: `/class/class/${classId}`,
             data: {
                 startTime: startTime,
                 endTime: endTime,
@@ -73,14 +67,14 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                 place: place,
                 type: type,
                 name: className,
-                amount: 10,
+                amount: amount,
                 coaches: coachIdArray,
                 note: note,
             },
-            successFunc: setIsSuccess,
+            flagCheckFunc: setPatchCheckFlag,
         });
     };
-
+    console.log('patchCheckFlag', patchCheckFlag);
     const handleClean = () => {
         setStartTime('');
         setEndTime('');
@@ -91,7 +85,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
         setAmount('');
         setCoaches([]);
         setIsShow(false);
-        setIsSuccess(false);
+        setPatchCheckFlag(false);
     };
 
     const dataValidate = () => {
@@ -142,7 +136,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
 
     const submitData = () => {
         const checkValid = dataValidate();
-        if (checkValid) postClass();
+        if (checkValid) patchClass();
     };
 
     useEffect(() => {
@@ -150,13 +144,17 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
     }, [className]);
     return (
         <div>
-            <WhiteBtn
-                content="+ 수업 추가"
-                func={handleShowModal}
-            />
-            {isShow && isSuccess ? (
+            <button
+                type="button"
+                onClick={handleShowModal}
+                className="flex items-center ml-2"
+            >
+                <span className="text-sm">수정</span>
+                <MdEdit className="w-5 h-5 text-egPurple-default" />
+            </button>
+            {isShow && patchCheckFlag ? (
                 <BasicAlert
-                    alertContents="수업 등록이 완료되었습니다"
+                    alertContents="수업 수정이 완료되었습니다"
                     alertFooterActiveFunc={handleClean}
                     alertFooterActiveBtn="확인"
                 />
@@ -164,10 +162,10 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                 <></>
             )}
             {isShow ? (
-                <div className="fixed flex justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
+                <div className="fixed flex text-base font-medium justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
                     <div className="fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg">
                         <div className="flex justify-between">
-                            <div className="mb-2 text-lg font-bold">수업 추가하기</div>
+                            <div className="mb-2 text-lg font-bold">수업 수정하기</div>
                             <CgClose onClick={handleCloseModal} />
                         </div>
                         <div className="p-4">
@@ -181,7 +179,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                                 <select
                                     name="className"
                                     id="className"
-                                    className="w-32 p-1 border rounded-md border-egGrey-default"
+                                    className="w-32 p-1 font-normal border rounded-md text-md border-egGrey-default"
                                     onChange={(e) => setClassName(e.target.value)}
                                 >
                                     {classList.map((el, idx) => (
@@ -203,7 +201,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                                     }
                                     modalTitle={'수업 추가'}
                                     modalContents={
-                                        <div className="p-2">
+                                        <div className="p-2 ">
                                             <div>추가하실 수업명을 입력하세요 (최대 15글자)</div>
                                             <input
                                                 placeholder="수업명"
@@ -229,7 +227,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                                             name="classification"
                                             value="실기"
                                             className="w-4 h-4 mr-1"
-                                            defaultChecked={true}
+                                            defaultChecked={type === '실기'}
                                             onChange={(e) => setType(e.target.value)}
                                         />
                                         <label htmlFor="실기">실기</label>
@@ -241,6 +239,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                                             name="classification"
                                             value="이론"
                                             className="w-4 h-4 mr-1"
+                                            defaultChecked={type === '이론'}
                                             onChange={(e) => setType(e.target.value)}
                                         />
                                         <label htmlFor="이론">이론</label>
@@ -250,6 +249,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                             <div className="flex mb-2">
                                 <span className="w-20 mr-4 text-lg font-semibold">시작 날짜</span>
                                 <input
+                                    value={startTime.slice(0, 16)}
                                     onChange={(e) => setStartTime(e.target.value)}
                                     type="datetime-local"
                                     id="datetime"
@@ -261,6 +261,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                             <div className="flex mb-2">
                                 <span className="w-20 mr-4 text-lg font-semibold">종료 날짜</span>
                                 <input
+                                    value={endTime.slice(0, 16)}
                                     onChange={(e) => setEndTime(e.target.value)}
                                     type="datetime-local"
                                     id="datetime"
@@ -272,6 +273,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                             <div className="flex mb-2">
                                 <span className="w-20 mr-4 text-lg font-semibold">등록 마감</span>
                                 <input
+                                    value={applicationDeadline.slice(0, 16)}
                                     onChange={(e) => setApplicationDeadline(e.target.value)}
                                     type="datetime-local"
                                     id="datetime"
@@ -314,6 +316,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                             <div className="flex mb-2">
                                 <span className="w-20 mr-4 text-lg font-semibold">인원 제한</span>
                                 <input
+                                    value={amount}
                                     placeholder="숫자입력"
                                     type="number"
                                     min="0"
@@ -386,4 +389,4 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
         </div>
     );
 };
-export default ClassAddModal;
+export default ClassEditModal;

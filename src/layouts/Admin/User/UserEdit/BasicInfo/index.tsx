@@ -21,34 +21,59 @@ import DatePicker from 'components/EgMaterials/DatePicker';
 // Buttons
 import WhiteBtn from 'components/Buttons/WhiteBtn';
 import PurpleBtn from 'components/Buttons/PurpleBtn';
+import dayjs from 'dayjs';
+
 interface handleState {
-    registStage: number;
-    handleNext: () => void;
-    handlePreview?: () => void;
-    basicInfoData: any;
-    setBasicInfoData: (data: any) => void;
+    photo: string;
+    setPhoto: (data: string) => void;
+    name: string;
+    setName: (data: string) => void;
+    defaultBirth: string;
+    setDefaultBirth: (data: string) => void;
+    birth: string;
+    setBirth: (data: string) => void;
+    defaultGender: string;
+    setDefaultGender: (data: string) => void;
+    gender: string;
+    setGender: (data: string) => void;
+    phone: string;
+    setPhone: (data: string) => void;
+    phoneFather: string;
+    setPhoneFather: (data: string) => void;
+    phoneMother: string;
+    setPhoneMother: (data: string) => void;
+    residence: string;
+    setResidence: (data: string) => void;
+    residenceSpecific: string;
+    setResidenceSpecific: (data: string) => void;
 }
 
-const BasicInfo = ({ registStage, handleNext, handlePreview, basicInfoData, setBasicInfoData }: handleState) => {
+const BasicInfo = ({
+    photo,
+    setPhoto,
+    name,
+    setName,
+    defaultBirth,
+    setDefaultBirth,
+    birth,
+    setBirth,
+    defaultGender,
+    setDefaultGender,
+    gender,
+    setGender,
+    phone,
+    setPhone,
+    phoneFather,
+    setPhoneFather,
+    phoneMother,
+    setPhoneMother,
+    residence,
+    setResidence,
+    residenceSpecific,
+    setResidenceSpecific,
+}: handleState) => {
     // 웹 앱 구분
     let isMobile = useRecoilValue(IsMobileAtom);
-    // 데이터
-    const [userID, setUserID] = useState('');
-    const [userPW, setUserPW] = useState('');
-    const [photo, setPhoto] = useState('any-photo-url');
-    const [name, setName] = useState('');
-    const [defaultBirth, setDefaultBirth] = useState('');
-    const [birth, setBirth] = useState('');
-    const [defaultGender, setDefaultGender] = useState('');
-    const [gender, setGender] = useState('');
-    const [phone, setPhone] = useState('');
-    const [phoneFather, setPhoneFather] = useState('');
-    const [phoneMother, setPhoneMother] = useState('');
-    const [residence, setResidence] = useState('');
-    const [residenceSpecific, setResidenceSpecific] = useState('');
-
-    const [idValid, setIdValid] = useState({ duplicate: 'initial' });
-    const [isIdConfirm, setIsIdConfirm] = useState(false);
 
     const inputStyle = 'w-full p-2 border border-egGrey-default mt-1 mb-3';
     const uploadBtn = (
@@ -66,114 +91,6 @@ const BasicInfo = ({ registStage, handleNext, handlePreview, basicInfoData, setB
         if (handlePhone) handlePhone(formatted);
     };
 
-    function validateInputs() {
-        // id 정규식
-        const idRegex = /^(?=.*[a-z])(?=.*[0-9])[a-zA-Z0-9_]{5,16}$/;
-        // password 정규식
-        const pwRegex = /^[a-zA-Z0-9!@#$%^&*()\-_=+{};:,<.>?]{8,20}$/;
-        const phoneRegex = /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/;
-        // 각 필드의 유효성 검사
-        if (!idRegex.test(userID)) {
-            alert('ID는 5~16자의 영문 소문자, 숫자, 언더바(_)로만 이루어져야 합니다.');
-            return false;
-        } else if (idValid.duplicate !== 'inital' && idValid.duplicate) {
-            alert('ID 중복 확인이 필요합니다.');
-            return false;
-        } else if (!pwRegex.test(userPW)) {
-            alert('Password는 8~20자의 영문 대소문자, 숫자, 특수문자로 이루어져야 합니다.');
-            return false;
-        } else if (!photo || !name || !phone || !residence || !residenceSpecific || !birth || !gender) {
-            alert('모든 필수 항목을 입력해주세요.');
-            return false;
-        } else if (!phoneRegex.test(phone)) {
-            alert('유효한 휴대폰 번호가 아닙니다.');
-        } else if (!phoneRegex.test(phoneFather) && !phoneRegex.test(phoneMother)) {
-            const todayYear = new Date().getFullYear();
-            const userBirthYear = new Date(birth).getFullYear();
-            const userAge = todayYear - userBirthYear;
-            if (userAge <= 14) {
-                alert('14세 이하의 경우, 부모님 중 적어도 한 분의 전화번호를 정확히 입력해주세요.');
-                return false;
-            }
-        }
-
-        // 모든 조건을 통과하면 true 반환
-        return true;
-    }
-
-    // POST요청
-    const mutation = useMutation({
-        mutationFn: ({ requestUrl, data, successFunc }: any) => {
-            return requestPost({
-                requestUrl: requestUrl,
-                data: data,
-                successFunc: successFunc,
-            });
-        },
-    });
-    // ID 중복확인
-    function handleDuplicate() {
-        // id 정규식
-        const idRegex = /^(?=.*[a-z])(?=.*[0-9])[a-zA-Z0-9_]{5,16}$/;
-        if (!idRegex.test(userID)) {
-            alert('ID는 5~16자의 영문 소문자, 숫자가 포함되어야 하고, 언더바(_) 사용 가능합니다.');
-            return false;
-        } else if (userID) {
-            setIsIdConfirm(true);
-            // POST 요청에 보낼 데이터
-            mutation.mutate({
-                requestUrl: '/auth/isduplicate',
-                data: {
-                    id: userID,
-                },
-                successFunc: setIdValid,
-            });
-        }
-    }
-    useEffect(() => {
-        if (idValid.duplicate !== 'initial' && isIdConfirm && !idValid.duplicate) alert('사용가능한 아이디입니다.');
-        else if (idValid.duplicate !== 'initial' && isIdConfirm && idValid.duplicate) alert('중복된 아이디입니다.');
-    }, [idValid.duplicate]);
-
-    function stageSubmit() {
-        if (validateInputs()) {
-            const validData = {
-                id: userID,
-                password: userPW,
-                role: 'student',
-                scope: ['gsm'],
-                photo: photo,
-                name: name,
-                phone: phone,
-                phoneFather: phoneFather,
-                phoneMother: phoneMother,
-                residence: residence,
-                residenceSpecific: residenceSpecific,
-                birth: birth,
-                gender: gender,
-            };
-            setBasicInfoData(validData);
-            handleNext();
-        }
-    }
-    // 렌더링 atom 저장
-    useEffect(() => {
-        if (basicInfoData) {
-            setUserID(basicInfoData.id);
-            setUserPW(basicInfoData.password);
-            setPhone(basicInfoData.photo);
-            setName(basicInfoData.name);
-            setPhone(basicInfoData.phone);
-            setPhoneFather(basicInfoData.phoneFather);
-            setPhoneMother(basicInfoData.phoneMother);
-            setBirth(basicInfoData.birth);
-            setDefaultBirth(basicInfoData.birth);
-            setGender(basicInfoData.gender);
-            setDefaultGender(basicInfoData.gender);
-            setResidence(basicInfoData.residence);
-            setResidenceSpecific(basicInfoData.residenceSpecific);
-        }
-    }, []);
     return (
         <div>
             <div className="relative">
@@ -188,46 +105,6 @@ const BasicInfo = ({ registStage, handleNext, handlePreview, basicInfoData, setB
                 />
             </div>
             <form className="mt-16">
-                {/* id, pw */}
-                <div>
-                    <label htmlFor="id">ID *</label>
-                    <div className="relative">
-                        <input
-                            id="id"
-                            type="id"
-                            placeholder="ID"
-                            className={inputStyle}
-                            value={userID}
-                            onChange={(e) => {
-                                setUserID(e.target.value);
-                                setIdValid({ duplicate: 'initial' });
-                                setIsIdConfirm(false);
-                            }}
-                        />
-                        <div className="absolute right-0 flex top-2">
-                            <div
-                                onClick={handleDuplicate}
-                                className={
-                                    isIdConfirm && !idValid.duplicate
-                                        ? 'px-3 py-1 mr-1 border rounded-md border-egPurple-default text-egPurple-default'
-                                        : 'px-3 py-1 mr-1 border rounded-md border-egGrey-default text-egGrey-default'
-                                }
-                            >
-                                중복확인
-                            </div>
-                        </div>
-                    </div>
-                    <label htmlFor="password">PASSWORD *</label>
-                    <input
-                        id="password"
-                        type="password"
-                        placeholder="PASSWORD"
-                        className={inputStyle}
-                        value={userPW}
-                        onChange={(e) => setUserPW(e.target.value)}
-                    />
-                </div>
-                <Divider />
                 {/* user personal info */}
                 <div>
                     <label htmlFor="name">이름 *</label>
@@ -329,7 +206,6 @@ const BasicInfo = ({ registStage, handleNext, handlePreview, basicInfoData, setB
                             </div>
                         </div>
                     </div>
-                    <Divider />
 
                     {/* 주소 */}
                     <label htmlFor="address">주소 *</label>
@@ -355,22 +231,8 @@ const BasicInfo = ({ registStage, handleNext, handlePreview, basicInfoData, setB
                         onChange={(e) => setResidenceSpecific(e.target.value)}
                     />
                 </div>
+                <Divider />
             </form>
-            <Divider />
-            <div className="flex justify-end my-8">
-                {registStage > 1 && registStage < 5 && (
-                    <WhiteBtn
-                        content="이전"
-                        func={handlePreview}
-                    />
-                )}
-                {registStage < 5 && (
-                    <PurpleBtn
-                        content={registStage < 4 ? '다음' : '가입하기'}
-                        func={stageSubmit}
-                    />
-                )}
-            </div>
         </div>
     );
 };

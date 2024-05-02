@@ -20,6 +20,7 @@ const User = () => {
     const [curPage, setCurPage] = useState(1);
     const [allUsers, setAllUsers] = useState([]);
     const [allCount, setAllCount] = useState(1);
+    const [defaultAllCount, setDefaultAllCount] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [tableRowData, setTableRowData] = useState<RowDataType[]>([]);
 
@@ -64,6 +65,7 @@ const User = () => {
         if (data) {
             setAllUsers(data.result);
             setAllCount(data.count);
+            setDefaultAllCount(data.count);
         }
     }, [data]);
     useEffect(() => {
@@ -73,7 +75,11 @@ const User = () => {
     return (
         <div className="mb-2 eg-default-wrapper">
             <div className="eg-title">회원관리</div>
-            <UserTable tableRowData={tableRowData && tableRowData} />
+            <UserTable
+                tableRowData={tableRowData && tableRowData}
+                defaultAllCount={defaultAllCount}
+                setAllCount={setAllCount}
+            />
             <div className="flex justify-center mt-4">
                 <PaginationRounded
                     totalItems={allCount ? allCount : 1}

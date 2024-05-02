@@ -1,9 +1,8 @@
 // hooks
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useMutation } from '@tanstack/react-query';
 // api
-import { requestGet, requestPost } from 'api/basic';
+import { requestGet } from 'api/basic';
 // recoil
 import { useRecoilState } from 'recoil';
 import {
@@ -15,9 +14,6 @@ import {
 // Common
 import TagCard from 'components/Common/Tags/TagCard';
 import Divider from 'components/Common/Divider';
-// Buttons
-import WhiteBtn from 'components/Buttons/WhiteBtn';
-import PurpleBtn from 'components/Buttons/PurpleBtn';
 
 interface skillType {
     _id: string;
@@ -25,37 +21,43 @@ interface skillType {
     category: string;
 }
 interface handleState {
-    registStage: number;
-    handleNext: () => void;
-    handlePreview?: () => void;
-    // researchInfoData: any;
-    // setResearchInfoData: (data: any) => void;
+    technicalSkillPros: skillType[];
+    setTechnicalSkillPros: (data: skillType[]) => void;
+    mentalSkillPros: skillType[];
+    setMentalSkillPros: (data: skillType[]) => void;
+    physicalSkillPros: skillType[];
+    setPhysicalSkillPros: (data: skillType[]) => void;
+    technicalSkillImpro: skillType[];
+    setTechnicalSkillImpro: (data: skillType[]) => void;
+    mentalSkillImpro: skillType[];
+    setMentalSkillImpro: (data: skillType[]) => void;
+    physicalSkillImpro: skillType[];
+    setPhysicalSkillImpro: (data: skillType[]) => void;
 }
 const ResearchInfo = ({
-    registStage,
-    handleNext,
-    handlePreview,
-}: // researchInfoData,
-// setResearchInfoData,
-handleState) => {
+    technicalSkillPros,
+    setTechnicalSkillPros,
+    mentalSkillPros,
+    setMentalSkillPros,
+    physicalSkillPros,
+    setPhysicalSkillPros,
+    technicalSkillImpro,
+    setTechnicalSkillImpro,
+    mentalSkillImpro,
+    setMentalSkillImpro,
+    physicalSkillImpro,
+    setPhysicalSkillImpro,
+}: handleState) => {
     const [basicInfoData, setBasicInfoData] = useRecoilState<any>(BasicInfoAtomSelector);
     const [additionalInfoData, setAdditionalInfoData] = useRecoilState<any>(AdditionalInfoAtomSelector);
-
     const [searchedData, setSearchedData] = useState([]);
+
     const [technicalSkill, setTechnicalSkill] = useState<skillType[]>([]);
-    const [checkTechnicalPros, setCheckTechnicalPros] = useState<skillType[]>([]);
-    const [checkTechnicalImporve, setCheckTechnicalImporve] = useState<skillType[]>([]);
+
     const [mentalSkill, setMentalSkill] = useState<skillType[]>([]);
-    const [checkMentalPros, setCheckMentalPros] = useState<skillType[]>([]);
-    const [checkMentalImporve, setCheckMentalImporve] = useState<skillType[]>([]);
 
     const [physicalSkill, setPhysicalSkill] = useState<skillType[]>([]);
-    const [checkPhysicalPros, setCheckPhysicalPros] = useState<skillType[]>([]);
-    const [checkPhysicalImporve, setCheckPhysicalImporve] = useState<skillType[]>([]);
 
-    const [postSuccess, setPostSuccess] = useState(false);
-
-    // GET 요청을 보낼 함수 정의
     const { data, error, isLoading, refetch } = useQuery({
         queryKey: ['getAbility'],
         queryFn: () => {
@@ -65,21 +67,21 @@ handleState) => {
                 // flagCheckFunc: setIsSearched,
             });
         },
-        staleTime: 100,
+        staleTime: 5 * 1000,
     });
     useEffect(() => {
         if (searchedData) {
             searchedData.forEach((data: any) => {
                 switch (data.category) {
                     case 'mental':
-                        setTechnicalSkill(data.ability);
+                        setMentalSkill(data.ability);
                         break;
                     case 'physical':
-                        setMentalSkill(data.ability);
+                        setPhysicalSkill(data.ability);
 
                         break;
                     case 'technical':
-                        setPhysicalSkill(data.ability);
+                        setTechnicalSkill(data.ability);
                         break;
                     default:
                         break;
@@ -88,82 +90,6 @@ handleState) => {
         }
     }, [searchedData]);
 
-    function validateInputs() {
-        if (checkTechnicalPros.length < 3 || checkMentalPros.length < 3 || checkPhysicalPros.length < 3) {
-            alert('장점을 각각 3개 이상씩 선택하세요');
-            return false;
-        } else if (
-            checkTechnicalImporve.length < 3 ||
-            checkMentalImporve.length < 3 ||
-            checkPhysicalImporve.length < 3
-        ) {
-            alert('개선 희망점을 각각 3개 이상씩 선택하세요');
-            return false;
-        }
-        return true;
-    }
-    const mutation = useMutation({
-        mutationFn: ({ requestUrl, data, flagCheckFunc }: any) => {
-            return requestPost({
-                requestUrl: requestUrl,
-                data: data,
-                flagCheckFunc: flagCheckFunc,
-            });
-            // return requestPost({ requestUrl: requestUrl, id: id, pw: pw, successFunc: setLoginSelector });
-        },
-    });
-    const postClass = () => {
-        if (validateInputs()) {
-            // POST 요청에 보낼 데이터
-            const {
-                id,
-                password,
-                role,
-                scope,
-                photo,
-                name,
-                phone,
-                phoneFather,
-                phoneMother,
-                residence,
-                residenceSpecific,
-                birth,
-                gender,
-            } = basicInfoData;
-            const { height, weight, classGroupName, team, soccerHistory, lessonHistory, majorFoot, position } =
-                additionalInfoData;
-            mutation.mutate({
-                requestUrl: '/auth/signup/student',
-                data: {
-                    id: id,
-                    password: password,
-                    role: 'student',
-                    scope: ['gsm'],
-                    photo: photo,
-                    classGroupName: classGroupName,
-                    name: name,
-                    phone: phone,
-                    phoneFather: phoneFather,
-                    phoneMother: phoneMother,
-                    residence: residence,
-                    residenceSpecific: residenceSpecific,
-                    birth: birth,
-                    gender: gender,
-                    height: Number(height),
-                    weight: Number(weight),
-                    pros: [...checkTechnicalPros, ...checkMentalPros, ...checkPhysicalPros],
-                    improvements: [...checkTechnicalImporve, ...checkMentalImporve, ...checkPhysicalImporve],
-                    team: team,
-                    position: position,
-                    soccerHistory: soccerHistory,
-                    lessonHistory: lessonHistory,
-                    majorFoot: majorFoot,
-                },
-                successFunc: setPostSuccess,
-            });
-            handleNext();
-        }
-    };
     return (
         <div>
             <div className="flex flex-col items-center justify-center w-full pb-10">
@@ -179,21 +105,24 @@ handleState) => {
                 <div className="mt-1 mb-2">기술적 능력 선택(3가지 이상)</div>
                 <TagCard
                     tagList={technicalSkill}
-                    func={setCheckTechnicalPros}
+                    func={setTechnicalSkillPros}
+                    defaultTagList={technicalSkillPros}
                 />
             </div>
             <div className="p-2 mt-6 border border-egGrey-default">
                 <div className="mt-1 mb-2">정신적 능력 선택(3가지 이상)</div>
                 <TagCard
                     tagList={mentalSkill}
-                    func={setCheckMentalPros}
+                    func={setMentalSkillPros}
+                    defaultTagList={mentalSkillPros}
                 />
             </div>
             <div className="p-2 mt-6 border border-egGrey-default">
                 <div className="mt-1 mb-2">신체적 능력 선택(3가지 이상)</div>
                 <TagCard
                     tagList={physicalSkill}
-                    func={setCheckPhysicalPros}
+                    func={setPhysicalSkillPros}
+                    defaultTagList={physicalSkillPros}
                 />
             </div>
             <Divider />
@@ -203,38 +132,27 @@ handleState) => {
                 <div className="mt-1 mb-2">기술적 능력 선택(3가지 이상)</div>
                 <TagCard
                     tagList={technicalSkill}
-                    func={setCheckTechnicalImporve}
+                    func={setTechnicalSkillImpro}
+                    defaultTagList={technicalSkillImpro}
                 />
             </div>
             <div className="p-2 mt-6 border border-egGrey-default">
                 <div className="mt-1 mb-2">정신적 능력 선택(3가지 이상)</div>
                 <TagCard
                     tagList={mentalSkill}
-                    func={setCheckMentalImporve}
+                    func={setMentalSkillImpro}
+                    defaultTagList={mentalSkillImpro}
                 />
             </div>
             <div className="p-2 mt-6 border border-egGrey-default">
                 <div className="mt-1 mb-2">신체적 능력 선택(3가지 이상)</div>
                 <TagCard
                     tagList={physicalSkill}
-                    func={setCheckPhysicalImporve}
+                    func={setPhysicalSkillImpro}
+                    defaultTagList={physicalSkillImpro}
                 />
             </div>
             <Divider />
-            <div className="flex justify-end my-8">
-                {registStage > 1 && registStage < 5 && (
-                    <WhiteBtn
-                        content="이전"
-                        func={handlePreview}
-                    />
-                )}
-                {registStage < 5 && (
-                    <PurpleBtn
-                        content={registStage < 4 ? '다음' : '가입하기'}
-                        func={postClass}
-                    />
-                )}
-            </div>
         </div>
     );
 };

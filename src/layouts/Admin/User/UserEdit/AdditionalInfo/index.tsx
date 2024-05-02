@@ -16,81 +16,64 @@ import {
     soccerHistoryOptioins,
     lessonHistoryOptions,
     trainingCourseOptions,
-    classGroupMatcherByKor,
-    classGroupMatcherByEng,
     positionOptions,
     positionMatcherByEng,
 } from 'utility/standardConst';
 
 interface handleState {
-    registStage: number;
-    handleNext: () => void;
-    handlePreview?: () => void;
-    additionalInfoData: any;
-    setAdditionalInfoData: (data: any) => void;
+    height: number | string;
+    setHeight: (data: number | string) => void;
+    weight: number | string;
+    setWeight: (data: number | string) => void;
+    team: string;
+    setTeam: (data: string) => void;
+    soccerHistory: string;
+    setSoccerHistory: (data: string) => void;
+    lessonHistory: string;
+    setLessonHistory: (data: string) => void;
+    classGroupName: string;
+    setClassGroupName: (data: string) => void;
+    majorFoot: string;
+    setMajorFoot: (data: string) => void;
+    position: string[];
+    setPosition: (data: any) => void;
+    defaultPosition: string[];
+    setDefaultPosition: (data: any) => void;
 }
 
 const AdditionalInfo = ({
-    registStage,
-    handleNext,
-    handlePreview,
-    additionalInfoData,
-    setAdditionalInfoData,
+    height,
+    setHeight,
+    weight,
+    setWeight,
+    team,
+    setTeam,
+    soccerHistory,
+    setSoccerHistory,
+    lessonHistory,
+    setLessonHistory,
+    classGroupName,
+    setClassGroupName,
+    majorFoot,
+    setMajorFoot,
+    position,
+    setPosition,
+    defaultPosition,
+    setDefaultPosition,
 }: handleState) => {
     // 웹 앱 구분
     let isMobile = useRecoilValue(IsMobileAtom);
     // 데이터
 
-    const [height, setHeight] = useState('');
-    const [weight, setWeight] = useState('');
-    const [team, setTeam] = useState('');
-    const [soccerHistory, setSoccerHistory] = useState('');
-    const [lessonHistory, setLessonHistory] = useState('');
-    const [classGroupName, setClassGroupName] = useState('');
-    const [majorFoot, setMajorFoot] = useState('');
-    const [position, setPosition] = useState<string[]>([]);
-    const [defaultPosition, setDefaultPosition] = useState([]);
     const inputStyle = 'w-full p-2 border border-egGrey-default mt-1 mb-3';
-
     // 포지션 데이터
     const handleCheckboxChange = (selectedOptions: string[]) => {
         setPosition(selectedOptions);
     };
-    function stageSubmit() {
-        const test = {
-            height: height,
-            weight: weight,
-            classGroupName: classGroupMatcherByKor(classGroupName),
-            team: team ? team : '없음',
-            soccerHistory: soccerHistory,
-            lessonHistory: lessonHistory,
-            majorFoot: majorFoot,
-            position: position,
-        };
-        if (!height || !weight || !classGroupName || !soccerHistory || !lessonHistory || !majorFoot) {
-            alert('모든 필수 사항을 입력해주세요');
-        } else {
-            setAdditionalInfoData(test);
-            handleNext();
-        }
-    }
-    useEffect(() => {
-        if (additionalInfoData) {
-            setHeight(additionalInfoData.height);
-            setWeight(additionalInfoData.weight);
-            setTeam(additionalInfoData.team);
-            setClassGroupName(classGroupMatcherByEng(additionalInfoData.classGroupName));
-            setSoccerHistory(additionalInfoData.soccerHistory);
-            setLessonHistory(additionalInfoData.lessonHistory);
-            setMajorFoot(additionalInfoData.majorFoot);
-            setPosition(additionalInfoData.position);
-            setDefaultPosition(additionalInfoData.position);
-        }
-    }, []);
 
     return (
-        <div className="max-w-lg p-2 m-auto">
-            <form>
+        <div className="max-w-lg m-auto">
+            <form className="mt-2">
                 <label htmlFor="height">키 *</label>
                 <input
                     id="height"
@@ -193,21 +176,6 @@ const AdditionalInfo = ({
                     ))}
                 </div>
             </form>
-            <div className="flex justify-end my-8">
-                {registStage > 1 && registStage < 5 && (
-                    <WhiteBtn
-                        content="이전"
-                        func={handlePreview}
-                    />
-                )}
-                {registStage < 5 && (
-                    <PurpleBtn
-                        content={registStage < 4 ? '다음' : '가입하기'}
-                        // func={validConfirm}
-                        func={stageSubmit}
-                    />
-                )}
-            </div>
         </div>
     );
 };

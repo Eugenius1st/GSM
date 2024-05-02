@@ -63,7 +63,7 @@ const App = () => {
                 element={<AdminUserDetail />}
             />
             <Route
-                path="/admin/user/edit/:classId"
+                path="/admin/user/edit/:userId"
                 element={<AdminUserEdit />}
             />
             <Route

@@ -27,13 +27,14 @@ const EditModal = ({ activeFunc }: EditModalType) => {
     };
     return (
         <div>
-            <div
+            <button
+                type="button"
                 onClick={handleShowModal}
                 className="flex items-center ml-2"
             >
                 <span className="text-sm">수정</span>
                 <MdEdit className="w-5 h-5 text-egPurple-default" />
-            </div>
+            </button>
             {isShow ? (
                 <div className="fixed flex justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
                     <div className="fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg">
