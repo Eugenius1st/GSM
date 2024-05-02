@@ -2,17 +2,29 @@ import * as React from 'react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-// icons
-import { AiOutlineCalendar } from 'react-icons/ai';
+import dayjs from 'dayjs';
+// hooks
+import { useEffect } from 'react';
 
 interface BasicDatePickerTyle {
+    defaultBirth?: any;
     content?: string;
     range?: 'year' | 'month' | 'day';
     isMobile?: boolean;
+    customStyle?: string;
+    func?: (date: any) => void;
 }
 
-export default function BasicDatePicker({ content, range, isMobile }: BasicDatePickerTyle) {
+export default function BasicDatePicker({
+    defaultBirth,
+    content,
+    range,
+    func,
+    customStyle,
+    isMobile,
+}: BasicDatePickerTyle) {
     const [curDate, setCurDate] = React.useState('');
+
     let currentDate = (value: any) => {
         let selectedDate = new Date(value.$d);
         let year = selectedDate.getFullYear();
@@ -23,13 +35,22 @@ export default function BasicDatePicker({ content, range, isMobile }: BasicDateP
         else if (range === 'month') dateString = year + '/' + month;
         else dateString = year + '/' + month + '/' + day;
         setCurDate(dateString);
+
+        if (func) func(selectedDate);
     };
-    console.log('curDate', curDate);
+    useEffect(() => {
+        if (defaultBirth) {
+            const newDefaultBirth = dayjs(defaultBirth);
+            currentDate(newDefaultBirth);
+        }
+    }, [defaultBirth]);
+
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             {isMobile ? (
                 <div className="mr-1">
                     <DatePicker
+                        onChange={(value) => currentDate(value)}
                         label={content}
                         sx={{
                             opacity: 1,
@@ -38,8 +59,15 @@ export default function BasicDatePicker({ content, range, isMobile }: BasicDateP
                     />
                 </div>
             ) : (
-                <div className="flex items-center py-1 pr-1 mr-1 border rounded-md border-egGrey-default text-egGrey-default width-40">
+                <div
+                    className={
+                        customStyle
+                            ? customStyle
+                            : 'flex rounded-md items-center py-1 pr-1 mr-1 border border-egGrey-default text-egGrey-default width-40'
+                    }
+                >
                     <DatePicker
+                        onChange={(value) => currentDate(value)}
                         sx={{
                             left: '-10px',
                             opacity: 1,

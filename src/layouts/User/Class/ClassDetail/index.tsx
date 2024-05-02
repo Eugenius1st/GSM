@@ -1,10 +1,16 @@
 // hooks
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { useRecoilValue } from 'recoil';
 import { IsMobileSelector } from 'atom/isMobile';
+// api
+import { requestGet } from 'api/basic';
 // Class Components
 import ViewUserCard from 'layouts/User/Class/components/ViewUserCard';
 // Cards
 import ClassCard from 'components/Cards/ClassCard';
+import { ClassInfoType } from 'components/Cards/ClassCard';
 // images
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
 import user1 from 'assets/user/user1.jpg';
@@ -16,19 +22,27 @@ import Divider from 'components/Common/Divider';
 
 const ClassDetail = () => {
     let isMobile = useRecoilValue(IsMobileSelector);
+    const { classId } = useParams();
+    const [curClass, setCurClass] = useState<ClassInfoType | undefined>();
 
-    const classInfo = {
-        id: 1,
-        classImage: class_adult_woman,
-        title: '성인남성반1',
-        date: '2024-03-09',
-        location: '수원월드컵점',
-        attendCount: '8/10',
-        waiting: 4,
-        attend: true,
-        coaches: ['안유진', '최보미'],
-        notice: '신장 00cm 제한입니다. 조건에 맞지 않는 신청시, 취소됩니다.',
-    };
+    // GET 요청을 보낼 함수 정의
+    const { data, error, isLoading } = useQuery({
+        queryKey: ['classDetail'],
+        queryFn: () => {
+            if (classId) {
+                return requestGet({
+                    requestUrl: `/class/${classId}`,
+                });
+            } else {
+                return Promise.resolve('');
+            }
+        },
+        staleTime: 5 * 1000,
+    });
+
+    useEffect(() => {
+        setCurClass(data);
+    }, [data]);
     const attendInfo = [
         { profile: user1, name: '홍길동', age: 13, attend: '출석' },
         { profile: user2, name: '홍이동', age: 13, attend: '불참' },
@@ -54,17 +68,17 @@ const ClassDetail = () => {
                 </div>
             </div>
             <div>
-                <ClassCard classInfo={classInfo} />
+                <ClassCard classInfo={curClass && curClass} />
             </div>
 
             <div className="p-4 border shadow-md border-egGrey-default">
                 <div className="mb-4 text-lg font-bold">참석자 명단</div>
-                <ViewUserCard attendInfo={attendInfo} />
+                <ViewUserCard attendInfo={curClass && curClass.attendancereservations} />
             </div>
 
             <Divider />
             <div className="p-4 mb-4 text-lg font-bold">대기자 명단</div>
-            <ViewUserCard attendInfo={waitingInfo} />
+            <ViewUserCard attendInfo={curClass && curClass.attendancereservations} />
             <Divider />
         </div>
     );

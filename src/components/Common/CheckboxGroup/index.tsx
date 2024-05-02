@@ -1,14 +1,16 @@
 // hooks
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // icons
 import { MdOutlineCheckBox } from 'react-icons/md';
 import { MdOutlineCheckBoxOutlineBlank } from 'react-icons/md';
+
 interface CheckboxGroupProps {
     options: string[];
     onChange: (selectedOptions: string[]) => void;
+    defaultSelected?: string[] | [];
 }
 
-const CheckboxGroup: React.FC<CheckboxGroupProps> = ({ options, onChange }) => {
+const CheckboxGroup: React.FC<CheckboxGroupProps> = ({ options, onChange, defaultSelected }) => {
     const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
     const optionStyle = 'w-full p-2 border border-egGrey-default mt-[-1px]';
     const handleCheckboxChange = (option: string) => {
@@ -24,6 +26,13 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = ({ options, onChange }) => {
         setSelectedOptions(newSelectedOptions);
         onChange(newSelectedOptions);
     };
+
+    // 기본값 렌더링
+    useEffect(() => {
+        if (defaultSelected) {
+            setSelectedOptions(defaultSelected);
+        }
+    }, [defaultSelected]);
     return (
         <div>
             {options.map((option, index) => (

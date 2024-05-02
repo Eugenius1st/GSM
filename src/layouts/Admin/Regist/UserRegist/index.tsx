@@ -1,5 +1,13 @@
 // hooks
 import { useState, useEffect } from 'react';
+// recoil
+import { useRecoilState } from 'recoil';
+import {
+    TermsAgreeAtomSelector,
+    BasicInfoAtomSelector,
+    AdditionalInfoAtomSelector,
+    ResearchInfoAtomSelector,
+} from 'atom/userRegist';
 // User Regist Components
 import TermsAgree from 'layouts/Admin/Regist/UserRegist//TermsAgree';
 import BasicInfo from 'layouts/Admin/Regist/UserRegist/BasicInfo';
@@ -11,11 +19,13 @@ import { MdOutlineArrowForwardIos } from 'react-icons/md';
 import { FiCheckSquare } from 'react-icons/fi';
 import { LuPencilLine } from 'react-icons/lu';
 import { FiUserCheck } from 'react-icons/fi';
-// Buttons
-import WhiteBtn from 'components/Buttons/WhiteBtn';
-import PurpleBtn from 'components/Buttons/PurpleBtn';
+
 const UserRegist = () => {
     const [registStage, setRegistStage] = useState(1);
+    const [termsAgreeData, setTermsAgreeData] = useRecoilState(TermsAgreeAtomSelector);
+    const [basicInfoData, setBasicInfoData] = useRecoilState(BasicInfoAtomSelector);
+    const [additionalInfoData, setAdditionalInfoData] = useRecoilState(AdditionalInfoAtomSelector);
+    // const [researchInfoData, setResearchInfoData] = useRecoilState(ResearchInfoAtomSelector);
     function handleNext() {
         if (registStage < 5) setRegistStage(registStage + 1);
     }
@@ -24,13 +34,29 @@ const UserRegist = () => {
     }
     const [stageBarStyle, setStageBarStyle] = useState(`h-2 rounded-lg bg-egPurple-default absolue w-1/5`);
     useEffect(() => {
-        setStageBarStyle(`h-2 rounded-lg bg-egPurple-default absolue w-${registStage}/5`);
+        if (registStage === 2) setStageBarStyle(`h-2 rounded-lg bg-egPurple-default absolue w-2/5`);
+        else if (registStage === 3) setStageBarStyle(`h-2 rounded-lg bg-egPurple-default absolue w-3/5`);
+        else if (registStage === 4) setStageBarStyle(`h-2 rounded-lg bg-egPurple-default absolue w-4/5`);
+        else setStageBarStyle(`h-2 rounded-lg bg-egPurple-default absolue w-${registStage}/5`);
+
         window.scrollTo(0, 0);
+        if (registStage === 5) {
+            setTermsAgreeData('');
+            setBasicInfoData('');
+            setAdditionalInfoData('');
+        }
     }, [registStage]);
 
     return (
         <div className="eg-regist-wrapper">
-            <div className="mt-10">
+            {registStage < 4 && (
+                <div className="flex items-center justify-start pb-5 eg-title">
+                    <span>회원 등록</span>
+                    <MdOutlineArrowForwardIos className="w-4 h-4 mx-1" />
+                    <span>{registStage === 1 ? '약관 동의' : registStage === 5 ? '가입 완료' : '정보 입력'}</span>
+                </div>
+            )}
+            <div className="my-10">
                 <div className="flex justify-between m-auto mx-10 text-center">
                     <div>
                         <FiCheckSquare className="w-12 h-12 p-2 rounded-full bg-egPurple-light" />
@@ -49,45 +75,41 @@ const UserRegist = () => {
                     <div className={stageBarStyle}></div>
                 </div>
             </div>
-            {registStage < 4 && (
-                <div className="flex items-center justify-start py-5 eg-title">
-                    <span>회원 등록</span>
-                    <MdOutlineArrowForwardIos className="w-4 h-4 mx-1" />
-                    <span>{registStage === 1 ? '약관 동의' : registStage === 5 ? '가입 완료' : '정보 입력'}</span>
-                </div>
-            )}
+
             {registStage === 1 ? (
-                <TermsAgree />
+                <TermsAgree
+                    registStage={registStage}
+                    handleNext={handleNext}
+                    termsAgreeData={termsAgreeData}
+                    setTermsAgreeData={setTermsAgreeData}
+                />
             ) : registStage === 2 ? (
-                <BasicInfo />
+                <BasicInfo
+                    registStage={registStage}
+                    handleNext={handleNext}
+                    handlePreview={handlePreview}
+                    basicInfoData={basicInfoData}
+                    setBasicInfoData={setBasicInfoData}
+                />
             ) : registStage === 3 ? (
-                <AdditionalInfo />
+                <AdditionalInfo
+                    registStage={registStage}
+                    handleNext={handleNext}
+                    handlePreview={handlePreview}
+                    additionalInfoData={additionalInfoData}
+                    setAdditionalInfoData={setAdditionalInfoData}
+                />
             ) : registStage === 4 ? (
-                <ResearchInfo />
+                <ResearchInfo
+                    registStage={registStage}
+                    handleNext={handleNext}
+                    handlePreview={handlePreview}
+                    // researchInfoData={researchInfoData}
+                    // setResearchInfoData={setResearchInfoData}
+                />
             ) : (
                 <RegistComplete />
             )}
-            <div className="flex justify-end my-8">
-                {registStage > 1 && registStage < 5 && (
-                    <WhiteBtn
-                        content="이전"
-                        func={handlePreview}
-                    />
-                )}
-                {registStage < 5 && (
-                    <PurpleBtn
-                        content={registStage < 4 ? '다음' : '가입하기'}
-                        func={handleNext}
-                    />
-                )}
-                {registStage === 5 && (
-                    <PurpleBtn
-                        content={'완료'}
-                        func={handleNext}
-                        width="full"
-                    />
-                )}
-            </div>
         </div>
     );
 };

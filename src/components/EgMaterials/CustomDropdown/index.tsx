@@ -3,24 +3,32 @@ import { useState, useEffect } from 'react';
 
 interface CustomDropdownType {
     placehorder?: string;
+    value?: string | number | undefined;
     formStyle?: string;
     itemList: string[] | number[];
     inputStyle?: string;
     itemStyle?: string;
+    func?: (item: any) => void;
 }
 
-const CustomDropdown = ({ placehorder, formStyle, itemList, inputStyle, itemStyle }: CustomDropdownType) => {
-    const [curValue, setCurValue] = useState('');
-
+const CustomDropdown = ({
+    placehorder,
+    value,
+    formStyle,
+    itemList,
+    inputStyle,
+    itemStyle,
+    func,
+}: CustomDropdownType) => {
     const handleValueChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setCurValue(event.target.value);
+        if (func) func(event.target.value);
     };
     return (
         <div className={formStyle}>
             <select
-                value={curValue}
+                value={value}
                 onChange={handleValueChange}
-                className={curValue && 'text-egBlack-default'}
+                className={value ? 'text-egBlack-default' : ''}
             >
                 <option
                     value=""

@@ -1,7 +1,10 @@
+// hooks
+import React, { KeyboardEvent, useEffect, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+// api
+import { requestPost } from 'api/basic';
 // Buttons
 import PurpleBtn from 'components/Buttons/PurpleBtn';
-// hooks
-import { useState } from 'react';
 // Cards
 import MemoCard from 'components/Cards/MemoCard';
 // Buttons
@@ -11,24 +14,30 @@ import { CgClose } from 'react-icons/cg';
 import { FiPlus } from 'react-icons/fi';
 import { IoMdSearch } from 'react-icons/io';
 // Modals
-import BasicModal from '../BasicModal';
+import SearchModal from 'components/Modals/SearchModal';
+import { AdminDataType } from 'components/Modals/SearchModal';
+import BasicModal from 'components/Modals/BasicModal';
+// Alerts
+import BasicAlert from 'components/Alerts/BasicAlert';
 
-const ClassAddModal = () => {
-    const classList = ['엘리트반', '성인반', '취미반'];
-    const [selectedClass, setSelecteClass] = useState('');
+interface ClassAddModalType {
+    isSuccess: boolean;
+    setIsSuccess: (isSuccess: boolean) => void;
+}
+const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
+    const classList = ['엘리트반', '성인 남성반', '취미반'];
+    const [startTime, setStartTime] = useState('');
+    const [endTime, setEndTime] = useState('');
+    const [applicationDeadline, setApplicationDeadline] = useState('');
+    const [place, setPlace] = useState('판교 1호점');
+    const [type, setType] = useState('실기');
+    const [amount, setAmount] = useState('');
+    const [coaches, setCoaches] = useState<any>([]);
+    const [className, setClassName] = useState(classList[0]);
+    const [note, setNote] = useState('');
+
     const [isShow, setIsShow] = useState(false);
-    const [isSearched, setIsSearched] = useState(false);
-    const searchedCoachs = [
-        { id: 1, name: '손상훈', birth: '1997' },
-        { id: 1, name: '손삼훈', birth: '1997' },
-        { id: 1, name: '송상흥', birth: '1997' },
-        { id: 1, name: '손상훈', birth: '1997' },
-        { id: 1, name: '손삼훈', birth: '1997' },
-        { id: 1, name: '송상흥', birth: '1997' },
-        { id: 1, name: '손상훈', birth: '1997' },
-        { id: 1, name: '손삼훈', birth: '1997' },
-        { id: 1, name: '송상흥', birth: '1997' },
-    ];
+
     const handleShowModal = () => {
         setIsShow(true);
         document.body.style.overflow = 'hidden';
@@ -37,13 +46,123 @@ const ClassAddModal = () => {
         setIsShow(false);
         document.body.style.overflow = 'unset';
     };
+    // POST 수업추가 요청을 보낼 함수 정의
+    const flagCheckFunc = (flag: boolean) => {
+        setIsSuccess(flag);
+    };
+    const mutation = useMutation({
+        mutationFn: ({ requestUrl, data, successFunc }: any) => {
+            return requestPost({
+                requestUrl: requestUrl,
+                data: data,
+                flagCheckFunc: flagCheckFunc,
+            });
+            // return requestPost({ requestUrl: requestUrl, id: id, pw: pw, successFunc: setLoginSelector });
+        },
+    });
+    const postClass = () => {
+        const coachIdArray = coaches ? coaches.map((coach: { _id: string }) => coach._id) : [];
+
+        // POST 요청에 보낼 데이터
+        mutation.mutate({
+            requestUrl: '/class',
+            data: {
+                startTime: startTime,
+                endTime: endTime,
+                applicationDeadline: applicationDeadline,
+                place: place,
+                type: type,
+                name: className,
+                amount: 10,
+                coaches: coachIdArray,
+                note: note,
+            },
+            successFunc: setIsSuccess,
+        });
+    };
+
+    const handleClean = () => {
+        setStartTime('');
+        setEndTime('');
+        setApplicationDeadline('');
+        setPlace('판교점');
+        setType('실기');
+        setClassName('');
+        setAmount('');
+        setCoaches([]);
+        setIsShow(false);
+        setIsSuccess(false);
+    };
+
+    const dataValidate = () => {
+        if (!startTime) {
+            alert('시작 시간을 입력하세요');
+            return false;
+        } else if (!endTime) {
+            alert('종료 시간을 입력하세요');
+            return false;
+        } else if (!applicationDeadline) {
+            alert('마감 시간을 입력하세요');
+            return false;
+        } else if (!place) {
+            alert('수업 장소를 입력하세요');
+            return false;
+        } else if (!type) {
+            alert('이론, 실기 구분을 입력하세요');
+            return false;
+        } else if (!className) {
+            alert('수업 명을 입력하세요');
+            return false;
+        } else if (!amount) {
+            alert('제한 인원을 입력하세요');
+            return false;
+        }
+        return true;
+    };
+    const handleAddCoaches = (coachInfo: AdminDataType) => {
+        const isIdMatch = coaches.some((coach: any) => coach._id === coachInfo._id);
+
+        // _id가 일치하지 않는 경우에만 추가
+        if (!isIdMatch) {
+            // 새로운 배열을 만들어서 coachInfo 추가
+            const updatedCoaches = [...coaches, coachInfo];
+            // state 업데이트
+            setCoaches(updatedCoaches);
+        } else {
+            alert('이미 추가한 코치입니다.');
+        }
+    };
+    const handleDeleteCoaches = (idx: number) => {
+        const newCoachList = [...coaches];
+        if (newCoachList.length > 0) {
+            newCoachList.splice(idx, 1);
+            setCoaches(newCoachList);
+        }
+    };
+
+    const submitData = () => {
+        const checkValid = dataValidate();
+        if (checkValid) postClass();
+    };
+
+    useEffect(() => {
+        setType('실기');
+    }, [className]);
     return (
         <div>
             <WhiteBtn
                 content="+ 수업 추가"
                 func={handleShowModal}
             />
-
+            {isShow && isSuccess ? (
+                <BasicAlert
+                    alertContents="수업 등록이 완료되었습니다"
+                    alertFooterActiveFunc={handleClean}
+                    alertFooterActiveBtn="확인"
+                />
+            ) : (
+                <></>
+            )}
             {isShow ? (
                 <div className="fixed flex justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
                     <div className="fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg">
@@ -63,7 +182,7 @@ const ClassAddModal = () => {
                                     name="className"
                                     id="className"
                                     className="w-32 p-1 border rounded-md border-egGrey-default"
-                                    onChange={(e) => setSelecteClass(e.target.value)}
+                                    onChange={(e) => setClassName(e.target.value)}
                                 >
                                     {classList.map((el, idx) => (
                                         <option
@@ -99,79 +218,97 @@ const ClassAddModal = () => {
                                     modalScrollStayFlag={false}
                                 />
                             </div>
-                            {selectedClass === '엘리트반' && (
+                            {className === '엘리트반' && (
                                 <div className="flex mb-2 items">
                                     <span className="w-20 mr-4 text-lg font-semibold">수업분류</span>
 
                                     <div className="flex items-center mr-2">
                                         <input
                                             type="radio"
-                                            id="skills"
+                                            id="실기"
                                             name="classification"
-                                            value="skills"
+                                            value="실기"
                                             className="w-4 h-4 mr-1"
+                                            defaultChecked={true}
+                                            onChange={(e) => setType(e.target.value)}
                                         />
-                                        <label htmlFor="skills">실기 수업</label>
+                                        <label htmlFor="실기">실기</label>
                                     </div>
                                     <div className="flex items-center mr-2">
                                         <input
                                             type="radio"
-                                            id="theory"
+                                            id="이론"
                                             name="classification"
-                                            value="theory"
+                                            value="이론"
                                             className="w-4 h-4 mr-1"
-                                            defaultChecked={true}
+                                            onChange={(e) => setType(e.target.value)}
                                         />
-                                        <label htmlFor="theory">이론 수업</label>
+                                        <label htmlFor="이론">이론</label>
                                     </div>
                                 </div>
                             )}
                             <div className="flex mb-2">
                                 <span className="w-20 mr-4 text-lg font-semibold">시작 날짜</span>
                                 <input
-                                    type="date"
-                                    className="w-32 p-1 mr-2 border rounded-md border-egGrey-default"
-                                />
-                                <input
-                                    type="time"
-                                    className="w-32 p-1 border rounded-md border-egGrey-default"
+                                    onChange={(e) => setStartTime(e.target.value)}
+                                    type="datetime-local"
+                                    id="datetime"
+                                    // max="2077-06-20T21:00"
+                                    // min="2077-06-05T12:30"
+                                    // value="2077-06-15T13:27"
                                 />
                             </div>
                             <div className="flex mb-2">
                                 <span className="w-20 mr-4 text-lg font-semibold">종료 날짜</span>
                                 <input
-                                    type="date"
-                                    className="w-32 p-1 mr-2 border rounded-md border-egGrey-default"
-                                />
-                                <input
-                                    type="time"
-                                    className="w-32 p-1 border rounded-md border-egGrey-default"
+                                    onChange={(e) => setEndTime(e.target.value)}
+                                    type="datetime-local"
+                                    id="datetime"
+                                    // max="2077-06-20T21:00"
+                                    // min={startTime}
+                                    // value="2077-06-15T13:27"
                                 />
                             </div>
-
+                            <div className="flex mb-2">
+                                <span className="w-20 mr-4 text-lg font-semibold">등록 마감</span>
+                                <input
+                                    onChange={(e) => setApplicationDeadline(e.target.value)}
+                                    type="datetime-local"
+                                    id="datetime"
+                                    // max="2077-06-20T21:00"
+                                    // min={startTime}
+                                    // value="2077-06-15T13:27"
+                                />
+                            </div>
                             <div className="flex mb-2 items">
                                 <span className="w-20 mr-4 text-lg font-semibold">위치</span>
                                 <div className="flex items-center mr-2">
                                     <input
                                         type="radio"
-                                        id="pangyo"
+                                        id="판교점"
                                         name="location"
-                                        value="pangyo"
+                                        value="판교점"
                                         className="w-4 h-4 mr-1"
                                         defaultChecked={true}
+                                        onChange={(e) => {
+                                            setPlace(e.target.value);
+                                        }}
                                     />
-                                    <label htmlFor="pangyo">판교점</label>
+                                    <label htmlFor="판교점">판교점</label>
                                 </div>
 
                                 <div className="flex items-center">
                                     <input
                                         type="radio"
-                                        id="Suwon"
+                                        id="수원월드컵점"
                                         name="location"
-                                        value="Suwon"
+                                        value="수원월드컵점"
                                         className="w-4 h-4 mr-1"
+                                        onChange={(e) => {
+                                            setPlace(e.target.value);
+                                        }}
                                     />
-                                    <label htmlFor="Suwon">수원월드컵점</label>
+                                    <label htmlFor="수원월드컵점">수원월드컵점</label>
                                 </div>
                             </div>
                             <div className="flex mb-2">
@@ -182,16 +319,25 @@ const ClassAddModal = () => {
                                     min="0"
                                     max="99"
                                     className="w-40 p-1 border rounded-md border-egGrey-default"
+                                    onChange={(e) => {
+                                        setAmount(e.target.value);
+                                    }}
                                 />
                             </div>
                             <div className="flex items-center mb-2">
                                 <span className="w-20 mr-4 text-lg font-semibold">참석 코치</span>
                                 <div className="w-40 h-8 p-1 border rounded-md border-egGrey-default">
-                                    <div className="flex items-center px-1 text-sm rounded-sm bg-egBlack-superLight w-fit">
-                                        손상훈 <CgClose />
-                                    </div>
+                                    {coaches.length > 0 && (
+                                        <div className="flex ">
+                                            {coaches.map((el: any, idx: number) => (
+                                                <div className="flex items-center px-1 mr-1 text-sm rounded-sm bg-egBlack-superLight w-fit">
+                                                    {el.name} <CgClose onClick={() => handleDeleteCoaches(idx)} />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
-                                <BasicModal
+                                <SearchModal
                                     modalBtn={
                                         <button className="flex items-center p-1 ml-2 border rounded-md border-egPurple-default hover:bg-egPurple-superLight">
                                             <div className="mr-1 text-sm">코치 검색</div>
@@ -199,39 +345,18 @@ const ClassAddModal = () => {
                                         </button>
                                     }
                                     modalTitle={'코치 검색'}
-                                    modalContents={
-                                        <div className="p-2">
-                                            <div>찾으시는 코치의 이름을 입력하세요 (최대 10글자)</div>
-                                            <div className="flex items-center w-full mt-4 border border-egPurple-default">
-                                                <input
-                                                    type="text"
-                                                    minLength={10}
-                                                    className="w-full p-2 border-none focus:outline-none"
-                                                />
-                                                <IoMdSearch
-                                                    onClick={() => setIsSearched(!isSearched)}
-                                                    className="w-6 h-6 mx-2 text-egPurple-default"
-                                                />
-                                            </div>
-                                            {isSearched && (
-                                                <div className="h-40 py-1 overflow-y-auto border shadow-lg rounded-b-md">
-                                                    {searchedCoachs.map((el) => (
-                                                        <div className="flex px-4 py-1 hover:bg-egGrey-light">
-                                                            {el.name} ({el.birth})
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
-                                    }
+                                    modalContents={'찾으시는 코치의 이름을 입력하세요(최대 10글자)'}
                                     // modalFooterExitBtn={'취소'}
                                     // modalFooterActiveBtn={'입력'}
+                                    modalActiveFunc={handleAddCoaches}
                                     modalScrollStayFlag={false}
                                 />
                             </div>
                             <div className="flex mb-2">
                                 <span className="w-20 mr-4 text-lg font-semibold">안내 사항</span>
                                 <textarea
+                                    value={note}
+                                    onChange={(e) => setNote(e.target.value)}
                                     name="opinion"
                                     cols={30}
                                     rows={4}
@@ -239,6 +364,14 @@ const ClassAddModal = () => {
                                     placeholder="안내사항은 100글자 내로 작성하세요"
                                     className="p-1 border rounded-md border-egGrey-default"
                                 ></textarea>
+                            </div>
+                        </div>
+                        <div>
+                            <div className="text-end">
+                                <PurpleBtn
+                                    content="추가"
+                                    func={submitData}
+                                />
                             </div>
                         </div>
                     </div>

@@ -9,16 +9,16 @@
     --egWhite-default: #ffffff;
     /* egGrey */
     --egGrey-default: #9e9e9e;
-    --egGrey-semiLght: #f3f3f3;
+    --egGrey-semiLight: #f3f3f3;
     --egGrey-light: #f9f9f9;
     /* egBlack */
     --egBlack-default: #252525;
-    --egBlack-semiLght: #505050;
+    --egBlack-semiLight: #505050;
     --egBlack-light: #b5b5b5;
     --egBlack-superLight: #e1e1e1;
     /* egRed */
     --egRed-default: '#DA1E28';
-    --egRed-semiLght: '#DA1E2840';
+    --egRed-semiLight: '#DA1E2840';
 
     --egRed-light: '#FBE8E9';
     /* egGreen */
@@ -27,7 +27,7 @@
 
     /* egYellow */
     --egYellow-default: '#FED74C';
-    --egRed-semiLght: '#FED74C50';
+    --egRed-semiLight: '#FED74C50';
     --egYellow-light: '#FFFBED';
 }
 

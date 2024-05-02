@@ -15,122 +15,36 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import { IoFilterSharp } from 'react-icons/io5';
-import { RiDeleteBin6Fill } from 'react-icons/ri';
 import { visuallyHidden } from '@mui/utils';
 //hooks
 import { Link } from 'react-router-dom';
-// images
-import coach_son from 'assets/coach/coach_son.jpeg';
-import coach_kim from 'assets/coach/coach_kim.jpeg';
-import coach_hong from 'assets/coach/coach_hong.jpeg';
+import { useQuery } from '@tanstack/react-query';
+// api
+import { requestGet } from 'api/basic';
 // Common
-import SearchBar from 'components/Common/SearchBar';
 import SelectMenu from 'components/Common/SelectMenu';
+import SearchBar from 'components/Common/SearchBar';
 // Eg Components
 import DropDownModal from 'components/EgMaterials/DropDown';
 // Buttons
 import WhiteBtn from 'components/Buttons/WhiteBtn';
-import PurpleBtn from 'components/Buttons/PurpleBtn';
 // colors
 import colors from 'assets/colors/palette';
 // icons
 import { RiUserForbidFill } from 'react-icons/ri';
+// Cards
+import EmptyCard from 'components/Cards/EmptyCard';
 
-interface Data {
-    id: number;
-    profile: string;
+interface RowDataType {
+    _id: number;
+    photo: string;
     name: string;
     birth: number;
-    level: number;
+    lv: number;
 }
-
-const rows = [
-    {
-        id: 1,
-        profile: coach_son,
-        name: '손흥민',
-        birth: 1998,
-        level: 1,
-    },
-    {
-        id: 2,
-        profile: coach_kim,
-        name: '김민재',
-        birth: 2000,
-        level: 2,
-    },
-    {
-        id: 3,
-        profile: coach_hong,
-        name: '홍길동',
-        birth: 1978,
-        level: 3,
-    },
-    {
-        id: 4,
-        profile: coach_son,
-        name: '손흥민',
-        birth: 1998,
-        level: 4,
-    },
-    {
-        id: 5,
-        profile: coach_kim,
-        name: '김민재',
-        birth: 2000,
-        level: 5,
-    },
-    {
-        id: 6,
-        profile: coach_hong,
-        name: '홍길동',
-        birth: 1978,
-        level: 6,
-    },
-    {
-        id: 7,
-        profile: coach_son,
-        name: '손흥민',
-        birth: 1998,
-        level: 1,
-    },
-    {
-        id: 8,
-        profile: coach_kim,
-        name: '김민재',
-        birth: 2000,
-        level: 7,
-    },
-    {
-        id: 9,
-        profile: coach_hong,
-        name: '홍길동',
-        birth: 1978,
-        level: 1,
-    },
-    {
-        id: 10,
-        profile: coach_son,
-        name: '손흥민',
-        birth: 1998,
-        level: 1,
-    },
-    {
-        id: 11,
-        profile: coach_kim,
-        name: '김민재',
-        birth: 2000,
-        level: 1,
-    },
-    {
-        id: 12,
-        profile: coach_hong,
-        name: '홍길동',
-        birth: 1978,
-        level: 1,
-    },
-];
+interface TableRowDataType {
+    tableRowData: RowDataType[];
+}
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
@@ -144,42 +58,17 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
 
 type Order = 'asc' | 'desc';
 
-function getComparator<Key extends keyof any>(
-    order: Order,
-    orderBy: Key
-): (a: { [key in Key]: number | string }, b: { [key in Key]: number | string }) => number {
-    return order === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
-function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
-    const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-    stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
-        if (order !== 0) {
-            return order;
-        }
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
-}
-
 interface HeadCell {
-    id: keyof Data;
+    id: keyof RowDataType;
     label: string;
     numeric: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
     {
-        id: 'profile',
+        id: 'photo',
         numeric: false,
-        label: 'profile',
+        label: 'photo',
     },
     {
         id: 'name',
@@ -187,9 +76,9 @@ const headCells: readonly HeadCell[] = [
         label: 'Name',
     },
     {
-        id: 'level',
+        id: 'lv',
         numeric: false,
-        label: 'Level',
+        label: 'lv',
     },
     {
         id: 'birth',
@@ -200,7 +89,7 @@ const headCells: readonly HeadCell[] = [
 
 interface EnhancedTableProps {
     numSelected: number;
-    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
+    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof RowDataType) => void;
     onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
     order: Order;
     orderBy: string;
@@ -210,7 +99,7 @@ interface EnhancedTableProps {
 function EnhancedTableHead(props: EnhancedTableProps) {
     const { egPurple } = colors;
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-    const createSortHandler = (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
+    const createSortHandler = (property: keyof RowDataType) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
     };
 
@@ -274,10 +163,71 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
     numSelected: number;
+    defaultRowData: any;
+    setRowData: (data: any) => void;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-    const { numSelected } = props;
+    const { numSelected, defaultRowData, setRowData } = props;
+    const [curPage, setCurPage] = React.useState(1);
+    const [itemsPerPage, setItemsPerPage] = React.useState(10);
+    const [coachSearchInput, setCoachSearchInput] = React.useState('');
+    const [searchedCoach, setSearchedCoach] = React.useState([]);
+    const [coachQueryEnabled, setCoachQueryEnabled] = React.useState(false);
+
+    // GET 요청을 보낼 함수 정의
+    const { data, error, isLoading, refetch } = useQuery({
+        queryKey: ['searchCoach'],
+        queryFn: () => {
+            if (coachSearchInput) {
+                return requestGet({
+                    requestUrl: `/admin/search/${coachSearchInput}?with_head=true&take=${itemsPerPage}&page=${curPage}`,
+                    successFunc: setSearchedCoach,
+                });
+            } else {
+                // searchInput이 undefined일 때에 대한 처리
+                return Promise.resolve([]); // 또는 다른 유효한 값을 반환할 수 있음
+            }
+        },
+        staleTime: 1000,
+        enabled: coachQueryEnabled, // enabled 옵션을 사용하여 쿼리를 활성화 또는 비활성화합니다.
+    });
+    const useHandleButtonClick = () => {
+        // GET 요청 버튼 클릭 시에만 쿼리를 활성화하도록 설정합니다.
+        if (coachSearchInput) {
+            setCurPage(1);
+            setCoachQueryEnabled(true);
+            refetch();
+        }
+    };
+
+    // 검색시 렌더링
+    React.useEffect(() => {
+        convertTableRowData();
+    }, [searchedCoach]);
+    React.useEffect(() => {
+        if (!coachSearchInput) {
+            setRowData(defaultRowData);
+        }
+    }, [coachSearchInput]);
+
+    // Table 에 적합한 Row 형태로 변경하기
+    function convertTableRowData() {
+        // 코치 정보를 담을 빈 배열 생성
+        const rows: RowDataType[] = [];
+        searchedCoach.forEach((coach: RowDataType, index: number) => {
+            const { _id, photo, name, birth, lv } = coach; // 원하는 속성들을 추출
+            rows.push({
+                _id: _id, // 배열 인덱스를 이용하여 id 부여
+                photo: photo, // 사진 속성 그대로 사용
+                name: name, // 이름 속성 그대로 사용
+                birth: new Date(birth).getFullYear(), // 출생일에서 연도만 추출
+                lv: lv, // 레벨 속성 그대로 사용
+            });
+        });
+        // 변환된 배열 반환!!
+        setRowData(rows);
+    }
 
     return (
         <Toolbar
@@ -321,22 +271,29 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
             ) : (
                 <div className="flex items-center">
                     <div className="mr-1">
-                        <SelectMenu menuList={['이름', '소속']} />
+                        <SelectMenu menuList={['이름']} />
                     </div>
-                    <SearchBar />
+                    <SearchBar
+                        searchFunc={useHandleButtonClick}
+                        searchInput={coachSearchInput}
+                        setSearchInput={setCoachSearchInput}
+                    />
                     <DropDownModal
                         itemList={[
                             {
                                 item: 'ALL',
                             },
                             {
-                                item: '엘리트반',
+                                item: 'LV1',
                             },
                             {
-                                item: '취미반',
+                                item: 'LV2',
                             },
                             {
-                                item: '성인반',
+                                item: 'LV3',
+                            },
+                            {
+                                item: 'LV4',
                             },
                         ]}
                     />
@@ -345,15 +302,20 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         </Toolbar>
     );
 }
-export default function EnhancedTable() {
+export default function EnhancedTable({ tableRowData }: TableRowDataType) {
+    const [rowData, setRowData] = React.useState(tableRowData);
     const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<keyof Data>('level');
+    const [orderBy, setOrderBy] = React.useState<keyof RowDataType>('lv');
     const [selected, setSelected] = React.useState<readonly number[]>([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const { egPurple } = colors;
+    // Table Body 렌더링 관련
+    React.useEffect(() => {
+        if (tableRowData) setRowData(tableRowData);
+    }, [tableRowData]);
 
-    const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
+    const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof RowDataType) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
@@ -361,7 +323,7 @@ export default function EnhancedTable() {
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            const newSelected = rows.map((n) => n.id);
+            const newSelected = rowData.map((n) => n._id);
             setSelected(newSelected);
             return;
         }
@@ -384,141 +346,137 @@ export default function EnhancedTable() {
         setSelected(newSelected);
     };
 
-    const handleChangePage = (event: unknown, newPage: number) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
     const isSelected = (id: number) => selected.indexOf(id) !== -1;
 
-    // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-    const visibleRows = React.useMemo(
-        () =>
-            stableSort(rows, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-        [order, orderBy, page, rowsPerPage]
-    );
+    // Avoid a layout jump when reaching the last page with empty tableRowData.
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rowData.length) : 0;
 
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
-                <EnhancedTableToolbar numSelected={selected.length} />
+                <EnhancedTableToolbar
+                    numSelected={selected.length}
+                    defaultRowData={tableRowData}
+                    setRowData={setRowData}
+                />
                 <TableContainer sx={{ overflowY: 'scroll' }}>
-                    <Table
-                        sx={{ minWidth: 440 }}
-                        aria-labelledby="tableTitle"
-                        size="small"
-                    >
-                        <EnhancedTableHead
-                            numSelected={selected.length}
-                            order={order}
-                            orderBy={orderBy}
-                            onSelectAllClick={handleSelectAllClick}
-                            onRequestSort={handleRequestSort}
-                            rowCount={rows.length}
-                        />
-                        <TableBody
-                            sx={{
-                                '.MuiTableRow-hover:hover': { background: `${egPurple.superLight} !important` },
-                                '.Mui-selected': { background: `${egPurple.superLight} !important` },
-                            }}
+                    {rowData && rowData.length > 0 ? (
+                        <Table
+                            sx={{ minWidth: 440 }}
+                            aria-labelledby="tableTitle"
+                            size="small"
                         >
-                            {visibleRows.map((row, index) => {
-                                const isItemSelected = isSelected(row.id);
-                                const labelId = `enhanced-table-checkbox-${index}`;
+                            <EnhancedTableHead
+                                numSelected={selected.length}
+                                order={order}
+                                orderBy={orderBy}
+                                onSelectAllClick={handleSelectAllClick}
+                                onRequestSort={handleRequestSort}
+                                rowCount={rowData.length}
+                            />
+                            <TableBody
+                                sx={{
+                                    '.MuiTableRow-hover:hover': { background: `${egPurple.superLight} !important` },
+                                    '.Mui-selected': { background: `${egPurple.superLight} !important` },
+                                }}
+                            >
+                                {rowData.map((row, index) => {
+                                    const isItemSelected = isSelected(row._id);
+                                    const labelId = `enhanced-table-checkbox-${index}`;
+                                    return (
+                                        <TableRow
+                                            hover
+                                            onClick={(event) => handleClick(event, row._id)}
+                                            role="checkbox"
+                                            aria-checked={isItemSelected}
+                                            tabIndex={-1}
+                                            key={row._id}
+                                            selected={isItemSelected}
+                                            sx={{ cursor: 'pointer' }}
+                                        >
+                                            <TableCell padding="checkbox">
+                                                <Checkbox
+                                                    color="primary"
+                                                    checked={isItemSelected}
+                                                    inputProps={{
+                                                        'aria-labelledby': labelId,
+                                                    }}
+                                                />
+                                            </TableCell>
+                                            <TableCell
+                                                sx={{ paddingX: 0 }}
+                                                align="center"
+                                            >
+                                                <img
+                                                    className="object-cover rounded-full w-14 h-14"
+                                                    src={row.photo}
+                                                    alt={row.name}
+                                                />
+                                            </TableCell>
 
-                                return (
+                                            <TableCell
+                                                sx={{ paddingX: 0 }}
+                                                component="th"
+                                                id={labelId}
+                                                scope="row"
+                                            >
+                                                {row.name}
+                                            </TableCell>
+                                            <TableCell sx={{ paddingX: 0 }}>{row.lv} lv</TableCell>
+                                            <TableCell sx={{ paddingX: 0 }}>{row.birth}</TableCell>
+                                            <TableCell
+                                                sx={{ paddingX: 0 }}
+                                                align="center"
+                                            >
+                                                <Link to={`/admin/coach/${row._id}`}>
+                                                    <WhiteBtn
+                                                        content="정보보기"
+                                                        width="18"
+                                                    />
+                                                </Link>
+                                            </TableCell>
+                                            <TableCell
+                                                sx={{ paddingX: 0 }}
+                                                align="center"
+                                            >
+                                                <Link to={`/admin/coach/coach-class/${row._id}`}>
+                                                    <WhiteBtn
+                                                        content="수업보기"
+                                                        width="18"
+                                                    />
+                                                </Link>
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                                {emptyRows > 0 && (
                                     <TableRow
-                                        hover
-                                        onClick={(event) => handleClick(event, row.id)}
-                                        role="checkbox"
-                                        aria-checked={isItemSelected}
-                                        tabIndex={-1}
-                                        key={row.id}
-                                        selected={isItemSelected}
-                                        sx={{ cursor: 'pointer' }}
+                                        style={{
+                                            height: 33,
+                                        }}
                                     >
-                                        <TableCell padding="checkbox">
-                                            <Checkbox
-                                                color="primary"
-                                                checked={isItemSelected}
-                                                inputProps={{
-                                                    'aria-labelledby': labelId,
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell
-                                            sx={{ paddingX: 0 }}
-                                            align="center"
-                                        >
-                                            <img
-                                                className="object-cover rounded-full w-14 h-14"
-                                                src={row.profile}
-                                                alt={row.name}
-                                            />
-                                        </TableCell>
-
-                                        <TableCell
-                                            sx={{ paddingX: 0 }}
-                                            component="th"
-                                            id={labelId}
-                                            scope="row"
-                                        >
-                                            {row.name}
-                                        </TableCell>
-                                        <TableCell sx={{ paddingX: 0 }}>{row.level} lv</TableCell>
-                                        <TableCell sx={{ paddingX: 0 }}>{row.birth}</TableCell>
-                                        <TableCell
-                                            sx={{ paddingX: 0 }}
-                                            align="center"
-                                        >
-                                            <Link to={`/admin/coach/${row.id}`}>
-                                                <WhiteBtn
-                                                    content="정보보기"
-                                                    width="18"
-                                                />
-                                            </Link>
-                                        </TableCell>
-                                        <TableCell
-                                            sx={{ paddingX: 0 }}
-                                            align="center"
-                                        >
-                                            <Link to={`/admin/coach/coach-class/${row.id}`}>
-                                                <WhiteBtn
-                                                    content="수업보기"
-                                                    width="18"
-                                                />
-                                            </Link>
-                                        </TableCell>
+                                        <TableCell colSpan={6} />
                                     </TableRow>
-                                );
-                            })}
-                            {emptyRows > 0 && (
-                                <TableRow
-                                    style={{
-                                        height: 33,
-                                    }}
-                                >
-                                    <TableCell colSpan={6} />
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
+                                )}
+                            </TableBody>
+                        </Table>
+                    ) : (
+                        <EmptyCard
+                            content="데이터가 없습니다."
+                            customStyle="py-28 text-egPurple-semiLight flex flex-col justify-center items-center  shadow-md"
+                        />
+                    )}
                 </TableContainer>
-                <TablePagination
+                {/* <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
-                    count={rows.length}
+                    count={rowData.length}
                     rowsPerPage={rowsPerPage}
                     labelRowsPerPage=""
                     page={page}
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
-                />
+                /> */}
             </Paper>
         </Box>
     );

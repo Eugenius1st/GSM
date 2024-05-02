@@ -1,4 +1,8 @@
+// hooks
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+// Buttons
+import WhiteBtn from 'components/Buttons/WhiteBtn';
 interface UserProfileCardType {
     isMobile: boolean;
     thumbnail: string;
@@ -8,6 +12,7 @@ interface UserProfileCardType {
 }
 
 const UserProfileCard = ({ isMobile, thumbnail, name, birth, classInfo }: UserProfileCardType) => {
+    const navigation = useNavigate();
     const infoStyle = 'mb-2 pb-1 flex border-b border-egGrey-default';
     const titleStyle = isMobile ? 'mr-2 w-2/5 ' : 'mr-2 w-1/3 ';
     const highLight = 'px-1 bg-egPurple-superLight';
@@ -28,7 +33,7 @@ const UserProfileCard = ({ isMobile, thumbnail, name, birth, classInfo }: UserPr
             className={
                 position > 77 && !isMobile
                     ? 'fixed w-[15.15rem] p-4 border border-egGrey-default mt-[-5.5rem]'
-                    : 'p-4 border h-72 border-egGrey-default'
+                    : 'p-4 border h-[24rem] border-egGrey-default'
             }
         >
             <div className="">
@@ -58,6 +63,13 @@ const UserProfileCard = ({ isMobile, thumbnail, name, birth, classInfo }: UserPr
                         <div>
                             {classInfo.remainingRounds} / {classInfo.paymentRound}
                         </div>
+                    </div>
+                    <div className="mt-10">
+                        <WhiteBtn
+                            content="로그아웃"
+                            width={'full'}
+                            func={() => navigation('/logout')}
+                        />
                     </div>
                 </div>
             </div>

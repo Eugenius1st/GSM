@@ -1,10 +1,11 @@
 // hooks
-import React, { KeyboardEvent } from 'react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { KeyboardEvent, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 // recoil
+import { AutoLoginSelector } from 'atom/auth';
 import { useRecoilState } from 'recoil';
-import { LoginAtomSelector } from 'atom/auth';
+// api
+import { loginPost, PostLoginType } from 'api/login';
 // Common
 import EgInput from 'components/EgMaterials/EgInput';
 import EgCheckBox from 'components/EgMaterials/CheckBox';
@@ -13,26 +14,35 @@ import WhiteBtn from 'components/Buttons/WhiteBtn';
 // images
 import galloping_purple_logo from 'assets/logo/galloping_purple_logo.jpg';
 
-const WebLogin = () => {
-    const navigate = useNavigate();
-    const [loginState, setLoginSelector] = useRecoilState(LoginAtomSelector);
+export interface WebLoginType {
+    loginAtom: any;
+    setLoginSelector: any;
+}
+
+const WebLogin = ({ loginAtom, setLoginSelector }: WebLoginType) => {
+    // const navigate = useNavigate();
     const [loginID, setLoginID] = useState('');
     const [loginPW, setLoginPW] = useState('');
-    const [autoLogin, setAutoLogin] = useState(false);
-    const loginHandler = (ID: string, PW: string) => {
-        if (ID === 'user' && PW === '1111') {
-            setLoginSelector('user');
-            navigate('/user');
-        } else if (ID === 'admin' && PW === '1111') {
-            setLoginSelector('admin');
-            navigate('/admin');
-        } else {
-            alert('아이디, 비밀번호를 확인하세요');
-        }
+    const [autoLogin, setAutoLogin] = useRecoilState(AutoLoginSelector);
+    console.log('autoLogin', autoLogin);
+    // POST 요청을 보낼 함수 정의
+    const mutation = useMutation({
+        mutationFn: ({ requestUrl, id, pw }: PostLoginType) => {
+            return loginPost({ requestUrl: requestUrl, id: id, pw: pw, successFunc: setLoginSelector });
+        },
+    });
+    const handleSubmit = () => {
+        // POST 요청에 보낼 데이터
+        mutation.mutate({
+            requestUrl: '/auth/login',
+            id: loginID,
+            pw: loginPW,
+            successFunc: setLoginSelector,
+        });
     };
     const handleOnKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            loginHandler(loginID, loginPW); // Enter 입력이 되면 클릭 이벤트 실행
+            handleSubmit(); // Enter 입력이 되면 클릭 이벤트 실행
         }
     };
     return (
@@ -96,7 +106,7 @@ const WebLogin = () => {
                         </div>
 
                         <WhiteBtn
-                            func={() => loginHandler(loginID, loginPW)}
+                            func={() => handleSubmit()}
                             // enterPress={handleOnKeyPress}
                             content="로그인"
                             width="full"

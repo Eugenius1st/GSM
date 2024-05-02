@@ -7,8 +7,11 @@ import PurpleBtn from 'components/Buttons/PurpleBtn';
 import { CgClose } from 'react-icons/cg';
 import { MdDelete } from 'react-icons/md';
 import { MdEdit } from 'react-icons/md';
+interface EditModalType {
+    activeFunc?: () => void;
+}
 
-const EditModal = () => {
+const EditModal = ({ activeFunc }: EditModalType) => {
     const [isShow, setIsShow] = useState(false);
     const handleShowModal = () => {
         setIsShow(true);
@@ -18,15 +21,20 @@ const EditModal = () => {
         setIsShow(false);
         document.body.style.overflow = 'unset';
     };
+    const handleActive = () => {
+        if (activeFunc) activeFunc();
+        handleCloseModal();
+    };
     return (
         <div>
-            <div
+            <button
+                type="button"
                 onClick={handleShowModal}
                 className="flex items-center ml-2"
             >
                 <span className="text-sm">수정</span>
                 <MdEdit className="w-5 h-5 text-egPurple-default" />
-            </div>
+            </button>
             {isShow ? (
                 <div className="fixed flex justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
                     <div className="fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg">
@@ -37,11 +45,14 @@ const EditModal = () => {
                         <div className="flex justify-end text-sm">
                             <WhiteBtn
                                 content={'취소'}
-                                func={handleShowModal}
+                                func={handleCloseModal}
                             />
 
                             <div>
-                                <PurpleBtn content={'수정'} />
+                                <PurpleBtn
+                                    content={'수정'}
+                                    func={handleActive}
+                                />
                             </div>
                         </div>
                     </div>

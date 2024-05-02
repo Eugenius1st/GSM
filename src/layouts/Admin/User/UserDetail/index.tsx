@@ -1,43 +1,46 @@
+// hooks
+import { useState, useEffect } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useQuery, useMutation } from '@tanstack/react-query';
+// api
+import { requestPatch, requestGet } from 'api/basic';
 // Cards
 import MemoCard from 'components/Cards/MemoCard';
 // Common
 import Divider from 'components/Common/Divider';
-// images
-import user1 from 'assets/user/user1.jpg';
 // Admin User Components
 import UserProfileCard from 'layouts/Admin/User/Components/UserProfileCard';
+// Modals
+import EditModal from 'components/Modals/EditModal';
+// Buttons
+import WhiteBtn from 'components/Buttons/WhiteBtn';
+import LightPurpleBtn from 'components/Buttons/LightPurpleBtn';
+
+interface PatchDataType {
+    requestUrl: string;
+    data?: any;
+    flagCheckFunc?: (data: boolean) => void;
+}
 
 const UserDetail = () => {
-    const userInfo = {
-        thumbnail: user1,
-        name: '손흥민',
-        gender: 'man',
-        birth: '990101-1******',
-        height: 60,
-        weight: 170,
-        phone: '010-1234-1234',
-        parentsPhone: '010-9876-9876',
-        soccerSkills: '1년 미만',
-        advantages: '장점',
-        team: '갤로핑FC',
-        position: '미드필더',
-        lessonExperience: '',
-        mainFoot: '왼발',
-        classInfo: {
-            lessonName: '엘리트반',
-            deposit: true,
-            remainingRounds: 8,
-            paymentRound: 10,
-            reasonList: [
-                { count: '+1', date: '2024-03-11', reson: '컴플레인' },
-                { count: '-1', date: '2024-03-18', reson: '당일불참 처리' },
-            ],
+    const { userId } = useParams();
+    const [curUser, setCurUser] = useState();
+    const [patchUnblockFlag, setPatchUnblockFlag] = useState(false); // 비활성화 성공 여부
+    const [patchBlockFlag, setPatchBlockFlag] = useState(false); // 비활성화 성공 여부
+
+    const navigate = useNavigate();
+    // GET 요청을 보낼 함수 정의
+    const { data, error, isLoading, refetch } = useQuery({
+        queryKey: ['userDetailInfo'],
+        queryFn: () => {
+            return requestGet({
+                requestUrl: `/student/${userId}`,
+                successFunc: setCurUser,
+                // flagCheckFunc: setIsSearched,
+            });
         },
-        marketingConsent: {
-            privacy: true,
-            event: false,
-        },
-    };
+        staleTime: 5 * 1000,
+    });
     const userMemo = {
         feedback: [
             {
@@ -63,16 +66,54 @@ const UserDetail = () => {
             { date: '2024-03-04', content: '아이들 이름 외울 필요 있음' },
         ],
     };
+    const editActive = () => {
+        navigate(`/admin/user/edit/${userId}`);
+    };
+
+    // Patch 요청
+    const mutation = useMutation({
+        mutationFn: ({ requestUrl, data, flagCheckFunc }: PatchDataType) => {
+            return requestPatch({ requestUrl: requestUrl, data: data, flagCheckFunc: flagCheckFunc });
+        },
+    });
+
+    function handleBlock() {
+        mutation.mutate({
+            requestUrl: `/auth/block/${userId}`,
+            // data: data,
+            flagCheckFunc: setPatchBlockFlag,
+        });
+    }
+    function handleUnblock() {
+        mutation.mutate({
+            requestUrl: `/auth/unblock/${userId}`,
+            // data: data,
+            flagCheckFunc: setPatchUnblockFlag,
+        });
+    }
     return (
         <div className="eg-default-wrapper">
-            <div className="eg-title">회원관리</div>
-            <div className="text-sm text-right">Edit</div>
-            <UserProfileCard userInfo={userInfo} />
+            <div className="flex items-center justify-between">
+                <div className="eg-title">회원관리</div>
+                <EditModal activeFunc={editActive} />
+            </div>
+            {curUser && <UserProfileCard userInfo={curUser} />}
             <Divider />
             <MemoCard
                 tab={['피드백', '특이사항']}
                 memo={userMemo}
             />
+            <div className="flex justify-end my-8">
+                {/* 유저 차단, 활성화 구분 정보 있다면 버튼 1개만 보이게 하는 것이 좋을 듯 */}
+                <WhiteBtn
+                    content="유저 차단"
+                    func={handleBlock}
+                />
+                <LightPurpleBtn
+                    content="차단 해제"
+                    func={handleUnblock}
+                />
+            </div>
         </div>
     );
 };

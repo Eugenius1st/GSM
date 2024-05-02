@@ -1,58 +1,95 @@
-// Buttons
-import WhiteBtn from 'components/Buttons/WhiteBtn';
+// hooks
+import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+// api
+import { requestGet } from 'api/basic';
 // Eg Components
 import CoachTable from 'layouts/Admin/Coach/Components/CoachTable';
-// images
-import coach_son from 'assets/coach/coach_son.jpeg';
-import coach_kim from 'assets/coach/coach_kim.jpeg';
-import coach_hong from 'assets/coach/coach_hong.jpeg';
-
-export interface ColumnType {
-    id: string;
-    label: string;
-    minWidth?: number;
-    align?: 'center' | 'left' | 'right' | 'inherit' | 'justify' | undefined;
+// Pagination
+import PaginationRounded from 'components/EgMaterials/Pagenation';
+// Common
+import SearchBar from 'components/Common/SearchBar';
+import SelectMenu from 'components/Common/SelectMenu';
+export interface RowDataType {
+    _id: number;
+    photo: string;
+    name: string;
+    birth: number;
+    lv: number;
 }
 const Coach = () => {
-    const coachesInfoCol: ColumnType[] = [
-        { id: 'id', label: 'id', minWidth: 100, align: 'left' },
-        { id: 'thumnail', label: 'Profile', minWidth: 100, align: 'left' },
-        { id: 'name', label: 'Name', minWidth: 100, align: 'center' },
-        { id: 'age', label: 'Age', minWidth: 100, align: 'center' },
-        { id: 'infoBtn', label: '정보보기', minWidth: 100, align: 'center' },
-        { id: 'classBtn', label: '수업보기', minWidth: 100, align: 'center' },
-    ];
+    const [curPage, setCurPage] = useState(1);
+    const [curAllCoaches, setCurAllCoaches] = useState([]);
+    const [defaultAllCoaches, setDefaultllCoaches] = useState([]);
+    const [allCount, setAllCount] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [tableRowData, setTableRowData] = useState<RowDataType[]>([]);
 
-    const coachesInfoRow = [
-        {
-            id: 1,
-            thumbnail: coach_son,
-            name: '손흥민',
-            birth: '1998',
-            infoBtn: true,
-            classBtn: true,
+    // GET 요청을 보낼 함수 정의
+    const { data, error, isLoading, refetch } = useQuery({
+        queryKey: ['allCoaches'],
+        queryFn: () => {
+            return requestGet({
+                requestUrl: `/admin?page=${curPage}&take=${itemsPerPage}`,
+                // successFunc: setAllCoaches,
+                // flagCheckFunc: setIsSearched,
+            });
         },
-        {
-            id: 2,
-            thumbnail: coach_kim,
-            name: '김민재',
-            birth: '1997',
-            infoBtn: true,
-            classBtn: true,
-        },
-        {
-            id: 3,
-            thumbnail: coach_hong,
-            name: '홍길동',
-            birth: '2000',
-            infoBtn: true,
-            classBtn: true,
-        },
-    ];
+        staleTime: 5 * 1000,
+        // enabled: queryEnabled, // enabled 옵션을 사용하여 쿼리를 활성화 또는 비활성화합니다.
+    });
+
+    // Table 에 적합한 Row 형태로 변경하기
+    function convertTableRowData() {
+        // 코치 정보를 담을 빈 배열 생성
+        const rows: RowDataType[] = [];
+        curAllCoaches.forEach((coach: RowDataType, index: number) => {
+            const { _id, photo, name, birth, lv } = coach; // 원하는 속성들을 추출
+            rows.push({
+                _id: _id, // 배열 인덱스를 이용하여 id 부여
+                photo: photo, // 사진 속성 그대로 사용
+                name: name, // 이름 속성 그대로 사용
+                birth: new Date(birth).getFullYear(), // 출생일에서 연도만 추출
+                lv: lv, // 레벨 속성 그대로 사용
+            });
+        });
+        // 변환된 배열 반환
+        setTableRowData(rows);
+    }
+    // 전체 GET 요청시 렌더링
+    useEffect(() => {
+        if (data) {
+            setCurAllCoaches(data.result);
+            setDefaultllCoaches(data.result);
+            setAllCount(data.count);
+        }
+    }, [data]);
+
+    // 페이지 변경시 함수 호출
+    useEffect(() => {
+        refetch();
+    }, [curPage]);
+
+    useEffect(() => {
+        if (curAllCoaches.length > 0) {
+            convertTableRowData();
+        }
+    }, [curAllCoaches]);
+
     return (
         <div className="mb-2 eg-default-wrapper">
             <div className="eg-title">코치관리</div>
-            <CoachTable />
+
+            <CoachTable tableRowData={tableRowData && tableRowData} />
+            <div className="flex justify-center mt-4">
+                <PaginationRounded
+                    totalItems={allCount ? allCount : 1}
+                    itemsPerPage={itemsPerPage}
+                    curPage={curPage}
+                    // setCurPage={setCurPage}
+                    setCurPage={(page) => setCurPage(page)}
+                />
+            </div>
         </div>
     );
 };

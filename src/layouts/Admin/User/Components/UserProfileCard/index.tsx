@@ -8,10 +8,13 @@ import EgCheckBox from 'components/EgMaterials/CheckBox';
 // Common
 import Divider from 'components/Common/Divider';
 import BasicModal from 'components/Modals/BasicModal';
-
+// utility
+import { positionMatcherByEng } from 'utility/standardConst';
 // icons
 import { IoIosArrowDown } from 'react-icons/io';
 import { IoIosArrowUp } from 'react-icons/io';
+// images
+import userImg from 'assets/user/user.png';
 
 interface reasonList {
     count?: string;
@@ -26,28 +29,51 @@ interface ClassInfo {
     reasonList: reasonList[];
 }
 
-interface MarketingConsent {
-    privacy: boolean | true;
-    event: boolean | true;
+interface prosImproType {
+    category: string;
+    name: string;
 }
 
 interface UserInfoType {
-    thumbnail: string;
-    name: string;
-    gender: string;
-    birth: string;
-    height: number;
-    weight: number;
+    classGroupId?: any;
+    classGroupName?: string;
+    _id?: string;
+    isDeleted?: boolean;
+    deletedAt?: any;
+    authId?: string;
+    photo?: string;
+    currentRoundId?: string;
+    classId?: any;
+    className?: string;
+    name?: string;
+    name_token?: string;
+    name_token_heads?: string;
     phone?: string;
-    parentsPhone?: string;
-    soccerSkills?: string;
-    advantages?: string;
+    phoneFather?: string;
+    phoneMother?: string;
+    residence?: string;
+    residenceSpecific?: string;
+    birth?: string;
+    gender?: string;
+    height?: number;
+    weight?: number;
+    pros?: prosImproType[];
+    improvements?: prosImproType[];
     team?: string;
-    position?: string;
-    lessonExperience?: string;
-    mainFoot?: string;
-    classInfo: ClassInfo;
-    marketingConsent: MarketingConsent;
+    grade?: string;
+    position?: string[];
+    lessonExpire?: any;
+    soccerHistory?: string;
+    lessonHistory?: string;
+    majorFoot?: string;
+    marketingAgree?: boolean;
+    serviceAgree?: boolean;
+    createdAt?: string;
+    updatedAt?: string;
+    __v?: number;
+    name_spaced?: string;
+    name_token_heads_spaced?: string;
+    name_token_spaced?: string;
 }
 
 interface InfoType {
@@ -56,105 +82,166 @@ interface InfoType {
 
 const UserProfileCard = ({ userInfo }: InfoType) => {
     const {
-        thumbnail,
+        classGroupId,
+        classGroupName,
+        _id,
+        isDeleted,
+        deletedAt,
+        authId,
+        photo,
+        currentRoundId,
+        classId,
+        className,
         name,
-        gender,
+        name_token,
+        name_token_heads,
+        phone,
+        phoneFather,
+        phoneMother,
+        residence,
+        residenceSpecific,
         birth,
+        gender,
         height,
         weight,
-        phone,
-        parentsPhone,
-        soccerSkills,
-        advantages,
+        pros,
+        improvements,
         team,
+        grade,
         position,
-        lessonExperience,
-        mainFoot,
-        classInfo,
-        marketingConsent,
+        lessonExpire,
+        soccerHistory,
+        lessonHistory,
+        majorFoot,
+        marketingAgree,
+        serviceAgree,
+        createdAt,
+        updatedAt,
+        __v,
+        name_spaced,
+        name_token_heads_spaced,
+        name_token_spaced,
     } = userInfo;
     let isMobile = useRecoilValue(IsMobileSelector);
-    const titleStyle = 'mr-2 font-bold my-1';
-    const listStyle = 'inline-block w-56';
+    const titleStyle = 'mr-2 font-bold px-1 my-1 bg-egPurple-superLight';
+    const listStyle = 'w-64 min-h-14';
+    const contentStyle = 'px-1';
     const [seeMore, setSeeMore] = useState(false);
-    const [marketingPrivacy, setMarketingPrivacy] = useState(marketingConsent.privacy);
-    const [marketingEvent, setMarketingEvent] = useState(marketingConsent.event);
+    const [marketingPrivacy, setMarketingPrivacy] = useState(marketingAgree);
+    const [marketingEvent, setMarketingEvent] = useState(serviceAgree);
 
     return (
         <div>
-            <div className="flex items-center">
+            <div className="flex items-center justify-between">
                 <img
-                    src={thumbnail}
+                    src={photo === 'any-photo-url' ? userImg : ''}
                     alt="coach_son"
-                    className="object-cover h-40 mr-4 rounded-full min-w-40"
+                    className="object-cover h-40 p-1 mr-4 border rounded-full border-egPurple-default min-w-40"
                 />
-                <ul>
-                    <li className={listStyle}>
-                        <span className={titleStyle}>코치이름:</span>
-                        <span>{name}</span>
-                    </li>
-                    <li className={listStyle}>
-                        <span className={titleStyle}>생년월일:</span>
-                        <span>{birth}</span>
-                    </li>
-                    <li className={listStyle}>
-                        <span className={titleStyle}>성별:</span>
-                        <span>{gender === 'man' ? '남자' : '여자'}</span>
-                    </li>
-                    <li className={listStyle}>
-                        <span className={titleStyle}>키/무게:</span>
-                        <span>{height}</span>
-                        <span>{weight}</span>
-                    </li>
-                    <li className={listStyle}>
-                        <span className={titleStyle}>휴대폰:</span>
-                        <span>{phone}</span>
-                    </li>
-                    <li className={listStyle}>
-                        <span className={titleStyle}>부모님 휴대폰:</span>
-                        <span>{parentsPhone}</span>
-                    </li>
-                    <li className={listStyle}>
-                        <span className={titleStyle}>축구 구력:</span>
-                        <span>{soccerSkills}</span>
-                    </li>
-                    <li className={listStyle}>
-                        <span className={titleStyle}>장점:</span>
-                        <span>{advantages}</span>
-                    </li>
-                    <li className={listStyle}>
-                        <span className={titleStyle}>소속:</span>
-                        <span>{team}</span>
-                    </li>
-                    <li className={listStyle}>
-                        <span className={titleStyle}>포지션:</span>
-                        <span>{position}</span>
-                    </li>
-                    <li className={listStyle}>
-                        <span className={titleStyle}>레슨 경험:</span>
-                        <span>{lessonExperience}</span>
-                    </li>
-                    <li className={listStyle}>
-                        <span className={titleStyle}>주 발(사용발):</span>
-                        <span>{mainFoot}</span>
-                    </li>
-                </ul>
+                <div className={isMobile ? 'grid grid-cols-1' : 'grid grid-cols-2'}>
+                    <div className={listStyle}>
+                        <div className={titleStyle}>이름</div>
+                        <div className={contentStyle}>{name}</div>
+                    </div>
+                    <div className={listStyle}>
+                        <div className={titleStyle}>생년월일</div>
+                        <div className={contentStyle}>{birth?.slice(0, 10)}</div>
+                    </div>
+                    <div className={listStyle}>
+                        <div className={titleStyle}>성별</div>
+                        <div className={contentStyle}>{gender === 'man' ? '남자' : '여자'}</div>
+                    </div>
+                    <div className={listStyle}>
+                        <div className={titleStyle}>키 / 무게</div>
+                        <div className={contentStyle}>
+                            {height}cm / {weight}kg
+                        </div>
+                    </div>
+                    <div className={listStyle}>
+                        <div className={titleStyle}>휴대폰</div>
+                        <div className={contentStyle}>{phone}</div>
+                    </div>
+
+                    <div className={listStyle}>
+                        <div className={titleStyle}>부모님 휴대폰</div>
+                        {phoneFather && <div className={contentStyle}>부: {phoneFather}</div>}
+                        {phoneMother && <div className={contentStyle}>모: {phoneMother}</div>}
+                    </div>
+                    <div className={listStyle}>
+                        <div className={titleStyle}>주소</div>
+                        <div className={contentStyle}>{residence}</div>
+                        <div className={contentStyle}>{residenceSpecific}</div>
+                    </div>
+
+                    <div className={listStyle}>
+                        <div className={titleStyle}>포지션</div>
+                        <div className={contentStyle}>
+                            {position?.map((el, idx) => (
+                                <span
+                                    key={idx}
+                                    className="border border-egPurple-light rounded-sm px-[2px] py-[1px] m-[2px] inline-block"
+                                >
+                                    {positionMatcherByEng(el)}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                    <div className={listStyle}>
+                        <div className={titleStyle}>장점</div>
+                        {pros?.map((el, idx) => (
+                            <span
+                                key={idx}
+                                className="border border-egPurple-light  bg-egGrey-light rounded-sm px-[2px] py-[1px] m-[2px] inline-block"
+                            >
+                                {el.name}
+                            </span>
+                        ))}
+                    </div>
+                    <div className={listStyle}>
+                        <div className={titleStyle}>개선점</div>
+                        {improvements?.map((el, idx) => (
+                            <span
+                                key={idx}
+                                className="border border-egPurple-light bg-egGrey-light rounded-sm px-[2px] py-[1px] m-[2px] inline-block"
+                            >
+                                {el.name}
+                            </span>
+                        ))}
+                    </div>
+
+                    <div className={listStyle}>
+                        <div className={titleStyle}>축구 구력</div>
+                        <div className={contentStyle}>{soccerHistory}</div>
+                    </div>
+                    <div className={listStyle}>
+                        <div className={titleStyle}>레슨 경험</div>
+                        <div className={contentStyle}>{lessonHistory}</div>
+                    </div>
+                    <div className={listStyle}>
+                        <div className={titleStyle}>소속</div>
+                        <div className={contentStyle}>{team}</div>
+                    </div>
+                    <div className={listStyle}>
+                        <div className={titleStyle}>주 발(사용발)</div>
+                        <div className={contentStyle}>{majorFoot}</div>
+                    </div>
+                </div>
             </div>
             <Divider />
             <div>
                 <ul>
                     <li className="flex mb-1">
                         <div className="font-bold w-28">레슨명</div>
-                        <div className="">{classInfo.lessonName}</div>
+                        <div>{classGroupName}</div>
                     </li>
                     <li className="flex mb-1">
                         <div className="font-bold w-28">입금여부</div>
-                        <div className="">{classInfo.deposit ? 'O' : 'X'}</div>
+                        {/* <div className="">{classInfo.deposit ? 'O' : 'X'}</div> */}
                     </li>
                     <li className="flex justify-between mb-4">
                         <div className="flex">
                             <div className="font-bold w-28">회차추가</div>
-                            {classInfo.remainingRounds}/{classInfo.paymentRound}
+                            {/* {classInfo.remainingRounds}/{classInfo.paymentRound} */}
                         </div>
                         <div className="flex">
                             <button
@@ -181,7 +268,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                                             <span className="mr-4 text-lg font-semibold">날짜</span>
                                             <input
                                                 type="date"
-                                                className="w-40 p-1 border rounded-md border-egPurple-semiLght"
+                                                className="w-40 p-1 border rounded-md border-egPurple-semiLight"
                                             />
                                         </div>
 
@@ -192,7 +279,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                                                 type="number"
                                                 min="0"
                                                 max="99"
-                                                className="w-40 p-1 border rounded-md border-egPurple-semiLght"
+                                                className="w-40 p-1 border rounded-md border-egPurple-semiLight"
                                             />
                                         </div>
                                         <div className="flex mb-2">
@@ -203,7 +290,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                                                 rows={3}
                                                 maxLength={30}
                                                 placeholder="사유는 30글자 내로 작성하세요"
-                                                className="p-1 border rounded-md border-egPurple-semiLght"
+                                                className="p-1 border rounded-md border-egPurple-semiLight"
                                             ></textarea>
                                         </div>
                                     </div>
@@ -225,7 +312,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                                             <span className="mr-4 text-lg font-semibold">날짜</span>
                                             <input
                                                 type="date"
-                                                className="w-40 p-1 border rounded-md border-egPurple-semiLght"
+                                                className="w-40 p-1 border rounded-md border-egPurple-semiLight"
                                             />
                                         </div>
 
@@ -236,7 +323,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                                                 type="number"
                                                 min="-99"
                                                 max="0"
-                                                className="w-40 p-1 border rounded-md border-egPurple-semiLght"
+                                                className="w-40 p-1 border rounded-md border-egPurple-semiLight"
                                             />
                                         </div>
                                         <div className="flex mb-2">
@@ -247,7 +334,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                                                 rows={3}
                                                 maxLength={30}
                                                 placeholder="사유는 30글자 내로 작성하세요"
-                                                className="p-1 border rounded-md border-egPurple-semiLght"
+                                                className="p-1 border rounded-md border-egPurple-semiLight"
                                             ></textarea>
                                         </div>
                                     </div>
@@ -257,7 +344,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                             />
                         </div>
                     </li>
-                    {seeMore &&
+                    {/* {seeMore &&
                         classInfo.reasonList.map((el, idx) => (
                             <li
                                 key={idx}
@@ -270,7 +357,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                                     <div className="w-1/3">{el.date}</div>
                                 </div>
                             </li>
-                        ))}
+                        ))} */}
                     <li className="flex mb-1">
                         <div className="mt-[9px] w-28 font-bold flex-shrink-0">마케팅 동의</div>
                         <div>
@@ -279,14 +366,14 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                                 className="inline-block w-56"
                             >
                                 <span>개인정보 수집 및 이용 동의</span>
-                                <EgCheckBox checked={marketingPrivacy} />
+                                {marketingPrivacy && <EgCheckBox checked={marketingPrivacy} />}
                             </div>
                             <div
                                 onClick={() => setMarketingEvent(!marketingEvent)}
                                 className="inline-block w-56"
                             >
                                 <span>소식 수신 및 이벤트 참여</span>
-                                <EgCheckBox checked={marketingEvent} />
+                                {marketingEvent && <EgCheckBox checked={marketingEvent} />}
                             </div>
                         </div>
                     </li>

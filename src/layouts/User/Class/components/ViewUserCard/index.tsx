@@ -2,17 +2,21 @@
 import colors from 'assets/colors/palette';
 // Buttons
 import GreyBorderBtn from 'components/Buttons/GreyBorderBtn';
+// Cards
+import EmptyCard from 'components/Cards/EmptyCard';
 
 interface AttendUserType {
-    profile: string;
+    _id: string;
     name: string;
-    age: number;
-    attend?: string;
+    birth: string;
+    studentId: string;
+    photo: string;
+    status: string;
 }
 interface AttendInfoType {
     attendInfo: AttendUserType[];
 }
-const UserViewUserCard = ({ attendInfo }: AttendInfoType) => {
+const UserViewUserCard = ({ attendInfo = [] }: AttendInfoType) => {
     const userMemo = {
         feedback: [
             { date: '2024-03-07', content: '3골 넣음' },
@@ -37,27 +41,36 @@ const UserViewUserCard = ({ attendInfo }: AttendInfoType) => {
     };
     return (
         <div className="px-2">
-            {attendInfo.map((el, idx) => (
-                <div
-                    key={idx}
-                    className="flex items-center p-2 "
-                >
-                    <div>
-                        <img
-                            src={el.profile}
-                            className="object-cover w-12 h-12 mr-4 rounded-full"
-                        />
-                    </div>
-                    <div className="flex w-full">
-                        <div className="ml-16 ">{el.name}</div>
-                        <div className="ml-16 text-egGrey-default">{el.age}00 년생</div>
-                    </div>
-                </div>
-            ))}
-            {attendInfo.length > 5 && (
-                <div className="flex justify-center mt-5">
-                    <GreyBorderBtn content="더보기" />
-                </div>
+            {attendInfo.length > 0 ? (
+                <>
+                    {attendInfo.map((el, idx) => (
+                        <div
+                            key={idx}
+                            className="flex items-center p-2 "
+                        >
+                            <div>
+                                <img
+                                    src={el.photo}
+                                    className="object-cover w-12 h-12 mr-4 rounded-full"
+                                />
+                            </div>
+                            <div className="flex w-full">
+                                <div className="ml-16 ">{el.name}</div>
+                                <div className="ml-16 text-egGrey-default">{el.birth}00 년생</div>
+                            </div>
+                        </div>
+                    ))}
+                    {attendInfo.length > 5 && (
+                        <div className="flex justify-center mt-5">
+                            <GreyBorderBtn content="더보기" />
+                        </div>
+                    )}
+                </>
+            ) : (
+                <EmptyCard
+                    content="아직 인원이 없습니다"
+                    customStyle="flex flex-col items-center justify-center py-20 my-5 text-egPurple-semiLight"
+                />
             )}
         </div>
     );

@@ -9,7 +9,7 @@ import CustomBtn from 'components/Buttons/CustomBtn';
 import MapSearch from 'components/Map/MapSearch';
 // Buttons
 import PurpleBtn from 'components/Buttons/PurpleBtn';
-interface MapDataType {
+export interface MapDataType {
     address_name?: string;
     category_group_code?: string;
     category_group_name?: string;
@@ -23,9 +23,13 @@ interface MapDataType {
     x: string;
     y: string;
 }
-const ResidenceSearchModal = () => {
+interface ResidenceSearchModalType {
+    residence: string;
+    setResidence: (data: string) => void;
+}
+const ResidenceSearchModal = ({ residence, setResidence }: ResidenceSearchModalType) => {
     const [isShow, setIsShow] = useState(false);
-    const [residence, setResidence] = useState<MapDataType>();
+    const [curResidence, setCurResidence] = useState<MapDataType>();
     const handleShowModal = () => {
         setIsShow(true);
         document.body.style.overflow = 'hidden';
@@ -35,6 +39,7 @@ const ResidenceSearchModal = () => {
         document.body.style.overflow = 'unset';
     };
     const confirmResidence = () => {
+        if (curResidence && curResidence.address_name) setResidence(curResidence.address_name);
         handleCloseModal();
     };
     return (
@@ -59,14 +64,14 @@ const ResidenceSearchModal = () => {
 
                         <MapSearch
                             // residence={residence}
-                            setResidence={setResidence}
+                            setResidence={setCurResidence}
                         />
                         <div className="flex justify-between">
                             <div className="flex items-center mr-2 font-bold text-egPurple-default">
                                 내 주소
                                 <div className="font-medium text-egBlack-default">
-                                    {residence ? (
-                                        ` : ${residence.road_address_name}`
+                                    {curResidence ? (
+                                        ` : ${curResidence.road_address_name}`
                                     ) : (
                                         <div className="text-egGrey-default">{` : 아직 선택되지 않았습니다`}</div>
                                     )}
@@ -74,7 +79,7 @@ const ResidenceSearchModal = () => {
                             </div>
                             <PurpleBtn
                                 content="주소 선택"
-                                func={residence && confirmResidence}
+                                func={curResidence && confirmResidence}
                             />
                         </div>
                     </div>

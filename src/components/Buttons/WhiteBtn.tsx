@@ -12,7 +12,7 @@ const WhiteBtn = ({ content, width, customStyle, enterPress, func }: WhiteBtnTyp
         <button
             type="button"
             onKeyDown={() => enterPress}
-            onClick={func}
+            onClick={func && func}
             className={`${customStyle} px-4 py-2 m-1 rounded-md text-egPurple-default bg-egGrey-semiLight hover:bg-egPurple-superLight w-${width} active:bg-egPurple-default active:text-egWhite-default`}
         >
             {content}

@@ -1,6 +1,9 @@
 // hooks
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+// recoil
+import { useRecoilState } from 'recoil';
+import { LoginAtomSelector, LoginStateSelector } from 'atom/auth';
 // Common
 import EgInput from 'components/EgMaterials/EgInput';
 import EgCheckBox from 'components/EgMaterials/CheckBox';
@@ -14,6 +17,13 @@ import galloping_purple_logo from 'assets/logo/galloping_purple_logo.jpg';
 const WebLogout = () => {
     const navigate = useNavigate();
     const [autoLogin, setAutoLogin] = useState(false);
+    const [loginAtom, setLoginSelector] = useRecoilState(LoginAtomSelector);
+    const [loginState, setStateSelector] = useRecoilState(LoginStateSelector);
+    const handleLogout = () => {
+        setLoginSelector('initial');
+        setStateSelector('initial');
+        navigate('/');
+    };
 
     return (
         <div className="w-screen h-screen bg-top bg-cover bg-login-bg z-[0] relative">
@@ -48,14 +58,14 @@ const WebLogout = () => {
                         <div className="mb-8">더 좋은 서비스를 제공하는 GSM 이 되겠습니다.</div>
                         <div className="mt-16">
                             <CustomBtn
-                                func={() => navigate('/')}
+                                func={() => handleLogout()}
                                 content="로그아웃"
                                 customStyle="px-4 py-3 m-1 rounded-md text-egPurple-default bg-egPurple-light hover:text-egWhite-default hover:bg-egPurple-default w-full active:bg-egPurple-default active:text-egWhite-default"
                             />
                         </div>
                         <div className="mt-1">
                             <WhiteBtn
-                                // func={() => navigate.goBack()}
+                                func={() => navigate(-1)}
                                 content="아니오"
                                 width="full"
                                 customStyle="py-3"

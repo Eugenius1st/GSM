@@ -1,13 +1,20 @@
+// hooks
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
+// api
+import { requestGet, requestDelete } from 'api/basic';
 // Class Components
 import ViewUserCard from 'layouts/Admin/Class/Components/ViewUserCard';
 // Icons
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 // Cards
 import ClassCard from 'components/Cards/ClassCard';
+import { ClassInfoType } from 'components/Cards/ClassCard';
 // Buttons
 import PurpleBtn from 'components/Buttons/PurpleBtn';
 // images
-import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
 import user1 from 'assets/user/user1.jpg';
 import user2 from 'assets/user/user2.png';
 import user3 from 'assets/user/user3.jpeg';
@@ -17,20 +24,50 @@ import Divider from 'components/Common/Divider';
 import WhiteBtn from 'components/Buttons/WhiteBtn';
 // Modals
 import DeleteModal from 'components/Modals/DeleteModal';
-import EditModal from 'components/Modals/EditModal';
+import ClassEditModal from 'components/Modals/ClassEditModal';
 
 const ClassDetail = () => {
-    const classInfo = {
-        id: 1,
-        classImage: class_adult_woman,
-        title: '성인남성반',
-        date: '2024-03-09',
-        location: '수원월드컵점',
-        attendCount: '8/10',
-        waiting: 4,
-        coaches: ['안유진', '최보미'],
-        notice: '신장 00cm 제한입니다. 조건에 맞지 않는 신청시, 취소됩니다.',
+    const navigate = useNavigate();
+    const { classId } = useParams();
+    const [curClass, setCurClass] = useState<ClassInfoType | undefined>();
+    const [patchCheckFlag, setPatchCheckFlag] = useState(false);
+    const [deleteState, setDeleteState] = useState(false);
+    // GET 요청을 보낼 함수 정의
+    const { data, error, isLoading, refetch } = useQuery({
+        queryKey: ['adminClassDetail'],
+        queryFn: () => {
+            if (classId) {
+                return requestGet({
+                    requestUrl: `/class/${classId}`,
+                });
+            } else {
+                return Promise.resolve('');
+            }
+        },
+        staleTime: 5 * 1000,
+    });
+
+    // DELETE 요청을 보낼 함수 정의
+    const deleteSubmit = async () => {
+        requestDelete({
+            requestUrl: `${process.env.REACT_APP_API_URL}/class/${classId}`,
+            flagCheckFunc: setDeleteState,
+        });
     };
+
+    useEffect(() => {
+        setCurClass(data);
+    }, [data]);
+    useEffect(() => {
+        if (deleteState) navigate(-1);
+    }, [deleteState]);
+    useEffect(() => {
+        if (patchCheckFlag) {
+            refetch();
+            setPatchCheckFlag(false);
+        }
+    }, [patchCheckFlag]);
+
     const attendInfo = [
         { profile: user1, name: '홍길동', age: 13, attend: '출석' },
         { profile: user2, name: '홍이동', age: 13, attend: '불참' },
@@ -47,7 +84,6 @@ const ClassDetail = () => {
         { profile: user3, name: '홍삼동', age: 13, attend: '지각' },
         { profile: user4, name: '홍사동', age: 13, attend: '취소' },
     ];
-
     return (
         <div className="eg-default-wrapper">
             <div className="flex items-center justify-between eg-title">
@@ -56,13 +92,20 @@ const ClassDetail = () => {
                     <MdOutlineArrowForwardIos className="w-4 h-4 mx-1" />
                     <span> 수업정보</span>
                 </div>
-                <div className="flex">
-                    <EditModal />
-                    <DeleteModal />
-                </div>
+                {classId && curClass && (
+                    <div className="flex">
+                        <ClassEditModal
+                            classId={classId}
+                            curClass={curClass}
+                            patchCheckFlag={patchCheckFlag}
+                            setPatchCheckFlag={setPatchCheckFlag}
+                        />
+                        <DeleteModal deleteFunc={deleteSubmit} />
+                    </div>
+                )}
             </div>
             <div>
-                <ClassCard classInfo={classInfo} />
+                <ClassCard classInfo={curClass} />
             </div>
 
             <Divider />

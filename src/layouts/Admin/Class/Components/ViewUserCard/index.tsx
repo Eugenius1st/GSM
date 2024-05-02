@@ -42,7 +42,7 @@ const CoachViewUserCard = ({ attendInfo }: AttendInfoType) => {
         ],
     };
     return (
-        <div className="px-2 ">
+        <div className="z-0 px-2">
             {attendInfo.map((el, idx) => (
                 <div
                     key={idx}
@@ -55,7 +55,7 @@ const CoachViewUserCard = ({ attendInfo }: AttendInfoType) => {
                     <div className="mr-4">
                         {el.name} / {el.age} 세
                     </div>
-                    <div className="flex items-center justify-end">
+                    <div className="flex items-center justify-end ">
                         <DropDown
                             itemList={[
                                 { item: '참석', bgColor: egWhite.default },

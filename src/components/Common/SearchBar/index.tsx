@@ -4,7 +4,13 @@ import TextField from '@mui/material/TextField';
 // icons
 import { IoMdSearch } from 'react-icons/io';
 
-const SearchBar = () => {
+interface SearchBarType {
+    searchFunc: () => void;
+    searchInput: string;
+    setSearchInput: (value: string) => void;
+}
+
+const SearchBar = ({ searchFunc, searchInput, setSearchInput }: SearchBarType) => {
     return (
         <Box
             component="form"
@@ -14,14 +20,19 @@ const SearchBar = () => {
         >
             <TextField
                 sx={{
-                    width: '13rem',
+                    width: '18rem',
                     paddingRight: '2rem',
                     paddingTop: '0.5rem',
                 }}
+                onChange={(e) => setSearchInput(e.target.value)}
+                value={searchInput}
                 variant="standard"
             />
 
-            <IoMdSearch className="absolute w-10 h-10 hover:bg-[rgba(0,0,0,0.05)] rounded-full p-2 right-1.5 top-1" />
+            <IoMdSearch
+                onClick={() => searchFunc()}
+                className="absolute w-10 h-10 hover:bg-[rgba(0,0,0,0.05)] rounded-full p-2 right-1.5 top-1"
+            />
         </Box>
     );
 };
