@@ -1,8 +1,12 @@
 // hooks
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+// Modals
+import PasswordEditModal from 'components/Modals/PasswordEditModal';
 // Buttons
 import WhiteBtn from 'components/Buttons/WhiteBtn';
+import PurpleBtn from 'components/Buttons/PurpleBtn';
+
 interface UserProfileCardType {
     isMobile: boolean;
     thumbnail: string;
@@ -33,7 +37,7 @@ const UserProfileCard = ({ isMobile, thumbnail, name, birth, classInfo }: UserPr
             className={
                 position > 77 && !isMobile
                     ? 'fixed w-[15.15rem] p-4 border border-egGrey-default mt-[-5.5rem]'
-                    : 'p-4 border h-[24rem] border-egGrey-default'
+                    : 'p-4 border h-[25rem] border-egGrey-default'
             }
         >
             <div className="">
@@ -64,8 +68,16 @@ const UserProfileCard = ({ isMobile, thumbnail, name, birth, classInfo }: UserPr
                             {classInfo.remainingRounds} / {classInfo.paymentRound}
                         </div>
                     </div>
-                    <div className="mt-10">
-                        <WhiteBtn
+                    <div className="mt-4">
+                        <PasswordEditModal
+                            modalBtn={
+                                <WhiteBtn
+                                    content="비밀번호 변경"
+                                    customStyle={'w-full'}
+                                />
+                            }
+                        />
+                        <PurpleBtn
                             content="로그아웃"
                             width={'full'}
                             func={() => navigation('/logout')}

@@ -26,6 +26,7 @@ interface InfoType {
 
 const CoachProfileCard = ({ coachInfo }: InfoType) => {
     const titleStyle = 'mr-2 font-bold my-1';
+    console.log('coachInfo', coachInfo);
     return (
         <div>
             {coachInfo && (
@@ -41,10 +42,12 @@ const CoachProfileCard = ({ coachInfo }: InfoType) => {
                                 <span className={titleStyle}>코치이름:</span>
                                 <span>{coachInfo.name}</span>
                             </li>
-                            <li>
-                                <span className={titleStyle}>생년월일:</span>
-                                <span>{coachInfo.birth.slice(0, 10)}</span>
-                            </li>
+                            {coachInfo.birth && (
+                                <li>
+                                    <span className={titleStyle}>생년월일:</span>
+                                    <span>{coachInfo.birth.slice(0, 10)}</span>
+                                </li>
+                            )}
                             <li>
                                 <span className={titleStyle}>성별:</span>
                                 <span>{coachInfo.gender === 'male' ? '남자' : '여자'}</span>
@@ -53,10 +56,12 @@ const CoachProfileCard = ({ coachInfo }: InfoType) => {
                                 <span className={titleStyle}>군필여부:</span>
                                 <span>{coachInfo.duty}</span>
                             </li>
-                            <li>
-                                <span className={titleStyle}>자격증:</span>
-                                <span>{coachInfo.license.join(', ')}</span>
-                            </li>
+                            {coachInfo.license && coachInfo.license.length > 0 && (
+                                <li>
+                                    <span className={titleStyle}>자격증:</span>
+                                    <span>{coachInfo.license.join(', ')}</span>
+                                </li>
+                            )}
                         </ul>
                     </div>
                     <Divider />
