@@ -15,6 +15,8 @@ import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
 // images
 import userImg from "assets/user/user.png";
+// Admin User Components
+import UserRoundTest from "layouts/Admin/User/Components/UserRoundProduct";
 
 interface reasonList {
   count?: string;
@@ -248,10 +250,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
             <div className="font-bold w-28">레슨명</div>
             <div>{classGroupName}</div>
           </li>
-          <li className="flex mb-1">
-            <div className="font-bold w-28">입금여부</div>
-            {/* <div className="">{classInfo.deposit ? 'O' : 'X'}</div> */}
-          </li>
+
           <li className="flex justify-between mb-4">
             <div className="flex">
               <div className="font-bold w-28">회차추가</div>
@@ -269,49 +268,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                   <IoIosArrowDown className="inline ml-1" />
                 )}
               </button>
-              <BasicModal
-                modalBtn={
-                  <button className="px-[10px] py-1 ml-2 border rounded-md text-egPurple-default border-egPurple-default">
-                    +
-                  </button>
-                }
-                modalTitle={"회차추가"}
-                modalContents={
-                  <div className="p-4">
-                    <div className="flex mb-2">
-                      <span className="mr-4 text-lg font-semibold">날짜</span>
-                      <input
-                        type="date"
-                        className="w-40 p-1 border rounded-md border-egPurple-semiLight"
-                      />
-                    </div>
-
-                    <div className="flex mb-2">
-                      <span className="mr-4 text-lg font-semibold">횟수</span>
-                      <input
-                        placeholder="숫자 입력"
-                        type="number"
-                        min="0"
-                        max="99"
-                        className="w-40 p-1 border rounded-md border-egPurple-semiLight"
-                      />
-                    </div>
-                    <div className="flex mb-2">
-                      <span className="mr-4 text-lg font-semibold">사유</span>
-                      <textarea
-                        name="opinion"
-                        cols={30}
-                        rows={3}
-                        maxLength={30}
-                        placeholder="사유는 30글자 내로 작성하세요"
-                        className="p-1 border rounded-md border-egPurple-semiLight"
-                      ></textarea>
-                    </div>
-                  </div>
-                }
-                modalFooterExitBtn={"취소"}
-                modalFooterActiveBtn={"제출"}
-              />
+              <UserRoundTest />
 
               <BasicModal
                 modalBtn={
