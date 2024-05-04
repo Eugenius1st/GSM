@@ -92,7 +92,10 @@ export async function requestDelete({
   flagCheckFunc,
 }: RegistDeleteType) {
   try {
-    const response = await axios.delete(`${requestUrl}`, { data: data });
+    const response = await axios.delete(
+      `${process.env.REACT_APP_API_URL}${requestUrl}`,
+      { data: data }
+    );
     console.log("DELETE 요청 되었습니다", response.data);
     if (successFunc) successFunc(response.status);
     if (flagCheckFunc) flagCheckFunc(true);
