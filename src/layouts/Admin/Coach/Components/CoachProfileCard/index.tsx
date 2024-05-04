@@ -1,71 +1,70 @@
 // Common
-import Divider from 'components/Common/Divider';
+import Divider from "components/Common/Divider";
 // Cardsimport
-import EmptyCard from 'components/Cards/EmptyCard';
+import EmptyCard from "components/Cards/EmptyCard";
 interface recordType {
-    date: number;
-    title: string;
+  date: number;
+  title: string;
 }
 
 interface CoachInfoType {
-    photo?: string;
-    name: string;
-    birth: string;
-    gender: string;
-    duty: boolean;
-    license: string[];
-    record: recordType[];
-    createdAt?: string;
-    lv: number;
-    mobile: string;
+  photo?: string;
+  name: string;
+  birth: string;
+  gender: string;
+  duty: boolean;
+  license: string[];
+  record: recordType[];
+  createdAt?: string;
+  lv: number;
+  mobile: string;
 }
 
 interface InfoType {
-    coachInfo: CoachInfoType | undefined;
+  coachInfo: CoachInfoType | undefined;
 }
 
 const CoachProfileCard = ({ coachInfo }: InfoType) => {
-    const titleStyle = 'mr-2 font-bold my-1';
-    console.log('coachInfo', coachInfo);
-    return (
+  const titleStyle = "mr-2 font-bold my-1";
+  return (
+    <div>
+      {coachInfo && (
         <div>
-            {coachInfo && (
-                <div>
-                    <div className="flex items-center ">
-                        <img
-                            src={coachInfo.photo}
-                            alt="coach_son"
-                            className="object-cover h-40 mr-4 rounded-full min-w-40"
-                        />
-                        <ul>
-                            <li>
-                                <span className={titleStyle}>코치이름:</span>
-                                <span>{coachInfo.name}</span>
-                            </li>
-                            {coachInfo.birth && (
-                                <li>
-                                    <span className={titleStyle}>생년월일:</span>
-                                    <span>{coachInfo.birth.slice(0, 10)}</span>
-                                </li>
-                            )}
-                            <li>
-                                <span className={titleStyle}>성별:</span>
-                                <span>{coachInfo.gender === 'male' ? '남자' : '여자'}</span>
-                            </li>
-                            <li>
-                                <span className={titleStyle}>군필여부:</span>
-                                <span>{coachInfo.duty}</span>
-                            </li>
-                            {coachInfo.license && coachInfo.license.length > 0 && (
-                                <li>
-                                    <span className={titleStyle}>자격증:</span>
-                                    <span>{coachInfo.license.join(', ')}</span>
-                                </li>
-                            )}
-                        </ul>
-                    </div>
-                    <Divider />
-                    {/* <div className="px-4">
+          <div className="flex items-center ">
+            <img
+              src={coachInfo.photo}
+              alt="coach_son"
+              className="object-cover h-40 mr-4 rounded-full min-w-40"
+            />
+            <ul>
+              <li>
+                <span className={titleStyle}>코치이름:</span>
+                <span>{coachInfo.name}</span>
+              </li>
+              {coachInfo.birth && (
+                <li>
+                  <span className={titleStyle}>생년월일:</span>
+                  <span>{coachInfo.birth.slice(0, 10)}</span>
+                </li>
+              )}
+              <li>
+                <span className={titleStyle}>성별:</span>
+                <span>{coachInfo.gender === "male" ? "남자" : "여자"}</span>
+              </li>
+              <li>
+                <span className={titleStyle}>군필여부:</span>
+                <span>{coachInfo.duty}</span>
+              </li>
+              {coachInfo.license && coachInfo.license.length > 0 && (
+                <li>
+                  <span className={titleStyle}>자격증:</span>
+                  <span>{coachInfo.license.join(", ")}</span>
+                </li>
+              )}
+            </ul>
+          </div>
+          <Divider />
+          {/* <div className="px-4">
                         <div className="mb-2 text-lg font-bold">이력</div>
                         <div>
                             {coachInfo.record.map((el, idx) => (
@@ -79,10 +78,10 @@ const CoachProfileCard = ({ coachInfo }: InfoType) => {
                             ))}
                         </div>
                     </div> */}
-                </div>
-            )}
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 export default CoachProfileCard;

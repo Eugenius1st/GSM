@@ -117,7 +117,6 @@ const Home = () => {
     staleTime: 5 * 1000,
   });
 
-  console.log(classData.data);
   return (
     <div className="eg-default-wrapper">
       <div className="eg-title">회원관리</div>
@@ -157,7 +156,7 @@ const Home = () => {
           classData?.data?.result.map((el: any, idx: number) => (
             <EgPhotoCard
               key={idx}
-              _id={el.id}
+              _id={el._id}
               name={el.name}
               photo={el.photo}
               describe={el.describe}
@@ -166,7 +165,7 @@ const Home = () => {
               startTime={el.startTime}
               endTime={el.endTime}
               amount={el.amount}
-              //   type={el.type}
+              type={el.type}
               place={el.place}
               attendance={el.attendance}
             />

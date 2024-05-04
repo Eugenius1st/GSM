@@ -61,7 +61,10 @@ const EgPhotoCard = ({
         title="green iguana"
       />
       <CardContent>
-        <div className="text-lg font-bold">{name}</div>
+        <div className="text-lg font-bold">
+          {name}
+          {type && ` (${type})`}
+        </div>
         {birthYear && (
           <Typography variant="body2" color="text.secondary">
             {birthYear} 년생
