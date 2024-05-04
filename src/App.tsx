@@ -51,7 +51,7 @@ const App = () => {
                 element={<AdminCoachClass />}
             />
             <Route
-                path="/admin/coach/coach-class/:coachId/:classId"
+                path="/admin/coach/coach-class-detail/:classId"
                 element={<AdminCoachClassDetail />}
             />
             <Route

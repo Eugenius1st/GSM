@@ -36,7 +36,7 @@ export interface ClassInfoType {
     attendance: number;
     reserved: number;
     coaches?: string[];
-    notice?: string;
+    note?: string;
     attendancereservations?: any;
 }
 
@@ -252,12 +252,12 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
                             </div>
                         )}
 
-                        {classInfo?.notice && (
+                        {classInfo?.note && (
                             <div className={infoStyle}>
                                 <div className={titleStyle}>
                                     <span className="px-1 bg-egRed-semiLihgt">안내사항</span>
                                 </div>
-                                <div>{classInfo?.notice}</div>
+                                <div>{classInfo?.note}</div>
                             </div>
                         )}
                     </div>
