@@ -203,7 +203,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   const [curPage, setCurPage] = React.useState(1);
   const [itemsPerPage, setItemsPerPage] = React.useState(10);
   const [userSearchInput, setUserSearchInput] = React.useState("");
-  const [searchedUser, setSearchedUser] = React.useState<any>([]);
+  const [searchedUser, setSearchedUser] = React.useState<any>("");
   const [userQueryEnabled, setCoachQueryEnabled] = React.useState(false);
 
   // GET 요청을 보낼 함수 정의
