@@ -1,6 +1,5 @@
 // hooks
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 // api
 import { requestGet } from "api/basic";
@@ -13,17 +12,6 @@ import UserTable from "layouts/Admin/User/Components/UserTable";
 import PaginationRounded from "components/EgMaterials/Pagenation";
 // Admin Home Components
 import TitleBar from "layouts/Admin/Home/Components/TitleBar";
-// images
-import coach_son from "assets/coach/coach_son.jpeg";
-import coach_kim from "assets/coach/coach_kim.jpeg";
-import coach_hong from "assets/coach/coach_hong.jpeg";
-import class_adult_man from "assets/class/class_adult_man.jpeg";
-import class_adult_woman from "assets/class/class_adult_woman.jpeg";
-import user1 from "assets/user/user1.jpg";
-import user2 from "assets/user/user2.png";
-import user3 from "assets/user/user3.jpeg";
-import user4 from "assets/user/user4.png";
-import { isElementType } from "@testing-library/user-event/dist/utils";
 
 export interface ColumnType {
   id: string;
@@ -40,7 +28,9 @@ export interface RowDataType {
   team: string;
 }
 const Home = () => {
-  const location = useLocation().pathname;
+  const LoginInfo = localStorage.getItem("recoil-persist");
+  if (LoginInfo) console.log(JSON.parse(LoginInfo));
+
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [curPage, setCurPage] = useState(1);
   const [allCount, setAllCount] = useState(1);
