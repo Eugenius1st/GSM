@@ -35,9 +35,7 @@ const RoundProductEditModal = ({
   const [newRPName, setNewRPName] = useState(defaultInfo.name);
   const [newRPPrice, setNewRPPrice] = useState<number>(defaultInfo.roundCount);
   const [newRPCount, setNewRPCount] = useState<number>(defaultInfo.price);
-  const [newRPStartDate, setNewRPStartDate] = useState(
-    defaultInfo.startOfSales
-  );
+  const [newRPStartDate, setNewRPStartDate] = useState("");
   const [newRPEndDate, setNewRPEndDate] = useState("");
   const [newRPId, setNewRPId] = useState<string>(defaultInfo._id);
 
@@ -71,7 +69,10 @@ const RoundProductEditModal = ({
   };
 
   useEffect(() => {
-    if (defaultInfo.endOfSales) setNewRPEndDate(defaultInfo.endOfSales);
+    if (defaultInfo.startOfSales)
+      setNewRPStartDate(defaultInfo.startOfSales.slice(0, 16));
+    if (defaultInfo.endOfSales)
+      setNewRPEndDate(defaultInfo.endOfSales.slice(0, 16));
   }, [defaultInfo]);
   useEffect(() => {
     if (flag) {
@@ -84,9 +85,10 @@ const RoundProductEditModal = ({
     }
   }, [flag]);
 
-  const handleShowModal = () => {
+  const handleShowModal = (e: any) => {
     setIsShow(true);
     document.body.style.overflow = "hidden";
+    e.stopPropagation();
   };
   const handleCloseModal = () => {
     setIsShow(false);
@@ -95,8 +97,8 @@ const RoundProductEditModal = ({
 
   return (
     <div>
-      <div onClick={handleShowModal}>
-        <button className="p-1 font-bold flex items-center text-egPurple-default">
+      <div onClick={(e) => handleShowModal(e)}>
+        <button className="border border-egGrey-default px-1 flex items-center hover:bg-egGrey-light text-egGrey-default">
           <div>수정</div>
           <MdEdit />
         </button>
@@ -105,7 +107,7 @@ const RoundProductEditModal = ({
         <div className="fixed flex justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
           <div className="fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg">
             <div className="flex items-center justify-between">
-              <div className="mb-2 text-xl font-bold">회차상품 추가</div>
+              <div className="mb-2 text-xl font-bold">회차상품 수정</div>
               <CgClose onClick={handleCloseModal} />
             </div>
             <div className="p-2">

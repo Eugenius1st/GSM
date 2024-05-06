@@ -16,7 +16,7 @@ import { IoIosArrowUp } from "react-icons/io";
 // images
 import userImg from "assets/user/user.png";
 // Admin User Components
-import UserRoundTest from "layouts/Admin/User/Components/UserRoundProduct";
+import UserRoundProduct from "layouts/Admin/User/Components/UserRoundProduct";
 
 interface reasonList {
   count?: string;
@@ -268,7 +268,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                   <IoIosArrowDown className="inline ml-1" />
                 )}
               </button>
-              <UserRoundTest />
+              <UserRoundProduct />
 
               <BasicModal
                 modalBtn={

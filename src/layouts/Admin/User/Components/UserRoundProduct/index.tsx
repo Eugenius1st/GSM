@@ -42,7 +42,7 @@ const UserRoundProduct = () => {
         requestUrl: `/roundproduct?page=${roundProductPage}&take=10' `,
       });
     },
-    staleTime: 5 * 1000,
+    // staleTime: 5 * 1000,
   });
 
   useEffect(() => {
@@ -89,41 +89,57 @@ const UserRoundProduct = () => {
         <div className="fixed flex justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
           <div className="fixed bg-egWhite-default z-[70] p-4 rounded-lg">
             <div className="flex items-center justify-between">
-              <div className="text-xl font-bold mb-4">회차 추가</div>
+              <div className="text-xl font-bold">회차 추가</div>
               <CgClose onClick={handleCloseModal} />
+            </div>
+            <div className="flex justify-end m-2">
+              <RoundProductAddModal
+                flag={newRPAddFlag}
+                setFlag={setNewRPAddFlag}
+              />
             </div>
             <div className="max-h-[14rem] overflow-y-scroll">
               <table>
-                <tr className="bg-egGrey-semiLight ">
-                  <th className="px-2">상품명</th>
-                  <th className="px-2">가격</th>
-                  <th className="px-2">총회차</th>
-                  <th className="px-2">시작날짜</th>
-                  <th className="px-2">종료날짜</th>
+                <thead className="bg-egGrey-semiLight text-center border">
+                  <th className="px-2 border">상품명</th>
+                  <th className="px-2 border">가격</th>
+                  <th className="px-2 border">총회차</th>
+                  <th className="px-2 border">시작</th>
+                  <th className="px-2 border">종료</th>
+                  <th className="px-2 "></th>
                   <th className="px-2"></th>
-                </tr>
+                </thead>
                 {data.result &&
                   data.result.map((el: any, idx: number) => (
-                    <tr
-                      key={idx}
-                      onClick={() => handleAddRoundProduct(el._id)}
-                      className="hover:bg-egPurple-superLight"
-                    >
-                      <td className="px-2 ">{el?.name}</td>
-                      <td className="px-2 ">{el?.price}</td>
-                      <td className="px-2 ">{el?.roundCount}</td>
-                      <td className="px-2 ">{el?.startOfSales.slice(0, 16)}</td>
-                      <td className="px-2 ">
+                    <tbody key={idx} className="text-center border">
+                      <td className="px-2 border">{el?.name}</td>
+                      <td className="px-2 border">{el?.price}</td>
+                      <td className="px-2 border">{el?.roundCount}</td>
+                      <td className="px-2 border">{`${el?.startOfSales.slice(
+                        0,
+                        10
+                      )} (${el?.startOfSales.slice(11, 16)})`}</td>
+                      <td className="px-2 border">
                         {el.endOfSales
-                          ? el.endOfSales.slice(0, 16)
+                          ? `${el?.endOfSales.slice(
+                              0,
+                              10
+                            )} (${el?.endOfSales.slice(11, 16)})`
                           : "기한 없음"}
                       </td>
-                      <RoundProductEditModal
-                        flag={newRPEditFlag}
-                        setFlag={setNewRPEditFlag}
-                        defaultInfo={el}
-                      />
-                    </tr>
+                      <td className="z-10 ">
+                        <RoundProductEditModal
+                          flag={newRPEditFlag}
+                          setFlag={setNewRPEditFlag}
+                          defaultInfo={el}
+                        />
+                      </td>
+                      <td onClick={() => handleAddRoundProduct(el._id)}>
+                        <button className="border border-egPurple-default text-egPurple-default hover:bg-egPurple-superLight z-0 px-1">
+                          회차 추가
+                        </button>
+                      </td>
+                    </tbody>
                   ))}
               </table>
             </div>
@@ -137,11 +153,11 @@ const UserRoundProduct = () => {
                 />
               </div>
             )}
+
             <div className="flex justify-end">
               <WhiteBtn content="닫기" func={handleCloseModal} />
             </div>
           </div>
-          <RoundProductAddModal flag={newRPAddFlag} setFlag={setNewRPAddFlag} />
         </div>
       ) : (
         <></>

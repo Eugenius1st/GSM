@@ -40,8 +40,8 @@ const UserDetail = () => {
         // flagCheckFunc: setIsSearched,
       });
     },
-    staleTime: 5 * 1000,
   });
+
   const userMemo = {
     feedback: [
       {

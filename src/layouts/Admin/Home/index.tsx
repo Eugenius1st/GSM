@@ -41,7 +41,7 @@ export interface RowDataType {
 }
 const Home = () => {
   const location = useLocation().pathname;
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
   const [curPage, setCurPage] = useState(1);
   const [allCount, setAllCount] = useState(1);
   const [defaultAllCount, setDefaultAllCount] = useState(1);
@@ -50,7 +50,7 @@ const Home = () => {
 
   // GET User 요청을 보낼 함수 정의
   const { data, error, isLoading, refetch } = useQuery({
-    queryKey: ["allUsers"],
+    queryKey: ["allUsersHomeData"],
     queryFn: () => {
       return requestGet({
         requestUrl: `/student?page=${curPage}&take=${itemsPerPage}`,
@@ -98,7 +98,7 @@ const Home = () => {
 
   // GET Coach 요청을 보낼 함수 정의
   const coachData = useQuery({
-    queryKey: ["allCoaches"],
+    queryKey: ["allCoachesHomeData"],
     queryFn: () => {
       return requestGet({
         requestUrl: `/admin?page=1&take=3`,
@@ -109,7 +109,7 @@ const Home = () => {
 
   // GET Class 요청을 보낼 함수 정의
   const classData = useQuery({
-    queryKey: ["allClassData"],
+    queryKey: ["allClassHomeData"],
     queryFn: () =>
       requestGet({
         requestUrl: `/class?page=1&take=${2}`,

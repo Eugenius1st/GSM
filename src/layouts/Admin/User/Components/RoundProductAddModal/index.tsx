@@ -8,7 +8,7 @@ import WhiteBtn from "components/Buttons/WhiteBtn";
 import PurpleBtn from "components/Buttons/PurpleBtn";
 // icons
 import { CgClose } from "react-icons/cg";
-
+import { IoIosAddCircleOutline } from "react-icons/io";
 interface RoundProductAddModalType {
   flag: boolean;
   setFlag: (flag: boolean) => void;
@@ -73,8 +73,9 @@ const RoundProductAddModal = ({ flag, setFlag }: RoundProductAddModalType) => {
   return (
     <div>
       <div onClick={handleShowModal}>
-        <button className="border border-egPurple-default text-egPurple-default rounded-sm p-1">
-          회차상품 추가
+        <button className="hover:bg-egPurple-superLight rounded-md flex items-center text-egPurple-default rounded-sm p-1">
+          <div className="mr-1">상품 추가</div>
+          <IoIosAddCircleOutline />
         </button>
       </div>
       {isShow ? (
