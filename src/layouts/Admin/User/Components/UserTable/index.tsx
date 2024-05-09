@@ -6,17 +6,13 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import { IoFilterSharp } from 'react-icons/io5';
-import { visuallyHidden } from '@mui/utils';
 // Common
 import SearchBar from 'components/Common/SearchBar';
 import SelectMenu from 'components/Common/SelectMenu';
@@ -31,13 +27,16 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { requestGet, requestPatch } from 'api/basic';
 // Buttons
 import WhiteBtn from 'components/Buttons/WhiteBtn';
-import PurpleBtn from 'components/Buttons/PurpleBtn';
 // colors
 import colors from 'assets/colors/palette';
 // icons
 import { RiUserForbidFill } from 'react-icons/ri';
 // Cards
 import EmptyCard from 'components/Cards/EmptyCard';
+// utility
+import { classGroupMatcherByEng } from 'utility/standardConst';
+// Pagination
+import PaginationRounded from 'components/EgMaterials/Pagenation';
 
 interface PatchDataType {
     requestUrl: string;
@@ -50,24 +49,13 @@ interface RowDataType {
     name: string;
     birth: number;
     team: string;
+    classGroupName?: string;
 }
 interface TableRowDataType {
     tableRowData: RowDataType[];
-    userSearchState?: boolean;
+    userSearchState: boolean;
     setUserSearchState?: (data: boolean) => void;
 }
-
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
-}
-
-type Order = 'asc' | 'desc';
 
 interface HeadCell {
     id: keyof RowDataType;
@@ -99,29 +87,46 @@ const headCells: readonly HeadCell[] = [
     },
 ];
 
+const searchedHeadCells: readonly HeadCell[] = [
+    {
+        id: 'photo',
+        numeric: false,
+        label: 'profile',
+    },
+    {
+        id: 'name',
+        numeric: false,
+        label: 'Name',
+    },
+
+    {
+        id: 'classGroupName',
+        numeric: true,
+        label: 'ClassGroupName',
+    },
+];
+
 interface EnhancedTableProps {
     numSelected: number;
-    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof RowDataType) => void;
     onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    order: Order;
-    orderBy: string;
     rowCount: number;
+    userSearchState: boolean;
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
     const { egPurple } = colors;
     let isMobile = useRecoilValue(IsMobileSelector);
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-    const createSortHandler = (property: keyof RowDataType) => (event: React.MouseEvent<unknown>) => {
-        onRequestSort(event, property);
-    };
+    const { onSelectAllClick, numSelected, rowCount, userSearchState } = props;
 
     return (
         <TableHead sx={{ '.MuiTableCell-root': { background: egPurple.superLight } }}>
             <TableRow>
                 <TableCell
-                    align="left"
-                    padding="checkbox"
+                    align="center"
+                    sx={{
+                        width: '1rem',
+                        padding: 0,
+                    }}
                 >
                     <Checkbox
                         color="primary"
@@ -134,39 +139,37 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                     />
                 </TableCell>
 
-                {headCells.map((headCell) => (
-                    <TableCell
-                        align="left"
-                        sx={{
-                            paddingX: 0,
-                            width: 'fit-content',
-                        }}
-                        key={headCell.id}
-                        sortDirection={orderBy === headCell.id ? order : false}
-                    >
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
-                        >
-                            {headCell.label}
-                            {orderBy === headCell.id ? (
-                                <Box
-                                    component="span"
-                                    sx={visuallyHidden}
-                                >
-                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                </Box>
-                            ) : null}
-                        </TableSortLabel>
-                    </TableCell>
-                ))}
+                {userSearchState
+                    ? searchedHeadCells.map((headCell) => (
+                          <TableCell
+                              align="center"
+                              sx={{
+                                  paddingX: 0,
+                                  width: 'fit-content',
+                              }}
+                              key={headCell.id}
+                          >
+                              {headCell.label}
+                          </TableCell>
+                      ))
+                    : headCells.map((headCell) => (
+                          <TableCell
+                              align="center"
+                              sx={{
+                                  paddingX: 0,
+                                  width: 'fit-content',
+                              }}
+                              key={headCell.id}
+                          >
+                              {headCell.label}
+                          </TableCell>
+                      ))}
                 <TableCell
                     sx={{
                         paddingX: 0,
                         width: '1rem',
                     }}
-                    align="left"
+                    align="center"
                 >
                     정보 보기
                 </TableCell>
@@ -176,21 +179,34 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 interface EnhancedTableToolbarProps {
-    selectedArr: any;
     numSelected: number;
     setRowData: (data: any) => void;
+
+    selectedArr: any;
     userSearchState?: boolean;
     setUserSearchState?: (data: boolean) => void;
+    curPage: number;
+    setCurPage: (page: number) => void;
+    itemsPerPage: number;
+    setAllCount: (count: number) => void;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-    const { selectedArr, numSelected, setRowData, userSearchState, setUserSearchState } = props;
-    const [curPage, setCurPage] = React.useState(1);
-    const [itemsPerPage, setItemsPerPage] = React.useState(10);
-    const [searchedUser, setSearchedUser] = React.useState<any>('');
-    const [allCount, setAllCount] = React.useState(1);
-    const [userQueryEnabled, setCoachQueryEnabled] = React.useState(false);
+    const {
+        numSelected,
+        setRowData,
+        selectedArr,
+        userSearchState,
+        setUserSearchState,
+        curPage,
+        itemsPerPage,
+        setCurPage,
+        setAllCount,
+    } = props;
 
+    let isMobile = useRecoilValue(IsMobileSelector);
+    const [searchedUser, setSearchedUser] = React.useState<any>('');
+    const [userQueryEnabled, setCoachQueryEnabled] = React.useState(false);
     const [userSearchInput, setUserSearchInput] = React.useState('');
 
     // GET 요청을 보낼 함수 정의
@@ -208,8 +224,6 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                 return Promise.resolve([]); // 또는 다른 유효한 값을 반환할 수 있음
             }
         },
-        staleTime: 5 * 1000,
-
         enabled: userQueryEnabled, // enabled 옵션을 사용하여 쿼리를 활성화 또는 비활성화합니다.
     });
     // GET 요청 버튼 클릭 시에만 쿼리를 활성화하도록 설정합니다.
@@ -224,9 +238,9 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     // 검색시 렌더링
     React.useEffect(() => {
         convertTableRowData();
-        // setAllCount(searchedUser.count);
+        setAllCount(searchedUser.count);
     }, [searchedUser]);
-    // 코치 검색 input 값이 없을 시
+    // 유저 검색 input 값이 없을 시
     React.useEffect(() => {
         if (!userSearchInput && setUserSearchState) {
             setUserSearchState(false);
@@ -238,15 +252,24 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         if (searchedUser.result) {
             const rows: RowDataType[] = [];
             searchedUser.result.forEach((user: RowDataType, index: number) => {
-                const { _id, photo, name, birth, team } = user; // 원하는 속성들을 추출
-                console.log('birth', birth);
-                rows.push({
-                    _id: _id, // 배열 인덱스를 이용하여 id 부여
-                    photo: photo, // 사진 속성 그대로 사용
-                    name: name, // 이름 속성 그대로 사용
-                    birth: new Date(birth).getFullYear(), // 출생일에서 연도만 추출
-                    team: team,
-                });
+                const { _id, photo, name, birth, team, classGroupName } = user; // 원하는 속성들을 추출
+                if (userSearchState) {
+                    rows.push({
+                        _id: _id,
+                        photo: photo,
+                        name: name,
+                        classGroupName: classGroupName,
+                        birth: 0,
+                        team: '',
+                    });
+                } else
+                    rows.push({
+                        _id: _id, // 배열 인덱스를 이용하여 id 부여
+                        photo: photo, // 사진 속성 그대로 사용
+                        name: name, // 이름 속성 그대로 사용
+                        birth: new Date(birth).getFullYear(), // 출생일에서 연도만 추출
+                        team: team,
+                    });
             });
             // 변환된 배열 반환!!
             setRowData(rows);
@@ -273,6 +296,12 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
             });
         });
     }
+    React.useEffect(() => {
+        if (patchCheckFlag) {
+            alert('비활성화 되었습니다');
+            setPatchCheckFlag(false);
+        }
+    }, [patchCheckFlag]);
     return (
         <Toolbar
             sx={{
@@ -295,14 +324,16 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                     {numSelected} selected
                 </Typography>
             ) : (
-                <Typography
-                    sx={{ fontWeight: 'bold' }}
-                    variant="subtitle1"
-                    id="tableTitle"
-                    component="div"
-                >
-                    회원정보
-                </Typography>
+                !isMobile && (
+                    <Typography
+                        sx={{ fontWeight: 'bold' }}
+                        variant="subtitle1"
+                        id="tableTitle"
+                        component="div"
+                    >
+                        회원정보
+                    </Typography>
+                )
             )}
 
             {numSelected > 0 ? (
@@ -315,13 +346,17 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
             ) : (
                 <div className="flex items-center">
                     <div className="flex items-center justify-between">
-                        <div className="mr-1">
-                            <SelectMenu menuList={['이름', '소속']} />
-                        </div>
+                        {!isMobile && (
+                            <div className="mr-1">
+                                <SelectMenu menuList={['이름']} />
+                            </div>
+                        )}
                         <SearchBar
                             searchFunc={useHandleButtonClick}
                             searchInput={userSearchInput}
                             setSearchInput={setUserSearchInput}
+                            barWidth="15rem"
+                            placeholder="이름으로 검색하세요"
                         />
                     </div>
 
@@ -348,23 +383,16 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 }
 export default function EnhancedTable({ tableRowData, userSearchState, setUserSearchState }: TableRowDataType) {
     const [rowData, setRowData] = React.useState(tableRowData);
-    const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<keyof RowDataType>('birth');
     const [selected, setSelected] = React.useState<readonly number[]>([]);
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [curPage, setCurPage] = React.useState(1);
+    const [allCount, setAllCount] = React.useState(1);
+    const [itemsPerPage, setItemsPerPage] = React.useState(10);
     const { egPurple } = colors;
 
     // Table Body 렌더링 관련
     React.useEffect(() => {
         if (tableRowData) setRowData(tableRowData);
     }, [tableRowData]);
-
-    const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof RowDataType) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
-    };
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
@@ -392,33 +420,32 @@ export default function EnhancedTable({ tableRowData, userSearchState, setUserSe
 
     const isSelected = (id: number) => selected.indexOf(id) !== -1;
 
-    // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rowData.length) : 0;
-
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <EnhancedTableToolbar
+                    numSelected={selected.length}
+                    setRowData={setRowData}
                     userSearchState={userSearchState}
                     setUserSearchState={setUserSearchState}
                     selectedArr={selected}
-                    numSelected={selected.length}
-                    setRowData={setRowData}
+                    curPage={curPage}
+                    setCurPage={setCurPage}
+                    itemsPerPage={itemsPerPage}
+                    setAllCount={setAllCount}
                 />
                 <TableContainer sx={{ overflowY: 'scroll' }}>
                     {rowData && rowData.length > 0 ? (
                         <Table
-                            sx={{ minWidth: 440 }}
+                            sx={{ minWidth: 400 }}
                             aria-labelledby="tableTitle"
                             size="small"
                         >
                             <EnhancedTableHead
                                 numSelected={selected.length}
-                                order={order}
-                                orderBy={orderBy}
                                 onSelectAllClick={handleSelectAllClick}
-                                onRequestSort={handleRequestSort}
                                 rowCount={rowData.length}
+                                userSearchState={userSearchState}
                             />
                             <TableBody
                                 sx={{
@@ -438,14 +465,20 @@ export default function EnhancedTable({ tableRowData, userSearchState, setUserSe
                                         <TableRow
                                             hover
                                             onClick={(event) => handleClick(event, row._id)}
-                                            role="checkbox"
+                                            role="left"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
                                             key={row._id}
                                             selected={isItemSelected}
                                             sx={{ cursor: 'pointer' }}
                                         >
-                                            <TableCell padding="checkbox">
+                                            <TableCell
+                                                align="center"
+                                                sx={{
+                                                    paddingX: 0,
+                                                    width: '1rem',
+                                                }}
+                                            >
                                                 <Checkbox
                                                     color="primary"
                                                     checked={isItemSelected}
@@ -462,13 +495,13 @@ export default function EnhancedTable({ tableRowData, userSearchState, setUserSe
                                                 }}
                                             >
                                                 <img
-                                                    className="object-cover rounded-full w-14 h-14"
+                                                    className="object-cover m-auto rounded-full w-14 h-14"
                                                     src={row.photo}
                                                     alt={row.name}
                                                 />
                                             </TableCell>
                                             <TableCell
-                                                align="left"
+                                                align="center"
                                                 sx={{ paddingX: 0, width: '1rem' }}
                                                 component="th"
                                                 id={labelId}
@@ -477,24 +510,37 @@ export default function EnhancedTable({ tableRowData, userSearchState, setUserSe
                                                 {row.name}
                                             </TableCell>
 
-                                            <TableCell
-                                                align="left"
-                                                sx={{ paddingX: 0, width: '1rem' }}
-                                            >
-                                                {row.birth} 년생
-                                            </TableCell>
-                                            <TableCell
-                                                align="left"
-                                                sx={{ paddingX: 0, width: '1rem' }}
-                                            >
-                                                {row.team}
-                                            </TableCell>
+                                            {userSearchState ? (
+                                                <TableCell
+                                                    align="center"
+                                                    sx={{ paddingX: 0, width: '1rem' }}
+                                                >
+                                                    {row.classGroupName
+                                                        ? classGroupMatcherByEng(row.classGroupName)
+                                                        : '미정'}
+                                                </TableCell>
+                                            ) : (
+                                                <TableCell
+                                                    align="center"
+                                                    sx={{ paddingX: 0, width: '1rem' }}
+                                                >
+                                                    {row.birth} 년생
+                                                </TableCell>
+                                            )}
+                                            {!userSearchState && (
+                                                <TableCell
+                                                    align="center"
+                                                    sx={{ paddingX: 0, width: '1rem' }}
+                                                >
+                                                    {row.team}
+                                                </TableCell>
+                                            )}
                                             <TableCell
                                                 sx={{
                                                     paddingX: 0,
-                                                    marginX: 0,
+                                                    width: '6rem',
                                                 }}
-                                                align="left"
+                                                align="center"
                                             >
                                                 <Link to={`/admin/user/${row._id}`}>
                                                     <WhiteBtn
@@ -506,35 +552,26 @@ export default function EnhancedTable({ tableRowData, userSearchState, setUserSe
                                         </TableRow>
                                     );
                                 })}
-                                {emptyRows > 0 && (
-                                    <TableRow
-                                        style={{
-                                            height: 33,
-                                        }}
-                                    >
-                                        <TableCell colSpan={6} />
-                                    </TableRow>
-                                )}
                             </TableBody>
                         </Table>
                     ) : (
                         <EmptyCard
-                            content="잠시만 기다려주세요"
+                            content="검색 결과가 없습니다"
                             customStyle="py-28 text-egPurple-semiLight flex flex-col justify-center items-center  shadow-md"
                         />
                     )}
                 </TableContainer>
-                {/* <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    labelRowsPerPage=""
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                /> */}
             </Paper>
+            {userSearchState && (
+                <div className="flex justify-center my-4">
+                    <PaginationRounded
+                        totalItems={allCount ? allCount : 1}
+                        itemsPerPage={itemsPerPage}
+                        curPage={curPage}
+                        setCurPage={(page) => setCurPage(page)}
+                    />
+                </div>
+            )}
         </Box>
     );
 }

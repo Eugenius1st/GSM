@@ -13,17 +13,6 @@ import UserTable from 'layouts/Admin/User/Components/UserTable';
 import PaginationRounded from 'components/EgMaterials/Pagenation';
 // Admin Home Components
 import TitleBar from 'layouts/Admin/Home/Components/TitleBar';
-// images
-import coach_son from 'assets/coach/coach_son.jpeg';
-import coach_kim from 'assets/coach/coach_kim.jpeg';
-import coach_hong from 'assets/coach/coach_hong.jpeg';
-import class_adult_man from 'assets/class/class_adult_man.jpeg';
-import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
-import user1 from 'assets/user/user1.jpg';
-import user2 from 'assets/user/user2.png';
-import user3 from 'assets/user/user3.jpeg';
-import user4 from 'assets/user/user4.png';
-import { isElementType } from '@testing-library/user-event/dist/utils';
 
 export interface ColumnType {
     id: string;
@@ -41,16 +30,18 @@ export interface RowDataType {
 }
 const Home = () => {
     const location = useLocation().pathname;
-    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [itemsPerPage, setItemsPerPage] = useState(5);
     const [curPage, setCurPage] = useState(1);
     const [allCount, setAllCount] = useState(1);
     // const [defaultAllCount, setDefaultAllCount] = useState(1);
     const [allUsers, setAllUsers] = useState([]);
     const [tableRowData, setTableRowData] = useState<RowDataType[]>([]);
+    // 유저 검색 state
+    const [userSearchState, setUserSearchState] = useState(false);
 
     // GET User 요청을 보낼 함수 정의
     const { data, error, isLoading, refetch } = useQuery({
-        queryKey: ['allUsers'],
+        queryKey: ['homeAllUsers'],
         queryFn: () => {
             return requestGet({
                 requestUrl: `/student?page=${curPage}&take=${itemsPerPage}`,
@@ -58,8 +49,6 @@ const Home = () => {
                 // flagCheckFunc: setIsSearched,
             });
         },
-        staleTime: 5 * 1000,
-        // enabled: queryEnabled, // enabled 옵션을 사용하여 쿼리를 활성화 또는 비활성화합니다.
     });
 
     // Table 에 적합한 Row 형태로 변경하기
@@ -116,24 +105,32 @@ const Home = () => {
             }),
         staleTime: 5 * 1000,
     });
+    // 유저 검색 input 값이 없을 시
+    useEffect(() => {
+        if (!userSearchState) {
+            convertTableRowData();
+        }
+    }, [userSearchState]);
 
     return (
         <div className="eg-default-wrapper">
             <div className="eg-title">회원관리</div>
             <UserTable
                 tableRowData={tableRowData && tableRowData}
-                // defaultAllCount={defaultAllCount}
-                // setAllCount={setAllCount}
+                userSearchState={userSearchState}
+                setUserSearchState={setUserSearchState}
             />
-            <div className="flex justify-center mt-4">
-                <PaginationRounded
-                    totalItems={allCount ? allCount : 1}
-                    itemsPerPage={itemsPerPage}
-                    curPage={curPage}
-                    // setCurPage={setCurPage}
-                    setCurPage={(page) => setCurPage(page)}
-                />
-            </div>
+            {!userSearchState && (
+                <div className="flex justify-center mt-4">
+                    <PaginationRounded
+                        totalItems={allCount ? allCount : 1}
+                        itemsPerPage={itemsPerPage}
+                        curPage={curPage}
+                        // setCurPage={setCurPage}
+                        setCurPage={(page) => setCurPage(page)}
+                    />
+                </div>
+            )}
             <TitleBar
                 title="코치관리"
                 navigationURL="/admin/coach"

@@ -6,21 +6,20 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import { visuallyHidden } from '@mui/utils';
 //hooks
 import { Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useRecoilValue } from 'recoil';
+import { IsMobileSelector } from 'atom/isMobile';
+import { useQuery, useMutation } from '@tanstack/react-query';
 // api
-import { requestGet } from 'api/basic';
+import { requestGet, requestPatch } from 'api/basic';
 // Common
 import SelectMenu from 'components/Common/SelectMenu';
 import SearchBar from 'components/Common/SearchBar';
@@ -34,6 +33,14 @@ import colors from 'assets/colors/palette';
 import { RiUserForbidFill } from 'react-icons/ri';
 // Cards
 import EmptyCard from 'components/Cards/EmptyCard';
+// Pagination
+import PaginationRounded from 'components/EgMaterials/Pagenation';
+
+interface PatchDataType {
+    requestUrl: string;
+    data?: any;
+    flagCheckFunc?: (data: boolean) => void;
+}
 
 interface RowDataType {
     _id: number;
@@ -47,18 +54,6 @@ interface TableRowDataType {
     coachSearchState: boolean;
     setCoachSearchState: (data: boolean) => void;
 }
-
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
-}
-
-type Order = 'asc' | 'desc';
 
 interface HeadCell {
     id: keyof RowDataType;
@@ -91,26 +86,24 @@ const headCells: readonly HeadCell[] = [
 
 interface EnhancedTableProps {
     numSelected: number;
-    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof RowDataType) => void;
     onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    order: Order;
-    orderBy: string;
     rowCount: number;
+    coachSearchState: boolean;
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
     const { egPurple } = colors;
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-    const createSortHandler = (property: keyof RowDataType) => (event: React.MouseEvent<unknown>) => {
-        onRequestSort(event, property);
-    };
+    const { onSelectAllClick, numSelected, rowCount, coachSearchState } = props;
 
     return (
         <TableHead sx={{ '.MuiTableCell-root': { background: egPurple.superLight } }}>
             <TableRow>
                 <TableCell
                     align="center"
-                    padding="checkbox"
+                    sx={{
+                        width: '1rem',
+                        padding: 0,
+                    }}
                 >
                     <Checkbox
                         color="primary"
@@ -124,10 +117,9 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                 </TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
-                        sx={{ paddingX: 0 }}
+                        sx={{ paddingX: 0, width: 'fit-content' }}
                         key={headCell.id}
-                        align="left"
-                        sortDirection={orderBy === headCell.id ? order : false}
+                        align="center"
                     >
                         {headCell.label}
                     </TableCell>
@@ -151,19 +143,33 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
     numSelected: number;
-    // defaultRowData: any;
     setRowData: (data: any) => void;
+
+    selectedArr: any;
     coachSearchState: boolean;
     setCoachSearchState: (data: boolean) => void;
+    curPage: number;
+    setCurPage: (page: number) => void;
+    itemsPerPage: number;
+    setAllCount: (count: number) => void;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-    const { numSelected, setRowData, coachSearchState, setCoachSearchState } = props;
-    const [curPage, setCurPage] = React.useState(1);
-    const [itemsPerPage, setItemsPerPage] = React.useState(10);
+    const {
+        numSelected,
+        setRowData,
+        selectedArr,
+        coachSearchState,
+        setCoachSearchState,
+        curPage,
+        itemsPerPage,
+        setCurPage,
+        setAllCount,
+    } = props;
+
+    let isMobile = useRecoilValue(IsMobileSelector);
     const [searchedCoach, setSearchedCoach] = React.useState<any>('');
     const [coachQueryEnabled, setCoachQueryEnabled] = React.useState(false);
-
     const [coachSearchInput, setCoachSearchInput] = React.useState('');
 
     // GET 요청을 보낼 함수 정의
@@ -181,7 +187,6 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                 return Promise.resolve([]); // 또는 다른 유효한 값을 반환할 수 있음
             }
         },
-        staleTime: 1000,
         enabled: coachQueryEnabled, // enabled 옵션을 사용하여 쿼리를 활성화 또는 비활성화합니다.
     });
     const useHandleButtonClick = () => {
@@ -193,17 +198,17 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         }
     };
 
-    // 코치 검색 input 값이 없을 시
-    React.useEffect(() => {
-        if (!coachSearchState) {
-            setCoachSearchState(false);
-        }
-    }, []);
-
     // 검색시 렌더링
     React.useEffect(() => {
         convertTableRowData();
+        setAllCount(searchedCoach.count);
     }, [searchedCoach]);
+    // 코치 검색 input 값이 없을 시
+    React.useEffect(() => {
+        if (!coachSearchInput && setCoachSearchState) {
+            setCoachSearchState(false);
+        }
+    }, [coachSearchInput]);
 
     // Table 에 적합한 Row 형태로 변경하기
     function convertTableRowData() {
@@ -224,6 +229,33 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         // 변환된 배열 반환!!
         setRowData(rows);
     }
+
+    const [patchCheckFlag, setPatchCheckFlag] = React.useState(false);
+    // Patch 요청
+    const mutation = useMutation({
+        mutationFn: ({ requestUrl, data, flagCheckFunc }: PatchDataType) => {
+            return requestPatch({
+                requestUrl: requestUrl,
+                data: data,
+                flagCheckFunc: flagCheckFunc,
+            });
+        },
+    });
+    function handleBlock() {
+        selectedArr.forEach((userId: any) => {
+            mutation.mutate({
+                requestUrl: `/auth/block/${userId}`,
+                // data: data,
+                flagCheckFunc: setPatchCheckFlag,
+            });
+        });
+    }
+    React.useEffect(() => {
+        if (patchCheckFlag) {
+            alert('비활성화 되었습니다');
+            setPatchCheckFlag(false);
+        }
+    }, [patchCheckFlag]);
 
     return (
         <Toolbar
@@ -247,14 +279,16 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                     {numSelected} selected
                 </Typography>
             ) : (
-                <Typography
-                    sx={{ fontWeight: 'bold' }}
-                    variant="subtitle1"
-                    id="tableTitle"
-                    component="div"
-                >
-                    코치정보
-                </Typography>
+                !isMobile && (
+                    <Typography
+                        sx={{ fontWeight: 'bold' }}
+                        variant="subtitle1"
+                        id="tableTitle"
+                        component="div"
+                    >
+                        코치정보
+                    </Typography>
+                )
             )}
 
             {numSelected > 0 ? (
@@ -265,14 +299,18 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                     </IconButton>
                 </Tooltip>
             ) : (
-                <div className="flex items-center">
-                    <div className="mr-1">
-                        <SelectMenu menuList={['이름']} />
-                    </div>
+                <div className={'flex items-center'}>
+                    {!isMobile && (
+                        <div className="mr-1">
+                            <SelectMenu menuList={['이름']} />
+                        </div>
+                    )}
                     <SearchBar
                         searchFunc={useHandleButtonClick}
                         searchInput={coachSearchInput}
                         setSearchInput={setCoachSearchInput}
+                        barWidth="15rem"
+                        placeholder="이름으로 검색하세요"
                     />
                     <DropDownModal
                         itemList={[
@@ -299,24 +337,19 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     );
 }
 export default function EnhancedTable({ tableRowData, coachSearchState, setCoachSearchState }: TableRowDataType) {
+    let isMobile = useRecoilValue(IsMobileSelector);
+
     const [rowData, setRowData] = React.useState(tableRowData);
-    const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<keyof RowDataType>('lv');
     const [selected, setSelected] = React.useState<readonly number[]>([]);
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [curPage, setCurPage] = React.useState(1);
+    const [allCount, setAllCount] = React.useState(1);
+    const [itemsPerPage, setItemsPerPage] = React.useState(10);
 
     const { egPurple } = colors;
     // Table Body 렌더링 관련
     React.useEffect(() => {
         if (tableRowData) setRowData(tableRowData);
     }, [tableRowData]);
-
-    const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof RowDataType) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
-    };
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
@@ -346,7 +379,6 @@ export default function EnhancedTable({ tableRowData, coachSearchState, setCoach
     const isSelected = (id: number) => selected.indexOf(id) !== -1;
 
     // Avoid a layout jump when reaching the last page with empty tableRowData.
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rowData.length) : 0;
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -356,21 +388,24 @@ export default function EnhancedTable({ tableRowData, coachSearchState, setCoach
                     setRowData={setRowData}
                     coachSearchState={coachSearchState}
                     setCoachSearchState={setCoachSearchState}
+                    selectedArr={selected}
+                    curPage={curPage}
+                    setCurPage={setCurPage}
+                    itemsPerPage={itemsPerPage}
+                    setAllCount={setAllCount}
                 />
                 <TableContainer sx={{ overflowY: 'scroll' }}>
                     {rowData && rowData.length > 0 ? (
                         <Table
-                            sx={{ minWidth: 440 }}
+                            sx={{ minWidth: 500 }}
                             aria-labelledby="tableTitle"
                             size="small"
                         >
                             <EnhancedTableHead
                                 numSelected={selected.length}
-                                order={order}
-                                orderBy={orderBy}
                                 onSelectAllClick={handleSelectAllClick}
-                                onRequestSort={handleRequestSort}
                                 rowCount={rowData.length}
+                                coachSearchState={coachSearchState}
                             />
                             <TableBody
                                 sx={{
@@ -406,28 +441,39 @@ export default function EnhancedTable({ tableRowData, coachSearchState, setCoach
                                                 />
                                             </TableCell>
                                             <TableCell
-                                                sx={{ paddingX: 0 }}
+                                                sx={{ paddingX: 0, width: 'fit-content' }}
                                                 align="center"
                                             >
                                                 <img
-                                                    className="object-cover rounded-full w-14 h-14"
+                                                    className="object-cover m-auto rounded-full w-14 h-14"
                                                     src={row.photo}
                                                     alt={row.name}
                                                 />
                                             </TableCell>
 
                                             <TableCell
-                                                sx={{ paddingX: 0 }}
+                                                align="center"
+                                                sx={{ paddingX: 0, width: 'fit-content' }}
                                                 component="th"
                                                 id={labelId}
                                                 scope="row"
                                             >
                                                 {row.name}
                                             </TableCell>
-                                            <TableCell sx={{ paddingX: 0 }}>{row.lv} lv</TableCell>
-                                            <TableCell sx={{ paddingX: 0 }}>{row.birth}</TableCell>
                                             <TableCell
-                                                sx={{ paddingX: 0 }}
+                                                align="center"
+                                                sx={{ paddingX: 0, width: 'fit-content' }}
+                                            >
+                                                {row.lv} lv
+                                            </TableCell>
+                                            <TableCell
+                                                align="center"
+                                                sx={{ paddingX: 0, width: 'fit-content' }}
+                                            >
+                                                {row.birth}
+                                            </TableCell>
+                                            <TableCell
+                                                sx={{ paddingX: 0, width: isMobile ? '6rem' : '8rem' }}
                                                 align="center"
                                             >
                                                 <Link to={`/admin/coach/${row._id}`}>
@@ -438,7 +484,7 @@ export default function EnhancedTable({ tableRowData, coachSearchState, setCoach
                                                 </Link>
                                             </TableCell>
                                             <TableCell
-                                                sx={{ paddingX: 0 }}
+                                                sx={{ paddingX: 0, width: isMobile ? '6rem' : '8rem' }}
                                                 align="center"
                                             >
                                                 <Link to={`/admin/coach/coach-class/${row._id}`}>
@@ -451,35 +497,26 @@ export default function EnhancedTable({ tableRowData, coachSearchState, setCoach
                                         </TableRow>
                                     );
                                 })}
-                                {emptyRows > 0 && (
-                                    <TableRow
-                                        style={{
-                                            height: 33,
-                                        }}
-                                    >
-                                        <TableCell colSpan={6} />
-                                    </TableRow>
-                                )}
                             </TableBody>
                         </Table>
                     ) : (
                         <EmptyCard
-                            content="데이터가 없습니다."
+                            content="검색 결과가 없습니다."
                             customStyle="py-28 text-egPurple-semiLight flex flex-col justify-center items-center  shadow-md"
                         />
                     )}
                 </TableContainer>
-                {/* <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={rowData.length}
-                    rowsPerPage={rowsPerPage}
-                    labelRowsPerPage=""
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                /> */}
             </Paper>
+            {coachSearchState && (
+                <div className="flex justify-center my-4">
+                    <PaginationRounded
+                        totalItems={allCount ? allCount : 1}
+                        itemsPerPage={itemsPerPage}
+                        curPage={curPage}
+                        setCurPage={(page) => setCurPage(page)}
+                    />
+                </div>
+            )}
         </Box>
     );
 }

@@ -29,7 +29,7 @@ const Coach = () => {
 
     // GET 요청을 보낼 함수 정의
     const { data, error, isLoading, refetch } = useQuery({
-        queryKey: ['allCoaches'],
+        queryKey: ['homeAllCoaches'],
         queryFn: () => {
             return requestGet({
                 requestUrl: `/admin?page=${curPage}&take=${itemsPerPage}`,
@@ -100,7 +100,6 @@ const Coach = () => {
                         totalItems={allCount ? allCount : 1}
                         itemsPerPage={itemsPerPage}
                         curPage={curPage}
-                        // setCurPage={setCurPage}
                         setCurPage={(page) => setCurPage(page)}
                     />
                 )}
