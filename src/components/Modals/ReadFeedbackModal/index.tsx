@@ -54,8 +54,11 @@ const ReadFeedbackModal = ({ modalBtn }: ReadFeedbackModalType) => {
                             <CgClose onClick={handleCloseModal} />
                         </div>
                         <div className="overflow-y-auto h-96">
-                            {feedbackInfo.map((el) => (
-                                <div className="px-3 py-2 mb-3 mr-4 rounded-md bg-egGrey-semiLight">
+                            {feedbackInfo.map((el, idx) => (
+                                <div
+                                    key={idx}
+                                    className="px-3 py-2 mb-3 mr-4 rounded-md bg-egGrey-semiLight"
+                                >
                                     <div className="flex justify-between items-top">
                                         <div className="flex items-center mb-3">
                                             <img
