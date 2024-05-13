@@ -20,9 +20,10 @@ const Class = () => {
     const location = useLocation().pathname;
     let isMobile = useRecoilValue(IsMobileSelector);
     const [allClass, setAllClass] = useState<ClassInfoType[]>([]);
+    const [totalItems, setTotalItems] = useState(1);
 
     // GET 요청을 보낼 함수 정의
-    const { data, error, isLoading } = useQuery({
+    const { data, error, isLoading, refetch } = useQuery({
         queryKey: ['allClassData'],
         queryFn: () =>
             requestGet({
@@ -33,8 +34,14 @@ const Class = () => {
     });
 
     useEffect(() => {
-        setAllClass(data);
+        refetch();
+    }, [curPage]);
+
+    useEffect(() => {
+        setAllClass(data.result);
+        setTotalItems(data.count);
     }, [data]);
+
     return (
         <div className="eg-default-wrapper">
             <div className="flex items-center justify-between mb-4">
@@ -68,10 +75,10 @@ const Class = () => {
             {allClass && allClass.length > 0 && (
                 <div className="flex justify-center">
                     <PaginationRounded
-                        totalItems={allClass.length}
+                        totalItems={totalItems}
                         itemsPerPage={4}
                         curPage={curPage}
-                        setCurPage={setCurPage}
+                        setCurPage={(page) => setCurPage(page)}
                         // onPageChange={() => }
                     />
                 </div>

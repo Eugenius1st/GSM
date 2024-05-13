@@ -22,7 +22,7 @@ export function classGroupMatcherByEng(classGroup: string) {
         case '2:1private':
             return '2:1개인레슨';
         default:
-            return '';
+            return '모르겠음,수정필요';
     }
 }
 
@@ -39,7 +39,7 @@ export function classGroupMatcherByKor(classGroup: string) {
         case '2:1개인레슨':
             return '2:1private';
         default:
-            return '';
+            return '모르겠음,수정필요';
     }
 }
 export function positionMatcherByEng(position: string) {

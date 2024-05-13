@@ -85,8 +85,9 @@ const Alarm = () => {
     return (
         <div className="eg-default-wrapper">
             <div className="eg-title">나의 알림</div>
-            {alarmInfo.map((el) => (
+            {alarmInfo.map((el, idx) => (
                 <div
+                    key={idx}
                     className={
                         el.read
                             ? 'flex items-center w-full px-3 py-3 rounded-md bg-egPurple-superLight'

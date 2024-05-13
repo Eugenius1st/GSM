@@ -24,10 +24,12 @@ const Coach = () => {
     const [allCount, setAllCount] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [tableRowData, setTableRowData] = useState<RowDataType[]>([]);
+    // 코치 검색 state
+    const [coachSearchState, setCoachSearchState] = useState(false);
 
     // GET 요청을 보낼 함수 정의
     const { data, error, isLoading, refetch } = useQuery({
-        queryKey: ['allCoaches'],
+        queryKey: ['homeAllCoaches'],
         queryFn: () => {
             return requestGet({
                 requestUrl: `/admin?page=${curPage}&take=${itemsPerPage}`,
@@ -76,19 +78,31 @@ const Coach = () => {
         }
     }, [curAllCoaches]);
 
+    // 코치 검색 input 값이 없을 시
+    useEffect(() => {
+        if (!coachSearchState) {
+            convertTableRowData();
+        }
+    }, [coachSearchState]);
+
     return (
         <div className="mb-2 eg-default-wrapper">
             <div className="eg-title">코치관리</div>
 
-            <CoachTable tableRowData={tableRowData && tableRowData} />
+            <CoachTable
+                tableRowData={tableRowData && tableRowData}
+                coachSearchState={coachSearchState}
+                setCoachSearchState={setCoachSearchState}
+            />
             <div className="flex justify-center mt-4">
-                <PaginationRounded
-                    totalItems={allCount ? allCount : 1}
-                    itemsPerPage={itemsPerPage}
-                    curPage={curPage}
-                    // setCurPage={setCurPage}
-                    setCurPage={(page) => setCurPage(page)}
-                />
+                {!coachSearchState && (
+                    <PaginationRounded
+                        totalItems={allCount ? allCount : 1}
+                        itemsPerPage={itemsPerPage}
+                        curPage={curPage}
+                        setCurPage={(page) => setCurPage(page)}
+                    />
+                )}
             </div>
         </div>
     );

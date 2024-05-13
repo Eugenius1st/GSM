@@ -8,9 +8,17 @@ interface SearchBarType {
     searchFunc: () => void;
     searchInput: string;
     setSearchInput: (value: string) => void;
+    barWidth?: string;
+    placeholder?: string;
 }
 
-const SearchBar = ({ searchFunc, searchInput, setSearchInput }: SearchBarType) => {
+const SearchBar = ({
+    searchFunc,
+    searchInput,
+    setSearchInput,
+    barWidth = '18rem',
+    placeholder = '',
+}: SearchBarType) => {
     return (
         <Box
             component="form"
@@ -20,10 +28,11 @@ const SearchBar = ({ searchFunc, searchInput, setSearchInput }: SearchBarType) =
         >
             <TextField
                 sx={{
-                    width: '18rem',
+                    width: barWidth,
                     paddingRight: '2rem',
                     paddingTop: '0.5rem',
                 }}
+                placeholder={placeholder}
                 onChange={(e) => setSearchInput(e.target.value)}
                 value={searchInput}
                 variant="standard"
