@@ -9,23 +9,24 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import { IoFilterSharp } from 'react-icons/io5';
-import { visuallyHidden } from '@mui/utils';
 // Buttons
 import PurpleBtn from 'components/Buttons/PurpleBtn';
 // Modals
 import AlarmModal from 'components/Modals/AlarmModal';
 // colors
 import colors from 'assets/colors/palette';
-// icons
-import { FaBell } from 'react-icons/fa';
+// Eg Components
+import DropDownModal from 'components/EgMaterials/DropDown';
+import EgCheckBox from 'components/EgMaterials/CheckBox';
+// Pagination
+import PaginationRounded from 'components/EgMaterials/Pagenation';
+
 interface Data {
     id: number;
     lesson: string;
@@ -33,7 +34,6 @@ interface Data {
     expiration: number;
     remainingRounds: number | '0';
     paymentRound: number | '0';
-    deposit: number;
 }
 
 interface InitialData {
@@ -43,7 +43,6 @@ interface InitialData {
     expiration: number;
     remainingRounds: number | '0';
     paymentRound: number | '0';
-    deposit: boolean;
 }
 
 const initialData: InitialData[] = [
@@ -54,7 +53,6 @@ const initialData: InitialData[] = [
         expiration: 7,
         remainingRounds: 5,
         paymentRound: 10,
-        deposit: false,
     },
     {
         id: 2,
@@ -63,7 +61,6 @@ const initialData: InitialData[] = [
         expiration: 5,
         remainingRounds: 5,
         paymentRound: 10,
-        deposit: false,
     },
     {
         id: 3,
@@ -72,7 +69,6 @@ const initialData: InitialData[] = [
         expiration: 3,
         remainingRounds: 5,
         paymentRound: 10,
-        deposit: true,
     },
     {
         id: 4,
@@ -81,7 +77,6 @@ const initialData: InitialData[] = [
         expiration: 7,
         remainingRounds: 5,
         paymentRound: 10,
-        deposit: true,
     },
     {
         id: 5,
@@ -90,7 +85,6 @@ const initialData: InitialData[] = [
         expiration: 5,
         remainingRounds: 5,
         paymentRound: 10,
-        deposit: true,
     },
     {
         id: 6,
@@ -99,7 +93,6 @@ const initialData: InitialData[] = [
         expiration: 3,
         remainingRounds: 5,
         paymentRound: 10,
-        deposit: true,
     },
     {
         id: 7,
@@ -108,7 +101,6 @@ const initialData: InitialData[] = [
         expiration: 7,
         remainingRounds: 5,
         paymentRound: 10,
-        deposit: true,
     },
     {
         id: 8,
@@ -117,7 +109,6 @@ const initialData: InitialData[] = [
         expiration: 5,
         remainingRounds: 5,
         paymentRound: 10,
-        deposit: true,
     },
     {
         id: 9,
@@ -126,7 +117,6 @@ const initialData: InitialData[] = [
         expiration: 3,
         remainingRounds: 5,
         paymentRound: 10,
-        deposit: false,
     },
     {
         id: 10,
@@ -135,7 +125,6 @@ const initialData: InitialData[] = [
         expiration: 7,
         remainingRounds: 5,
         paymentRound: 10,
-        deposit: false,
     },
     {
         id: 11,
@@ -144,7 +133,6 @@ const initialData: InitialData[] = [
         expiration: 5,
         remainingRounds: 5,
         paymentRound: 10,
-        deposit: false,
     },
     {
         id: 12,
@@ -153,7 +141,6 @@ const initialData: InitialData[] = [
         expiration: 3,
         remainingRounds: 5,
         paymentRound: 10,
-        deposit: false,
     },
 ];
 
@@ -169,50 +156,12 @@ function DataProcess(DataList: InitialData[]) {
             remainingRounds: el.remainingRounds,
             paymentRound: el.paymentRound,
             expiration: el.expiration,
-            deposit: el.deposit ? 1 : 0,
         });
     });
     return NewData;
 }
 
 const rows = DataProcess(initialData);
-
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
-}
-
-type Order = 'asc' | 'desc';
-
-function getComparator<Key extends keyof any>(
-    order: Order,
-    orderBy: Key
-): (a: { [key in Key]: number | string }, b: { [key in Key]: number | string }) => number {
-    return order === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
-function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
-    const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-    stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
-        if (order !== 0) {
-            return order;
-        }
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
-}
 
 interface HeadCell {
     id: keyof Data;
@@ -231,11 +180,7 @@ const headCells: readonly HeadCell[] = [
         numeric: false,
         label: '수업명',
     },
-    {
-        id: 'deposit',
-        numeric: false,
-        label: '입금여부',
-    },
+
     {
         id: 'remainingRounds',
         numeric: false,
@@ -250,19 +195,13 @@ const headCells: readonly HeadCell[] = [
 
 interface EnhancedTableProps {
     numSelected: number;
-    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
     onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    order: Order;
-    orderBy: string;
     rowCount: number;
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
     const { egPurple, egBlack } = colors;
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-    const createSortHandler = (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
-        onRequestSort(event, property);
-    };
+    const { onSelectAllClick, numSelected, rowCount } = props;
 
     return (
         <TableHead
@@ -291,23 +230,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                         sx={{ width: '5rem', paddingX: 0 }}
                         align="center"
                         key={headCell.id}
-                        sortDirection={orderBy === headCell.id ? order : false}
                     >
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
-                        >
-                            {headCell.label}
-                            {orderBy === headCell.id ? (
-                                <Box
-                                    component="span"
-                                    sx={visuallyHidden}
-                                >
-                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                </Box>
-                            ) : null}
-                        </TableSortLabel>
+                        {headCell.label}
                     </TableCell>
                 ))}
                 <TableCell
@@ -328,6 +252,8 @@ interface EnhancedTableToolbarProps {
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     const { numSelected } = props;
     const { egPurple, egWhite } = colors;
+    const [applicationOnWeek, setApplicationOnWeek] = React.useState(true);
+    const [notApplicationOnWeek, setNotApplicationOnWeek] = React.useState(true);
 
     return (
         <Toolbar
@@ -358,6 +284,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                     회원정보
                 </Typography>
             )}
+
             {numSelected > 0 ? (
                 <Tooltip title="Add">
                     <IconButton
@@ -373,28 +300,49 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                     </IconButton>
                 </Tooltip>
             ) : (
-                <Tooltip title="Filter list">
-                    <IconButton>
-                        <IoFilterSharp />
-                    </IconButton>
-                </Tooltip>
+                <div className="flex">
+                    <div
+                        className="flex items-center w-40 mr-2 "
+                        onClick={() => setApplicationOnWeek(!applicationOnWeek)}
+                    >
+                        <EgCheckBox checked={applicationOnWeek} />
+                        <div>금주 수업 신청 X</div>
+                    </div>
+                    <div
+                        className="flex items-center w-40 mr-4 "
+                        onClick={() => setNotApplicationOnWeek(!notApplicationOnWeek)}
+                    >
+                        <EgCheckBox checked={notApplicationOnWeek} />
+                        <div>금주 수업 신청 O</div>
+                    </div>
+                    <Tooltip title="Filter list">
+                        <DropDownModal
+                            itemList={[
+                                {
+                                    item: 'ALL',
+                                },
+                                {
+                                    item: '엘리트반',
+                                },
+                                {
+                                    item: '취미반',
+                                },
+                                {
+                                    item: '성인반',
+                                },
+                            ]}
+                        />
+                    </Tooltip>
+                </div>
             )}
         </Toolbar>
     );
 }
 export default function EnhancedTable() {
-    const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<keyof Data>('expiration');
     const [selected, setSelected] = React.useState<readonly number[]>([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const { egPurple, egBlack } = colors;
-
-    const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
-    };
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
@@ -433,12 +381,6 @@ export default function EnhancedTable() {
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-    const visibleRows = React.useMemo(
-        () =>
-            stableSort(rows, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-        [order, orderBy, page, rowsPerPage]
-    );
-
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
@@ -451,10 +393,7 @@ export default function EnhancedTable() {
                     >
                         <EnhancedTableHead
                             numSelected={selected.length}
-                            order={order}
-                            orderBy={orderBy}
                             onSelectAllClick={handleSelectAllClick}
-                            onRequestSort={handleRequestSort}
                             rowCount={rows.length}
                         />
                         <TableBody
@@ -463,7 +402,7 @@ export default function EnhancedTable() {
                                 '.Mui-selected': { background: `${egPurple.superLight} !important` },
                             }}
                         >
-                            {visibleRows.map((row, index) => {
+                            {rows.map((row, index) => {
                                 const isItemSelected = isSelected(row.id);
                                 const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -477,7 +416,9 @@ export default function EnhancedTable() {
                                         key={row.id}
                                         selected={isItemSelected}
                                         sx={{
-                                            '.MuiTableCell-body': { border: `1px solid ${egBlack.light}` },
+                                            '.MuiTableCell-body': {
+                                                border: `0.5px solid ${egBlack.light}`,
+                                            },
                                             cursor: 'pointer',
                                         }}
                                     >
@@ -505,12 +446,7 @@ export default function EnhancedTable() {
                                         >
                                             {row.lesson}
                                         </TableCell>
-                                        <TableCell
-                                            align="center"
-                                            sx={{ paddingX: 0 }}
-                                        >
-                                            {row.deposit ? 'O' : 'X'}
-                                        </TableCell>
+
                                         <TableCell
                                             align="center"
                                             sx={{ paddingX: 0 }}
@@ -545,17 +481,15 @@ export default function EnhancedTable() {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    labelRowsPerPage=""
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
             </Paper>
+            <div className="flex justify-center my-4">
+                <PaginationRounded
+                    totalItems={1}
+                    itemsPerPage={10}
+                    curPage={1}
+                    setCurPage={(page) => console.log(page)}
+                />
+            </div>
             <div className="text-end">
                 <PurpleBtn content="선택 알림 전송" />
             </div>
