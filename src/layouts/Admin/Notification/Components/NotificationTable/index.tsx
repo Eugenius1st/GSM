@@ -7,7 +7,6 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -15,6 +14,9 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
+// hooks
+import { useRecoilValue } from 'recoil';
+import { IsMobileSelector } from 'atom/isMobile';
 // Buttons
 import PurpleBtn from 'components/Buttons/PurpleBtn';
 // Modals
@@ -250,6 +252,7 @@ interface EnhancedTableToolbarProps {
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
+    let isMobile = useRecoilValue(IsMobileSelector);
     const { numSelected } = props;
     const { egPurple, egWhite } = colors;
     const [applicationOnWeek, setApplicationOnWeek] = React.useState(true);
@@ -275,14 +278,16 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                     {numSelected} selected
                 </Typography>
             ) : (
-                <Typography
-                    sx={{ flex: '1 1 100%', fontWeight: 'bold' }}
-                    variant="subtitle1"
-                    id="tableTitle"
-                    component="div"
-                >
-                    회원정보
-                </Typography>
+                !isMobile && (
+                    <Typography
+                        sx={{ flex: '1 1 100%', fontWeight: 'bold' }}
+                        variant="subtitle1"
+                        id="tableTitle"
+                        component="div"
+                    >
+                        회원정보
+                    </Typography>
+                )
             )}
 
             {numSelected > 0 ? (
@@ -300,20 +305,20 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                     </IconButton>
                 </Tooltip>
             ) : (
-                <div className="flex">
+                <div className={'flex items-center ml-[-1rem]'}>
                     <div
-                        className="flex items-center w-40 mr-2 "
+                        className={isMobile ? 'flex items-center' : 'flex items-center w-44'}
                         onClick={() => setApplicationOnWeek(!applicationOnWeek)}
                     >
                         <EgCheckBox checked={applicationOnWeek} />
-                        <div>금주 수업 신청 X</div>
+                        <div>이번주 수업 신청 X</div>
                     </div>
                     <div
-                        className="flex items-center w-40 mr-4 "
+                        className={isMobile ? 'flex items-center mr-4' : 'flex items-center w-44 mr-4'}
                         onClick={() => setNotApplicationOnWeek(!notApplicationOnWeek)}
                     >
                         <EgCheckBox checked={notApplicationOnWeek} />
-                        <div>금주 수업 신청 O</div>
+                        <div>이번주 수업 신청 O</div>
                     </div>
                     <Tooltip title="Filter list">
                         <DropDownModal

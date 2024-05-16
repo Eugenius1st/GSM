@@ -117,7 +117,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                 </TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
-                        sx={{ paddingX: 0, width: 'fit-content' }}
+                        sx={{ paddingX: 2, width: 'fit-content' }}
                         key={headCell.id}
                         align="center"
                     >
@@ -125,7 +125,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                     </TableCell>
                 ))}
                 <TableCell
-                    sx={{ paddingX: 0 }}
+                    sx={{ paddingX: 1 }}
                     align="center"
                 >
                     정보 보기
