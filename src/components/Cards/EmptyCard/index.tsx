@@ -14,7 +14,7 @@ const EmptyCard = ({ content = '준비중입니다', customStyle }: EmptyCard) =
                         : 'flex flex-col items-center justify-center py-40 my-5 border border-egGrey-default text-egPurple-semiLight'
                 }
             >
-                <div>
+                <div className="flex justify-center">
                     <MdSentimentSatisfiedAlt className="w-10 h-10 mb-5" />
                 </div>
                 <div>{content}</div>

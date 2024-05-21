@@ -47,12 +47,12 @@ const ClassEdit = () => {
     });
 
     // DELETE 요청을 보낼 함수 정의
-    const deleteSubmit = async () => {
-        requestDelete({
-            requestUrl: `${process.env.REACT_APP_API_URL}/class/${classId}`,
-            flagCheckFunc: setDeleteState,
-        });
-    };
+    // const deleteSubmit = async () => {
+    //     requestDelete({
+    //         requestUrl: `/class/${classId}`,
+    //         flagCheckFunc: setDeleteState,
+    //     });
+    // };
 
     useEffect(() => {
         setCurClass(data);

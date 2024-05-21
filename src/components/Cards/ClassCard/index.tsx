@@ -126,7 +126,7 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
     };
     const deleteSubmit = async (id: string, idx: number) => {
         requestDelete({
-            requestUrl: `${process.env.REACT_APP_API_URL}/class/coach`,
+            requestUrl: `/class/coach`,
             data: {
                 coachId: id,
                 classId: classId,

@@ -102,10 +102,10 @@ const CoachDetail = () => {
                 <div>
                     <CoachProfileCard coachInfo={curCoach && curCoach} />
                     <Divider />
-                    <MemoCard
+                    {/* <MemoCard
                         tab={['임금', '특이사항']}
                         memo={coachMemo}
-                    />
+                    /> */}
                 </div>
             ) : (
                 <EmptyCard customStyle="flex flex-col items-center justify-center py-40 my-5  text-egPurple-semiLight" />

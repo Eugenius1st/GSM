@@ -64,10 +64,10 @@ const CoachViewUserCard = ({ attendInfo }: AttendInfoType) => {
                                 { item: '취소', bgColor: egBlack.superLight },
                             ]}
                         />
-                        <MemoModal
+                        {/* <MemoModal
                             tab={['피드백', '특이사항']}
                             memo={userMemo}
-                        />
+                        /> */}
                     </div>
                 </div>
             ))}
