@@ -48,7 +48,7 @@ const CoachDetail = () => {
     const [curCoach, setCurCoach] = useState<any>();
     // GET 요청을 보낼 함수 정의
     const { data, error, isLoading, refetch } = useQuery({
-        queryKey: ['coachDetail'],
+        queryKey: [`coachDetail-${coachId}`],
         queryFn: () => {
             return requestGet({
                 requestUrl: `/admin/${coachId}`,

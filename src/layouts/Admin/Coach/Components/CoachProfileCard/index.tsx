@@ -48,6 +48,14 @@ const CoachProfileCard = ({ coachInfo }: InfoType) => {
                                 </div>
                                 <div>{coachInfo.name}</div>
                             </li>
+                            {coachInfo.lv && (
+                                <li className={listStyle}>
+                                    <div className={titleStyle}>
+                                        <span className={highLight}>LV</span>
+                                    </div>
+                                    <div>{coachInfo.lv}</div>
+                                </li>
+                            )}
                             {coachInfo.birth && (
                                 <li className={listStyle}>
                                     <div className={titleStyle}>
@@ -56,7 +64,14 @@ const CoachProfileCard = ({ coachInfo }: InfoType) => {
                                     <div>{coachInfo.birth.slice(0, 10)}</div>
                                 </li>
                             )}
-
+                            {coachInfo.mobile && (
+                                <li className={listStyle}>
+                                    <div className={titleStyle}>
+                                        <span className={highLight}>휴대폰</span>
+                                    </div>
+                                    <div>{coachInfo.mobile}</div>
+                                </li>
+                            )}
                             <li className={listStyle}>
                                 <div className={titleStyle}>
                                     <span className={highLight}>성별</span>
@@ -71,13 +86,21 @@ const CoachProfileCard = ({ coachInfo }: InfoType) => {
 
                                 <span>{coachInfo.duty}</span>
                             </li>
-                            {coachInfo.license && coachInfo.license.length > 0 && (
+                            {coachInfo.license && coachInfo.license.length > 0 ? (
                                 <li className={listStyle}>
                                     <div className={titleStyle}>
                                         <span className={highLight}>자격증</span>
                                     </div>
 
                                     <span>{coachInfo.license.join(', ')}</span>
+                                </li>
+                            ) : (
+                                <li className={listStyle}>
+                                    <div className={titleStyle}>
+                                        <span className={highLight}>자격증</span>
+                                    </div>
+
+                                    <span>등록 없음</span>
                                 </li>
                             )}
                         </ul>

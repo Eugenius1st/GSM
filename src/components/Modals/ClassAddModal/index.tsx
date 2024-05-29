@@ -1,11 +1,12 @@
 // hooks
 import React, { KeyboardEvent, useEffect, useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 // api
-import { requestPost } from 'api/basic';
+import { requestGet, requestPost } from 'api/basic';
 // Buttons
 import PurpleBtn from 'components/Buttons/PurpleBtn';
 // Cards
+import TagCard from 'components/Common/Tags/TagCard';
 import MemoCard from 'components/Cards/MemoCard';
 // Buttons
 import WhiteBtn from 'components/Buttons/WhiteBtn';
@@ -25,7 +26,15 @@ interface ClassAddModalType {
     setIsSuccess: (isSuccess: boolean) => void;
 }
 const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
-    const classGroupList = ['엘리트반', '성인 남성반', '취미반', '성인 여성반', '기본기반'];
+    const classGroupList = [
+        '엘리트반',
+        '성인 남성반',
+        '취미반',
+        '성인 여성반',
+        '기본기반',
+        '직접입력이 나을까요?',
+        '상수가 나을까요',
+    ];
     const personalClassGroupList = ['엘리트반'];
 
     const [lessonType, setLessonType] = useState<string>('단체');
@@ -34,6 +43,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
     const [applicationDeadline, setApplicationDeadline] = useState('');
     const [place, setPlace] = useState('판교점');
     const [classType, setClassType] = useState('실기');
+    const [classGroups, setClassGroups] = useState([]);
     const [amount, setAmount] = useState('');
     const [coaches, setCoaches] = useState<any>([]);
     const [className, setClassName] = useState(classGroupList[0]);
@@ -49,6 +59,17 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
         setIsShow(false);
         document.body.style.overflow = 'unset';
     };
+    // GET ClassGroup
+    const getClassGroup = useQuery({
+        queryKey: ['allClassGroup'],
+        queryFn: () => {
+            return requestGet({
+                requestUrl: `/classGroup`,
+            });
+        },
+        staleTime: 5 * 1000,
+    });
+
     // POST 수업추가 요청을 보낼 함수 정의
     const flagCheckFunc = (flag: boolean) => {
         setIsSuccess(flag);
@@ -74,8 +95,8 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                 applicationDeadline: applicationDeadline,
                 place: place,
                 lessonType: lessonType,
-
                 classType: classType,
+                classGroups: classGroups.map((el: any) => el.name),
                 name: className,
                 amount: 10,
                 coaches: coachIdArray,
@@ -84,8 +105,6 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
             successFunc: setIsSuccess,
         });
     };
-    console.log(lessonType);
-
     const handleClean = () => {
         setStartTime('');
         setEndTime('');
@@ -153,7 +172,6 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
     useEffect(() => {
         setClassType('실기');
     }, [className]);
-
     return (
         <div>
             <WhiteBtn
@@ -178,7 +196,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                         </div>
                         <div className="p-4">
                             <div className="flex justify-between px-1 py-2 border items border-egGrey-default">
-                                <span className="w-20 ml-1 text-lg">수업 형태</span>
+                                <span className="ml-1 text-lg w-28">수업 형태</span>
                                 <div className="flex items-center text-egGrey-default">
                                     <div className="mr-1">
                                         <input
@@ -228,7 +246,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                             <div className="flex items-center justify-between px-1 py-2 mt-[-1px] border border-egGrey-default">
                                 <label
                                     htmlFor="className"
-                                    className="w-20 ml-1 text-lg"
+                                    className="ml-1 text-lg w-28"
                                 >
                                     수업명
                                 </label>
@@ -286,7 +304,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                             {/* 수업 분류 */}
                             {className === '엘리트반' && (
                                 <div className="flex justify-between px-1 py-2 border items border-egGrey-default mt-[-1px]">
-                                    <span className="w-20 ml-1 text-lg">수업분류</span>
+                                    <span className="ml-1 text-lg w-28">수업분류</span>
                                     <div className="flex items-center text-egGrey-default">
                                         <div className="mr-1">
                                             <input
@@ -334,37 +352,21 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                             )}
 
                             {/* 수업 대상자 선택 */}
-                            {/* <div className="flex justify-between px-1 py-2 border items border-egGrey-default">
-                                <span className="w-20 ml-1 text-lg">수업 형태</span>
-                                <div className="flex items-center text-egGrey-default">
-                                    <div className="mr-1">
-                                        <input
-                                            type="radio"
-                                            id="단체"
-                                            name="lessonType"
-                                            value="단체"
-                                            className="hidden"
-                                            defaultChecked={true}
-                                            onChange={(e) => setLessonType(e.target.value)}
+                            {getClassGroup?.data && (
+                                <div className="flex justify-between px-1 py-2 mt-[-1px] border items border-egGrey-default">
+                                    <span className="ml-1 text-lg w-28">수업 대상</span>
+                                    <div className="flex items-center text-egGrey-default">
+                                        <TagCard
+                                            tagList={getClassGroup?.data.result}
+                                            func={setClassGroups}
                                         />
-                                        <label
-                                            htmlFor="단체"
-                                            className={
-                                                lessonType === '단체'
-                                                    ? 'px-5 py-2 border rounded-md border-egPurple-default text-egPurple-default'
-                                                    : 'px-5 py-2 border rounded-md border-egGrey-default'
-                                            }
-                                        >
-                                            단체
-                                        </label>
                                     </div>
-            
                                 </div>
-                            </div> */}
+                            )}
 
                             {/* 시간 날짜 */}
                             <div className="flex justify-between p-2 border border-egGrey-default mt-[-1px]">
-                                <span className="w-20 mr-4 text-lg">시작 날짜</span>
+                                <span className="mr-4 text-lg w-28">시작 날짜</span>
                                 <input
                                     onChange={(e) => setStartTime(e.target.value)}
                                     type="datetime-local"
@@ -375,7 +377,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                                 />
                             </div>
                             <div className="flex justify-between p-2 border border-egGrey-default mt-[-1px]">
-                                <span className="w-20 mr-4 text-lg">종료 날짜</span>
+                                <span className="mr-4 text-lg w-28">종료 날짜</span>
                                 <input
                                     onChange={(e) => setEndTime(e.target.value)}
                                     type="datetime-local"
@@ -386,7 +388,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                                 />
                             </div>
                             <div className="flex justify-between p-2 border border-egGrey-default mt-[-1px]">
-                                <span className="w-20 mr-4 text-lg">등록 마감</span>
+                                <span className="mr-4 text-lg w-28">등록 마감</span>
                                 <input
                                     onChange={(e) => setApplicationDeadline(e.target.value)}
                                     type="datetime-local"
@@ -399,7 +401,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
 
                             {/* 위치 */}
                             <div className="flex items-center justify-between px-1 pt-3 pb-2 border border-egGrey-default mt-[-1px]">
-                                <span className="w-20 ml-1 mr-4 text-lg">위치</span>
+                                <span className="ml-1 mr-4 text-lg w-28">위치</span>
 
                                 <div className="flex text-egGrey-default">
                                     <div className="mr-1">
@@ -448,7 +450,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
 
                             {/* 인원제한 */}
                             <div className="flex items-center justify-between py-2 px-1 border border-egGrey-default mt-[-1px]">
-                                <span className="w-20 ml-1 mr-4 text-lg">인원 제한</span>
+                                <span className="ml-1 mr-4 text-lg w-28">인원 제한</span>
                                 <input
                                     placeholder="숫자입력"
                                     type="number"
@@ -462,7 +464,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                             </div>
                             {/* 참석 코치 */}
                             <div className="flex justify-between p-2 border border-egGrey-default mt-[-1px]">
-                                <span className="w-20 mr-4 text-lg">참석 코치</span>
+                                <span className="mr-4 text-lg w-28">참석 코치</span>
                                 <div className="flex">
                                     <div className="w-40 h-8 p-1 mr-1 border rounded-md border-egGrey-default">
                                         {coaches.length > 0 && (
@@ -492,7 +494,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                                 </div>
                             </div>
                             <div className="mb-2 border border-egGrey-default mt-[-1px] p-2">
-                                <div className="w-20 mb-2 text-lg">안내 사항</div>
+                                <div className="mb-2 text-lg w-28">안내 사항</div>
                                 <textarea
                                     value={note}
                                     onChange={(e) => setNote(e.target.value)}
