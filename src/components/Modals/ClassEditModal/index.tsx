@@ -60,7 +60,7 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
         const coachIdArray = coaches ? coaches.map((coach: { _id: string }) => coach._id) : [];
         // PATCH 요청에 보낼 데이터
         mutation.mutate({
-            requestUrl: `/class/class/${classId}`,
+            requestUrl: `/class/${classId}`,
             data: {
                 startTime: startTime,
                 endTime: endTime,

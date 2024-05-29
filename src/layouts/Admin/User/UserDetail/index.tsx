@@ -68,31 +68,7 @@ const UserDetail = () => {
             setAnnotation({ feedback: getUserFeedback.data, significant: getUserSignificant.data });
         }
     }, [getUserFeedback.data, getUserSignificant.data]);
-    const userMemo = {
-        feedback: [
-            {
-                date: '2024-03-07',
-                content: '왼발 자세 보완 필요',
-            },
-            { date: '2024-03-07', content: '왼발 자세 보완 필요' },
-            { date: '2024-03-07', content: '왼발 자세 보완 필요' },
-            { date: '2024-03-07', content: '왼발 자세 보완 필요' },
-            { date: '2024-03-05', content: '드리블 훌륭' },
-            { date: '2024-03-04', content: '드리블 매우 훌륭' },
-        ],
-        significant: [
-            {
-                date: '2024-03-07',
-                content:
-                    '태도가 아주 좋음 태도가 아주 좋음 태도가 아주 좋음 태도가 아주 좋음 태도가 아주 좋음 태도가 아주 좋음',
-            },
-            { date: '2024-03-07', content: '태도가 아주 좋음' },
-            { date: '2024-03-07', content: '태도가 아주 좋음' },
-            { date: '2024-03-07', content: '태도가 아주 좋음' },
-            { date: '2024-03-05', content: '인사성 밝음' },
-            { date: '2024-03-04', content: '아이들 이름 외울 필요 있음' },
-        ],
-    };
+
     const editActive = () => {
         navigate(`/admin/user/edit/${userId}`);
     };

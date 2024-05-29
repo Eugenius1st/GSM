@@ -1,10 +1,13 @@
 // hook
 import { useState, useEffect } from 'react';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { requestGet, requestPost } from 'api/basic';
 // recoil
 import { useRecoilValue } from 'recoil';
 import { IsMobileAtom } from 'atom/isMobile';
 // Common
 import CustomDropdown from 'components/EgMaterials/CustomDropdown';
+import ClassGroupDropdown from 'components/EgMaterials/ClassGroupDropDown';
 import RadioButton from 'components/Common/RadioButton';
 import CheckboxGroup from 'components/Common/CheckboxGroup';
 import Divider from 'components/Common/Divider';
@@ -21,6 +24,8 @@ import {
     positionOptions,
     positionMatcherByEng,
 } from 'utility/standardConst';
+// Modlas
+import BasicModal from 'components/Modals/BasicModal';
 
 interface handleState {
     registStage: number;
@@ -47,6 +52,10 @@ const AdditionalInfo = ({
     const [soccerHistory, setSoccerHistory] = useState('');
     const [lessonHistory, setLessonHistory] = useState('');
     const [classGroupName, setClassGroupName] = useState('');
+    const [addClassGroupNameInput, setAddClassGroupNameInput] = useState('');
+    const [addClassGroupDescriptionInput, setAddClassGroupDescriptionInput] = useState('');
+    const [addClassGroupFlag, setAddClassGroupFlag] = useState(false);
+
     const [majorFoot, setMajorFoot] = useState('');
     const [position, setPosition] = useState<string[]>([]);
     const [defaultPosition, setDefaultPosition] = useState([]);
@@ -60,7 +69,7 @@ const AdditionalInfo = ({
         const test = {
             height: height,
             weight: weight,
-            classGroupName: classGroupMatcherByKor(classGroupName),
+            classGroupName: classGroupName,
             team: team ? team : '없음',
             soccerHistory: soccerHistory,
             lessonHistory: lessonHistory,
@@ -88,6 +97,46 @@ const AdditionalInfo = ({
         }
     }, []);
 
+    // GET 요청을 보낼 함수 정의
+    const getClassGroup = useQuery({
+        queryKey: ['allClassGroup'],
+        queryFn: () => {
+            return requestGet({
+                requestUrl: `/classGroup`,
+            });
+        },
+        staleTime: 5 * 1000,
+    });
+    // POST 요청을 보낼 함수 정의
+    const classGroupMutate = useMutation({
+        mutationFn: ({ requestUrl, data, flagCheckFunc }: any) => {
+            return requestPost({
+                requestUrl: requestUrl,
+                data: data,
+                flagCheckFunc: setAddClassGroupFlag,
+            });
+        },
+    });
+    const postFeedback = () => {
+        if (addClassGroupNameInput && addClassGroupDescriptionInput) {
+            classGroupMutate.mutate({
+                requestUrl: '/classgroup',
+                data: {
+                    name: addClassGroupNameInput,
+                    description: addClassGroupDescriptionInput,
+                },
+            });
+        } else {
+            alert('클래스 그룹명 또는 설명을 입력하세요');
+        }
+    };
+    useEffect(() => {
+        if (addClassGroupFlag) {
+            getClassGroup.refetch();
+            setAddClassGroupFlag(false);
+        }
+    }, [addClassGroupFlag]);
+
     return (
         <div className="max-w-lg p-2 m-auto">
             <form>
@@ -113,16 +162,58 @@ const AdditionalInfo = ({
                 />
                 <Divider />
                 {/* 등록 교육 과정 */}
-                <div className="my-1">갤로핑 희망 교육 과정 *</div>
-                <CustomDropdown
-                    placehorder="교육 과정"
-                    formStyle="py-2 px-1 border border-egGrey-default text-egGrey-default flex flex-col mb-3"
-                    itemList={trainingCourseOptions}
-                    inputStyle="py-2 px-1 border border-egGrey-default text-egGrey-default"
-                    itemStyle=""
-                    func={setClassGroupName}
-                    value={classGroupName}
-                />
+                <div className="flex justify-between my-1">
+                    <div>갤로핑 희망 교육과정 *</div>
+
+                    <BasicModal
+                        modalBtn={
+                            <button
+                                type="button"
+                                className="px-1 border rounded-sm text-egPurple-default border-egPurple-default hover:bg-egPurple-superLight"
+                            >
+                                + 추가
+                            </button>
+                        }
+                        modalTitle={'교육과정 추가'}
+                        modalContents={
+                            <div>
+                                <div className="mt-4">클래스 그룹</div>
+                                <input
+                                    placeholder={`클래스 그룹명을 입력하세요`}
+                                    type="text"
+                                    maxLength={20}
+                                    onChange={(e) => setAddClassGroupNameInput(e.target.value)}
+                                    className="w-full p-2 mt-2 mb-4 border border-egPurple-default"
+                                />
+                                <div>그룹 설명</div>
+                                <input
+                                    placeholder={`설명을 입력하세요(ex: 초6~중3 선수반)`}
+                                    type="text"
+                                    maxLength={50}
+                                    onChange={(e) => setAddClassGroupDescriptionInput(e.target.value)}
+                                    className="w-full p-2 mt-2 mb-4 border border-egPurple-default"
+                                />
+                            </div>
+                        }
+                        modalFooterExitBtn={'취소'}
+                        modalFooterActiveBtn={'추가'}
+                        modalFooterActiveFunc={postFeedback}
+                        modalFooterActiveFuncAfterClose={true}
+                    />
+                </div>
+                {getClassGroup?.data && (
+                    <div>
+                        <ClassGroupDropdown
+                            placehorder="교육 과정"
+                            formStyle="py-2 px-1 border border-egGrey-default text-egGrey-default flex flex-col mb-3"
+                            itemList={getClassGroup.data.result ? getClassGroup.data.result : []}
+                            inputStyle="py-2 px-1 border border-egGrey-default text-egGrey-default"
+                            itemStyle=""
+                            func={setClassGroupName}
+                            value={classGroupName}
+                        />
+                    </div>
+                )}
 
                 <label htmlFor="team">소속팀</label>
                 <input

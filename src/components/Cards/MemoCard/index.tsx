@@ -51,8 +51,8 @@ const MemoCard = ({ tab, annotation, feedbackRefetchFunc, significantRefetchFunc
     const [feedbackInput, setFeedbackInput] = useState('');
     const [significantInput, setSignificantInput] = useState('');
     const { feedback, significant } = annotation;
-    const activeTab = 'text-egPurple-default border-b-4 border-egPurple-default px-4 py-1 mx-2';
-    const inactiveTab = 'text-egGrey-default border-b-4 border-egGrey-default px-4 py-1 mx-2';
+    const activeTab = 'text-egPurple-default border-b-4 border-egPurple-default px-4 py-1 mx-1';
+    const inactiveTab = 'text-egGrey-default border-b-4 border-egGrey-default px-4 py-1 mx-1';
     // admin id
     const adminAtom = useRecoilValue(LoginAtomSelector);
     const adminInfo = decode(adminAtom.accessToken);
@@ -60,7 +60,7 @@ const MemoCard = ({ tab, annotation, feedbackRefetchFunc, significantRefetchFunc
     const { userId } = useParams();
 
     // POST 요청을 보낼 함수 정의
-    const postFeedback = useMutation({
+    const mutateFeedback = useMutation({
         mutationFn: ({ requestUrl, data, successFunc }: any) => {
             return requestPost({
                 requestUrl: requestUrl,
@@ -68,7 +68,7 @@ const MemoCard = ({ tab, annotation, feedbackRefetchFunc, significantRefetchFunc
             });
         },
     });
-    const postSignificant = useMutation({
+    const mutateSignificant = useMutation({
         mutationFn: ({ requestUrl, data, successFunc }: any) => {
             return requestPost({
                 requestUrl: requestUrl,
@@ -77,8 +77,8 @@ const MemoCard = ({ tab, annotation, feedbackRefetchFunc, significantRefetchFunc
         },
     });
     // POST 요청 및 기존 coach 배열에 이미 있는 id 인지 확인하는 함수
-    const PostFeedback = () => {
-        postFeedback.mutate({
+    const postFeedback = () => {
+        mutateFeedback.mutate({
             requestUrl: '/annotation/feedback',
             data: {
                 studentId: userId,
@@ -87,8 +87,8 @@ const MemoCard = ({ tab, annotation, feedbackRefetchFunc, significantRefetchFunc
             },
         });
     };
-    const PostSignificant = () => {
-        postSignificant.mutate({
+    const postSignificant = () => {
+        mutateSignificant.mutate({
             requestUrl: '/annotation/significant',
             data: {
                 studentId: userId,
@@ -118,17 +118,17 @@ const MemoCard = ({ tab, annotation, feedbackRefetchFunc, significantRefetchFunc
 
     // REFETCH-POST
     useEffect(() => {
-        if (postFeedback.isSuccess) {
+        if (mutateFeedback.isSuccess) {
             feedbackRefetchFunc();
             setFeedbackInput('');
         }
-    }, [postFeedback.isSuccess]);
+    }, [mutateFeedback.isSuccess]);
     useEffect(() => {
-        if (postSignificant.isSuccess) {
+        if (mutateSignificant.isSuccess) {
             significantRefetchFunc();
             setSignificantInput('');
         }
-    }, [postSignificant.isSuccess]);
+    }, [mutateSignificant.isSuccess]);
     // REFETCH-DELTE
     useEffect(() => {
         if (deleteFeedbackState) {
@@ -159,7 +159,7 @@ const MemoCard = ({ tab, annotation, feedbackRefetchFunc, significantRefetchFunc
                         </button>
                     ))}
                 </div>
-                <div className="mt-2 rounded-md max-h-80">
+                <div className="mt-4 rounded-md max-h-80">
                     {/* {memoTab === tab[0] && (
                         <div>
                             {tab[0] == '임금' ? (
@@ -216,7 +216,7 @@ const MemoCard = ({ tab, annotation, feedbackRefetchFunc, significantRefetchFunc
                                     onChange={(e) => setFeedbackInput(e.target.value)}
                                 />
                                 <WhiteBtn
-                                    func={PostFeedback}
+                                    func={postFeedback}
                                     content="작성"
                                     width="28"
                                 />
@@ -258,7 +258,7 @@ const MemoCard = ({ tab, annotation, feedbackRefetchFunc, significantRefetchFunc
                                     onChange={(e) => setSignificantInput(e.target.value)}
                                 />
                                 <WhiteBtn
-                                    func={PostSignificant}
+                                    func={postSignificant}
                                     content="작성"
                                     width="28"
                                 />

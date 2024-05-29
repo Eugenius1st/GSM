@@ -33,7 +33,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
     const [endTime, setEndTime] = useState('');
     const [applicationDeadline, setApplicationDeadline] = useState('');
     const [place, setPlace] = useState('판교점');
-    const [type, setType] = useState('실기');
+    const [classType, setClassType] = useState('실기');
     const [amount, setAmount] = useState('');
     const [coaches, setCoaches] = useState<any>([]);
     const [className, setClassName] = useState(classGroupList[0]);
@@ -65,7 +65,6 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
     });
     const postClass = () => {
         const coachIdArray = coaches ? coaches.map((coach: { _id: string }) => coach._id) : [];
-
         // POST 요청에 보낼 데이터
         mutation.mutate({
             requestUrl: '/class',
@@ -74,7 +73,9 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                 endTime: endTime,
                 applicationDeadline: applicationDeadline,
                 place: place,
-                type: type,
+                lessonType: lessonType,
+
+                classType: classType,
                 name: className,
                 amount: 10,
                 coaches: coachIdArray,
@@ -83,13 +84,14 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
             successFunc: setIsSuccess,
         });
     };
+    console.log(lessonType);
 
     const handleClean = () => {
         setStartTime('');
         setEndTime('');
         setApplicationDeadline('');
         setPlace('판교점');
-        setType('실기');
+        setClassType('실기');
         setClassName('');
         setAmount('');
         setCoaches([]);
@@ -110,7 +112,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
         } else if (!place) {
             alert('수업 장소를 입력하세요');
             return false;
-        } else if (!type) {
+        } else if (!classType) {
             alert('이론, 실기 구분을 입력하세요');
             return false;
         } else if (!className) {
@@ -149,7 +151,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
     };
 
     useEffect(() => {
-        setType('실기');
+        setClassType('실기');
     }, [className]);
 
     return (
@@ -294,12 +296,12 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                                                 value="실기"
                                                 className="hidden"
                                                 defaultChecked={true}
-                                                onChange={(e) => setType(e.target.value)}
+                                                onChange={(e) => setClassType(e.target.value)}
                                             />
                                             <label
                                                 htmlFor="실기"
                                                 className={
-                                                    type === '실기'
+                                                    classType === '실기'
                                                         ? 'px-5 py-2 border rounded-md border-egPurple-default text-egPurple-default'
                                                         : 'px-5 py-2 border rounded-md border-egGrey-default'
                                                 }
@@ -314,12 +316,12 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                                                 name="classification"
                                                 value="이론"
                                                 className="hidden"
-                                                onChange={(e) => setType(e.target.value)}
+                                                onChange={(e) => setClassType(e.target.value)}
                                             />
                                             <label
                                                 htmlFor="이론"
                                                 className={
-                                                    type === '이론'
+                                                    classType === '이론'
                                                         ? 'px-5 py-2 border rounded-md border-egPurple-default text-egPurple-default'
                                                         : 'px-5 py-2 border rounded-md border-egGrey-default'
                                                 }

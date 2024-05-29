@@ -5,7 +5,7 @@ export const trainingCourseOptions = [
     '성인반(남,녀)',
     '기본기반(초4-6)',
     '어린이반(초1-3)',
-    '2:1개인레슨',
+    '개인레슨',
 ];
 export const positionOptions = ['GK', 'CB', 'LWB', 'RWB', 'CDM', 'CAM', 'CM', 'LM', 'RM', 'ST'];
 

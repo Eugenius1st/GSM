@@ -134,6 +134,11 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
     const [seeMore, setSeeMore] = useState(false);
     const [marketingPrivacy, setMarketingPrivacy] = useState(marketingAgree);
     const [marketingEvent, setMarketingEvent] = useState(serviceAgree);
+    const lessonTabList = ['단체', '개인'];
+    const [lessonTab, setLessonTab] = useState(lessonTabList[0]);
+
+    const activeTab = 'text-egPurple-default border-b-4 border-egPurple-default px-4 py-1 mx-1';
+    const inactiveTab = 'text-egGrey-default border-b-4 border-egGrey-default px-4 py-1 mx-1';
 
     return (
         <div>
@@ -157,7 +162,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                         <div className={titleStyle}>
                             <span className={highLight}>성별</span>
                         </div>
-                        <div className={contentStyle}>{gender === 'man' ? '남자' : '여자'}</div>
+                        <div className={contentStyle}>{gender === 'male' ? '남자' : '여자'}</div>
                     </div>
 
                     <div className={listStyle}>
@@ -198,6 +203,12 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                             <div className={contentStyle}>{residence}</div>
                             <div className={contentStyle}>{residenceSpecific}</div>
                         </div>
+                    </div>
+                    <div className={listStyle}>
+                        <div className={titleStyle}>
+                            <span className={highLight}>대표 연락처</span>
+                        </div>
+                        <div className={contentStyle}>개발중</div>
                     </div>
                 </div>
             </div>
@@ -291,8 +302,21 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
 
             <Divider />
             <div className={'w-full m-auto border border-egGrey-default p-4'}>
-                <div className="mb-4 text-lg font-bold">수업 정보</div>
-
+                <div className="flex justify-between">
+                    <div className="mb-2 text-lg font-bold">수업 정보</div>
+                    <div>
+                        {lessonTabList.map((el, idx) => (
+                            <button
+                                type="button"
+                                key={idx}
+                                onClick={() => setLessonTab(el)}
+                                className={`${lessonTab === el ? activeTab : inactiveTab}`}
+                            >
+                                {el}
+                            </button>
+                        ))}
+                    </div>
+                </div>
                 <div>
                     <div className={listStyle}>
                         <div className={titleStyle}>
