@@ -18,8 +18,8 @@ import { requestDelete } from 'api/basic';
 import EmptyCard from 'components/Cards/EmptyCard';
 // Modals
 import AddCoachModal from 'components/Modals/CoachAddModal';
+import BasicModal from 'components/Modals/BasicModal';
 // icons
-import { IoMdSearch } from 'react-icons/io';
 import { IoClose } from 'react-icons/io5';
 import { FaPlus } from 'react-icons/fa6';
 
@@ -86,7 +86,6 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
             }
         }
     };
-
     // POST 수업추가 요청을 보낼 함수 정의
     const mutation = useMutation({
         mutationFn: ({ requestUrl, data, successFunc }: any) => {
@@ -127,7 +126,7 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
     };
     const deleteSubmit = async (id: string, idx: number) => {
         requestDelete({
-            requestUrl: `${process.env.REACT_APP_API_URL}/class/coach`,
+            requestUrl: `/class/coach`,
             data: {
                 coachId: id,
                 classId: classId,
@@ -207,6 +206,36 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
                                         : 0}
                                     /{classInfo?.amount} (대기자{classInfo?.reserved ? classInfo?.reserved : 0} 명){' '}
                                 </div>
+                                {loginState === 'admin' && (
+                                    <div>
+                                        <BasicModal
+                                            modalBtn={
+                                                <button
+                                                    type="button"
+                                                    className="p-1 ml-2 text-xs border rounded-md bg-egPurple-superLight text-egPurple-default"
+                                                >
+                                                    마스킹
+                                                </button>
+                                            }
+                                            modalTitle={'데이터 마스킹'}
+                                            modalContents={
+                                                <div>
+                                                    <input
+                                                        placeholder={`${0}~${
+                                                            classInfo?.amount
+                                                        } 사이의 마스킹 값을 입력하세요`}
+                                                        type="number"
+                                                        min={0}
+                                                        max={classInfo?.amount}
+                                                        className="w-full p-2 my-4 border border-egPurple-default"
+                                                    />
+                                                </div>
+                                            }
+                                            modalFooterExitBtn={'취소'}
+                                            modalFooterActiveBtn={'마스킹'}
+                                        />
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -231,24 +260,26 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
                                         </div>
                                     ) : (
                                         <div className="text-egGrey-default">코치 배정중</div>
-                                    )}{' '}
+                                    )}
                                 </div>
-                                <div>
-                                    <AddCoachModal
-                                        modalBtn={
-                                            <button className="flex items-center px-2 py-1 ml-2 border rounded-md bg-egPurple-superLight hover:bg-egPurple-semiLight text-egPurple-default">
-                                                <FaPlus className="w-4 h-4 mr-1" />
-                                                <div className="text-sm ">추가</div>
-                                            </button>
-                                        }
-                                        modalTitle={'코치 검색'}
-                                        modalContents={'찾으시는 코치의 이름을 입력하세요(최대 10글자)'}
-                                        // modalFooterExitBtn={'취소'}
-                                        // modalFooterActiveBtn={'입력'}
-                                        modalActiveFunc={handleAddCoaches}
-                                        modalScrollStayFlag={false}
-                                    />
-                                </div>
+                                {loginState === 'admin' && (
+                                    <div>
+                                        <AddCoachModal
+                                            modalBtn={
+                                                <button className="flex items-center px-1 py-1 border rounded-md bg-egPurple-superLight hover:bg-egPurple-semiLight text-egPurple-default">
+                                                    {/* <div className="text-xs ">추가</div> */}
+                                                    <FaPlus className="w-4 h-4" />
+                                                </button>
+                                            }
+                                            modalTitle={'코치 검색'}
+                                            modalContents={'찾으시는 코치의 이름을 입력하세요(최대 10글자)'}
+                                            // modalFooterExitBtn={'취소'}
+                                            // modalFooterActiveBtn={'입력'}
+                                            modalActiveFunc={handleAddCoaches}
+                                            modalScrollStayFlag={false}
+                                        />
+                                    </div>
+                                )}
                             </div>
                         )}
 

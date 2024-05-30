@@ -10,6 +10,7 @@ import MemoCard from 'components/Cards/MemoCard';
 import Divider from 'components/Common/Divider';
 // Admin User Components
 import UserProfileCard from 'layouts/Admin/User/Components/UserProfileCard';
+import UserRoundCard from 'layouts/Admin/User/Components/UserRoundCard';
 // Modals
 import EditModal from 'components/Modals/EditModal';
 import PasswordEditModal from 'components/Modals/PasswordEditModal';
@@ -25,48 +26,67 @@ interface PatchDataType {
 
 const UserDetail = () => {
     const { userId } = useParams();
-    const [curUser, setCurUser] = useState();
+    // const [curUser, setCurUser] = useState();
     const [patchUnblockFlag, setPatchUnblockFlag] = useState(false); // 비활성화 성공 여부
     const [patchBlockFlag, setPatchBlockFlag] = useState(false); // 비활성화 성공 여부
-
+    const [annotation, setAnnotation] = useState<any>({ feedback: {}, significant: {} });
     const navigate = useNavigate();
-    // GET 요청을 보낼 함수 정의
-    const { data, error, isLoading, refetch } = useQuery({
-        queryKey: ['userDetailInfo'],
+    // GET USER INFO 요청을 보낼 함수 정의
+    const getUserDetailInfo = useQuery({
+        queryKey: [`userDetailInfo-${userId}`],
         queryFn: () => {
             return requestGet({
                 requestUrl: `/student/${userId}`,
-                successFunc: setCurUser,
+                // successFunc: setCurUser,
                 // flagCheckFunc: setIsSearched,
             });
         },
         staleTime: 5 * 1000,
     });
-    const userMemo = {
-        feedback: [
-            {
-                date: '2024-03-07',
-                content: '왼발 자세 보완 필요',
-            },
-            { date: '2024-03-07', content: '왼발 자세 보완 필요' },
-            { date: '2024-03-07', content: '왼발 자세 보완 필요' },
-            { date: '2024-03-07', content: '왼발 자세 보완 필요' },
-            { date: '2024-03-05', content: '드리블 훌륭' },
-            { date: '2024-03-04', content: '드리블 매우 훌륭' },
-        ],
-        significant: [
-            {
-                date: '2024-03-07',
-                content:
-                    '태도가 아주 좋음 태도가 아주 좋음 태도가 아주 좋음 태도가 아주 좋음 태도가 아주 좋음 태도가 아주 좋음',
-            },
-            { date: '2024-03-07', content: '태도가 아주 좋음' },
-            { date: '2024-03-07', content: '태도가 아주 좋음' },
-            { date: '2024-03-07', content: '태도가 아주 좋음' },
-            { date: '2024-03-05', content: '인사성 밝음' },
-            { date: '2024-03-04', content: '아이들 이름 외울 필요 있음' },
-        ],
+    //GET USER FEEDBACK 요청을 보낼 함수
+    const getUserFeedback = useQuery({
+        queryKey: [`userFeedback-${userId}`],
+        queryFn: () => {
+            return requestGet({
+                requestUrl: `/annotation/feedback/${userId}`,
+            });
+        },
+        staleTime: 5 * 1000,
+    });
+    //GET USER SIGNIFICANT 요청을 보낼 함수
+    const getUserSignificant = useQuery({
+        queryKey: [`userSignificant-${userId}`],
+        queryFn: () => {
+            return requestGet({
+                requestUrl: `/annotation/significant/${userId}`,
+            });
+        },
+        staleTime: 5 * 1000,
+    });
+
+    //GET USER ROUND 요청을 보낼 함수
+    const [userRoundInfo, setUserRounInfo] = useState<any>('');
+    const getUserRound = useQuery({
+        queryKey: [`userRound-${userId}`],
+        queryFn: () => {
+            return requestGet({
+                requestUrl: `/round/student/${userId}`,
+                successFunc: setUserRounInfo,
+            });
+        },
+        staleTime: 5 * 1000,
+    });
+    // GET USER ROUND REFETCH 함수
+    const handleRoundRefetch = () => {
+        getUserRound.refetch();
     };
+
+    useEffect(() => {
+        if (getUserFeedback.data && getUserSignificant.data) {
+            setAnnotation({ feedback: getUserFeedback.data, significant: getUserSignificant.data });
+        }
+    }, [getUserFeedback.data, getUserSignificant.data]);
+
     const editActive = () => {
         navigate(`/admin/user/edit/${userId}`);
     };
@@ -96,7 +116,6 @@ const UserDetail = () => {
             flagCheckFunc: setPatchUnblockFlag,
         });
     }
-
     return (
         <div className="eg-default-wrapper">
             <div className="flex items-center justify-between">
@@ -106,11 +125,23 @@ const UserDetail = () => {
                     <PasswordEditModal />
                 </div>
             </div>
-            {curUser && <UserProfileCard userInfo={curUser} />}
+            {getUserDetailInfo.data && <UserProfileCard userInfo={getUserDetailInfo.data} />}
+            <Divider />
+            {userRoundInfo && getUserDetailInfo.data && (
+                <UserRoundCard
+                    classGroupName={getUserDetailInfo.data.classGroupName}
+                    roundInfo={userRoundInfo.result}
+                    count={userRoundInfo.count}
+                    getRoundrefetchFunc={handleRoundRefetch}
+                />
+            )}
+
             <Divider />
             <MemoCard
-                tab={['피드백', '특이사항']}
-                memo={userMemo}
+                tab={['feedback', 'significant']}
+                annotation={annotation}
+                feedbackRefetchFunc={getUserFeedback.refetch}
+                significantRefetchFunc={getUserSignificant.refetch}
             />
             <div className="flex justify-end my-8">
                 {/* 유저 차단, 활성화 구분 정보 있다면 버튼 1개만 보이게 하는 것이 좋을 듯 */}

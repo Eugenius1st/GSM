@@ -38,8 +38,10 @@ const Class = () => {
     }, [curPage]);
 
     useEffect(() => {
-        setAllClass(data.result);
-        setTotalItems(data.count);
+        if (data) {
+            setAllClass(data.result);
+            setTotalItems(data.count);
+        }
     }, [data]);
 
     return (

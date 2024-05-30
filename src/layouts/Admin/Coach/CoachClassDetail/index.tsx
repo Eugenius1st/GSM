@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
 // api
-import { requestGet, requestDelete } from 'api/basic';
+import { requestGet } from 'api/basic';
 // Class Components
 import ViewUserCard from 'layouts/Admin/Class/Components/ViewUserCard';
 // Icons

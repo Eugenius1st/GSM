@@ -13,9 +13,8 @@ import { IoMdSearch } from 'react-icons/io';
 import EmptyCard from 'components/Cards/EmptyCard';
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
-import { PathOrFileDescriptor } from 'fs';
 
-interface CoachAddModalType {
+interface UserAddModalType {
     modalBtn: React.ReactNode;
     modalTitle?: string;
     modalContents?: string | React.ReactNode;
@@ -25,16 +24,14 @@ interface CoachAddModalType {
     modalActiveFunc?: (data: any) => void;
 }
 
-export interface AdminDataType {
-    birth?: string;
-    gender?: string;
-    lv?: number;
+export interface UserDataType {
     name: string;
     photo?: string;
     _id: string;
+    classGroupName?: string;
 }
 
-const CoachAddModal = ({
+const UserAddModal = ({
     modalBtn,
     modalTitle,
     modalContents,
@@ -42,7 +39,7 @@ const CoachAddModal = ({
     modalFooterActiveBtn,
     modalActiveFunc,
     modalScrollStayFlag = true,
-}: CoachAddModalType) => {
+}: UserAddModalType) => {
     const [isShow, setIsShow] = useState(false);
     const [queryEnabled, setQueryEnabled] = useState(false);
     const [searchInput, setSearchInput] = useState('');
@@ -61,13 +58,13 @@ const CoachAddModal = ({
     };
     // GET 요청을 보낼 함수 정의
     const { data, error, isLoading, refetch } = useQuery({
-        queryKey: ['searchCoach'],
+        queryKey: ['searchUser'],
         queryFn: () => {
             if (searchInput) {
                 return requestGet({
-                    requestUrl: `/admin/search/${searchInput}?with_head=true&take=${itemsPerPage}&page=${curPage}`,
+                    requestUrl: `/student/search/${searchInput}?with_head=true&take=${itemsPerPage}&page=${curPage}`,
                     // successFunc: setSearchedData,
-                    // flagCheckFunc: setIsSearched,
+                    flagCheckFunc: setIsSearched,
                 });
             } else {
                 // searchInput이 undefined일 때에 대한 처리
@@ -77,14 +74,12 @@ const CoachAddModal = ({
         staleTime: 5 * 1000,
         enabled: queryEnabled, // enabled 옵션을 사용하여 쿼리를 활성화 또는 비활성화합니다.
     });
-
     useEffect(() => {
         if (data) {
             setSearchedData(data.result);
             setTotalItems(data.count);
         }
     }, [data]);
-
     const handleButtonClick = () => {
         // GET 요청 버튼 클릭 시에만 쿼리를 활성화하도록 설정합니다.
         if (searchInput) {
@@ -93,12 +88,13 @@ const CoachAddModal = ({
         }
     };
 
-    const handleActive = (data: AdminDataType) => {
+    const handleActive = (data: UserDataType) => {
         if (modalActiveFunc && isSearched) {
             modalActiveFunc(data);
             handleCloseModal();
         }
     };
+    console.log('searchedData', searchedData);
 
     return (
         <div className="z-10">
@@ -127,7 +123,7 @@ const CoachAddModal = ({
                             </div>
                             {searchedData && searchedData.length > 0 ? (
                                 <div className="h-40 py-1 overflow-y-auto ">
-                                    {searchedData.map((el: AdminDataType, idx) => (
+                                    {searchedData.map((el: UserDataType, idx) => (
                                         <div
                                             onClick={() => handleActive(el)}
                                             key={idx}
@@ -138,12 +134,8 @@ const CoachAddModal = ({
                                                 alt={el.name}
                                                 className="w-8 h-8 rounded-full"
                                             />
-                                            <div>{el.lv && `LV:${el.lv}`}</div>
-                                            <div>
-                                                {el.name}
-                                                {el.gender === 'male' ? ' (남)' : ' (여)'}
-                                            </div>
-                                            <div>{el.birth && el.birth.slice(0, 4)}년생</div>
+                                            <div>{el.name}</div>
+                                            <div>{el.classGroupName}</div>
                                         </div>
                                     ))}
                                     {searchedData && searchedData.length > 0 && (
@@ -191,4 +183,4 @@ const CoachAddModal = ({
     );
 };
 
-export default CoachAddModal;
+export default UserAddModal;

@@ -9,7 +9,7 @@ import type { MemoCardType } from 'components/Cards/MemoCard';
 // icons
 import { CgClose } from 'react-icons/cg';
 
-const MemoModal = ({ tab = ['피드백', '특이사항'], memo }: MemoCardType) => {
+const MemoModal = ({ tab = ['피드백', '특이사항'] }: MemoCardType) => {
     const [isShow, setIsShow] = useState(false);
     const handleShowModal = () => {
         setIsShow(true);
@@ -31,10 +31,10 @@ const MemoModal = ({ tab = ['피드백', '특이사항'], memo }: MemoCardType) 
                         <div className="flex justify-end">
                             <CgClose onClick={handleCloseModal} />
                         </div>
-                        <MemoCard
+                        {/* <MemoCard
                             tab={tab}
                             memo={memo}
-                        />
+                        /> */}
                     </div>
                     <button
                         onClick={handleCloseModal}

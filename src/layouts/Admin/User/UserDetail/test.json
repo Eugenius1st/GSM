@@ -1,0 +1,92 @@
+[
+    {
+        "_id": "664d9c74ef312b430757cf99",
+        "studentId": "664d530af96777ebb75bec7c",
+        "roundProductId": "664d8fe52724fe6545ad2834",
+        "available": true, // (사용후) 표기
+        "use": true,
+        "useStartAt": "2024-05-22T07:19:16.366Z",
+        "expires": null,
+        "roundAR": [
+            // 이거애 따라 펼치기
+            {
+                "_id": "664e898b59766ad5011e74ba",
+                "classId": "664d90562724fe6545ad283f",
+                "status": "CONFIRMED",
+                "createdAt": "2024-05-23T00:10:51.048Z",
+                "className": "개인 레슨",
+                "startTime": "2024-05-22T04:22:06.782Z",
+                "endTime": "2024-05-22T06:22:06.782Z"
+            }
+        ],
+        "nRoundAr": 1,
+        "roundProductName": "개인레슨 5회",
+        "lessonType": "personal",
+        "roundAmount": 5,
+        "rest": 4
+    },
+    {
+        "_id": "664d9c8aef312b430757cf9f",
+        "studentId": "664d530af96777ebb75bec7c",
+        "roundProductId": "664d8fe52724fe6545ad2834",
+        "available": true,
+        "use": false, // 색상 처리, 및 비활성화(사용전)표기
+        "useStartAt": null,
+        "expires": null,
+        "roundAR": [],
+        "nRoundAr": 0,
+        "roundProductName": "개인레슨 5회",
+        "lessonType": "personal",
+        "roundAmount": 5,
+        "rest": 5
+    },
+    {
+        "_id": "664d9ca1ef312b430757cfa6",
+        "studentId": "664d530af96777ebb75bec7c",
+        "roundProductId": "664d7096114832e7198b0e0b",
+        "available": true,
+        "use": true,
+        "useStartAt": "2024-05-22T07:20:01.013Z",
+        "expires": null,
+        "roundAR": [
+            {
+                "_id": "664da725c977535f7721cf38",
+                "classId": "664d7042114832e7198b0e04",
+                "status": "CONFIRMED",
+                "createdAt": "2024-05-22T08:04:53.513Z",
+                "className": "성인 남성반",
+                "startTime": "2024-05-22T02:49:52.725Z",
+                "endTime": "2024-05-22T04:49:52.725Z"
+            },
+            {
+                "_id": "664ee11619e6696e6175f6de",
+                "classId": "664ed71f040bda943840b7ce",
+                "status": "CONFIRMED",
+                "createdAt": "2024-05-23T06:24:22.861Z",
+                "className": "이론 1차",
+                "startTime": "2024-05-23T00:01:29.185Z",
+                "endTime": "2024-05-23T02:01:29.185Z"
+            }
+        ],
+        "nRoundAr": 2,
+        "roundProductName": "그룹 레슨 10회",
+        "lessonType": "group",
+        "roundAmount": 10,
+        "rest": 8
+    },
+    {
+        "_id": "66568a30df98a6ffef4acc55",
+        "studentId": "664d530af96777ebb75bec7c",
+        "roundProductId": "664d8fe52724fe6545ad2834",
+        "available": true,
+        "use": false,
+        "useStartAt": null,
+        "expires": null,
+        "roundAR": [],
+        "nRoundAr": 0,
+        "roundProductName": "개인레슨 5회",
+        "lessonType": "personal",
+        "roundAmount": 5,
+        "rest": 5
+    }
+]

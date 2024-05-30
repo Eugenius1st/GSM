@@ -17,6 +17,7 @@ function BasicAlert({ alertTitle, alertContents, alertFooterActiveBtn, alertFoot
     const handleAlertFooterActiveFunc = () => {
         if (alertFooterActiveFunc) {
             alertFooterActiveFunc();
+            document.body.style.overflow = 'unset';
         }
     };
     return (

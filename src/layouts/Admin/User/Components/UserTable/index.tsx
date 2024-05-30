@@ -156,7 +156,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                           <TableCell
                               align="center"
                               sx={{
-                                  paddingX: 0,
+                                  paddingX: 1,
                                   width: 'fit-content',
                               }}
                               key={headCell.id}
@@ -470,7 +470,9 @@ export default function EnhancedTable({ tableRowData, userSearchState, setUserSe
                                             tabIndex={-1}
                                             key={row._id}
                                             selected={isItemSelected}
-                                            sx={{ cursor: 'pointer' }}
+                                            sx={{
+                                                cursor: 'pointer',
+                                            }}
                                         >
                                             <TableCell
                                                 align="center"
@@ -495,7 +497,7 @@ export default function EnhancedTable({ tableRowData, userSearchState, setUserSe
                                                 }}
                                             >
                                                 <img
-                                                    className="object-cover m-auto rounded-full w-14 h-14"
+                                                    className="object-cover m-auto border rounded-full w-14 h-14"
                                                     src={row.photo}
                                                     alt={row.name}
                                                 />
@@ -522,7 +524,7 @@ export default function EnhancedTable({ tableRowData, userSearchState, setUserSe
                                             ) : (
                                                 <TableCell
                                                     align="center"
-                                                    sx={{ paddingX: 0, width: '1rem' }}
+                                                    sx={{ paddingX: 0, width: '2rem' }}
                                                 >
                                                     {row.birth} 년생
                                                 </TableCell>
@@ -530,7 +532,7 @@ export default function EnhancedTable({ tableRowData, userSearchState, setUserSe
                                             {!userSearchState && (
                                                 <TableCell
                                                     align="center"
-                                                    sx={{ paddingX: 0, width: '1rem' }}
+                                                    sx={{ paddingX: 0, width: '2rem' }}
                                                 >
                                                     {row.team}
                                                 </TableCell>
@@ -538,7 +540,7 @@ export default function EnhancedTable({ tableRowData, userSearchState, setUserSe
                                             <TableCell
                                                 sx={{
                                                     paddingX: 0,
-                                                    width: '6rem',
+                                                    width: '1rem',
                                                 }}
                                                 align="center"
                                             >

@@ -19,7 +19,7 @@ const UserBasicCard = ({ isMobile, gender, phone, parentsPhone, address, detailA
                     <div className={titleStyle}>
                         <span className={highLight}>성별</span>
                     </div>
-                    <div>{gender}</div>
+                    <div>{gender === 'male' ? '남성' : '여성'}</div>
                 </div>
                 <div className={infoStyle}>
                     <div className={titleStyle}>
