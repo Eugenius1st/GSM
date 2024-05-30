@@ -1,5 +1,6 @@
 // Common
 import PurpleTag from 'components/Common/Tags/PurpleTag';
+import CustomTag from 'components/Common/Tags/CustomTag';
 import Divider from 'components/Common/Divider';
 
 interface SkillList {
@@ -30,15 +31,32 @@ const UserSkillCard = ({ advantages, improvement }: UserSkillCardType) => {
                 <div className={titleStyle}>신체적 능력</div>
                 <PurpleTag tagList={advantages.physicalSkill} />
                 <Divider />
+                <Divider />
+
                 <div className={infoStyle}>
                     <span className={highLight}>개선 희망점</span>
                 </div>
                 <div className={titleStyle}>기술적 능력</div>
-                <PurpleTag tagList={improvement.technicalSkill} />
+                <CustomTag
+                    tagList={improvement.technicalSkill}
+                    customTagStyle={
+                        'inline-block px-3 py-1 m-1 border rounded-md w-fit bg-egGrey-default border-egGrey-default text-egWhite-default'
+                    }
+                />
                 <div className={titleStyle}>정신적 능력</div>
-                <PurpleTag tagList={improvement.mentalSkill} />
+                <CustomTag
+                    tagList={improvement.mentalSkill}
+                    customTagStyle={
+                        'inline-block px-3 py-1 m-1 border rounded-md w-fit bg-egGrey-default border-egGrey-default text-egWhite-default'
+                    }
+                />
                 <div className={titleStyle}>신체적 능력</div>
-                <PurpleTag tagList={improvement.physicalSkill} />
+                <CustomTag
+                    tagList={improvement.physicalSkill}
+                    customTagStyle={
+                        'inline-block px-3 py-1 m-1 border rounded-md w-fit bg-egGrey-default border-egGrey-default text-egWhite-default'
+                    }
+                />
             </div>
             <Divider />
         </div>

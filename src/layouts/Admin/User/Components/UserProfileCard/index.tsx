@@ -11,13 +11,9 @@ import Divider from 'components/Common/Divider';
 import BasicModal from 'components/Modals/BasicModal';
 // utility
 import { positionMatcherByEng } from 'utility/standardConst';
-// icons
-import { IoIosArrowDown } from 'react-icons/io';
-import { IoIosArrowUp } from 'react-icons/io';
+
 // images
 import userImg from 'assets/user/user.png';
-// Admin User Components
-import UserRoundTest from 'layouts/Admin/User/Components/UserRoundProduct';
 
 interface reasonList {
     count?: string;
@@ -77,6 +73,7 @@ interface UserInfoType {
     name_spaced?: string;
     name_token_heads_spaced?: string;
     name_token_spaced?: string;
+    nTheoryAR?: string;
 }
 
 interface InfoType {
@@ -124,21 +121,16 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
         name_spaced,
         name_token_heads_spaced,
         name_token_spaced,
+        nTheoryAR,
     } = userInfo;
     let isMobile = useRecoilValue(IsMobileSelector);
     const listStyle = 'flex items-center border-b border-egGrey-default mt-1';
     const titleStyle = 'mr-2 font-bold px-1 my-1 w-28';
     const highLight = 'px-1 bg-egPurple-superLight';
-
     const contentStyle = 'px-1';
-    const [seeMore, setSeeMore] = useState(false);
+
     const [marketingPrivacy, setMarketingPrivacy] = useState(marketingAgree);
     const [marketingEvent, setMarketingEvent] = useState(serviceAgree);
-    const lessonTabList = ['단체', '개인'];
-    const [lessonTab, setLessonTab] = useState(lessonTabList[0]);
-
-    const activeTab = 'text-egPurple-default border-b-4 border-egPurple-default px-4 py-1 mx-1';
-    const inactiveTab = 'text-egGrey-default border-b-4 border-egGrey-default px-4 py-1 mx-1';
 
     return (
         <div>
@@ -183,7 +175,10 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                         <div className={titleStyle}>
                             <span className={highLight}>잔여회차</span>
                         </div>
-                        <div className={contentStyle}>개발중</div>
+                        <div>
+                            <div className={contentStyle}>이론: {nTheoryAR ? nTheoryAR : 0}회</div>
+                            <div className={contentStyle}>실기: {'개발중'}</div>
+                        </div>
                     </div>
 
                     <div className={listStyle}>
@@ -298,88 +293,29 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                     </div>
                     <div className={contentStyle}>{majorFoot}</div>
                 </div>
-            </div>
 
-            <Divider />
-            <div className={'w-full m-auto border border-egGrey-default p-4'}>
-                <div className="flex justify-between">
-                    <div className="mb-2 text-lg font-bold">수업 정보</div>
-                    <div>
-                        {lessonTabList.map((el, idx) => (
-                            <button
-                                type="button"
-                                key={idx}
-                                onClick={() => setLessonTab(el)}
-                                className={`${lessonTab === el ? activeTab : inactiveTab}`}
+                {/* 마케팅 */}
+                <div className={listStyle}>
+                    <div className={titleStyle}>
+                        <span className={highLight}>마케팅 동의</span>
+                    </div>
+                    <div className={contentStyle}>
+                        <div className="grid w-full grid-cols-2">
+                            <div
+                                onClick={() => setMarketingPrivacy(!marketingPrivacy)}
+                                className="inline-block full"
                             >
-                                {el}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-                <div>
-                    <div className={listStyle}>
-                        <div className={titleStyle}>
-                            <span className={highLight}>레슨명</span>
-                        </div>
-                        <div className={contentStyle}>
-                            {classGroupName ? classGroupMatcherByEng(classGroupName) : '없음'}
-                        </div>
-                    </div>
+                                {marketingPrivacy && <EgCheckBox checked={marketingPrivacy} />}
 
-                    <div className={listStyle}>
-                        <div className={titleStyle}>
-                            <span className={highLight}>회차추가</span>
-                        </div>
-                        <div className="flex justify-end w-full px-1 mb-1">
-                            <button
-                                onClick={() => setSeeMore(!seeMore)}
-                                className="px-2 py-1 border rounded-md text-egPurple-default border-egPurple-default"
-                            >
-                                내역보기
-                                {seeMore ? (
-                                    <IoIosArrowUp className="inline ml-1" />
-                                ) : (
-                                    <IoIosArrowDown className="inline ml-1" />
-                                )}
-                            </button>
-                            <UserRoundTest />
-                        </div>
-                    </div>
-
-                    {seeMore && (
-                        <div className={listStyle}>
-                            <div className={titleStyle}></div>
-                            <div className="w-full">
-                                <div className="mb-2 bg-egPurple-superLight">개발중 등록내역 yyyy-mm-dd</div>
-                                <div className="mb-2 bg-egPurple-superLight">개발중 등록내역 yyyy-mm-dd</div>
-                                <div className="mb-2 bg-egPurple-superLight">개발중 등록내역 yyyy-mm-dd</div>
+                                <span>개인정보 수집 및 이용 동의</span>
                             </div>
-                        </div>
-                    )}
+                            <div
+                                onClick={() => setMarketingEvent(!marketingEvent)}
+                                className="inline-block w-full"
+                            >
+                                {marketingEvent && <EgCheckBox checked={marketingEvent} />}
 
-                    <div className={listStyle}>
-                        <div className={titleStyle}>
-                            <span className={highLight}>마케팅 동의</span>
-                        </div>
-                        <div className={contentStyle}>
-                            <div className="grid w-full grid-cols-2">
-                                <div
-                                    onClick={() => setMarketingPrivacy(!marketingPrivacy)}
-                                    className="inline-block full"
-                                >
-                                    {marketingPrivacy && <EgCheckBox checked={marketingPrivacy} />}
-
-                                    <span>개인정보 수집 및 이용 동의</span>
-                                </div>
-                                <div
-                                    onClick={() => setMarketingEvent(!marketingEvent)}
-                                    className="inline-block w-full"
-                                >
-                                    {marketingEvent && <EgCheckBox checked={marketingEvent} />}
-
-                                    <span>소식 수신 및 이벤트 참여</span>
-                                </div>
+                                <span>소식 수신 및 이벤트 참여</span>
                             </div>
                         </div>
                     </div>

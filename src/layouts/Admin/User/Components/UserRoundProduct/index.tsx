@@ -15,7 +15,11 @@ import WhiteBtn from 'components/Buttons/WhiteBtn';
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
 
-const UserRoundProduct = () => {
+interface UserRoundProductType {
+    getRoundrefetchFunc?: () => void;
+}
+
+const UserRoundProduct = ({ getRoundrefetchFunc }: UserRoundProductType) => {
     const { userId } = useParams();
     const [isShow, setIsShow] = useState(false);
 
@@ -47,6 +51,7 @@ const UserRoundProduct = () => {
 
     useEffect(() => {
         if (newRPAddFlag || newRPEditFlag) {
+            alert('회차 상품이 추가 되었습니다.');
             refetch();
             setNewRPAddFlag(false);
             setNewRPEditFlag(false);
@@ -76,12 +81,17 @@ const UserRoundProduct = () => {
     useEffect(() => {
         if (newRoundFlag) {
             handleCloseModal();
+            alert('새 회차가 추가 되었습니다.');
+            if (getRoundrefetchFunc) {
+                getRoundrefetchFunc();
+                setNewRoundFlag(false);
+            }
         }
     }, [newRoundFlag]);
     return (
         <div>
             <div onClick={handleShowModal}>
-                <button className="p-1 mx-1 border rounded-md border-egPurple-default text-egPurple-default">
+                <button className="w-24 p-1 mx-1 border rounded-sm bg-egPurple-default text-egWhite-default">
                     + 회차 추가
                 </button>
             </div>

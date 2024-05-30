@@ -10,6 +10,7 @@ import MemoCard from 'components/Cards/MemoCard';
 import Divider from 'components/Common/Divider';
 // Admin User Components
 import UserProfileCard from 'layouts/Admin/User/Components/UserProfileCard';
+import UserRoundCard from 'layouts/Admin/User/Components/UserRoundCard';
 // Modals
 import EditModal from 'components/Modals/EditModal';
 import PasswordEditModal from 'components/Modals/PasswordEditModal';
@@ -63,6 +64,23 @@ const UserDetail = () => {
         staleTime: 5 * 1000,
     });
 
+    //GET USER ROUND 요청을 보낼 함수
+    const [userRoundInfo, setUserRounInfo] = useState<any>('');
+    const getUserRound = useQuery({
+        queryKey: [`userRound-${userId}`],
+        queryFn: () => {
+            return requestGet({
+                requestUrl: `/round/student/${userId}`,
+                successFunc: setUserRounInfo,
+            });
+        },
+        staleTime: 5 * 1000,
+    });
+    // GET USER ROUND REFETCH 함수
+    const handleRoundRefetch = () => {
+        getUserRound.refetch();
+    };
+
     useEffect(() => {
         if (getUserFeedback.data && getUserSignificant.data) {
             setAnnotation({ feedback: getUserFeedback.data, significant: getUserSignificant.data });
@@ -108,6 +126,16 @@ const UserDetail = () => {
                 </div>
             </div>
             {getUserDetailInfo.data && <UserProfileCard userInfo={getUserDetailInfo.data} />}
+            <Divider />
+            {userRoundInfo && getUserDetailInfo.data && (
+                <UserRoundCard
+                    classGroupName={getUserDetailInfo.data.classGroupName}
+                    roundInfo={userRoundInfo.result}
+                    count={userRoundInfo.count}
+                    getRoundrefetchFunc={handleRoundRefetch}
+                />
+            )}
+
             <Divider />
             <MemoCard
                 tab={['feedback', 'significant']}

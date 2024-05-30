@@ -5,7 +5,7 @@ interface ClassGroupDropdownType {
     placehorder?: string;
     value?: string | number | undefined;
     formStyle?: string;
-    itemList: { _id: string; name: string; description: string }[];
+    itemList: { _id?: string; name: string; description: string }[];
     inputStyle?: string;
     itemStyle?: string;
     func?: (item: any) => void;

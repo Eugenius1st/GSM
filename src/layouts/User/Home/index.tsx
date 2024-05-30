@@ -22,7 +22,7 @@ const User = () => {
     const userInfo = {
         thumbnail: user5,
         name: '손흥민',
-        gender: 'man',
+        gender: 'male',
         birth: '990101-1******',
         height: 60,
         weight: 170,
