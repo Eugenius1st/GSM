@@ -1,11 +1,14 @@
 // hooks
 import { useEffect, useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { requestPost, requestDelete } from 'api/basic';
 import { useRecoilValue } from 'recoil';
 import { LoginAtomSelector } from 'atom/auth';
 import { useParams } from 'react-router-dom';
+
 // api
+import axios from 'axios';
+import { requestGet } from 'api/basic';
 import { decode } from 'api/decode';
 // Buttons
 import WhiteBtn from 'components/Buttons/WhiteBtn';
@@ -18,6 +21,7 @@ import { MdDelete } from 'react-icons/md';
 interface FeedbackType {
     _id: string;
     adminId: string;
+    adminName?: string;
     createdAt: string;
     detail: string;
     studentId: string;
@@ -27,6 +31,7 @@ interface FeedbackType {
 interface SignificantType {
     _id: string;
     adminId: string;
+    adminName?: string;
     createdAt: string;
     detail: string;
     studentId: string;
@@ -48,9 +53,13 @@ export interface MemoCardType {
 
 const MemoCard = ({ tab, annotation, feedbackRefetchFunc, significantRefetchFunc }: MemoCardType) => {
     const [memoTab, setMemoTab] = useState(tab[0]);
+
+    const [queryEnabled, setQueryEnabled] = useState(false);
     const [feedbackInput, setFeedbackInput] = useState('');
     const [significantInput, setSignificantInput] = useState('');
-    const { feedback, significant } = annotation;
+    const [feedback, setFeedback] = useState<FeedbackType[]>([]);
+    const [significant, setSignificant] = useState<SignificantType[]>([]);
+
     const activeTab = 'text-egPurple-default border-b-4 border-egPurple-default px-4 py-1 mx-1';
     const inactiveTab = 'text-egGrey-default border-b-4 border-egGrey-default px-4 py-1 mx-1';
     // admin id
@@ -59,7 +68,47 @@ const MemoCard = ({ tab, annotation, feedbackRefetchFunc, significantRefetchFunc
     // user id
     const { userId } = useParams();
 
-    // POST 요청을 보낼 함수 정의
+    // GET AdminId
+    // GET USER INFO 요청을 보낼 함수 정의
+
+    useEffect(() => {
+        const fetchAdminName = async (adminId: string) => {
+            try {
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/admin/${adminId}`);
+                return response.data.name;
+            } catch (error) {
+                console.error('Error fetching admin name:', error);
+                return 'Unknown';
+            }
+        };
+        const updateAnnotation = async () => {
+            const feedbackRow = annotation.feedback;
+            const significantkRow = annotation.significant;
+
+            if (feedbackRow && feedbackRow.result) {
+                const updatedFeedbackArray = await Promise.all(
+                    feedbackRow.result.map(async (item: FeedbackType) => {
+                        const adminName = await fetchAdminName(item.adminId);
+                        return {
+                            ...item,
+                            adminName: adminName,
+                        };
+                    })
+                );
+                setFeedback(updatedFeedbackArray);
+            }
+            if (significantkRow && significantkRow.result) {
+                const updatedSignificantArray = await Promise.all(
+                    significantkRow.result.map(async (item: SignificantType) => {
+                        const adminName = await fetchAdminName(item.adminId);
+                        return { ...item, adminName: adminName };
+                    })
+                );
+                setSignificant(updatedSignificantArray);
+            }
+        };
+        updateAnnotation();
+    }, [annotation]);
     const mutateFeedback = useMutation({
         mutationFn: ({ requestUrl, data, successFunc }: any) => {
             return requestPost({
@@ -184,12 +233,13 @@ const MemoCard = ({ tab, annotation, feedbackRefetchFunc, significantRefetchFunc
                     {memoTab === tab[0] && (
                         <div>
                             <div className="overflow-y-auto max-h-56 ">
-                                {feedback?.result && feedback?.result?.length > 0 ? (
-                                    feedback.result.map((el, idx) => (
+                                {feedback && feedback?.length > 0 ? (
+                                    feedback.map((el, idx) => (
                                         <div
                                             key={idx}
                                             className="relative w-full px-4 py-1 mb-4 rounded-lg bg-egGrey-light"
                                         >
+                                            <div className="mb-1 text-sm font-bold">{el.adminName}</div>
                                             <div className="w-11/12 text-base">{el.detail}</div>
                                             <div className="text-xs text-right">{el.createdAt.slice(0, 10)}</div>
                                             <div className="absolute flex items-center justify-center top-1 right-1">
@@ -226,12 +276,13 @@ const MemoCard = ({ tab, annotation, feedbackRefetchFunc, significantRefetchFunc
                     {memoTab === tab[1] && (
                         <div>
                             <div className="overflow-y-auto max-h-56 ">
-                                {significant && significant?.result?.length > 0 ? (
-                                    significant.result.map((el, idx) => (
+                                {significant && significant?.length > 0 ? (
+                                    significant.map((el, idx) => (
                                         <div
                                             key={idx}
                                             className="relative w-full px-4 py-1 mb-4 rounded-lg bg-egGrey-light"
                                         >
+                                            <div className="mb-1 text-sm font-bold">{el.adminName}</div>
                                             <div className="w-11/12 text-base">{el.detail}</div>
                                             <div className="text-xs text-right">{el.createdAt.slice(0, 10)}</div>
                                             <div className="absolute flex items-center justify-center top-1 right-1">

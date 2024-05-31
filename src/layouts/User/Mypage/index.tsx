@@ -192,7 +192,6 @@ const MyPage = () => {
         },
         staleTime: 5 * 1000,
     });
-    console.log(getUserDetailInfo.data);
     return (
         <div className="eg-default-wrapper">
             <div className="pt-5 text-2xl font-bold text-center">마이페이지</div>

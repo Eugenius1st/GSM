@@ -38,6 +38,8 @@ const UserRegist = () => {
     const [phone, setPhone] = useState('');
     const [phoneFather, setPhoneFather] = useState('');
     const [phoneMother, setPhoneMother] = useState('');
+    const [defaultMajorPhone, setDefaultMajorPhone] = useState('');
+    const [majorPhone, setMajorPhone] = useState('');
     const [residence, setResidence] = useState('');
     const [residenceSpecific, setResidenceSpecific] = useState('');
 
@@ -117,6 +119,7 @@ const UserRegist = () => {
             setPhoneMother(curUser.phoneMother);
             setResidence(curUser.residence);
             setResidenceSpecific(curUser.residenceSpecific);
+            // ??? setMajorPhone: curUser.majorPhone,
 
             // set additional info
             setHeight(curUser.height);
@@ -159,6 +162,7 @@ const UserRegist = () => {
             !soccerHistory ||
             !lessonHistory ||
             !majorFoot
+            // !majorPhone
         ) {
             alert('모든 필수 항목을 입력해주세요.');
             return false;
@@ -256,6 +260,10 @@ const UserRegist = () => {
                     phoneFather={phoneFather}
                     setPhoneFather={setPhoneFather}
                     phoneMother={phoneMother}
+                    defaultMajorPhone={defaultMajorPhone}
+                    setDefaultMajorPhone={setDefaultMajorPhone}
+                    majorPhone={majorPhone}
+                    setMajorPhone={setMajorPhone}
                     setPhoneMother={setPhoneMother}
                     residence={residence}
                     setResidence={setResidence}

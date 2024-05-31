@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 // api
 import { requestGet } from 'api/basic';
 // Eg Components
-import CoachTable from 'layouts/Admin/Coach/Components/CoachTable';
+import CoachTable from 'layouts/Admin/Coach/components/CoachTable';
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
 // Common

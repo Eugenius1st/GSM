@@ -1,6 +1,9 @@
 // hooks
 import React, { KeyboardEvent, useEffect, useState } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
+// recoil
+import { useRecoilValue } from 'recoil';
+import { IsMobileSelector } from 'atom/isMobile';
 // api
 import { requestGet, requestPost } from 'api/basic';
 // Buttons
@@ -20,12 +23,15 @@ import { AdminDataType } from 'components/Modals/SearchModal';
 import BasicModal from 'components/Modals/BasicModal';
 // Alerts
 import BasicAlert from 'components/Alerts/BasicAlert';
+// utils
+import { trainingCourseOptions } from 'utility/standardConst';
 
 interface ClassAddModalType {
     isSuccess: boolean;
     setIsSuccess: (isSuccess: boolean) => void;
 }
 const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
+    const isMobile = useRecoilValue(IsMobileSelector);
     const classGroupList = [
         '엘리트반',
         '성인 남성반',
@@ -35,7 +41,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
         '직접입력이 나을까요?',
         '상수가 나을까요',
     ];
-    const personalClassGroupList = ['엘리트반'];
+    const personalClassGroupList = ['개인레슨반'];
 
     const [lessonType, setLessonType] = useState<string>('단체');
     const [startTime, setStartTime] = useState('');
@@ -189,7 +195,13 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
             )}
             {isShow ? (
                 <div className="fixed flex justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
-                    <div className="fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg">
+                    <div
+                        className={
+                            isMobile
+                                ? 'fixed bg-egWhite-default z-[70] w-11/12 h-2/3 overflow-y-scroll p-4 rounded-lg'
+                                : 'fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg'
+                        }
+                    >
                         <div className="flex justify-between">
                             <div className="mb-2 text-lg font-bold">수업 추가하기</div>
                             <CgClose onClick={handleCloseModal} />
@@ -258,7 +270,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                                         onChange={(e) => setClassName(e.target.value)}
                                     >
                                         {lessonType === '단체'
-                                            ? classGroupList.map((el, idx) => (
+                                            ? trainingCourseOptions.map((el, idx) => (
                                                   <option
                                                       key={idx}
                                                       value={el}
@@ -400,11 +412,17 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                             </div>
 
                             {/* 위치 */}
-                            <div className="flex items-center justify-between px-1 pt-3 pb-2 border border-egGrey-default mt-[-1px]">
+                            <div className="flex items-center justify-between px-1 pt-3  pb-2 border border-egGrey-default mt-[-1px]">
                                 <span className="ml-1 mr-4 text-lg w-28">위치</span>
 
-                                <div className="flex text-egGrey-default">
-                                    <div className="mr-1">
+                                <div
+                                    className={
+                                        isMobile
+                                            ? 'grid grid-cols-1 gap-4 text-egGrey-default'
+                                            : 'flex text-egGrey-default'
+                                    }
+                                >
+                                    <div className="inline-block mr-1">
                                         <input
                                             type="radio"
                                             id="판교점"
@@ -463,7 +481,13 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                                 />
                             </div>
                             {/* 참석 코치 */}
-                            <div className="flex justify-between p-2 border border-egGrey-default mt-[-1px]">
+                            <div
+                                className={
+                                    isMobile
+                                        ? 'p-2 border border-egGrey-default mt-[-1px]'
+                                        : 'flex justify-between p-2 border border-egGrey-default mt-[-1px]'
+                                }
+                            >
                                 <span className="mr-4 text-lg w-28">참석 코치</span>
                                 <div className="flex">
                                     <div className="w-40 h-8 p-1 mr-1 border rounded-md border-egGrey-default">
@@ -480,7 +504,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                                     <SearchModal
                                         modalBtn={
                                             <button className="flex items-center justify-center px-2 py-1 border rounded-md border-egPurple-default hover:bg-egPurple-superLight">
-                                                <div className="mr-1 text-sm">코치 찾기</div>
+                                                <div className="mr-1 text-sm">코치</div>
                                                 <IoMdSearch className="h-4 text-egPurple-default" />
                                             </button>
                                         }

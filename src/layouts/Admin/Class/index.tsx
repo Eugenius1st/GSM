@@ -2,6 +2,10 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+// recoil
+import { useRecoilValue } from 'recoil';
+import { IsMobileSelector } from 'atom/isMobile';
+
 // api
 import { requestGet } from 'api/basic';
 // images
@@ -18,6 +22,7 @@ import { ClassInfoType } from 'components/Cards/ClassCard';
 import EmptyCard from 'components/Cards/EmptyCard';
 
 const Class = () => {
+    let isMobile = useRecoilValue(IsMobileSelector);
     const location = useLocation().pathname;
     const [curPage, setCurPage] = useState(1);
     const [classGroupName, setClassGroupName] = useState('전체');
@@ -69,10 +74,10 @@ const Class = () => {
         <div className="eg-default-wrapper">
             <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                    <div className="eg-title">수업관리</div>
+                    {!isMobile && <div className="mr-3 eg-title">수업관리</div>}
                     <ClassGroupDropdown
                         placehorder="교육 과정"
-                        formStyle="py-2 px-1 border border-egGrey-default text-egGrey-default flex flex-col w-56 ml-3"
+                        formStyle="py-2 px-1 border border-egGrey-default text-egGrey-default flex flex-col w-56"
                         itemList={
                             getClassGroup.data
                                 ? [{ _id: '0', name: '전체', description: 'all' }, ...getClassGroup.data.result]

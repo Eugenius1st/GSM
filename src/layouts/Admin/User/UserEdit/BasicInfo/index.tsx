@@ -42,6 +42,11 @@ interface handleState {
     setPhoneFather: (data: string) => void;
     phoneMother: string;
     setPhoneMother: (data: string) => void;
+    defaultMajorPhone: string;
+    setDefaultMajorPhone: (data: string) => void;
+    majorPhone: string;
+    setMajorPhone: (data: string) => void;
+
     residence: string;
     setResidence: (data: string) => void;
     residenceSpecific: string;
@@ -67,6 +72,12 @@ const BasicInfo = ({
     setPhoneFather,
     phoneMother,
     setPhoneMother,
+
+    defaultMajorPhone,
+    setDefaultMajorPhone,
+    majorPhone,
+    setMajorPhone,
+
     residence,
     setResidence,
     residenceSpecific,
@@ -206,7 +217,28 @@ const BasicInfo = ({
                             </div>
                         </div>
                     </div>
-
+                    {/* 대표 연락처 */}
+                    <div>대표 연락처(알림 수신) *</div>
+                    <div className="relative w-full p-2 mt-1 mb-3 border border-egGrey-default">
+                        <RadioButton
+                            RadioBtnList={[
+                                {
+                                    value: '본인',
+                                    name: '본인',
+                                },
+                                {
+                                    value: '부',
+                                    name: '부',
+                                },
+                                {
+                                    value: '모',
+                                    name: '모',
+                                },
+                            ]}
+                            func={setMajorPhone}
+                            defaultRadio={defaultMajorPhone}
+                        />
+                    </div>
                     {/* 주소 */}
                     <label htmlFor="address">주소 *</label>
                     <div className="relative">

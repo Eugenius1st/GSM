@@ -9,8 +9,8 @@ import MemoCard from 'components/Cards/MemoCard';
 // Common
 import Divider from 'components/Common/Divider';
 // Admin User Components
-import UserProfileCard from 'layouts/Admin/User/Components/UserProfileCard';
-import UserRoundCard from 'layouts/Admin/User/Components/UserRoundCard';
+import UserProfileCard from 'layouts/Admin/User/components/UserProfileCard';
+import UserRoundCard from 'layouts/Admin/User/components/UserRoundCard';
 // Modals
 import EditModal from 'components/Modals/EditModal';
 import PasswordEditModal from 'components/Modals/PasswordEditModal';
@@ -43,6 +43,7 @@ const UserDetail = () => {
         },
         staleTime: 5 * 1000,
     });
+
     //GET USER FEEDBACK 요청을 보낼 함수
     const getUserFeedback = useQuery({
         queryKey: [`userFeedback-${userId}`],

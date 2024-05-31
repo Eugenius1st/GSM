@@ -1,6 +1,9 @@
 // hooks
 import React, { KeyboardEvent, useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
+// recoil
+import { useRecoilValue, useRecoilState } from 'recoil';
+import { IsMobileSelector } from 'atom/isMobile';
 // api
 import { requestPatch } from 'api/basic';
 // Buttons
@@ -16,6 +19,8 @@ import { AdminDataType } from 'components/Modals/SearchModal';
 import BasicModal from 'components/Modals/BasicModal';
 // Alerts
 import BasicAlert from 'components/Alerts/BasicAlert';
+// utils
+import { trainingCourseOptions } from 'utility/standardConst';
 
 interface ClassEditModalType {
     classId: string;
@@ -24,7 +29,7 @@ interface ClassEditModalType {
     setPatchCheckFlag: (patchCheckFlag: boolean) => void;
 }
 const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }: ClassEditModalType) => {
-    const classList = ['엘리트반', '성인 남성반', '취미반'];
+    let isMobile = useRecoilValue(IsMobileSelector);
     const [startTime, setStartTime] = useState(curClass.startTime);
     const [endTime, setEndTime] = useState(curClass.endTime);
     const [applicationDeadline, setApplicationDeadline] = useState(curClass.applicationDeadline);
@@ -35,7 +40,6 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
     const [className, setClassName] = useState(curClass.name);
     const [note, setNote] = useState(curClass.note);
     const [isShow, setIsShow] = useState(false);
-
     const handleShowModal = () => {
         setIsShow(true);
         document.body.style.overflow = 'hidden';
@@ -163,7 +167,13 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
             )}
             {isShow ? (
                 <div className="fixed flex text-base font-medium justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
-                    <div className="fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg">
+                    <div
+                        className={
+                            isMobile
+                                ? 'fixed bg-egWhite-default z-[70] w-full max-w-[30rem] p-4 rounded-lg'
+                                : 'fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg'
+                        }
+                    >
                         <div className="flex justify-between">
                             <div className="mb-2 text-lg font-bold">수업 수정하기</div>
                             <CgClose onClick={handleCloseModal} />
@@ -183,7 +193,7 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
                                     value={className}
                                     onChange={(e) => setClassName(e.target.value)}
                                 >
-                                    {classList.map((el, idx) => (
+                                    {trainingCourseOptions.map((el, idx) => (
                                         <option
                                             key={idx}
                                             value={el}
@@ -343,8 +353,8 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
                                 </div>
                                 <SearchModal
                                     modalBtn={
-                                        <button className="flex items-center p-1 ml-2 border rounded-md border-egPurple-default hover:bg-egPurple-superLight">
-                                            <div className="mr-1 text-sm">코치 검색</div>
+                                        <button className="flex items-center p-1 ml-1 border rounded-md border-egPurple-default hover:bg-egPurple-superLight">
+                                            <div className="text-sm ">코치</div>
                                             <IoMdSearch className="w-4 h-4 text-egPurple-default" />
                                         </button>
                                     }

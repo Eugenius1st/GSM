@@ -54,7 +54,6 @@ export default function MapSearch({ setResidence }: MapSearchProps) {
     const [markers, setMarkers] = useState<MapDataType[]>([]);
     const [map, setMap] = useState<any>();
     const [keyword, setKeyword] = useState<string>('');
-    console.log('isMobile', isMobile);
     // map이 변경될 때마다 mapRender 함수 호출
     useEffect(() => {
         mapRender();

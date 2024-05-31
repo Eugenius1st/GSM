@@ -34,7 +34,7 @@ import { RiUserForbidFill } from 'react-icons/ri';
 // Cards
 import EmptyCard from 'components/Cards/EmptyCard';
 // utility
-import { classGroupMatcherByEng } from 'utility/standardConst';
+import { gradeMatcherByAge } from 'utility/standardConst';
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
 
@@ -360,6 +360,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                         />
                     </div>
 
+                    {/* ??? 백엔드 구현 대기중 
                     <DropDownModal
                         itemList={[
                             {
@@ -375,7 +376,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                                 item: '성인반',
                             },
                         ]}
-                    />
+                    /> */}
                 </div>
             )}
         </Toolbar>
@@ -517,16 +518,15 @@ export default function EnhancedTable({ tableRowData, userSearchState, setUserSe
                                                     align="center"
                                                     sx={{ paddingX: 0, width: '1rem' }}
                                                 >
-                                                    {row.classGroupName
-                                                        ? classGroupMatcherByEng(row.classGroupName)
-                                                        : '미정'}
+                                                    {row.classGroupName}
                                                 </TableCell>
                                             ) : (
                                                 <TableCell
                                                     align="center"
                                                     sx={{ paddingX: 0, width: '2rem' }}
                                                 >
-                                                    {row.birth} 년생
+                                                    {/* row.birth */}
+                                                    {gradeMatcherByAge(row.birth)}
                                                 </TableCell>
                                             )}
                                             {!userSearchState && (

@@ -2,7 +2,7 @@
 import WhiteBtn from 'components/Buttons/WhiteBtn';
 // Eg Components
 import EgPageTable from 'components/EgMaterials/PageTable';
-import NotifiactionTable from 'layouts/Admin/Notification/Components/NotificationTable';
+import NotifiactionTable from 'layouts/Admin/Notification/components/NotificationTable';
 // images
 import coach_son from 'assets/coach/coach_son.jpeg';
 import coach_kim from 'assets/coach/coach_kim.jpeg';

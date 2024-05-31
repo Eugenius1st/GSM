@@ -5,7 +5,7 @@ import { IsMobileSelector } from 'atom/isMobile';
 // Eg Components
 import EgCheckBox from 'components/EgMaterials/CheckBox';
 // utility
-import { classGroupMatcherByEng } from 'utility/standardConst';
+import { gradeMatcherByAge } from 'utility/standardConst';
 // Common
 import Divider from 'components/Common/Divider';
 import BasicModal from 'components/Modals/BasicModal';
@@ -142,7 +142,7 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                         className={'object-cover h-32 p-1 mr-4 border rounded-full border-egPurple-default min-w-32'}
                     />
                 </div>
-                <div className={'w-full grid grid-cols-2 gap-x-4'}>
+                <div className={isMobile ? 'w-full' : 'w-full grid grid-cols-2 gap-x-4'}>
                     <div className={listStyle}>
                         <div className={titleStyle}>
                             <span className={highLight}>이름</span>
@@ -161,7 +161,9 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                         <div className={titleStyle}>
                             <span className={highLight}>생년월일</span>
                         </div>
-                        <div className={contentStyle}>{birth?.slice(0, 10)}</div>
+                        <div className={contentStyle}>
+                            {birth?.slice(0, 10)} / {gradeMatcherByAge(Number(birth?.slice(0, 4)))}
+                        </div>
                     </div>
 
                     <div className={listStyle}>
@@ -300,10 +302,10 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
                         <span className={highLight}>마케팅 동의</span>
                     </div>
                     <div className={contentStyle}>
-                        <div className="grid w-full grid-cols-2">
+                        <div className={isMobile ? 'w-full' : 'grid w-full grid-cols-2'}>
                             <div
                                 onClick={() => setMarketingPrivacy(!marketingPrivacy)}
-                                className="inline-block full"
+                                className="inline-block w-full"
                             >
                                 {marketingPrivacy && <EgCheckBox checked={marketingPrivacy} />}
 
