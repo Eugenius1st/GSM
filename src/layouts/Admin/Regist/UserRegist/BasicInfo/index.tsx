@@ -7,7 +7,7 @@ import { requestPost } from 'api/basic';
 import { useRecoilValue } from 'recoil';
 import { IsMobileAtom } from 'atom/isMobile';
 // utility
-import ImageUploader from 'utility/ImageUploader';
+import RegisterImageUploader from 'utility/RegisterImageUploader';
 // Common
 import RadioButton from 'components/Common/RadioButton';
 import Divider from 'components/Common/Divider';
@@ -27,15 +27,24 @@ interface handleState {
     handlePreview?: () => void;
     basicInfoData: any;
     setBasicInfoData: (data: any) => void;
+    selectedPhoto: File | null;
+    setSelectedPhoto: (file: File | null) => void;
 }
 
-const BasicInfo = ({ registStage, handleNext, handlePreview, basicInfoData, setBasicInfoData }: handleState) => {
+const BasicInfo = ({
+    registStage,
+    handleNext,
+    handlePreview,
+    basicInfoData,
+    setBasicInfoData,
+    selectedPhoto,
+    setSelectedPhoto,
+}: handleState) => {
     // 웹 앱 구분
     let isMobile = useRecoilValue(IsMobileAtom);
     // 데이터
     const [userID, setUserID] = useState('');
     const [userPW, setUserPW] = useState('');
-    const [photo, setPhoto] = useState('any-photo-url');
     const [name, setName] = useState('');
     const [defaultBirth, setDefaultBirth] = useState('');
     const [birth, setBirth] = useState('');
@@ -86,7 +95,7 @@ const BasicInfo = ({ registStage, handleNext, handlePreview, basicInfoData, setB
         } else if (!pwRegex.test(userPW)) {
             alert('Password는 8~20자의 영문 대소문자, 숫자, 특수문자로 이루어져야 합니다.');
             return false;
-        } else if (!photo || !name || !phone || !residence || !residenceSpecific || !birth || !gender) {
+        } else if (!name || !phone || !residence || !residenceSpecific || !birth || !gender) {
             alert('모든 필수 항목을 입력해주세요.'); // ??? || majorPhone
             return false;
         } else if (!phoneRegex.test(phone)) {
@@ -144,10 +153,10 @@ const BasicInfo = ({ registStage, handleNext, handlePreview, basicInfoData, setB
         if (validateInputs()) {
             const validData = {
                 id: userID,
+                photo: selectedPhoto,
                 password: userPW,
                 role: 'student',
                 scope: ['gsm'],
-                photo: photo,
                 name: name,
                 phone: phone,
                 phoneFather: phoneFather,
@@ -167,7 +176,8 @@ const BasicInfo = ({ registStage, handleNext, handlePreview, basicInfoData, setB
         if (basicInfoData) {
             setUserID(basicInfoData.id);
             setUserPW(basicInfoData.password);
-            setPhone(basicInfoData.photo);
+            setSelectedPhoto(basicInfoData.photo);
+            setPhone(basicInfoData.phone);
             setName(basicInfoData.name);
             setPhone(basicInfoData.phone);
             setPhoneFather(basicInfoData.phoneFather);
@@ -183,14 +193,12 @@ const BasicInfo = ({ registStage, handleNext, handlePreview, basicInfoData, setB
     return (
         <div>
             <div className="relative">
-                <ImageUploader
+                <RegisterImageUploader
+                    type={'student'}
                     uploadCustomBtn={uploadBtn}
                     previewImgStyle="w-24 h-24 m-auto border-2 rounded-full border-egPurple-default object-cover"
-                    previewBeforeIcon={
-                        <div className="relative w-24 h-24 border-2 rounded-full border-egPurple-default bg-egGrey-semiLight">
-                            <FaUser className="absolute bottom-[0.5px] w-20 h-20 rounded-[2.3rem] right-[7px] text-egBlack-light " />
-                        </div>
-                    }
+                    selectedPhoto={selectedPhoto}
+                    setSelectedPhoto={setSelectedPhoto}
                 />
             </div>
             <form className="mt-16">

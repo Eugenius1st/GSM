@@ -24,29 +24,27 @@ import PurpleBtn from 'components/Buttons/PurpleBtn';
 import AlarmModal from 'components/Modals/AlarmModal';
 // colors
 import colors from 'assets/colors/palette';
-// react-icons
-import { FaArrowDown } from 'react-icons/fa';
-import { FaArrowUp } from 'react-icons/fa';
+// Eg Components
+import DropDownModal from 'components/EgMaterials/DropDown';
+import EgCheckBox from 'components/EgMaterials/CheckBox';
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
 
 interface Data {
     id: number;
-    birth: number;
+    lesson: string;
     name: string;
-    className: string;
     expiration: number;
-    usingRounds: number | '0';
+    remainingRounds: number | '0';
     paymentRound: number | '0';
 }
 
 interface InitialData {
     id: number;
-    className: string;
+    lesson: string;
     name: string;
-    birth: number;
     expiration: number;
-    usingRounds: number | '0';
+    remainingRounds: number | '0';
     paymentRound: number | '0';
 }
 
@@ -54,120 +52,97 @@ const initialData: InitialData[] = [
     {
         id: 1,
         name: '손흥민',
-        className: '엘리트',
-        birth: 2016,
+        lesson: '엘리트',
         expiration: 7,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 2,
         name: '김민재',
-        className: '엘리트',
-        birth: 2016,
-
+        lesson: '엘리트',
         expiration: 5,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 3,
         name: '홍길동',
-        className: '엘리트',
-        birth: 2016,
-
+        lesson: '엘리트',
         expiration: 3,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 4,
         name: '손흥민',
-        className: '엘리트',
-        birth: 2016,
-
+        lesson: '엘리트',
         expiration: 7,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 5,
         name: '김민재',
-        className: '엘리트',
-        birth: 2016,
-
+        lesson: '엘리트',
         expiration: 5,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 6,
         name: '홍길동',
-        className: '엘리트',
-        birth: 2016,
-
+        lesson: '엘리트',
         expiration: 3,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 7,
         name: '손흥민',
-        className: '엘리트',
-        birth: 2016,
-
+        lesson: '엘리트',
         expiration: 7,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 8,
         name: '김민재',
-        className: '엘리트',
-        birth: 2016,
-
+        lesson: '엘리트',
         expiration: 5,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 9,
         name: '홍길동',
-        className: '엘리트',
-        birth: 2016,
-
+        lesson: '엘리트',
         expiration: 3,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 10,
         name: '손흥민',
-        className: '기본기·어린이',
-        birth: 2017,
-
+        lesson: '기본기·어린이',
         expiration: 7,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 11,
         name: '김민재',
-        className: '기본기·어린이',
-        birth: 2018,
-
+        lesson: '기본기·어린이',
         expiration: 5,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 12,
         name: '홍길동',
-        className: '기본기·어린이',
-        birth: 2010,
-
+        lesson: '기본기·어린이',
         expiration: 3,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
 ];
@@ -180,9 +155,8 @@ function DataProcess(DataList: InitialData[]) {
             // push 메서드 사용
             id: el.id,
             name: el.name,
-            className: el.className,
-            birth: el.birth,
-            usingRounds: el.usingRounds,
+            lesson: el.lesson,
+            remainingRounds: el.remainingRounds,
             paymentRound: el.paymentRound,
             expiration: el.expiration,
         });
@@ -204,22 +178,21 @@ const headCells: readonly HeadCell[] = [
         numeric: false,
         label: '이름',
     },
-
     {
-        id: 'className',
+        id: 'lesson',
         numeric: false,
-        label: '클래스',
-    },
-    {
-        id: 'birth',
-        numeric: false,
-        label: '년생',
+        label: '수업명',
     },
 
     {
-        id: 'usingRounds',
+        id: 'remainingRounds',
         numeric: false,
-        label: '사용회차',
+        label: '잔여회차',
+    },
+    {
+        id: 'expiration',
+        numeric: false,
+        label: '만료',
     },
 ];
 
@@ -393,7 +366,7 @@ export default function EnhancedTable() {
                             <Link to={el.link}>
                                 <span
                                     className={
-                                        el.label === '공지'
+                                        el.label === '수업신청공지'
                                             ? 'px-2 pb-1 mr-2 border-b-2 text-egPurple-default border-egPurple-default'
                                             : 'px-2 pb-1 mr-2 text-egGrey-default-default'
                                     }
@@ -404,53 +377,6 @@ export default function EnhancedTable() {
                             {idx < NotificationTab.length - 1 && <span>·</span>}
                         </div>
                     ))}
-                </Box>
-                <Box>
-                    <div className="flex w-full">
-                        <div className="w-2/12 py-2 text-center border bg-egPurple-superLight">레슨타입</div>
-                        <div className="grid w-10/12 grid-cols-7 px-4 py-2 border">
-                            <span>단체</span>
-                            <span>개인</span>
-                        </div>
-                    </div>
-                    <div className="flex w-full">
-                        <div className="w-2/12 py-2 text-center border bg-egPurple-superLight">클래스타입</div>
-                        <div className="grid w-10/12 grid-cols-7 px-4 py-2 border">
-                            <span>이론</span>
-                            <span>실기</span>
-                        </div>
-                    </div>
-                    <div className="flex w-full">
-                        <div className="w-2/12 py-2 text-center border bg-egPurple-superLight">클래스타입</div>
-                        <div className="grid w-10/12 grid-cols-7 px-4 py-2 border">
-                            <span>엘리트반</span>
-                            <span>기본기반</span>
-                            <span>어린이반</span>
-                            <span>성인남성반</span>
-                            <span>성인여성반</span>
-                        </div>
-                    </div>
-                    <div className="flex w-full">
-                        <div className="w-2/12 py-2 text-center border bg-egPurple-superLight">잔여수강권</div>
-                        <div className="grid w-10/12 grid-cols-10 px-4 py-2 border">
-                            <span>있음</span>
-                            <span>없음</span>
-                        </div>
-                    </div>
-                    <div className="flex w-full">
-                        <div className="w-2/12 py-2 text-center border bg-egPurple-superLight">마지막수업신청</div>
-                        <div className="grid w-10/12 grid-cols-10 px-4 py-2 border">
-                            <span>2주</span>
-                            <span>3개월</span>
-                            <span>6개월</span>
-                            <span>1년</span>
-                        </div>
-                    </div>
-                </Box>
-                <Box sx={{ textAlign: 'end', m: 2 }}>
-                    <button className="p-1 border border-egGrey-default ">
-                        최신가입자 <FaArrowDown className="inline text-egPurple-default" />
-                    </button>
                 </Box>
                 <TableContainer sx={{ overflowY: 'scroll' }}>
                     <Table
@@ -511,19 +437,20 @@ export default function EnhancedTable() {
                                             sx={{ paddingX: 0 }}
                                             align="center"
                                         >
-                                            {row.className}
+                                            {row.lesson}
+                                        </TableCell>
+
+                                        <TableCell
+                                            align="center"
+                                            sx={{ paddingX: 0 }}
+                                        >
+                                            {row.remainingRounds}/{row.paymentRound}
                                         </TableCell>
                                         <TableCell
                                             align="center"
                                             sx={{ paddingX: 0 }}
                                         >
-                                            {row.birth}학년변환
-                                        </TableCell>
-                                        <TableCell
-                                            align="center"
-                                            sx={{ paddingX: 0 }}
-                                        >
-                                            {row.usingRounds}/{row.paymentRound}
+                                            D-{row.expiration}
                                         </TableCell>
 
                                         <TableCell

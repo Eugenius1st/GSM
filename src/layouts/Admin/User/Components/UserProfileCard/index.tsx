@@ -9,11 +9,10 @@ import { gradeMatcherByAge } from 'utility/standardConst';
 // Common
 import Divider from 'components/Common/Divider';
 import BasicModal from 'components/Modals/BasicModal';
+// images
+import userTempPhoto from 'assets/user/userTempPhoto.png';
 // utility
 import { positionMatcherByEng } from 'utility/standardConst';
-
-// images
-import userImg from 'assets/user/user.png';
 
 interface reasonList {
     count?: string;
@@ -78,9 +77,10 @@ interface UserInfoType {
 
 interface InfoType {
     userInfo: UserInfoType;
+    userPhoto?: string;
 }
 
-const UserProfileCard = ({ userInfo }: InfoType) => {
+const UserProfileCard = ({ userInfo, userPhoto }: InfoType) => {
     const {
         classGroupId,
         classGroupName,
@@ -137,9 +137,9 @@ const UserProfileCard = ({ userInfo }: InfoType) => {
             <div className={'w-full m-auto border border-egGrey-default p-4'}>
                 <div className="flex justify-center mb-5">
                     <img
-                        src={photo === 'any-photo-url' ? userImg : ''}
+                        src={userPhoto ? userPhoto : userTempPhoto}
                         alt="coach_son"
-                        className={'object-cover h-32 p-1 mr-4 border rounded-full border-egPurple-default min-w-32'}
+                        className={'object-cover w-32 h-32 p-1 mr-4 border rounded-full border-egPurple-default'}
                     />
                 </div>
                 <div className={isMobile ? 'w-full' : 'w-full grid grid-cols-2 gap-x-4'}>

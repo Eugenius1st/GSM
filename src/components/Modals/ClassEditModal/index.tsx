@@ -36,6 +36,8 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
     const [place, setPlace] = useState(curClass.place);
     const [type, setType] = useState(curClass.type);
     const [amount, setAmount] = useState(curClass.amount);
+    const [masking, setMasking] = useState(curClass.masking);
+
     const [coaches, setCoaches] = useState<any>(curClass.coaches);
     const [className, setClassName] = useState(curClass.name);
     const [note, setNote] = useState(curClass.note);
@@ -73,6 +75,7 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
                 type: type,
                 name: className,
                 amount: Number(amount),
+                masking: masking,
                 coaches: coachIdArray,
                 note: note,
             },
@@ -87,11 +90,11 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
         setType(curClass.type);
         setClassName(curClass.name);
         setAmount(curClass.amount);
+        setMasking(curClass.masking);
         setCoaches(curClass.coaches);
         setIsShow(false);
         setPatchCheckFlag(false);
     };
-
     const dataValidate = () => {
         if (!startTime) {
             alert('시작 시간을 입력하세요');
@@ -330,7 +333,7 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
                                     value={amount}
                                     placeholder="숫자입력"
                                     type="number"
-                                    min="0"
+                                    min={0}
                                     max="99"
                                     className="w-40 p-1 border rounded-md border-egGrey-default"
                                     onChange={(e) => {
@@ -338,13 +341,42 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
                                     }}
                                 />
                             </div>
+                            {/* 알림 포인트 */}
+                            <div className="flex items-center mb-2">
+                                <span className="mr-4 text-base font-semibold w-22">Alert point</span>
+                                <input
+                                    value={''}
+                                    placeholder="개발중"
+                                    type="number"
+                                    min={0}
+                                    max={amount}
+                                    className="w-20 p-1 border rounded-md border-egGrey-default"
+                                    // onChange={(e) => {
+                                    // }}
+                                />
+                                <span className="ml-2 text-base">(회차 소진+교육안내 알림 point)</span>
+                            </div>
+                            <div className="flex mb-2">
+                                <span className="w-20 mr-4 text-lg font-semibold">마스킹</span>
+                                <input
+                                    value={masking}
+                                    placeholder="숫자입력"
+                                    type="number"
+                                    min={0}
+                                    max={amount}
+                                    className="w-40 p-1 border rounded-md border-egGrey-default"
+                                    onChange={(e) => {
+                                        setMasking(e.target.value);
+                                    }}
+                                />
+                            </div>
                             <div className="flex items-center mb-2">
                                 <span className="w-20 mr-4 text-lg font-semibold">참석 코치</span>
-                                <div className="w-40 h-8 p-1 border rounded-md border-egGrey-default">
+                                <div className="w-40 p-1 border rounded-md h-fit min-h-8 border-egGrey-default">
                                     {coaches.length > 0 && (
-                                        <div className="flex ">
+                                        <div className="inline-block">
                                             {coaches.map((el: any, idx: number) => (
-                                                <div className="flex items-center px-1 mr-1 text-sm rounded-sm bg-egBlack-superLight w-fit">
+                                                <div className="flex items-center px-1 my-1 mr-1 text-sm rounded-sm bg-egBlack-superLight w-fit">
                                                     {el.name} <CgClose onClick={() => handleDeleteCoaches(idx)} />
                                                 </div>
                                             ))}

@@ -40,7 +40,7 @@ const Class = () => {
                     requestUrl:
                         classGroupName === '전체'
                             ? `/class?page=${curPage}&take=${4}`
-                            : `/class?classGroup=${classGroupName}page=${1}&take=${10}`,
+                            : `/class?classGroup=${classGroupName}&page=${1}&take=${10}`,
                 }
                 // successFunc: () => console.log(data),
                 // }),

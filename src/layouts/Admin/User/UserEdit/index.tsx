@@ -29,7 +29,7 @@ const UserRegist = () => {
     const { userId } = useParams();
     const [curUser, setCurUser] = useState<any>();
     // basic 데이터
-    const [photo, setPhoto] = useState('any-photo-url');
+    // const [photo, setPhoto] = useState('');
     const [name, setName] = useState('');
     const [defaultBirth, setDefaultBirth] = useState('');
     const [birth, setBirth] = useState('');
@@ -108,7 +108,6 @@ const UserRegist = () => {
 
         // set basic user info
         if (curUser) {
-            setPhoto(curUser.photo);
             setName(curUser.name);
             setDefaultBirth(curUser.birth);
             setBirth(curUser.birth);
@@ -149,7 +148,6 @@ const UserRegist = () => {
         const phoneRegex = /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/;
         // 각 필드의 유효성 검사
         if (
-            !photo ||
             !name ||
             !phone ||
             !residence ||
@@ -205,7 +203,6 @@ const UserRegist = () => {
                 data: {
                     role: 'student',
                     scope: ['gsm'],
-                    photo: photo,
                     classGroupName: classGroupName,
                     name: name,
                     phone: phone,
@@ -241,10 +238,11 @@ const UserRegist = () => {
                 <span>회원 정보 수정</span>
             </div>
 
-            {data && curUser && (
+            {userId && data && curUser && (
                 <BasicInfo
-                    photo={photo}
-                    setPhoto={setPhoto}
+                    userId={userId}
+                    // photo={photo}
+                    // setPhoto={setPhoto}
                     name={name}
                     setName={setName}
                     defaultBirth={defaultBirth}

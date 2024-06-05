@@ -24,8 +24,9 @@ import PurpleBtn from 'components/Buttons/PurpleBtn';
 import dayjs from 'dayjs';
 
 interface handleState {
-    photo: string;
-    setPhoto: (data: string) => void;
+    userId: string;
+    // photo: string;
+    // setPhoto: (data: string) => void;
     name: string;
     setName: (data: string) => void;
     defaultBirth: string;
@@ -54,8 +55,7 @@ interface handleState {
 }
 
 const BasicInfo = ({
-    photo,
-    setPhoto,
+    userId,
     name,
     setName,
     defaultBirth,
@@ -106,13 +106,10 @@ const BasicInfo = ({
         <div>
             <div className="relative">
                 <ImageUploader
+                    type={'student'}
+                    uploadedId={userId}
                     uploadCustomBtn={uploadBtn}
                     previewImgStyle="w-24 h-24 m-auto border-2 rounded-full border-egPurple-default object-cover"
-                    previewBeforeIcon={
-                        <div className="relative w-24 h-24 border-2 rounded-full border-egPurple-default bg-egGrey-semiLight">
-                            <FaUser className="absolute bottom-[0.5px] w-20 h-20 rounded-[2.3rem] right-[7px] text-egBlack-light " />
-                        </div>
-                    }
                 />
             </div>
             <form className="mt-16">

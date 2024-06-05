@@ -168,7 +168,7 @@ const AdditionalInfo = ({
                 <div className="mt-3 text-egGrey-default">참고</div>
                 <div className="w-full text-egGrey-default">
                     {positionOptions.map((option, idx) => (
-                        <span>
+                        <span key={idx}>
                             {idx === positionOptions.length - 1
                                 ? `${option}(${positionMatcherByEng(option)})`
                                 : `${option}(${positionMatcherByEng(option)}), `}

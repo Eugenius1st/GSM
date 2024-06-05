@@ -37,6 +37,8 @@ import EmptyCard from 'components/Cards/EmptyCard';
 import { gradeMatcherByAge } from 'utility/standardConst';
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
+// images
+import userTempPhoto from 'assets/user/userTempPhoto.png';
 
 interface PatchDataType {
     requestUrl: string;
@@ -45,7 +47,7 @@ interface PatchDataType {
 }
 interface RowDataType {
     _id: number;
-    photo: string;
+    photo?: string;
     name: string;
     birth: number;
     team: string;
@@ -403,7 +405,6 @@ export default function EnhancedTable({ tableRowData, userSearchState, setUserSe
         }
         setSelected([]);
     };
-
     const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
         const selectedIndex = selected.indexOf(id);
         let newSelected: readonly number[] = [];
@@ -498,8 +499,8 @@ export default function EnhancedTable({ tableRowData, userSearchState, setUserSe
                                                 }}
                                             >
                                                 <img
-                                                    className="object-cover m-auto border rounded-full w-14 h-14"
-                                                    src={row.photo}
+                                                    className="object-cover w-12 h-12 m-auto border rounded-full"
+                                                    src={row.photo ? row.photo : userTempPhoto}
                                                     alt={row.name}
                                                 />
                                             </TableCell>

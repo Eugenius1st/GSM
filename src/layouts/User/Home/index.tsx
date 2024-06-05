@@ -6,7 +6,7 @@ import { IsMobileSelector } from 'atom/isMobile';
 import UserProfileCard from 'layouts/User/Home/components/UserProfileCard';
 import ClassCard from 'components/Cards/ClassCard';
 // images
-import user5 from 'assets/user/user5.jpeg';
+import userTempPhoto from 'assets/user/userTempPhoto.png';
 import class_adult_man from 'assets/class/class_adult_man.jpeg';
 import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
 // Common
@@ -20,7 +20,7 @@ import ReadFeedbackModal from 'components/Modals/ReadFeedbackModal';
 const User = () => {
     let isMobile = useRecoilValue(IsMobileSelector);
     const userInfo = {
-        thumbnail: user5,
+        thumbnail: userTempPhoto,
         name: '손흥민',
         gender: 'male',
         birth: '990101-1******',

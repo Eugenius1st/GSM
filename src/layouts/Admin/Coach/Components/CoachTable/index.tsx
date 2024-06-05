@@ -37,6 +37,8 @@ import EmptyCard from 'components/Cards/EmptyCard';
 import PaginationRounded from 'components/EgMaterials/Pagenation';
 // utility
 import { gradeMatcherByAge } from 'utility/standardConst';
+// images
+import userTempPhoto from 'assets/user/userTempPhoto.png';
 
 interface PatchDataType {
     requestUrl: string;
@@ -449,8 +451,8 @@ export default function EnhancedTable({ tableRowData, coachSearchState, setCoach
                                                 align="center"
                                             >
                                                 <img
-                                                    className="object-cover m-auto rounded-full w-14 h-14"
-                                                    src={row.photo}
+                                                    className="object-cover w-12 h-12 m-auto rounded-full"
+                                                    src={row.photo ? row.photo : userTempPhoto}
                                                     alt={row.name}
                                                 />
                                             </TableCell>

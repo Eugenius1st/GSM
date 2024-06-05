@@ -30,7 +30,7 @@ export interface RequestBodyType {
     password: string;
     role: string;
     scope: string[];
-    photo: string;
+    // photo: string;
     name: string;
     gender: string;
     birth: string;
@@ -57,7 +57,7 @@ const AdminRegist = () => {
     const [adminPw, setAdminPw] = useState('');
     const [role, setRole] = useState('admin');
     const [scope, setScope] = useState(['gsm']);
-    const [photo, setPhoto] = useState('any-photo-url');
+    // const [photo, setPhoto] = useState('any-photo-url');
     const [name, setName] = useState('');
     const [gender, setGender] = useState('성별');
     const [birth, setBirth] = useState('');
@@ -163,7 +163,7 @@ const AdminRegist = () => {
                 password: adminPw,
                 role: role,
                 scope: scope,
-                photo: photo,
+                // photo: photo,
                 name: name,
                 gender: gender,
                 birth: birth,
@@ -196,15 +196,15 @@ const AdminRegist = () => {
                 <span> 관리자 등록</span>
             </div>
             <div className="relative">
-                <ImageUploader
-                    uploadCustomBtn={uploadBtn}
-                    previewImgStyle="w-24 h-24 m-auto border-2 rounded-full border-egPurple-default object-cover"
-                    previewBeforeIcon={
-                        <div className="relative w-24 h-24 border-2 rounded-full border-egPurple-default bg-egGrey-semiLight">
-                            <FaUser className="absolute bottom-[0.5px] w-20 h-20 rounded-[2.3rem] right-[7px] text-egBlack-light " />
-                        </div>
-                    }
-                />
+                {adminId && (
+                    <ImageUploader
+                        type={'admin'}
+                        uploadedId={adminId}
+                        uploadCustomBtn={uploadBtn}
+                        previewImgStyle="w-24 h-24 m-auto border-2 rounded-full border-egPurple-default object-cover"
+                        // defaultPhoto={photo}
+                    />
+                )}
             </div>
             <form className="mt-16">
                 {/* id, pw */}
@@ -334,7 +334,7 @@ const AdminRegist = () => {
                     </div>
 
                     {/* 직접 선택 및 입력 */}
-                    <div className="my-1">이력사항</div>
+                    {/* <div className="my-1">이력사항</div>
                     {soccerRecord.map((el, idx) => (
                         <div
                             key={idx}
@@ -390,7 +390,7 @@ const AdminRegist = () => {
                                 )}
                             </div>
                         </div>
-                    ))}
+                    ))} */}
                     <div className="my-1">자격증</div>
                     {license.length < 3 && (
                         <div

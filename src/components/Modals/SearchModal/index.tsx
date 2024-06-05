@@ -16,7 +16,6 @@ import { IoMdSearch } from 'react-icons/io';
 import EmptyCard from 'components/Cards/EmptyCard';
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
-import { PathOrFileDescriptor } from 'fs';
 
 interface SearchModalType {
     modalBtn: React.ReactNode;
@@ -63,27 +62,31 @@ const SearchModal = ({
         if (modalScrollStayFlag) document.body.style.overflow = 'unset';
     };
     // GET 요청을 보낼 함수 정의
-    const { data, error, isLoading, refetch } = useQuery({
+    const getSearchCoach = useQuery({
         queryKey: ['searchAdmin'],
         queryFn: () => {
             if (searchInput) {
                 return requestGet({
                     requestUrl: `/admin/search/${searchInput}?with_head=true&take=${itemsPerPage}&page=${curPage}`,
-                    successFunc: setSearchedData,
                 });
             } else {
                 // searchInput이 undefined일 때에 대한 처리
                 return Promise.resolve([]); // 또는 다른 유효한 값을 반환할 수 있음
             }
         },
-        staleTime: 100,
         enabled: queryEnabled, // enabled 옵션을 사용하여 쿼리를 활성화 또는 비활성화합니다.
     });
+    useEffect(() => {
+        if (getSearchCoach.data) {
+            console.log('getSearchCoach.data', getSearchCoach.data);
+            setSearchedData(getSearchCoach.data.result);
+        }
+    }, [getSearchCoach.data]);
     const handleButtonClick = () => {
         // 버튼 클릭 시에만 쿼리를 활성화하도록 설정합니다.
         if (searchInput) {
             setQueryEnabled(true);
-            refetch();
+            getSearchCoach.refetch();
         }
     };
     const handleActive = (data: AdminDataType) => {

@@ -50,7 +50,6 @@ const CoachAddModal = ({
     const [isShow, setIsShow] = useState(false);
     const [queryEnabled, setQueryEnabled] = useState(false);
     const [searchInput, setSearchInput] = useState('');
-    const [isSearched, setIsSearched] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
     const [totalItems, setTotalItems] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -70,8 +69,6 @@ const CoachAddModal = ({
             if (searchInput) {
                 return requestGet({
                     requestUrl: `/admin/search/${searchInput}?with_head=true&take=${itemsPerPage}&page=${curPage}`,
-                    // successFunc: setSearchedData,
-                    // flagCheckFunc: setIsSearched,
                 });
             } else {
                 // searchInput이 undefined일 때에 대한 처리
@@ -81,7 +78,6 @@ const CoachAddModal = ({
         staleTime: 5 * 1000,
         enabled: queryEnabled, // enabled 옵션을 사용하여 쿼리를 활성화 또는 비활성화합니다.
     });
-    console.log('searchedData', searchedData);
     useEffect(() => {
         if (getSearchCoachs.data) {
             setSearchedData(getSearchCoachs.data.result);
@@ -98,7 +94,7 @@ const CoachAddModal = ({
     };
 
     const handleActive = (data: AdminDataType) => {
-        if (modalActiveFunc && isSearched) {
+        if (modalActiveFunc && data) {
             modalActiveFunc(data);
             handleCloseModal();
         }
