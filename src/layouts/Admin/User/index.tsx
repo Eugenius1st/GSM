@@ -61,7 +61,7 @@ const User = () => {
                     );
                     userPhoto = url;
                 } catch (error) {
-                    console.log(error);
+                    // console.log(error);
                 }
             }
             rows.push({

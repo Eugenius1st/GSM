@@ -20,11 +20,13 @@ const DeleteModal = ({ deleteFunc }: DeleteModalType) => {
         document.body.style.overflow = 'hidden';
     };
     const handleCloseModal = () => {
-        setIsShow(false);
         document.body.style.overflow = 'unset';
+        alert('삭제되었습니다.');
+        setIsShow(false);
     };
     const [deleteInput, setDeleteInput] = useState('');
     function handleInitial() {
+        document.body.style.overflow = 'unset';
         setDeleteInput('');
         if (deleteFunc) {
             deleteFunc();

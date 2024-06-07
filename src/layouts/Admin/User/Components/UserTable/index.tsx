@@ -421,7 +421,6 @@ export default function EnhancedTable({ tableRowData, userSearchState, setUserSe
     };
 
     const isSelected = (id: number) => selected.indexOf(id) !== -1;
-
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>

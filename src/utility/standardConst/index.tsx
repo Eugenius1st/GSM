@@ -88,7 +88,7 @@ export function gradeMatcherByAge(birthYear: number) {
     const age = currentYear - birthYear + 1;
 
     if (age <= 7) {
-        return `어린이`;
+        return `아동(${age}세)`;
     } else if (age <= 13) {
         return `초 ${13 - age}`;
     } else if (age <= 16) {
@@ -96,7 +96,7 @@ export function gradeMatcherByAge(birthYear: number) {
     } else if (age < 20) {
         return `고 ${20 - age}`;
     } else {
-        return `성인`;
+        return `성인(${age}세)`;
     }
 }
 

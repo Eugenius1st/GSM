@@ -1,6 +1,7 @@
 // hooks
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 // recoil
 import { useRecoilValue } from 'recoil';
 import { IsMobileAtom } from 'atom/isMobile';
@@ -13,11 +14,14 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 //color
 import colors from 'assets/colors/palette';
+// image
+import userTempPhoto from 'assets/user/userTempPhoto.png';
+// utility
+import { classImageByClassName } from 'utility/photoConst';
 interface EgPhotoCardType {
     _id: string;
     name: string;
     birthYear?: number | string;
-    photo?: string;
     describe?: string;
     imageY: number | string;
     cardType?: string;
@@ -32,7 +36,6 @@ interface EgPhotoCardType {
 const EgPhotoCard = ({
     _id,
     name,
-    photo,
     birthYear,
     describe,
     imageY,
@@ -45,8 +48,27 @@ const EgPhotoCard = ({
     type,
 }: EgPhotoCardType) => {
     const { egWhite, egPurple } = colors;
+    const [photo, setPhoto] = useState<any>('');
     let isMobile = useRecoilValue(IsMobileAtom);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (cardType === 'coach' && _id) {
+            axios
+                .get(`${process.env.REACT_APP_API_URL}/photo/admin/${_id}?isThumbnail=true`, { responseType: 'blob' })
+                .then((response) => {
+                    const url = window.URL.createObjectURL(
+                        new Blob([response.data], { type: response.headers['content-type'] })
+                    );
+                    setPhoto(url);
+                    console.log('photo', photo);
+                })
+                .catch((error) => console.log(error));
+        } else if (cardType === 'class') {
+            const matchedPhoto = classImageByClassName(name);
+            setPhoto(matchedPhoto);
+        }
+    }, []);
     return (
         <Card
             sx={{ width: '100%', mx: 1 }}
@@ -57,7 +79,7 @@ const EgPhotoCard = ({
                     height: isMobile ? '7rem' : imageY,
                     border: `1px solid ${egPurple.light}`,
                 }}
-                image={photo}
+                image={photo ? photo : userTempPhoto}
                 title="green iguana"
             />
             <CardContent>

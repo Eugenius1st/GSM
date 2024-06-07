@@ -22,6 +22,8 @@ import BasicModal from 'components/Modals/BasicModal';
 // icons
 import { IoClose } from 'react-icons/io5';
 import { FaPlus } from 'react-icons/fa6';
+// utility
+import { classImageByClassName } from 'utility/photoConst';
 
 export interface ClassInfoType {
     _id: string;
@@ -166,7 +168,7 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
                     <div className={isMobile ? 'flex flex-col items-center justify-center' : 'flex items-center'}>
                         <div className={isMobile ? 'w-full h-[16rem] mb-4' : 'w-[30rem] h-[10rem] mb-4'}>
                             <img
-                                // src={classInfo.classImage}
+                                src={classInfo.name && classImageByClassName(classInfo.name)}
                                 alt="title"
                                 className="object-cover w-full h-full mr-4 border-2"
                             />

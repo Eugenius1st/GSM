@@ -11,8 +11,6 @@ import ViewUserCard from 'layouts/User/Class/components/ViewUserCard';
 // Cards
 import ClassCard from 'components/Cards/ClassCard';
 import { ClassInfoType } from 'components/Cards/ClassCard';
-// images
-import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
 
 // Common
 import Divider from 'components/Common/Divider';

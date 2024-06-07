@@ -7,8 +7,7 @@ import UserProfileCard from 'layouts/User/Home/components/UserProfileCard';
 import ClassCard from 'components/Cards/ClassCard';
 // images
 import userTempPhoto from 'assets/user/userTempPhoto.png';
-import class_adult_man from 'assets/class/class_adult_man.jpeg';
-import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
+import class_adult_male from 'assets/class/class_adult_male.jpeg';
 // Common
 import Divider from 'components/Common/Divider';
 // Cards
@@ -52,7 +51,7 @@ const User = () => {
     const classInfo = [
         {
             id: 1,
-            classImage: class_adult_man,
+            classImage: class_adult_male,
             title: '성인남성반',
             date: '2024-03-09',
             location: '수원월드컵점',
@@ -60,19 +59,10 @@ const User = () => {
             waiting: 4,
             attend: true,
         },
-        {
-            id: 2,
-            classImage: class_adult_woman,
-            title: '성인여성반',
-            date: '2024-03-09',
-            location: '수원월드컵점',
-            attendCount: '8/10',
-            waiting: 4,
-            attend: true,
-        },
+
         {
             id: 3,
-            classImage: class_adult_man,
+            classImage: class_adult_male,
             title: '성인남성반',
             date: '2024-03-09',
             location: '수원월드컵점',

@@ -32,7 +32,7 @@ const ClassDetail = () => {
     const [deleteState, setDeleteState] = useState(false);
     // GET 요청을 보낼 함수 정의
     const { data, error, isLoading, refetch } = useQuery({
-        queryKey: ['adminClassDetail'],
+        queryKey: [`adminClassDetail-${classId}`],
         queryFn: () => {
             if (classId) {
                 return requestGet({

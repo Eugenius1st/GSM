@@ -43,11 +43,25 @@ const UserRegist = () => {
 
         window.scrollTo(0, 0);
         if (registStage === 5) {
-            setTermsAgreeData('');
-            setBasicInfoData('');
-            setAdditionalInfoData('');
+            handleClear();
         }
     }, [registStage]);
+
+    // atom 값 초기화
+    const handleClear = () => {
+        setTermsAgreeData('');
+        setBasicInfoData('');
+        setAdditionalInfoData('');
+    };
+    useEffect(() => {
+        handleClear();
+        console.log(
+            'termsAgreeData, basicInfoData, additionalInfoData',
+            termsAgreeData,
+            basicInfoData,
+            additionalInfoData
+        );
+    }, []);
 
     return (
         <div className="eg-regist-wrapper">
