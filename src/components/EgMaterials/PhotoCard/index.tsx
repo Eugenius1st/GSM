@@ -51,24 +51,21 @@ const EgPhotoCard = ({
     const [photo, setPhoto] = useState<any>('');
     let isMobile = useRecoilValue(IsMobileAtom);
     const navigate = useNavigate();
-
     useEffect(() => {
         if (cardType === 'coach' && _id) {
             axios
-                .get(`${process.env.REACT_APP_API_URL}/photo/admin/${_id}?isThumbnail=true`, { responseType: 'blob' })
+                .get(`${process.env.REACT_APP_API_URL}/photo/admin/${_id}?isThumbnail=false`, { responseType: 'blob' })
                 .then((response) => {
                     const url = window.URL.createObjectURL(
                         new Blob([response.data], { type: response.headers['content-type'] })
                     );
                     setPhoto(url);
-                    console.log('photo', photo);
                 })
                 .catch((error) => console.log(error));
         } else if (cardType === 'class') {
-            const matchedPhoto = classImageByClassName(name);
-            setPhoto(matchedPhoto);
+            setPhoto(classImageByClassName(name));
         }
-    }, []);
+    }, [_id]);
     return (
         <Card
             sx={{ width: '100%', mx: 1 }}

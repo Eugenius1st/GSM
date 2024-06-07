@@ -194,7 +194,7 @@ handleState) => {
                     },
                 })
                 .then((res) => {
-                    console.log(res, '사진 전송까지 완료!!');
+                    // console.log(res, '사진 전송까지 완료!!');
                     handleNext();
                 })
                 .catch((err) => console.log(err));

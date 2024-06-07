@@ -122,7 +122,6 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
     };
     const handleAddCoaches = (coachInfo: AdminDataType) => {
         const isIdMatch = coaches.some((coach: any) => coach._id === coachInfo._id);
-
         // _id가 일치하지 않는 경우에만 추가
         if (!isIdMatch) {
             // 새로운 배열을 만들어서 coachInfo 추가
@@ -147,8 +146,9 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
     };
 
     useEffect(() => {
-        setType('실기');
+        setType('theory');
     }, [className]);
+
     return (
         <div>
             <button
@@ -230,33 +230,33 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
                                     modalScrollStayFlag={false}
                                 />
                             </div>
-                            {className === '엘리트반' && (
+                            {className === '엘리트반(초3-6/중,고,대)' && (
                                 <div className="flex mb-2 items">
                                     <span className="w-20 mr-4 text-lg font-semibold">수업분류</span>
 
                                     <div className="flex items-center mr-2">
                                         <input
                                             type="radio"
-                                            id="실기"
+                                            id="theory"
                                             name="classification"
-                                            value="실기"
+                                            value="theory"
                                             className="w-4 h-4 mr-1"
-                                            defaultChecked={type === '실기'}
+                                            defaultChecked={type === 'theory'}
                                             onChange={(e) => setType(e.target.value)}
                                         />
-                                        <label htmlFor="실기">실기</label>
+                                        <label htmlFor="theory">실기</label>
                                     </div>
                                     <div className="flex items-center mr-2">
                                         <input
                                             type="radio"
-                                            id="이론"
+                                            id="practice"
                                             name="classification"
-                                            value="이론"
+                                            value="practice"
                                             className="w-4 h-4 mr-1"
-                                            defaultChecked={type === '이론'}
+                                            defaultChecked={type === 'practice'}
                                             onChange={(e) => setType(e.target.value)}
                                         />
-                                        <label htmlFor="이론">이론</label>
+                                        <label htmlFor="practice">이론</label>
                                     </div>
                                 </div>
                             )}

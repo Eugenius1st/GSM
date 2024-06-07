@@ -7,6 +7,8 @@ export const trainingCourseOptions = [
     '기본기반(초4-6)',
     '어린이반(초1-3)',
     '개인레슨',
+    '이론 1차',
+    '이론 2차',
 ];
 export const positionOptions = ['GK', 'CB', 'LWB', 'RWB', 'CDM', 'CAM', 'CM', 'LM', 'RM', 'ST'];
 
@@ -86,17 +88,16 @@ export function positionMatcherByKor(position: string) {
 export function gradeMatcherByAge(birthYear: number) {
     const currentYear = new Date().getFullYear();
     const age = currentYear - birthYear + 1;
-
     if (age <= 7) {
-        return `아동(${age}세)`;
-    } else if (age <= 13) {
-        return `초 ${13 - age}`;
-    } else if (age <= 16) {
-        return `중 ${16 - age}`;
-    } else if (age < 20) {
-        return `고 ${20 - age}`;
+        return `아동 ${age}세`;
+    } else if (7 < age && age <= 13) {
+        return `초 ${age - 7}`;
+    } else if (13 < age && age <= 16) {
+        return `중 ${age - 13}`;
+    } else if (16 < age && age < 20) {
+        return `고 ${age - 16}`;
     } else {
-        return `성인(${age}세)`;
+        return `성인 ${age}세`;
     }
 }
 

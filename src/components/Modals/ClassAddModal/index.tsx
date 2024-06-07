@@ -322,7 +322,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                             </div>
 
                             {/* 수업 분류 */}
-                            {className === '엘리트반' && (
+                            {className === '엘리트반(초3-6/중,고,대)' && (
                                 <div className="flex justify-between px-1 py-2 border items border-egGrey-default mt-[-1px]">
                                     <span className="ml-1 text-lg w-28">수업분류</span>
                                     <div className="flex items-center text-egGrey-default">

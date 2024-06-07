@@ -36,26 +36,19 @@ const RegisterImageUploader: React.FC<RegisterImageUploaderType> = ({
 
     const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
-            setSelectedPhoto(event.target.files[0]);
+            const file = event.target.files[0];
+            const fileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+            const maxSize = 5 * 1024 * 1024; // 5MB
+
+            if (!fileTypes.includes(file.type)) {
+                alert('jpeg, jpg, png 파일만 업로드 가능합니다.');
+            } else if (file.size > maxSize) {
+                alert('5MB 이하의 사진을 업로드 하세요');
+            } else {
+                setSelectedPhoto(file);
+            }
         }
     };
-    // 회원가입 하는 부분으로 아래 코드 넘김
-    // const handlePostPhoto = () => {
-    //     const data = new FormData();
-    //     if (selectedPhoto && uploadedId) {
-    //         data.append('id', uploadedId);
-    //         data.append('photo', selectedPhoto);
-
-    //         axios
-    //             .post(`${process.env.REACT_APP_API_URL}/photo/${type}`, data, {
-    //                 headers: {
-    //                     'Content-Type': 'multipart/form-data',
-    //                 },
-    //             })
-    //             .then((res) => console.log(res))
-    //             .catch((err) => console.log(err));
-    //     }
-    // };
     const handleClearPhoto = () => {
         setPreviewUrl(null);
         setSelectedPhoto(null);

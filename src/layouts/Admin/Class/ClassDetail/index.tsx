@@ -54,7 +54,6 @@ const ClassDetail = () => {
     };
     useEffect(() => {
         setCurClass(data);
-        console.log('data', data);
     }, [data]);
     useEffect(() => {
         if (deleteState) navigate(-1);

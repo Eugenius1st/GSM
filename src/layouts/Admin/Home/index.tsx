@@ -121,7 +121,7 @@ const Home = () => {
             requestGet({
                 requestUrl: `/class?page=1&take=${2}`,
             }),
-        staleTime: 5 * 1000,
+        // staleTime: 5 * 1000,
     });
     // 유저 검색 input 값이 없을 시
     useEffect(() => {
@@ -129,7 +129,6 @@ const Home = () => {
             convertTableRowData();
         }
     }, [userSearchState]);
-
     return (
         <div className="eg-default-wrapper">
             <div className="eg-title">회원관리</div>

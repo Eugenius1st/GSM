@@ -106,32 +106,32 @@ const PasswordEditModal = ({ activeFunc, modalBtn }: PasswordEditModalType) => {
                         </div>
                         <div className="my-4 text-base font-bold text-center">비밀번호 변경</div>
                         <div className="flex flex-col">
-                            <div className="flex items-center text-sm font-semibold text-egPurple-default">ID</div>
+                            <div className="flex items-center text-sm font-semibold text-egBlack-semiLight">ID</div>
 
                             <input
                                 type="text"
-                                placeholder="ID"
-                                className="w-full p-1 my-1 border border-egPurple-default"
+                                placeholder="idx"
+                                className="w-full p-2 my-1 border rounded-md border-egGrey-default"
                                 value={id}
                                 onChange={(e) => setId(e.target.value)}
                             />
-                            <div className="flex items-center mt-2 text-sm font-semibold text-egPurple-default">
-                                PASSWORD
+                            <div className="flex items-center mt-4 text-sm font-semibold text-egBlack-semiLight">
+                                기존 비밀번호
                             </div>
                             <input
                                 type="password"
-                                placeholder="기존의 password"
-                                className="w-full p-1 my-1 border border-egPurple-default"
+                                placeholder="password"
+                                className="w-full p-2 my-1 border rounded-md border-egGrey-default"
                                 value={pw}
                                 onChange={(e) => setPw(e.target.value)}
                             />
-                            <div className="flex items-center mt-2 text-sm font-semibold text-egPurple-default">
-                                새로운 PASSWORD
+                            <div className="flex items-center mt-4 text-sm font-semibold text-egBlack-semiLight">
+                                새로운 비밀번호
                             </div>
                             <input
                                 type="password"
-                                placeholder="새로운 password"
-                                className="w-full p-1 my-1 border border-egPurple-default"
+                                placeholder="new password"
+                                className="w-full p-2 my-1 border rounded-md border-egGrey-default"
                                 value={newPw}
                                 onChange={(e) => setNewPw(e.target.value)}
                             />

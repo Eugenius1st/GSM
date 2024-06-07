@@ -201,7 +201,7 @@ const AdminRegist = () => {
                     },
                 })
                 .then((res) => {
-                    console.log(res, '사진 전송까지 완료!!');
+                    // console.log(res, '사진 전송까지 완료!!');
                     navigate('/admin');
                 })
                 .catch((err) => console.log(err));
@@ -491,7 +491,7 @@ const AdminRegist = () => {
                         </div>
                     ))}
                 </div>
-                <div>
+                <div className="mt-4 text-end">
                     <PurpleBtn
                         customStyle={
                             'w-full py-2 mt-8 rounded-md text-egWhite-default text-center bg-egPurple-default text-egWhite-default'

@@ -165,8 +165,8 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
                             참석
                         </button>
                     )}
-                    <div className={isMobile ? 'flex flex-col items-center justify-center' : 'flex items-center'}>
-                        <div className={isMobile ? 'w-full h-[16rem] mb-4' : 'w-[30rem] h-[10rem] mb-4'}>
+                    <div className={isMobile ? 'flex flex-col items-center justify-center' : 'flex  items-center'}>
+                        <div className={isMobile ? 'w-full h-[16rem] mb-4' : ' w-[31rem] h-[11rem]'}>
                             <img
                                 src={classInfo.name && classImageByClassName(classInfo.name)}
                                 alt="title"
