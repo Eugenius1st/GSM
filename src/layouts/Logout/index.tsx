@@ -6,7 +6,6 @@ import { IsTabletSelector } from 'atom/isTablet';
 // Logout Components
 import WebLogout from 'layouts/Logout/WebLogout';
 import MobileLogout from 'layouts/Logout/MobileLogout';
-import { useState, useEffect } from 'react';
 
 const Logout = () => {
     const location = useLocation().pathname;
