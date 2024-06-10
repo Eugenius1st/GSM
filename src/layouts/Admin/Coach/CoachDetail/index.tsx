@@ -11,7 +11,7 @@ import EmptyCard from 'components/Cards/EmptyCard';
 // Common
 import Divider from 'components/Common/Divider';
 // Admin Coach Components
-import CoachProfileCard from 'layouts/Admin/Coach/components/CoachProfileCard';
+import CoachProfileCard from 'layouts/Admin/Coach/Components/CoachProfileCard';
 // Modals
 import EditModal from 'components/Modals/EditModal';
 import PasswordEditModal from 'components/Modals/PasswordEditModal';
