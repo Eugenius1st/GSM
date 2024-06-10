@@ -39,7 +39,6 @@ const Coach = () => {
             });
         },
         staleTime: 5 * 1000,
-        // enabled: queryEnabled, // enabled 옵션을 사용하여 쿼리를 활성화 또는 비활성화합니다.
     });
 
     // Table 에 적합한 Row 형태로 변경하기
