@@ -9,11 +9,11 @@ import { requestGet } from 'api/basic';
 import Divider from 'components/Common/Divider';
 // Eg Components
 import EgPhotoCard from 'components/EgMaterials/PhotoCard';
-import UserTable from 'layouts/Admin/User/components/UserTable';
+import UserTable from 'layouts/Admin/User/Components/UserTable';
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
 // Admin Home Components
-import TitleBar from 'layouts/Admin/Home/components/TitleBar';
+// import TitleBar from 'layouts/Admin/Home/';
 
 export interface ColumnType {
     id: string;
@@ -148,10 +148,10 @@ const Home = () => {
                     />
                 </div>
             )}
-            <TitleBar
+            {/* <TitleBar
                 title="코치관리"
                 navigationURL="/admin/coach"
-            />
+            /> */}
             <div className="flex justify-between">
                 {coachData?.data?.result &&
                     coachData.data.result.map((el: any, idx: number) => (
@@ -166,10 +166,10 @@ const Home = () => {
                     ))}
             </div>
             <Divider />
-            <TitleBar
+            {/* <TitleBar
                 title="수업관리"
                 navigationURL="/admin/class"
-            />
+            /> */}
             <div className="flex justify-between">
                 {classData?.data?.result &&
                     classData?.data?.result.map((el: any, idx: number) => (
