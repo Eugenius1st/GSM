@@ -36,7 +36,7 @@ const WebHeader = () => {
                 { title: '회원 등록', link: '/admin/regist/user' },
             ],
         },
-        { title: '알림 및 안내', link: '/admin/notification/entire' },
+        { title: '알림 및 안내', link: '/admin/notification' },
     ];
     const [hoveredTab, setHoveredTab] = useState('');
     const tabHoverHandler = (tab: string) => {

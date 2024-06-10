@@ -19,7 +19,28 @@ interface AttendInfoType {
 }
 const CoachViewUserCard = ({ attendInfo }: AttendInfoType) => {
     const { egPurple, egWhite, egRed, egYellow, egGreen, egBlack } = colors;
-
+    const userMemo = {
+        feedback: [
+            { date: '2024-03-07', content: '3골 넣음' },
+            { date: '2024-03-07', content: '패스 실력 향상됨' },
+            { date: '2024-03-07', content: '드리블 훈련 살짝 미흡함. 다듬어야함' },
+            { date: '2024-03-07', content: '에잇 라운드 훈련 미숙함' },
+            { date: '2024-03-05', content: '에잇 라운드 훈련 미숙함' },
+            { date: '2024-03-04', content: '에잇 라운드 훈련 미숙함' },
+        ],
+        significant: [
+            {
+                date: '2024-03-07',
+                content:
+                    '태도가 아주 좋음 태도가 아주 좋음 태도가 아주 좋음 태도가 아주 좋음 태도가 아주 좋음 태도가 아주 좋음',
+            },
+            { date: '2024-03-07', content: '태도가 아주 좋음' },
+            { date: '2024-03-07', content: '태도가 아주 좋음' },
+            { date: '2024-03-07', content: '태도가 아주 좋음' },
+            { date: '2024-03-05', content: '인사성 밝음' },
+            { date: '2024-03-04', content: '아이들 이름 외울 필요 있음' },
+        ],
+    };
     return (
         <div className="z-0 px-2">
             {attendInfo.map((el, idx) => (
