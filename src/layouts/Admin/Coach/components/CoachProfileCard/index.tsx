@@ -3,7 +3,11 @@ import Divider from 'components/Common/Divider';
 // Cardsimport
 import EmptyCard from 'components/Cards/EmptyCard';
 // images
+<<<<<<< HEAD
 import userImg from 'assets/user/user.png';
+=======
+import userTempPhoto from 'assets/user/userTempPhoto.png';
+>>>>>>> db0f4f6e0046e862aa782edc570772134d108ef4
 
 interface recordType {
     date: number;
@@ -25,9 +29,16 @@ interface CoachInfoType {
 
 interface InfoType {
     coachInfo: CoachInfoType | undefined;
+<<<<<<< HEAD
 }
 
 const CoachProfileCard = ({ coachInfo }: InfoType) => {
+=======
+    coachPhoto?: string;
+}
+
+const CoachProfileCard = ({ coachPhoto, coachInfo }: InfoType) => {
+>>>>>>> db0f4f6e0046e862aa782edc570772134d108ef4
     const listStyle = 'flex items-center border-b border-egGrey-default mt-1';
     const titleStyle = 'mr-2 font-bold px-1 my-1 w-28';
     const highLight = 'px-1 bg-egPurple-superLight';
@@ -37,7 +48,11 @@ const CoachProfileCard = ({ coachInfo }: InfoType) => {
                 <div>
                     <div className={'w-full m-auto border border-egGrey-default p-4'}>
                         <img
+<<<<<<< HEAD
                             src={coachInfo.photo === 'any-photo-url' ? userImg : coachInfo.photo}
+=======
+                            src={coachPhoto ? coachPhoto : userTempPhoto}
+>>>>>>> db0f4f6e0046e862aa782edc570772134d108ef4
                             alt="coach_son"
                             className="object-cover w-32 h-32 p-1 m-auto mb-4 border rounded-full border-egPurple-default"
                         />
