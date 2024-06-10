@@ -41,7 +41,7 @@ export default function TemporaryDrawer() {
                 { title: '회원 등록', link: '/admin/regist/user' },
             ],
         },
-        { title: '알림 및 안내', link: '/admin/notification/entire', icon: <GoBellFill /> },
+        { title: '알림 및 안내', link: '/admin/notification', icon: <GoBellFill /> },
     ];
 
     const DrawerList = (

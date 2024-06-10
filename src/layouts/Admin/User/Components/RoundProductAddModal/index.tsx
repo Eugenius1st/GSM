@@ -21,7 +21,6 @@ const RoundProductAddModal = ({ flag, setFlag }: RoundProductAddModalType) => {
     const [newRPCount, setNewRPCount] = useState<number>(0);
     const [newRPStartDate, setNewRPStartDate] = useState('');
     const [newRPEndDate, setNewRPEndDate] = useState<string>('');
-    const [alertPoint, setAlertPoint] = useState<number>(0);
 
     // POST 요청
     const addRoundProduct = useMutation({
@@ -97,7 +96,7 @@ const RoundProductAddModal = ({ flag, setFlag }: RoundProductAddModalType) => {
                             </div>
 
                             <div className="flex items-center my-2">
-                                <div className="w-1/2 font-semibold">가격 *</div>
+                                <div className="font-semibold w-28">가격 *</div>
                                 <input
                                     type="number"
                                     value={newRPPrice}
@@ -107,27 +106,14 @@ const RoundProductAddModal = ({ flag, setFlag }: RoundProductAddModalType) => {
                             </div>
 
                             <div className="flex items-center my-2">
-                                <div className="w-1/2 font-semibold">총회차 *</div>
+                                <div className="font-semibold w-28">총회차 *</div>
                                 <input
-                                    type="number"
+                                    type="text"
                                     value={newRPCount}
                                     onChange={(e) => setNewRPCount(Number(e.target.value))}
                                     className="w-full p-1 border rounded-sm border-egGrey-default"
                                 />
                             </div>
-
-                            <div className="flex items-center my-2">
-                                <div className="w-1/2 font-semibold">가격 알림 제공 회차*</div>
-                                <input
-                                    type="number"
-                                    value={alertPoint}
-                                    min={0}
-                                    max={newRPCount}
-                                    onChange={(e) => setAlertPoint(Number(e.target.value))}
-                                    className="w-full p-1 border rounded-sm border-egGrey-default"
-                                />
-                            </div>
-
                             <div className="flex items-center my-2">
                                 <div className="font-semibold w-28">시작 날짜 *</div>
                                 <input

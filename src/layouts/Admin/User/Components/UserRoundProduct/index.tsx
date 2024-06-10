@@ -91,8 +91,8 @@ const UserRoundProduct = ({ getRoundrefetchFunc }: UserRoundProductType) => {
     return (
         <div>
             <div onClick={handleShowModal}>
-                <button className="p-1 mx-1 border rounded-sm w-14 bg-egPurple-default text-egWhite-default">
-                    + 회차
+                <button className="w-24 p-1 mx-1 border rounded-sm bg-egPurple-default text-egWhite-default">
+                    + 회차 추가
                 </button>
             </div>
             {isShow ? (

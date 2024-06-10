@@ -13,14 +13,14 @@ import UserBasicCard from 'layouts/User/Mypage/components/UserBasicCard';
 import UserAdditionalCard from 'layouts/User/Mypage/components/UserAdditionalCard';
 import UserSkillCard from 'layouts/User/Mypage/components/UserSkillCard';
 //images
-import userTempPhoto from 'assets/user/userTempPhoto.png';
+import user5 from 'assets/user/user5.jpeg';
 // Common
 import Divider from 'components/Common/Divider';
 
 const MyPage = () => {
     let isMobile = useRecoilValue(IsMobileSelector);
     const userInfo = {
-        thumbnail: userTempPhoto,
+        thumbnail: user5,
         name: '손흥민',
         gender: 'male',
         birth: '1995.04.11',
@@ -192,6 +192,7 @@ const MyPage = () => {
         },
         staleTime: 5 * 1000,
     });
+    console.log(getUserDetailInfo.data);
     return (
         <div className="eg-default-wrapper">
             <div className="pt-5 text-2xl font-bold text-center">마이페이지</div>
@@ -201,9 +202,7 @@ const MyPage = () => {
                     <div className={isMobile ? '' : 'relative col-span-1'}>
                         <UserProfileCard
                             isMobile={isMobile}
-                            thumbnail={
-                                getUserDetailInfo.data.thumbnail ? getUserDetailInfo.data.thumbnail : userTempPhoto
-                            }
+                            thumbnail={getUserDetailInfo.data.thumbnail === 'any-photo-url' ? user5 : user5}
                             name={getUserDetailInfo.data.name}
                             birth={getUserDetailInfo.data.birth.slice(0, 10)}
                             classInfo={userInfo.classInfo} // 여기 대폭 수정 필요..
