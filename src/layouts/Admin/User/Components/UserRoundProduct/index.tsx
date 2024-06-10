@@ -7,8 +7,8 @@ import { requestGet, requestPost } from 'api/basic';
 import Divider from 'components/Common/Divider';
 import { useEffect, useState } from 'react';
 // Admin User Components
-import RoundProductAddModal from 'layouts/Admin/User/Components/RoundProductAddModal';
-import RoundProductEditModal from 'layouts/Admin/User/Components/RoundProductEditModal';
+import RoundProductAddModal from 'layouts/Admin/User/components/RoundProductAddModal';
+import RoundProductEditModal from 'layouts/Admin/User/components/RoundProductEditModal';
 // icons
 import { CgClose } from 'react-icons/cg';
 import WhiteBtn from 'components/Buttons/WhiteBtn';
