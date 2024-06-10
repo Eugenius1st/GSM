@@ -3,10 +3,11 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 // api
 import { requestGet } from 'api/basic';
-// Eg Components
-import CoachTable from 'layouts/Admin/Coach/components/CoachTable';
+
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
+// Eg Components
+import CoachTable from 'layouts/Admin/Coach/components/CoachTable';
 // Common
 import SearchBar from 'components/Common/SearchBar';
 import SelectMenu from 'components/Common/SelectMenu';
