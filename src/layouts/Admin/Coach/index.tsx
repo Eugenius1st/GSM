@@ -7,7 +7,12 @@ import { requestGet } from 'api/basic';
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
 // Eg Components
-import CoachTable from 'layouts/Admin/Coach/components/CoachTable';
+
+import CoachTable from 'layouts/Admin/Coach/Components/CoachTable';
+// Common
+import SearchBar from 'components/Common/SearchBar';
+import SelectMenu from 'components/Common/SelectMenu';
+import axios from 'axios';
 
 export interface RowDataType {
     _id: number;
