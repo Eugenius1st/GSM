@@ -22,20 +22,17 @@ export async function loginPost({ requestUrl, id, pw, successFunc }: PostLoginTy
         if (successFunc) successFunc(response.data);
     } catch (error: any) {
         if (error.response) {
-            alert(error.response.data.message);
-            // console.log(error.response.data);
-            // console.log(error.response.status);
-            // console.log(error.response.headers);
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
         } else if (error.request) {
-            console.log(error.response.data.message);
-
             // 요청이 전송되었지만, 응답이 수신되지 않았습니다.
-            // console.log(error.request);
+            console.log(error.request);
         } else {
             // 오류가 발생한 요청을 설정하는 동안 문제가 발생했습니다.
             console.log('Error', error.message);
         }
-        // console.log(error.config);
+        console.log(error.config);
     }
 }
 // 요청할 데이터 타입 정의

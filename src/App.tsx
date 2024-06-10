@@ -102,7 +102,7 @@ export const adminRoutes = [
     },
     // admin notification
     {
-        path: '/admin/notification/:category',
+        path: '/admin/notification',
         element: <AdminNotifiaction />,
     },
 ];

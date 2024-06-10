@@ -60,7 +60,7 @@ const ResidenceSearchModal = ({ residence, setResidence }: ResidenceSearchModalT
 
             {isShow ? (
                 <div className="fixed flex justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
-                    <div className="fixed bg-egWhite-default z-[70] w-full max-w-[30rem] p-4 rounded-lg">
+                    <div className="fixed bg-egWhite-default z-[70] w-4/6 p-4 rounded-lg">
                         <div className="flex justify-between mb-4">
                             <div className="mr-1 text-lg font-bold">주소찾기</div>
                             <CgClose onClick={handleCloseModal} />

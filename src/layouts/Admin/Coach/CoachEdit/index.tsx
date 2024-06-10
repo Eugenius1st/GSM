@@ -27,7 +27,7 @@ import { CiSquareMinus } from 'react-icons/ci';
 import NavigateModal from 'components/Modals/NavigateModal';
 
 export interface RequestBodyType {
-    // photo: string;
+    photo: string;
     name: string;
     gender: string;
     birth: string;
@@ -50,7 +50,7 @@ const CoachEdit = () => {
     const [curCoach, setCurCoach] = useState();
     const [role, setRole] = useState('admin');
     const [scope, setScope] = useState(['gsm']);
-    // const [photo, setPhoto] = useState('any-photo-url');
+    const [photo, setPhoto] = useState('any-photo-url');
     const [name, setName] = useState('');
     const [gender, setGender] = useState('성별');
     const [birth, setBirth] = useState('');
@@ -104,8 +104,8 @@ const CoachEdit = () => {
     });
     useEffect(() => {
         if (curCoach) {
-            const { name, gender, birth, lv, mobile, duty, license } = curCoach;
-            // setPhoto(photo);
+            const { photo, name, gender, birth, lv, mobile, duty, license } = curCoach;
+            setPhoto(photo);
             setName(name);
             setGender(gender);
             setBirth(birth);
@@ -127,7 +127,7 @@ const CoachEdit = () => {
         // PATCH 요청에 보낼 데이터
         const numberLevel = Number(level);
         const data = {
-            // photo: photo,
+            photo: photo,
             name: name,
             gender: gender,
             birth: birth,
@@ -149,15 +149,15 @@ const CoachEdit = () => {
                 <span> 관리자 등록</span>
             </div>
             <div className="relative">
-                {coachId && (
-                    <ImageUploader
-                        type={'admin'}
-                        uploadedId={coachId}
-                        uploadCustomBtn={uploadBtn}
-                        previewImgStyle="w-24 h-24 m-auto border-2 rounded-full border-egPurple-default object-cover"
-                        // defaultPhoto={photo}
-                    />
-                )}
+                <ImageUploader
+                    uploadCustomBtn={uploadBtn}
+                    previewImgStyle="w-24 h-24 m-auto border-2 rounded-full border-egPurple-default object-cover"
+                    previewBeforeIcon={
+                        <div className="relative w-24 h-24 border-2 rounded-full border-egPurple-default bg-egGrey-semiLight">
+                            <FaUser className="absolute bottom-[0.5px] w-20 h-20 rounded-[2.3rem] right-[7px] text-egBlack-light " />
+                        </div>
+                    }
+                />
             </div>
             <form className="mt-16">
                 {/* user personal info */}
@@ -263,7 +263,7 @@ const CoachEdit = () => {
                     </div>
 
                     {/* 직접 선택 및 입력 */}
-                    {/* <div className="my-1">이력사항</div>
+                    <div className="my-1">이력사항</div>
                     {soccerRecord.map((el, idx) => (
                         <div
                             key={idx}
@@ -319,7 +319,7 @@ const CoachEdit = () => {
                                 )}
                             </div>
                         </div>
-                    ))} */}
+                    ))}
                     <div className="my-1">자격증</div>
                     {license.length < 3 && (
                         <div
