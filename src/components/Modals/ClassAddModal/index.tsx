@@ -163,7 +163,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
             alert('종료 시간을 입력하세요');
             return false;
         } else if (!applicationDeadline) {
-            alert('마감 시간을 입력하세요');
+            alert('신청 마감 시간을 입력하세요');
             return false;
         } else if (!place) {
             alert('수업 장소를 입력하세요');

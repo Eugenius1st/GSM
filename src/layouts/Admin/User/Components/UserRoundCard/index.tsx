@@ -8,7 +8,8 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { IoIosArrowUp } from 'react-icons/io';
 // Admin User Components
 import UserRoundProduct from 'layouts/Admin/User/components/UserRoundProduct';
-
+// Modals
+import LastRoundInfoModal from 'components/Modals/LastRoundInfoModal';
 interface RoundInfoType {
     _id: string;
     studentId: string;
@@ -128,8 +129,11 @@ const UserRoundCard = ({ roundInfo, count, classGroupName, getRoundrefetchFunc }
                     </div>
 
                     <div className="flex items-start justify-between mt-1">
-                        <div className={titleStyle}>
-                            <span className={highLight}>회차정보</span>
+                        <div className="flex">
+                            <div className={titleStyle}>
+                                <span className={highLight}>회차정보</span>
+                            </div>
+                            <LastRoundInfoModal />
                         </div>
                         <UserRoundProduct getRoundrefetchFunc={getRoundrefetchFunc} />
                     </div>

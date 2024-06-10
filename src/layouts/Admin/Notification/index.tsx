@@ -6,8 +6,9 @@ import WhiteBtn from 'components/Buttons/WhiteBtn';
 import EgPageTable from 'components/EgMaterials/PageTable';
 // NotificatioinContents
 import Application from 'layouts/Admin/Notification/components/Application';
-import NotifiactionTable from 'layouts/Admin/Notification/components/NotificationTable';
+import AllNotification from 'layouts/Admin/Notification/components/AllNotification';
 import RoundDebuction from 'layouts/Admin/Notification/components/RoundDebuction';
+import AlarmTable from 'layouts/Admin/Notification/components/AlarmTable';
 // images
 import coach_son from 'assets/coach/coach_son.jpeg';
 import coach_kim from 'assets/coach/coach_kim.jpeg';
@@ -26,14 +27,15 @@ const Notification = () => {
         <div className="mb-2 eg-default-wrapper">
             <div className="eg-title">알림 및 안내</div>
             {category === 'entire' ? (
-                <NotifiactionTable />
+                <AllNotification />
             ) : category === 'application' ? (
                 <Application />
             ) : category === 'round' ? (
                 <RoundDebuction />
             ) : (
-                <NotifiactionTable />
+                <AllNotification />
             )}
+            <AlarmTable />
         </div>
     );
 };

@@ -18,17 +18,23 @@ import Tooltip from '@mui/material/Tooltip';
 // hooks
 import { useRecoilValue } from 'recoil';
 import { IsMobileSelector } from 'atom/isMobile';
+import { useQuery } from '@tanstack/react-query';
+import { requestGet } from 'api/basic';
 // Buttons
 import PurpleBtn from 'components/Buttons/PurpleBtn';
 // Modals
 import AlarmModal from 'components/Modals/AlarmModal';
+import BasicModal from 'components/Modals/BasicModal';
 // colors
 import colors from 'assets/colors/palette';
 // react-icons
 import { FaArrowDown } from 'react-icons/fa';
 import { FaArrowUp } from 'react-icons/fa';
+import { IoIosInformationCircleOutline } from 'react-icons/io';
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
+// Notification Components
+import TagCard from 'layouts/Admin/Notification/components/TagCard';
 
 interface Data {
     id: number;
@@ -341,6 +347,7 @@ export default function EnhancedTable() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const { egPurple, egBlack } = colors;
+    // 필터탭
     const [lessonType, setLessonType] = React.useState('group');
     const [classType, setClassType] = React.useState('practice');
     const remainRoundState = [
@@ -358,6 +365,19 @@ export default function EnhancedTable() {
     ];
     const [lastApply, setLastApply] = React.useState('2주');
 
+    // GET ClassGroup
+    const [classGroups, setClassGroups] = React.useState([]);
+    const getClassGroup = useQuery({
+        queryKey: ['allClassGroup'],
+        queryFn: () => {
+            return requestGet({
+                requestUrl: `/classGroup`,
+            });
+        },
+        staleTime: 5 * 1000,
+    });
+
+    //핸들러
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
             const newSelected = rows.map((n) => n.id);
@@ -399,11 +419,12 @@ export default function EnhancedTable() {
         { label: '수업신청공지', link: '/admin/notification/application' },
         { label: '회차차감공지', link: '/admin/notification/round' },
     ];
+
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <EnhancedTableToolbar numSelected={selected.length} />
-                <Box sx={{ mx: 2, mb: 2, display: 'flex' }}>
+                <Box sx={{ mx: 2, mb: 2, display: 'flex', alignItems: 'center' }}>
                     {NotificationTab.map((el, idx) => (
                         <div key={idx}>
                             <Link to={el.link}>
@@ -420,7 +441,33 @@ export default function EnhancedTable() {
                             {idx < NotificationTab.length - 1 && <span>·</span>}
                         </div>
                     ))}
+                    <BasicModal
+                        modalBtn={<IoIosInformationCircleOutline className="text-orange-600" />}
+                        modalTitle={
+                            <div>
+                                <span className="px-2 bg-egPurple-superLight w-fit">공지용어 안내</span>
+                            </div>
+                        }
+                        modalContents={
+                            <div>
+                                <div className="mt-2 mb-4 border-b-2"></div>
+                                <div className="flex my-2">
+                                    <div className="mr-2 font-bold">공지 |</div>
+                                    <div>전체회원들에게 공지</div>
+                                </div>
+                                <div className="flex my-2">
+                                    <div className="mr-2 font-bold">회차차감 공지 |</div>
+                                    <div>전 주 수업 수강한 경우 공지</div>
+                                </div>
+                                <div className="flex my-2">
+                                    <div className="mr-2 font-bold">수업신청 공지 |</div>
+                                    <div>이번주 수업 신청 안한 경우 공지</div>
+                                </div>
+                            </div>
+                        }
+                    />
                 </Box>
+                {/* 필터탭 */}
                 <Box>
                     <div className="flex w-full">
                         <div className="w-2/12 py-2 text-center border bg-egPurple-superLight">레슨타입</div>
@@ -517,14 +564,20 @@ export default function EnhancedTable() {
                         </div>
                     </div>
                     <div className="flex w-full">
-                        <div className="w-2/12 py-2 text-center border bg-egPurple-superLight">클래스타입</div>
-                        <div className="grid w-10/12 grid-cols-7 px-4 py-2 border">
-                            <span>엘리트반</span>
-                            <span>기본기반</span>
-                            <span>어린이반</span>
-                            <span>성인남성반</span>
-                            <span>성인여성반</span>
+                        <div className="flex items-center justify-center w-2/12 py-2 text-center border bg-egPurple-superLight">
+                            클래스그룹
                         </div>
+                        {/* <div className="grid w-10/12 grid-cols-7 px-4 py-2 border"> */}
+                        <div className="w-10/12">
+                            {getClassGroup.data?.result && (
+                                <TagCard
+                                    tagList={getClassGroup?.data?.result}
+                                    func={setClassGroups}
+                                    defaultTagList={getClassGroup?.data?.result}
+                                />
+                            )}
+                        </div>
+                        {/* </div> */}
                     </div>
                     <div className="flex w-full">
                         <div className="w-2/12 py-2 text-center border bg-egPurple-superLight">잔여수강권</div>
@@ -594,6 +647,7 @@ export default function EnhancedTable() {
                         최신가입자 <FaArrowDown className="inline text-egPurple-default" />
                     </button>
                 </Box>
+                {/* 테이블 */}
                 <TableContainer sx={{ overflowY: 'scroll' }}>
                     <Table
                         sx={{ minWidth: 440 }}
