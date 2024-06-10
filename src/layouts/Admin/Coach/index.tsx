@@ -8,9 +8,7 @@ import { requestGet } from 'api/basic';
 import PaginationRounded from 'components/EgMaterials/Pagenation';
 // Eg Components
 import CoachTable from 'layouts/Admin/Coach/components/CoachTable';
-// Common
-import SearchBar from 'components/Common/SearchBar';
-import SelectMenu from 'components/Common/SelectMenu';
+
 export interface RowDataType {
     _id: number;
     photo: string;
