@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 // api
 import { requestGet, requestPost } from 'api/basic';
 // recoil
@@ -29,6 +30,7 @@ interface handleState {
     registStage: number;
     handleNext: () => void;
     handlePreview?: () => void;
+
     // researchInfoData: any;
     // setResearchInfoData: (data: any) => void;
 }
@@ -55,7 +57,7 @@ handleState) => {
     const [checkPhysicalImporve, setCheckPhysicalImporve] = useState<skillType[]>([]);
     const [tagEditState, setTagEditState] = useState(false);
 
-    const [postSuccess, setPostSuccess] = useState(false);
+    const [postSuccess, setPostSuccess] = useState<any>(false);
 
     // GET 요청을 보낼 함수 정의
     const { data, error, isLoading, refetch } = useQuery({
@@ -117,11 +119,11 @@ handleState) => {
         return true;
     }
     const mutation = useMutation({
-        mutationFn: ({ requestUrl, data, flagCheckFunc }: any) => {
+        mutationFn: ({ requestUrl, data, successFunc }: any) => {
             return requestPost({
                 requestUrl: requestUrl,
                 data: data,
-                flagCheckFunc: flagCheckFunc,
+                successFunc: successFunc,
             });
             // return requestPost({ requestUrl: requestUrl, id: id, pw: pw, successFunc: setLoginSelector });
         },
@@ -146,71 +148,64 @@ handleState) => {
             } = basicInfoData;
             const { height, weight, classGroupName, team, soccerHistory, lessonHistory, majorFoot, position } =
                 additionalInfoData;
-            console.log({
-                id: id,
-                password: password,
-                role: 'student',
-                scope: ['gsm'],
-                photo: photo,
-                classGroupName: classGroupName,
-                name: name,
-                phone: phone,
-                phoneFather: phoneFather,
-                phoneMother: phoneMother,
-                residence: residence,
-                residenceSpecific: residenceSpecific,
-                birth: birth,
-                gender: gender,
-                height: Number(height),
-                weight: Number(weight),
-                pros: [...checkTechnicalPros, ...checkMentalPros, ...checkPhysicalPros],
-                improvements: [...checkTechnicalImporve, ...checkMentalImporve, ...checkPhysicalImporve],
-                team: team,
-                position: position,
-                soccerHistory: soccerHistory,
-                lessonHistory: lessonHistory,
-                majorFoot: majorFoot,
+
+            mutation.mutate({
+                requestUrl: '/auth/signup/student',
+                data: {
+                    id: id,
+                    password: password,
+                    role: 'student',
+                    scope: ['gsm'],
+                    classGroupName: classGroupName,
+                    name: name,
+                    phone: phone,
+                    phoneFather: phoneFather,
+                    phoneMother: phoneMother,
+                    residence: residence,
+                    residenceSpecific: residenceSpecific,
+                    birth: birth,
+                    gender: gender,
+                    height: Number(height),
+                    weight: Number(weight),
+                    pros: [...checkTechnicalPros, ...checkMentalPros, ...checkPhysicalPros],
+                    improvements: [...checkTechnicalImporve, ...checkMentalImporve, ...checkPhysicalImporve],
+                    team: team,
+                    position: position,
+                    soccerHistory: soccerHistory,
+                    lessonHistory: lessonHistory,
+                    majorFoot: majorFoot,
+                },
+                successFunc: setPostSuccess,
             });
-            // mutation.mutate({
-            //   requestUrl: "/auth/signup/student",
-            //   data: {
-            //     id: id,
-            //     password: password,
-            //     role: "student",
-            //     scope: ["gsm"],
-            //     photo: photo,
-            //     classGroupName: classGroupName,
-            //     name: name,
-            //     phone: phone,
-            //     phoneFather: phoneFather,
-            //     phoneMother: phoneMother,
-            //     residence: residence,
-            //     residenceSpecific: residenceSpecific,
-            //     birth: birth,
-            //     gender: gender,
-            //     height: Number(height),
-            //     weight: Number(weight),
-            //     pros: [
-            //       ...checkTechnicalPros,
-            //       ...checkMentalPros,
-            //       ...checkPhysicalPros,
-            //     ],
-            //     improvements: [
-            //       ...checkTechnicalImporve,
-            //       ...checkMentalImporve,
-            //       ...checkPhysicalImporve,
-            //     ],
-            //     team: team,
-            //     position: position,
-            //     soccerHistory: soccerHistory,
-            //     lessonHistory: lessonHistory,
-            //     majorFoot: majorFoot,
-            //   },
-            //   successFunc: setPostSuccess,
-            // });
-            // handleNext();
         }
     };
+    // 사진 등록 요청
+    const handlePostPhoto = () => {
+        const data = new FormData();
+        const { photo } = basicInfoData;
+        if (photo && postSuccess._id) {
+            data.append('id', postSuccess._id);
+            data.append('photo', photo);
+
+            axios
+                .post(`${process.env.REACT_APP_API_URL}/photo/student`, data, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                })
+                .then((res) => {
+                    // console.log(res, '사진 전송까지 완료!!');
+                    handleNext();
+                })
+                .catch((err) => console.log(err));
+        }
+    };
+    useEffect(() => {
+        if (mutation.status === 'success') {
+            handlePostPhoto();
+        }
+    }, [mutation.status]);
+
     return (
         <div>
             <div className="flex flex-col items-center justify-center w-full pb-10">

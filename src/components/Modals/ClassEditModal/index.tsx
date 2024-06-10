@@ -1,6 +1,9 @@
 // hooks
 import React, { KeyboardEvent, useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
+// recoil
+import { useRecoilValue, useRecoilState } from 'recoil';
+import { IsMobileSelector } from 'atom/isMobile';
 // api
 import { requestPatch } from 'api/basic';
 // Buttons
@@ -16,6 +19,8 @@ import { AdminDataType } from 'components/Modals/SearchModal';
 import BasicModal from 'components/Modals/BasicModal';
 // Alerts
 import BasicAlert from 'components/Alerts/BasicAlert';
+// utils
+import { trainingCourseOptions } from 'utility/standardConst';
 
 interface ClassEditModalType {
     classId: string;
@@ -24,18 +29,19 @@ interface ClassEditModalType {
     setPatchCheckFlag: (patchCheckFlag: boolean) => void;
 }
 const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }: ClassEditModalType) => {
-    const classList = ['엘리트반', '성인 남성반', '취미반'];
+    let isMobile = useRecoilValue(IsMobileSelector);
     const [startTime, setStartTime] = useState(curClass.startTime);
     const [endTime, setEndTime] = useState(curClass.endTime);
     const [applicationDeadline, setApplicationDeadline] = useState(curClass.applicationDeadline);
     const [place, setPlace] = useState(curClass.place);
     const [type, setType] = useState(curClass.type);
     const [amount, setAmount] = useState(curClass.amount);
+    const [masking, setMasking] = useState(curClass.masking);
+
     const [coaches, setCoaches] = useState<any>(curClass.coaches);
     const [className, setClassName] = useState(curClass.name);
     const [note, setNote] = useState(curClass.note);
     const [isShow, setIsShow] = useState(false);
-
     const handleShowModal = () => {
         setIsShow(true);
         document.body.style.overflow = 'hidden';
@@ -69,6 +75,7 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
                 type: type,
                 name: className,
                 amount: Number(amount),
+                masking: masking,
                 coaches: coachIdArray,
                 note: note,
             },
@@ -83,11 +90,11 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
         setType(curClass.type);
         setClassName(curClass.name);
         setAmount(curClass.amount);
+        setMasking(curClass.masking);
         setCoaches(curClass.coaches);
         setIsShow(false);
         setPatchCheckFlag(false);
     };
-
     const dataValidate = () => {
         if (!startTime) {
             alert('시작 시간을 입력하세요');
@@ -115,7 +122,6 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
     };
     const handleAddCoaches = (coachInfo: AdminDataType) => {
         const isIdMatch = coaches.some((coach: any) => coach._id === coachInfo._id);
-
         // _id가 일치하지 않는 경우에만 추가
         if (!isIdMatch) {
             // 새로운 배열을 만들어서 coachInfo 추가
@@ -140,8 +146,9 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
     };
 
     useEffect(() => {
-        setType('실기');
+        setType('theory');
     }, [className]);
+
     return (
         <div>
             <button
@@ -163,7 +170,13 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
             )}
             {isShow ? (
                 <div className="fixed flex text-base font-medium justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
-                    <div className="fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg">
+                    <div
+                        className={
+                            isMobile
+                                ? 'fixed bg-egWhite-default z-[70] w-full max-w-[30rem] p-4 rounded-lg'
+                                : 'fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg'
+                        }
+                    >
                         <div className="flex justify-between">
                             <div className="mb-2 text-lg font-bold">수업 수정하기</div>
                             <CgClose onClick={handleCloseModal} />
@@ -183,7 +196,7 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
                                     value={className}
                                     onChange={(e) => setClassName(e.target.value)}
                                 >
-                                    {classList.map((el, idx) => (
+                                    {trainingCourseOptions.map((el, idx) => (
                                         <option
                                             key={idx}
                                             value={el}
@@ -217,33 +230,33 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
                                     modalScrollStayFlag={false}
                                 />
                             </div>
-                            {className === '엘리트반' && (
+                            {className === '엘리트반(초3-6/중,고,대)' && (
                                 <div className="flex mb-2 items">
                                     <span className="w-20 mr-4 text-lg font-semibold">수업분류</span>
 
                                     <div className="flex items-center mr-2">
                                         <input
                                             type="radio"
-                                            id="실기"
+                                            id="theory"
                                             name="classification"
-                                            value="실기"
+                                            value="theory"
                                             className="w-4 h-4 mr-1"
-                                            defaultChecked={type === '실기'}
+                                            defaultChecked={type === 'theory'}
                                             onChange={(e) => setType(e.target.value)}
                                         />
-                                        <label htmlFor="실기">실기</label>
+                                        <label htmlFor="theory">실기</label>
                                     </div>
                                     <div className="flex items-center mr-2">
                                         <input
                                             type="radio"
-                                            id="이론"
+                                            id="practice"
                                             name="classification"
-                                            value="이론"
+                                            value="practice"
                                             className="w-4 h-4 mr-1"
-                                            defaultChecked={type === '이론'}
+                                            defaultChecked={type === 'practice'}
                                             onChange={(e) => setType(e.target.value)}
                                         />
-                                        <label htmlFor="이론">이론</label>
+                                        <label htmlFor="practice">이론</label>
                                     </div>
                                 </div>
                             )}
@@ -320,7 +333,7 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
                                     value={amount}
                                     placeholder="숫자입력"
                                     type="number"
-                                    min="0"
+                                    min={0}
                                     max="99"
                                     className="w-40 p-1 border rounded-md border-egGrey-default"
                                     onChange={(e) => {
@@ -328,13 +341,42 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
                                     }}
                                 />
                             </div>
+                            {/* 알림 포인트 */}
+                            <div className="flex items-center mb-2">
+                                <span className="mr-4 text-base font-semibold w-22">Alert point</span>
+                                <input
+                                    value={''}
+                                    placeholder="개발중"
+                                    type="number"
+                                    min={0}
+                                    max={amount}
+                                    className="w-20 p-1 border rounded-md border-egGrey-default"
+                                    // onChange={(e) => {
+                                    // }}
+                                />
+                                <span className="ml-2 text-base">(회차 소진+교육안내 알림 point)</span>
+                            </div>
+                            <div className="flex mb-2">
+                                <span className="w-20 mr-4 text-lg font-semibold">마스킹</span>
+                                <input
+                                    value={masking}
+                                    placeholder="숫자입력"
+                                    type="number"
+                                    min={0}
+                                    max={amount}
+                                    className="w-40 p-1 border rounded-md border-egGrey-default"
+                                    onChange={(e) => {
+                                        setMasking(e.target.value);
+                                    }}
+                                />
+                            </div>
                             <div className="flex items-center mb-2">
                                 <span className="w-20 mr-4 text-lg font-semibold">참석 코치</span>
-                                <div className="w-40 h-8 p-1 border rounded-md border-egGrey-default">
+                                <div className="w-40 p-1 border rounded-md h-fit min-h-8 border-egGrey-default">
                                     {coaches.length > 0 && (
-                                        <div className="flex ">
+                                        <div className="inline-block">
                                             {coaches.map((el: any, idx: number) => (
-                                                <div className="flex items-center px-1 mr-1 text-sm rounded-sm bg-egBlack-superLight w-fit">
+                                                <div className="flex items-center px-1 my-1 mr-1 text-sm rounded-sm bg-egBlack-superLight w-fit">
                                                     {el.name} <CgClose onClick={() => handleDeleteCoaches(idx)} />
                                                 </div>
                                             ))}
@@ -343,8 +385,8 @@ const ClassEditModal = ({ classId, curClass, patchCheckFlag, setPatchCheckFlag }
                                 </div>
                                 <SearchModal
                                     modalBtn={
-                                        <button className="flex items-center p-1 ml-2 border rounded-md border-egPurple-default hover:bg-egPurple-superLight">
-                                            <div className="mr-1 text-sm">코치 검색</div>
+                                        <button className="flex items-center p-1 ml-1 border rounded-md border-egPurple-default hover:bg-egPurple-superLight">
+                                            <div className="text-sm ">코치</div>
                                             <IoMdSearch className="w-4 h-4 text-egPurple-default" />
                                         </button>
                                     }

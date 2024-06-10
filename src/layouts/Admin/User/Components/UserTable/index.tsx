@@ -34,9 +34,11 @@ import { RiUserForbidFill } from 'react-icons/ri';
 // Cards
 import EmptyCard from 'components/Cards/EmptyCard';
 // utility
-import { classGroupMatcherByEng } from 'utility/standardConst';
+import { gradeMatcherByAge } from 'utility/standardConst';
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
+// images
+import userTempPhoto from 'assets/user/userTempPhoto.png';
 
 interface PatchDataType {
     requestUrl: string;
@@ -45,7 +47,7 @@ interface PatchDataType {
 }
 interface RowDataType {
     _id: number;
-    photo: string;
+    photo?: string;
     name: string;
     birth: number;
     team: string;
@@ -360,6 +362,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                         />
                     </div>
 
+                    {/* ??? 백엔드 구현 대기중 
                     <DropDownModal
                         itemList={[
                             {
@@ -375,7 +378,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                                 item: '성인반',
                             },
                         ]}
-                    />
+                    /> */}
                 </div>
             )}
         </Toolbar>
@@ -402,7 +405,6 @@ export default function EnhancedTable({ tableRowData, userSearchState, setUserSe
         }
         setSelected([]);
     };
-
     const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
         const selectedIndex = selected.indexOf(id);
         let newSelected: readonly number[] = [];
@@ -419,7 +421,6 @@ export default function EnhancedTable({ tableRowData, userSearchState, setUserSe
     };
 
     const isSelected = (id: number) => selected.indexOf(id) !== -1;
-
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
@@ -497,8 +498,8 @@ export default function EnhancedTable({ tableRowData, userSearchState, setUserSe
                                                 }}
                                             >
                                                 <img
-                                                    className="object-cover m-auto border rounded-full w-14 h-14"
-                                                    src={row.photo}
+                                                    className="object-cover w-12 h-12 m-auto border rounded-full"
+                                                    src={row.photo ? row.photo : userTempPhoto}
                                                     alt={row.name}
                                                 />
                                             </TableCell>
@@ -517,16 +518,15 @@ export default function EnhancedTable({ tableRowData, userSearchState, setUserSe
                                                     align="center"
                                                     sx={{ paddingX: 0, width: '1rem' }}
                                                 >
-                                                    {row.classGroupName
-                                                        ? classGroupMatcherByEng(row.classGroupName)
-                                                        : '미정'}
+                                                    {row.classGroupName}
                                                 </TableCell>
                                             ) : (
                                                 <TableCell
                                                     align="center"
                                                     sx={{ paddingX: 0, width: '2rem' }}
                                                 >
-                                                    {row.birth} 년생
+                                                    {/* row.birth */}
+                                                    {gradeMatcherByAge(row.birth)}
                                                 </TableCell>
                                             )}
                                             {!userSearchState && (

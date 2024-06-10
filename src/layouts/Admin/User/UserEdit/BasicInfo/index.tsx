@@ -24,8 +24,9 @@ import PurpleBtn from 'components/Buttons/PurpleBtn';
 import dayjs from 'dayjs';
 
 interface handleState {
-    photo: string;
-    setPhoto: (data: string) => void;
+    userId: string;
+    // photo: string;
+    // setPhoto: (data: string) => void;
     name: string;
     setName: (data: string) => void;
     defaultBirth: string;
@@ -42,6 +43,11 @@ interface handleState {
     setPhoneFather: (data: string) => void;
     phoneMother: string;
     setPhoneMother: (data: string) => void;
+    defaultMajorPhone: string;
+    setDefaultMajorPhone: (data: string) => void;
+    majorPhone: string;
+    setMajorPhone: (data: string) => void;
+
     residence: string;
     setResidence: (data: string) => void;
     residenceSpecific: string;
@@ -49,8 +55,7 @@ interface handleState {
 }
 
 const BasicInfo = ({
-    photo,
-    setPhoto,
+    userId,
     name,
     setName,
     defaultBirth,
@@ -67,6 +72,12 @@ const BasicInfo = ({
     setPhoneFather,
     phoneMother,
     setPhoneMother,
+
+    defaultMajorPhone,
+    setDefaultMajorPhone,
+    majorPhone,
+    setMajorPhone,
+
     residence,
     setResidence,
     residenceSpecific,
@@ -95,13 +106,10 @@ const BasicInfo = ({
         <div>
             <div className="relative">
                 <ImageUploader
+                    type={'student'}
+                    uploadedId={userId}
                     uploadCustomBtn={uploadBtn}
                     previewImgStyle="w-24 h-24 m-auto border-2 rounded-full border-egPurple-default object-cover"
-                    previewBeforeIcon={
-                        <div className="relative w-24 h-24 border-2 rounded-full border-egPurple-default bg-egGrey-semiLight">
-                            <FaUser className="absolute bottom-[0.5px] w-20 h-20 rounded-[2.3rem] right-[7px] text-egBlack-light " />
-                        </div>
-                    }
                 />
             </div>
             <form className="mt-16">
@@ -206,7 +214,28 @@ const BasicInfo = ({
                             </div>
                         </div>
                     </div>
-
+                    {/* 대표 연락처 */}
+                    <div>대표 연락처(알림 수신) *</div>
+                    <div className="relative w-full p-2 mt-1 mb-3 border border-egGrey-default">
+                        <RadioButton
+                            RadioBtnList={[
+                                {
+                                    value: '본인',
+                                    name: '본인',
+                                },
+                                {
+                                    value: '부',
+                                    name: '부',
+                                },
+                                {
+                                    value: '모',
+                                    name: '모',
+                                },
+                            ]}
+                            func={setMajorPhone}
+                            defaultRadio={defaultMajorPhone}
+                        />
+                    </div>
                     {/* 주소 */}
                     <label htmlFor="address">주소 *</label>
                     <div className="relative">

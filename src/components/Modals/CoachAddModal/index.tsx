@@ -1,6 +1,9 @@
 // hooks
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+// recoil
+import { useRecoilValue } from 'recoil';
+import { IsMobileSelector } from 'atom/isMobile';
 // api
 import { requestGet } from 'api/basic';
 // Buttons
@@ -13,7 +16,6 @@ import { IoMdSearch } from 'react-icons/io';
 import EmptyCard from 'components/Cards/EmptyCard';
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
-import { PathOrFileDescriptor } from 'fs';
 
 interface CoachAddModalType {
     modalBtn: React.ReactNode;
@@ -43,10 +45,11 @@ const CoachAddModal = ({
     modalActiveFunc,
     modalScrollStayFlag = true,
 }: CoachAddModalType) => {
+    const isMobile = useRecoilValue(IsMobileSelector);
+
     const [isShow, setIsShow] = useState(false);
     const [queryEnabled, setQueryEnabled] = useState(false);
     const [searchInput, setSearchInput] = useState('');
-    const [isSearched, setIsSearched] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
     const [totalItems, setTotalItems] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -60,14 +63,12 @@ const CoachAddModal = ({
         // if (modalScrollStayFlag) document.body.style.overflow = 'unset';
     };
     // GET 요청을 보낼 함수 정의
-    const { data, error, isLoading, refetch } = useQuery({
+    const getSearchCoachs = useQuery({
         queryKey: ['searchCoach'],
         queryFn: () => {
             if (searchInput) {
                 return requestGet({
                     requestUrl: `/admin/search/${searchInput}?with_head=true&take=${itemsPerPage}&page=${curPage}`,
-                    // successFunc: setSearchedData,
-                    // flagCheckFunc: setIsSearched,
                 });
             } else {
                 // searchInput이 undefined일 때에 대한 처리
@@ -77,24 +78,23 @@ const CoachAddModal = ({
         staleTime: 5 * 1000,
         enabled: queryEnabled, // enabled 옵션을 사용하여 쿼리를 활성화 또는 비활성화합니다.
     });
-
     useEffect(() => {
-        if (data) {
-            setSearchedData(data.result);
-            setTotalItems(data.count);
+        if (getSearchCoachs.data) {
+            setSearchedData(getSearchCoachs.data.result);
+            setTotalItems(getSearchCoachs.data.count);
         }
-    }, [data]);
+    }, [getSearchCoachs.data]);
 
     const handleButtonClick = () => {
         // GET 요청 버튼 클릭 시에만 쿼리를 활성화하도록 설정합니다.
         if (searchInput) {
             setQueryEnabled(true);
-            refetch();
+            getSearchCoachs.refetch();
         }
     };
 
     const handleActive = (data: AdminDataType) => {
-        if (modalActiveFunc && isSearched) {
+        if (modalActiveFunc && data) {
             modalActiveFunc(data);
             handleCloseModal();
         }
@@ -105,7 +105,13 @@ const CoachAddModal = ({
             <div onClick={handleShowModal}>{modalBtn}</div>
             {isShow ? (
                 <div className="fixed flex justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
-                    <div className="fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg">
+                    <div
+                        className={
+                            isMobile
+                                ? 'fixed bg-egWhite-default z-[70] w-11/12 p-4 rounded-lg'
+                                : 'fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg'
+                        }
+                    >
                         <div className="flex items-center justify-between">
                             <div className="mb-2 text-xl font-bold">{modalTitle}</div>
                             <CgClose onClick={handleCloseModal} />

@@ -10,6 +10,7 @@ import PaginationRounded from 'components/EgMaterials/Pagenation';
 // Common
 import SearchBar from 'components/Common/SearchBar';
 import SelectMenu from 'components/Common/SelectMenu';
+import axios from 'axios';
 export interface RowDataType {
     _id: number;
     photo: string;
@@ -38,23 +39,39 @@ const Coach = () => {
             });
         },
         staleTime: 5 * 1000,
-        // enabled: queryEnabled, // enabled 옵션을 사용하여 쿼리를 활성화 또는 비활성화합니다.
     });
 
     // Table 에 적합한 Row 형태로 변경하기
-    function convertTableRowData() {
+    async function convertTableRowData() {
         // 코치 정보를 담을 빈 배열 생성
         const rows: RowDataType[] = [];
-        curAllCoaches.forEach((coach: RowDataType, index: number) => {
-            const { _id, photo, name, birth, lv } = coach; // 원하는 속성들을 추출
+        for (const coach of curAllCoaches) {
+            const { _id, name, birth, lv } = coach; // 원하는 속성들을 추출
+            let coachPhoto = '';
+            if (_id) {
+                try {
+                    const response = await axios.get(
+                        `${process.env.REACT_APP_API_URL}/photo/admin/${_id}?isThumbnail=true`,
+                        {
+                            responseType: 'blob',
+                        }
+                    );
+                    const url = window.URL.createObjectURL(
+                        new Blob([response.data], { type: response.headers['content-type'] })
+                    );
+                    coachPhoto = url;
+                } catch (error) {
+                    // console.log(error);
+                }
+            }
             rows.push({
                 _id: _id, // 배열 인덱스를 이용하여 id 부여
-                photo: photo, // 사진 속성 그대로 사용
+                photo: coachPhoto, // 사진 속성 그대로 사용
                 name: name, // 이름 속성 그대로 사용
                 birth: new Date(birth).getFullYear(), // 출생일에서 연도만 추출
                 lv: lv, // 레벨 속성 그대로 사용
             });
-        });
+        }
         // 변환된 배열 반환
         setTableRowData(rows);
     }

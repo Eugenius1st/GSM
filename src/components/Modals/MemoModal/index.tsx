@@ -2,6 +2,9 @@
 import PurpleBtn from 'components/Buttons/PurpleBtn';
 // hooks
 import { useState } from 'react';
+// recoil
+import { useRecoilValue } from 'recoil';
+import { IsMobileSelector } from 'atom/isMobile';
 // Cards
 import MemoCard from 'components/Cards/MemoCard';
 // type
@@ -10,6 +13,7 @@ import type { MemoCardType } from 'components/Cards/MemoCard';
 import { CgClose } from 'react-icons/cg';
 
 const MemoModal = ({ tab = ['피드백', '특이사항'] }: MemoCardType) => {
+    let isMobile = useRecoilValue(IsMobileSelector);
     const [isShow, setIsShow] = useState(false);
     const handleShowModal = () => {
         setIsShow(true);
@@ -27,7 +31,13 @@ const MemoModal = ({ tab = ['피드백', '특이사항'] }: MemoCardType) => {
             />
             {isShow ? (
                 <div className="fixed flex justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
-                    <div className="fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg">
+                    <div
+                        className={
+                            isMobile
+                                ? 'fixed bg-egWhite-default z-[70] w-full max-w-[30rem] p-4 rounded-lg'
+                                : 'fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg'
+                        }
+                    >
                         <div className="flex justify-end">
                             <CgClose onClick={handleCloseModal} />
                         </div>

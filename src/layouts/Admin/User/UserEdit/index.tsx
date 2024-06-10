@@ -29,7 +29,7 @@ const UserRegist = () => {
     const { userId } = useParams();
     const [curUser, setCurUser] = useState<any>();
     // basic 데이터
-    const [photo, setPhoto] = useState('any-photo-url');
+    // const [photo, setPhoto] = useState('');
     const [name, setName] = useState('');
     const [defaultBirth, setDefaultBirth] = useState('');
     const [birth, setBirth] = useState('');
@@ -38,6 +38,8 @@ const UserRegist = () => {
     const [phone, setPhone] = useState('');
     const [phoneFather, setPhoneFather] = useState('');
     const [phoneMother, setPhoneMother] = useState('');
+    const [defaultMajorPhone, setDefaultMajorPhone] = useState('');
+    const [majorPhone, setMajorPhone] = useState('');
     const [residence, setResidence] = useState('');
     const [residenceSpecific, setResidenceSpecific] = useState('');
 
@@ -106,7 +108,6 @@ const UserRegist = () => {
 
         // set basic user info
         if (curUser) {
-            setPhoto(curUser.photo);
             setName(curUser.name);
             setDefaultBirth(curUser.birth);
             setBirth(curUser.birth);
@@ -117,6 +118,7 @@ const UserRegist = () => {
             setPhoneMother(curUser.phoneMother);
             setResidence(curUser.residence);
             setResidenceSpecific(curUser.residenceSpecific);
+            // ??? setMajorPhone: curUser.majorPhone,
 
             // set additional info
             setHeight(curUser.height);
@@ -146,7 +148,6 @@ const UserRegist = () => {
         const phoneRegex = /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/;
         // 각 필드의 유효성 검사
         if (
-            !photo ||
             !name ||
             !phone ||
             !residence ||
@@ -159,6 +160,7 @@ const UserRegist = () => {
             !soccerHistory ||
             !lessonHistory ||
             !majorFoot
+            // !majorPhone
         ) {
             alert('모든 필수 항목을 입력해주세요.');
             return false;
@@ -201,7 +203,6 @@ const UserRegist = () => {
                 data: {
                     role: 'student',
                     scope: ['gsm'],
-                    photo: photo,
                     classGroupName: classGroupName,
                     name: name,
                     phone: phone,
@@ -237,10 +238,11 @@ const UserRegist = () => {
                 <span>회원 정보 수정</span>
             </div>
 
-            {data && curUser && (
+            {userId && data && curUser && (
                 <BasicInfo
-                    photo={photo}
-                    setPhoto={setPhoto}
+                    userId={userId}
+                    // photo={photo}
+                    // setPhoto={setPhoto}
                     name={name}
                     setName={setName}
                     defaultBirth={defaultBirth}
@@ -256,6 +258,10 @@ const UserRegist = () => {
                     phoneFather={phoneFather}
                     setPhoneFather={setPhoneFather}
                     phoneMother={phoneMother}
+                    defaultMajorPhone={defaultMajorPhone}
+                    setDefaultMajorPhone={setDefaultMajorPhone}
+                    majorPhone={majorPhone}
+                    setMajorPhone={setMajorPhone}
                     setPhoneMother={setPhoneMother}
                     residence={residence}
                     setResidence={setResidence}

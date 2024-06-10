@@ -2,29 +2,17 @@ export const soccerHistoryOptioins = ['없음', '1년 미만', '1~3년', '3~5년
 export const lessonHistoryOptions = ['없음', '6개월 미만', '1년 미만', '1~3년', '3~5년'];
 export const trainingCourseOptions = [
     '엘리트반(초3-6/중,고,대)',
-    '성인반(남,녀)',
+    '성인 남성반',
+    '성인 여성반',
     '기본기반(초4-6)',
     '어린이반(초1-3)',
     '개인레슨',
+    '이론 1차',
+    '이론 2차',
 ];
 export const positionOptions = ['GK', 'CB', 'LWB', 'RWB', 'CDM', 'CAM', 'CM', 'LM', 'RM', 'ST'];
 
-export function classGroupMatcherByEng(classGroup: string) {
-    switch (classGroup) {
-        case 'elite':
-            return '엘리트반(초3-6/중,고,대)';
-        case 'adults':
-            return '성인반(남,녀)';
-        case 'basics':
-            return '기본기반(초4-6)';
-        case 'child':
-            return '어린이반(초1-3)';
-        case '2:1private':
-            return '2:1개인레슨';
-        default:
-            return '모르겠음,수정필요';
-    }
-}
+// 포지션 한문 <-> 영문
 
 export function classGroupMatcherByKor(classGroup: string) {
     switch (classGroup) {
@@ -93,5 +81,41 @@ export function positionMatcherByKor(position: string) {
             return 'ST';
         default:
             return '';
+    }
+}
+
+// 나이 -> 학년
+export function gradeMatcherByAge(birthYear: number) {
+    const currentYear = new Date().getFullYear();
+    const age = currentYear - birthYear + 1;
+    if (age <= 7) {
+        return `아동 ${age}세`;
+    } else if (7 < age && age <= 13) {
+        return `초 ${age - 7}`;
+    } else if (13 < age && age <= 16) {
+        return `중 ${age - 13}`;
+    } else if (16 < age && age < 20) {
+        return `고 ${age - 16}`;
+    } else {
+        return `성인 ${age}세`;
+    }
+}
+
+// 클래스그룹 영문 -> 한문
+
+export function classGroupMatcherByEng(classGroup: string) {
+    switch (classGroup) {
+        case 'elite':
+            return '엘리트반(초3-6/중,고,대)';
+        case 'adults':
+            return '성인반(남,녀)';
+        case 'basics':
+            return '기본기반(초4-6)';
+        case 'child':
+            return '어린이반(초1-3)';
+        case '2:1private':
+            return '2:1개인레슨';
+        default:
+            return '모르겠음,수정필요';
     }
 }

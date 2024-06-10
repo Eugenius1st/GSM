@@ -1,6 +1,9 @@
 // hooks
 import * as React from 'react';
 import { useState } from 'react';
+// recoil
+import { useRecoilValue } from 'recoil';
+import { IsMobileSelector } from 'atom/isMobile';
 // Buttons
 import PurpleBtn from 'components/Buttons/PurpleBtn';
 import WhiteBtn from 'components/Buttons/WhiteBtn';
@@ -8,6 +11,7 @@ import WhiteBtn from 'components/Buttons/WhiteBtn';
 import { CgClose } from 'react-icons/cg';
 
 const AlarmModal = () => {
+    let isMobile = useRecoilValue(IsMobileSelector);
     // 버튼 오류 해결 필요하다 !!
     const alramInfo = [
         { title: '입금 안내', message: '갤로핑싸커 이용을 원하시면 입금 부탁드립니다.' },
@@ -36,7 +40,13 @@ const AlarmModal = () => {
             />
             {isShow ? (
                 <div className="fixed flex justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
-                    <div className="fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg">
+                    <div
+                        className={
+                            isMobile
+                                ? 'fixed bg-egWhite-default z-[70] w-full max-w-[30rem] p-4 rounded-lg'
+                                : 'fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg'
+                        }
+                    >
                         <div className="flex justify-between mx-2 mb-4">
                             <div className="mb-2 text-xl font-bold">알림 메세지 전송</div>
                             <CgClose onClick={handleCloseModal} />

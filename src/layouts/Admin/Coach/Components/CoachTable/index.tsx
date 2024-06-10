@@ -35,6 +35,10 @@ import { RiUserForbidFill } from 'react-icons/ri';
 import EmptyCard from 'components/Cards/EmptyCard';
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
+// utility
+import { gradeMatcherByAge } from 'utility/standardConst';
+// images
+import userTempPhoto from 'assets/user/userTempPhoto.png';
 
 interface PatchDataType {
     requestUrl: string;
@@ -312,6 +316,8 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                         barWidth="15rem"
                         placeholder="이름으로 검색하세요"
                     />
+                    {/* 
+                    ??? 백엔드 구현 대기중
                     <DropDownModal
                         itemList={[
                             {
@@ -330,7 +336,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                                 item: 'LV4',
                             },
                         ]}
-                    />
+                    /> */}
                 </div>
             )}
         </Toolbar>
@@ -445,8 +451,8 @@ export default function EnhancedTable({ tableRowData, coachSearchState, setCoach
                                                 align="center"
                                             >
                                                 <img
-                                                    className="object-cover m-auto rounded-full w-14 h-14"
-                                                    src={row.photo}
+                                                    className="object-cover w-12 h-12 m-auto rounded-full"
+                                                    src={row.photo ? row.photo : userTempPhoto}
                                                     alt={row.name}
                                                 />
                                             </TableCell>
@@ -470,7 +476,8 @@ export default function EnhancedTable({ tableRowData, coachSearchState, setCoach
                                                 align="center"
                                                 sx={{ paddingX: 0, width: 'fit-content' }}
                                             >
-                                                {row.birth}
+                                                {/* {row.birth} */}
+                                                {gradeMatcherByAge(row.birth)}
                                             </TableCell>
                                             <TableCell
                                                 sx={{ paddingX: 0, width: isMobile ? '6rem' : '8rem' }}

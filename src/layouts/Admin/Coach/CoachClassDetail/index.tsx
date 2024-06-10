@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 // api
 import { requestGet } from 'api/basic';
 // Class Components
-import ViewUserCard from 'layouts/Admin/Class/Components/ViewUserCard';
+import ViewUserCard from 'layouts/Admin/Class/components/ViewUserCard';
 // Icons
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 // Cards
@@ -15,10 +15,7 @@ import { ClassInfoType } from 'components/Cards/ClassCard';
 // Buttons
 import PurpleBtn from 'components/Buttons/PurpleBtn';
 // images
-import user1 from 'assets/user/user1.jpg';
-import user2 from 'assets/user/user2.png';
-import user3 from 'assets/user/user3.jpeg';
-import user4 from 'assets/user/user4.png';
+import userTempPhoto from 'assets/user/userTempPhoto.png';
 // Common
 import Divider from 'components/Common/Divider';
 import WhiteBtn from 'components/Buttons/WhiteBtn';
@@ -59,20 +56,20 @@ const CoachClassDetail = () => {
     // }, [patchCheckFlag]);
 
     const attendInfo = [
-        { profile: user1, name: '홍길동', age: 13, attend: '출석' },
-        { profile: user2, name: '홍이동', age: 13, attend: '불참' },
-        { profile: user3, name: '홍삼동', age: 13, attend: '지각' },
-        { profile: user4, name: '홍사동', age: 13, attend: '취소' },
-        { profile: user1, name: '홍길동', age: 13, attend: '출석' },
-        { profile: user2, name: '홍이동', age: 13, attend: '불참' },
-        { profile: user3, name: '홍삼동', age: 13, attend: '지각' },
-        { profile: user4, name: '홍사동', age: 13, attend: '취소' },
+        { profile: userTempPhoto, name: '홍길동', age: 13, attend: '출석' },
+        { profile: userTempPhoto, name: '홍이동', age: 13, attend: '불참' },
+        { profile: userTempPhoto, name: '홍삼동', age: 13, attend: '지각' },
+        { profile: userTempPhoto, name: '홍사동', age: 13, attend: '취소' },
+        { profile: userTempPhoto, name: '홍길동', age: 13, attend: '출석' },
+        { profile: userTempPhoto, name: '홍이동', age: 13, attend: '불참' },
+        { profile: userTempPhoto, name: '홍삼동', age: 13, attend: '지각' },
+        { profile: userTempPhoto, name: '홍사동', age: 13, attend: '취소' },
     ];
     const waitingInfo = [
-        { profile: user1, name: '홍길동', age: 13, attend: '출석' },
-        { profile: user2, name: '홍이동', age: 13, attend: '불참' },
-        { profile: user3, name: '홍삼동', age: 13, attend: '지각' },
-        { profile: user4, name: '홍사동', age: 13, attend: '취소' },
+        { profile: userTempPhoto, name: '홍길동', age: 13, attend: '출석' },
+        { profile: userTempPhoto, name: '홍이동', age: 13, attend: '불참' },
+        { profile: userTempPhoto, name: '홍삼동', age: 13, attend: '지각' },
+        { profile: userTempPhoto, name: '홍사동', age: 13, attend: '취소' },
     ];
     return (
         <div className="eg-default-wrapper">

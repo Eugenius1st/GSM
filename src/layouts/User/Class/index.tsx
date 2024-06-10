@@ -1,8 +1,9 @@
 // hooks
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 import { useQuery } from '@tanstack/react-query';
+// recoil
+import { useRecoilValue } from 'recoil';
 import { IsMobileSelector } from 'atom/isMobile';
 // api
 import { requestGet } from 'api/basic';
@@ -16,9 +17,10 @@ import { ClassInfoType } from 'components/Cards/ClassCard';
 import EmptyCard from 'components/Cards/EmptyCard';
 
 const Class = () => {
+    let isMobile = useRecoilValue(IsMobileSelector);
+
     const [curPage, setCurPage] = useState(1);
     const location = useLocation().pathname;
-    let isMobile = useRecoilValue(IsMobileSelector);
     const [allClass, setAllClass] = useState<ClassInfoType[]>([]);
     const [totalItems, setTotalItems] = useState(1);
 

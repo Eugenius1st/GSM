@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 // recoil
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { IsMobileAtom } from 'atom/isMobile';
@@ -10,7 +11,7 @@ import { LoginAtomSelector, LoginStateSelector } from 'atom/auth';
 import { registPost } from 'api/regist';
 import { requestPost } from 'api/basic';
 // utility
-import ImageUploader from 'utility/ImageUploader';
+import RegisterImageUploader from 'utility/RegisterImageUploader';
 // Common
 import RadioButton from 'components/Common/RadioButton';
 import CustomDropdown from 'components/EgMaterials/CustomDropdown';
@@ -30,7 +31,7 @@ export interface RequestBodyType {
     password: string;
     role: string;
     scope: string[];
-    photo: string;
+    // photo: string;
     name: string;
     gender: string;
     birth: string;
@@ -57,7 +58,8 @@ const AdminRegist = () => {
     const [adminPw, setAdminPw] = useState('');
     const [role, setRole] = useState('admin');
     const [scope, setScope] = useState(['gsm']);
-    const [photo, setPhoto] = useState('any-photo-url');
+
+    const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
     const [name, setName] = useState('');
     const [gender, setGender] = useState('성별');
     const [birth, setBirth] = useState('');
@@ -72,6 +74,7 @@ const AdminRegist = () => {
 
     const [idValid, setIdValid] = useState({ duplicate: 'initial' });
     const [isIdConfirm, setIsIdConfirm] = useState(false);
+    const [submitData, setSubmitData] = useState<any | RequestBodyType>('');
 
     const inputStyle = 'w-full p-2 border border-egGrey-default my-1';
     const uploadBtn = (
@@ -163,7 +166,7 @@ const AdminRegist = () => {
                 password: adminPw,
                 role: role,
                 scope: scope,
-                photo: photo,
+                // photo: photo,
                 name: name,
                 gender: gender,
                 birth: birth,
@@ -175,14 +178,40 @@ const AdminRegist = () => {
             mutation.mutate({
                 requestUrl: '/auth/signup/admin',
                 data: requestBody,
+                successFunc: setSubmitData,
                 flagCheckFunc: setIsSuccess,
             });
         }
     };
     const alertFooterActiveFunc = () => {
-        navigate('/admin');
         setIsShow(false);
     };
+
+    // 사진 등록 요청
+    const handlePostPhoto = () => {
+        const data = new FormData();
+        if (submitData && selectedPhoto) {
+            data.append('id', submitData._id);
+            data.append('photo', selectedPhoto);
+
+            axios
+                .post(`${process.env.REACT_APP_API_URL}/photo/admin`, data, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                })
+                .then((res) => {
+                    // console.log(res, '사진 전송까지 완료!!');
+                    navigate('/admin');
+                })
+                .catch((err) => console.log(err));
+        }
+    };
+    useEffect(() => {
+        if (mutation.status === 'success') {
+            handlePostPhoto();
+        }
+    }, [mutation.status]);
     return (
         <div className="eg-regist-wrapper">
             {isShow && isSuccess && (
@@ -196,17 +225,15 @@ const AdminRegist = () => {
                 <span> 관리자 등록</span>
             </div>
             <div className="relative">
-                <ImageUploader
+                <RegisterImageUploader
+                    type={'admin'}
                     uploadCustomBtn={uploadBtn}
                     previewImgStyle="w-24 h-24 m-auto border-2 rounded-full border-egPurple-default object-cover"
-                    previewBeforeIcon={
-                        <div className="relative w-24 h-24 border-2 rounded-full border-egPurple-default bg-egGrey-semiLight">
-                            <FaUser className="absolute bottom-[0.5px] w-20 h-20 rounded-[2.3rem] right-[7px] text-egBlack-light " />
-                        </div>
-                    }
+                    selectedPhoto={selectedPhoto}
+                    setSelectedPhoto={setSelectedPhoto}
                 />
             </div>
-            <form className="mt-16">
+            <form className="mt-10">
                 {/* id, pw */}
                 <div>
                     <label htmlFor="id">ID *</label>
@@ -334,7 +361,7 @@ const AdminRegist = () => {
                     </div>
 
                     {/* 직접 선택 및 입력 */}
-                    <div className="my-1">이력사항</div>
+                    {/* <div className="my-1">이력사항</div>
                     {soccerRecord.map((el, idx) => (
                         <div
                             key={idx}
@@ -390,7 +417,7 @@ const AdminRegist = () => {
                                 )}
                             </div>
                         </div>
-                    ))}
+                    ))} */}
                     <div className="my-1">자격증</div>
                     {license.length < 3 && (
                         <div
@@ -464,7 +491,7 @@ const AdminRegist = () => {
                         </div>
                     ))}
                 </div>
-                <div>
+                <div className="mt-4 text-end">
                     <PurpleBtn
                         customStyle={
                             'w-full py-2 mt-8 rounded-md text-egWhite-default text-center bg-egPurple-default text-egWhite-default'

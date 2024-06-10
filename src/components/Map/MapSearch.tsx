@@ -54,7 +54,6 @@ export default function MapSearch({ setResidence }: MapSearchProps) {
     const [markers, setMarkers] = useState<MapDataType[]>([]);
     const [map, setMap] = useState<any>();
     const [keyword, setKeyword] = useState<string>('');
-    console.log('isMobile', isMobile);
     // map이 변경될 때마다 mapRender 함수 호출
     useEffect(() => {
         mapRender();
@@ -229,7 +228,7 @@ export default function MapSearch({ setResidence }: MapSearchProps) {
                     ))}
 
                     {/* 주소 검색 박스 */}
-                    <div className="bg-[rgba(256,256,256,0.8)] absolute w-1/4 p-2 z-10 left-8 top-20 h-4/6 rounded-md overflow-y-scroll">
+                    <div className="bg-[rgba(256,256,256,0.8)] absolute w-1/2  p-2 z-10 left-8 top-20 h-4/6 rounded-md overflow-y-scroll">
                         <div className="flex justify-between p-1 mr-2 border rounded-md border-egPurple-default">
                             <input
                                 placeholder="주소를 입력해주세요"
