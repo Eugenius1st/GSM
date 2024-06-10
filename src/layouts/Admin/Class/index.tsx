@@ -4,9 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 // api
 import { requestGet } from 'api/basic';
-// images
-import class_adult_man from 'assets/class/class_adult_man.jpeg';
-import class_adult_woman from 'assets/class/class_adult_woman.jpeg';
+
 // Modals
 import ClassAddModal from 'components/Modals/ClassAddModal';
 // Material UI
