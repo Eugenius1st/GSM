@@ -41,6 +41,7 @@ import { gradeMatcherByAge } from 'utility/standardConst';
 // images
 import userTempPhoto from 'assets/user/userTempPhoto.png';
 
+
 interface PatchDataType {
     requestUrl: string;
     data?: any;
@@ -317,8 +318,10 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                         barWidth="15rem"
                         placeholder="이름으로 검색하세요"
                     />
+
                     {/* 
                     ??? 백엔드 구현 대기중
+
                     <DropDownModal
                         itemList={[
                             {
@@ -337,8 +340,11 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                                 item: 'LV4',
                             },
                         ]}
+
                     />
                     /> */}
+
+
                 </div>
             )}
         </Toolbar>
@@ -455,6 +461,7 @@ export default function EnhancedTable({ tableRowData, coachSearchState, setCoach
                                                 <img
                                                     className="object-cover w-12 h-12 m-auto rounded-full"
                                                     src={row.photo ? row.photo : userTempPhoto}
+
                                                     alt={row.name}
                                                 />
                                             </TableCell>
@@ -478,7 +485,10 @@ export default function EnhancedTable({ tableRowData, coachSearchState, setCoach
                                                 align="center"
                                                 sx={{ paddingX: 0, width: 'fit-content' }}
                                             >
+
+                                                {/* {row.birth} */}
                                                 {gradeMatcherByAge(row.birth)}
+
                                             </TableCell>
                                             <TableCell
                                                 sx={{ paddingX: 0, width: isMobile ? '6rem' : '8rem' }}

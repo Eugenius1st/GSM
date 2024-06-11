@@ -1,8 +1,5 @@
 // hooks
 import { useState } from 'react';
-// recoil
-import { useRecoilValue } from 'recoil';
-import { IsMobileSelector } from 'atom/isMobile';
 // Buttons
 import WhiteBtn from 'components/Buttons/WhiteBtn';
 import PurpleBtn from 'components/Buttons/PurpleBtn';
@@ -13,20 +10,17 @@ interface DeleteModalType {
     deleteFunc?: () => void;
 }
 const DeleteModal = ({ deleteFunc }: DeleteModalType) => {
-    let isMobile = useRecoilValue(IsMobileSelector);
     const [isShow, setIsShow] = useState(false);
     const handleShowModal = () => {
         setIsShow(true);
         document.body.style.overflow = 'hidden';
     };
     const handleCloseModal = () => {
-        document.body.style.overflow = 'unset';
-        alert('삭제되었습니다.');
         setIsShow(false);
+        document.body.style.overflow = 'unset';
     };
     const [deleteInput, setDeleteInput] = useState('');
     function handleInitial() {
-        document.body.style.overflow = 'unset';
         setDeleteInput('');
         if (deleteFunc) {
             deleteFunc();
@@ -46,13 +40,7 @@ const DeleteModal = ({ deleteFunc }: DeleteModalType) => {
             </div>
             {isShow ? (
                 <div className="fixed flex justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
-                    <div
-                        className={
-                            isMobile
-                                ? 'fixed bg-egWhite-default z-[70] w-full max-w-[30rem] p-4 rounded-lg'
-                                : 'fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg'
-                        }
-                    >
+                    <div className="fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg">
                         <div className="flex items-center justify-end">
                             <CgClose onClick={handleCloseModal} />
                         </div>

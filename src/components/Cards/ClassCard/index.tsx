@@ -22,8 +22,6 @@ import BasicModal from 'components/Modals/BasicModal';
 // icons
 import { IoClose } from 'react-icons/io5';
 import { FaPlus } from 'react-icons/fa6';
-// utility
-import { classImageByClassName } from 'utility/photoConst';
 
 export interface ClassInfoType {
     _id: string;
@@ -34,7 +32,6 @@ export interface ClassInfoType {
     applicationDeadline?: string;
     type: string;
     amount: number;
-    masking?: number;
     students: string[];
     attendance: number;
     reserved: number;
@@ -102,6 +99,7 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
     // POST 요청 및 기존 coach 배열에 이미 있는 id 인지 확인하는 함수
     const handleAddCoaches = (coachInfo: any) => {
         const isIdMatch = coachesInfo.some((coach: any) => coach._id === coachInfo._id);
+
         if (!isIdMatch) {
             mutation.mutate({
                 requestUrl: '/class/coach',
@@ -145,7 +143,6 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
             searchCoach();
         }
     }, [classInfo]);
-
     return (
         <div>
             {classInfo ? (
@@ -165,10 +162,10 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
                             참석
                         </button>
                     )}
-                    <div className={isMobile ? 'flex flex-col items-center justify-center' : 'flex  items-center'}>
-                        <div className={isMobile ? 'w-full h-[16rem] mb-4' : ' w-[31rem] h-[11rem]'}>
+                    <div className={isMobile ? 'flex flex-col items-center justify-center' : 'flex items-center'}>
+                        <div className={isMobile ? 'w-full h-[16rem] mb-4' : 'w-[30rem] h-[10rem] mb-4'}>
                             <img
-                                src={classInfo.name && classImageByClassName(classInfo.name)}
+                                // src={classInfo.classImage}
                                 alt="title"
                                 className="object-cover w-full h-full mr-4 border-2"
                             />
@@ -185,20 +182,14 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
                                     <span className={highLight}>시간</span>
                                 </div>
                                 <div>
-                                    {`${dateConverter(classInfo?.startTime, 'month_day')} ${dateConverter(
-                                        classInfo?.startTime,
-                                        'time'
-                                    )}~${dateConverter(classInfo?.endTime, 'time')}`}
+                                    <div>
+                                        {`${dateConverter(classInfo?.startTime, 'month_day')} ${dateConverter(
+                                            classInfo?.startTime,
+                                            'time'
+                                        )}~${dateConverter(classInfo?.endTime, 'time')}`}
+                                    </div>
                                 </div>
                             </div>
-                            {/* 등록 마감 */}
-                            <div className={infoStyle}>
-                                <div className={titleStyle}>
-                                    <span className={highLight}>등록 마감</span>
-                                </div>
-                                <div>개발중 </div>
-                            </div>
-                            {/* 위치 */}
                             <div className={infoStyle}>
                                 <div className={titleStyle}>
                                     <span className={highLight}>위치</span>
@@ -210,26 +201,41 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
                                     <span className={highLight}>참석</span>
                                 </div>
                                 <div>
-                                    <div>
-                                        {classInfo?.attendancereservations &&
-                                        classInfo?.masking &&
-                                        classInfo?.attendancereservations >= classInfo?.masking ? (
-                                            // 예약 수가 더 많은 경우
-                                            <span>{classInfo?.attendancereservations.length}</span>
-                                        ) : classInfo?.attendancereservations &&
-                                          classInfo?.masking &&
-                                          classInfo?.attendancereservations < classInfo?.masking ? (
-                                            // 마스킹 값이 더 큰 경우
-                                            <span className="text-egPurple-default">{classInfo.masking}</span>
-                                        ) : (
-                                            // 그 외의 경우
-                                            <span> 0</span>
-                                        )}
-                                        /{classInfo?.amount} (대기자: {classInfo?.reserved ? classInfo?.reserved : 0}{' '}
-                                        명)
-                                    </div>
-                                    <div>{loginState === 'admin' && ` 마스킹 (개발중)`}</div>
+                                    {classInfo?.attendancereservations && classInfo?.attendancereservations > 0
+                                        ? classInfo?.attendancereservations.length
+                                        : 0}
+                                    /{classInfo?.amount} (대기자{classInfo?.reserved ? classInfo?.reserved : 0} 명){' '}
                                 </div>
+                                {loginState === 'admin' && (
+                                    <div>
+                                        <BasicModal
+                                            modalBtn={
+                                                <button
+                                                    type="button"
+                                                    className="p-1 ml-2 text-xs border rounded-md bg-egPurple-superLight text-egPurple-default"
+                                                >
+                                                    마스킹
+                                                </button>
+                                            }
+                                            modalTitle={'데이터 마스킹'}
+                                            modalContents={
+                                                <div>
+                                                    <input
+                                                        placeholder={`${0}~${
+                                                            classInfo?.amount
+                                                        } 사이의 마스킹 값을 입력하세요`}
+                                                        type="number"
+                                                        min={0}
+                                                        max={classInfo?.amount}
+                                                        className="w-full p-2 my-4 border border-egPurple-default"
+                                                    />
+                                                </div>
+                                            }
+                                            modalFooterExitBtn={'취소'}
+                                            modalFooterActiveBtn={'마스킹'}
+                                        />
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

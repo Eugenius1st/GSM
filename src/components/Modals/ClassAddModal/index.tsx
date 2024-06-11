@@ -1,9 +1,6 @@
 // hooks
 import React, { KeyboardEvent, useEffect, useState } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
-// recoil
-import { useRecoilValue } from 'recoil';
-import { IsMobileSelector } from 'atom/isMobile';
 // api
 import { requestGet, requestPost } from 'api/basic';
 // Buttons
@@ -23,36 +20,36 @@ import { AdminDataType } from 'components/Modals/SearchModal';
 import BasicModal from 'components/Modals/BasicModal';
 // Alerts
 import BasicAlert from 'components/Alerts/BasicAlert';
-// utils
-import { trainingCourseOptions } from 'utility/standardConst';
 
 interface ClassAddModalType {
     isSuccess: boolean;
     setIsSuccess: (isSuccess: boolean) => void;
 }
 const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
-    const isMobile = useRecoilValue(IsMobileSelector);
-    const personalClassGroupList = ['개인레슨반'];
+    const classGroupList = [
+        '엘리트반',
+        '성인 남성반',
+        '취미반',
+        '성인 여성반',
+        '기본기반',
+        '직접입력이 나을까요?',
+        '상수가 나을까요',
+    ];
+    const personalClassGroupList = ['엘리트반'];
 
-    const [lessonType, setLessonType] = useState<string>('group');
+    const [lessonType, setLessonType] = useState<string>('단체');
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
     const [applicationDeadline, setApplicationDeadline] = useState('');
     const [place, setPlace] = useState('판교점');
-    const [classType, setClassType] = useState('practice');
+    const [classType, setClassType] = useState('실기');
     const [classGroups, setClassGroups] = useState([]);
     const [amount, setAmount] = useState('');
-    const [masking, setMasking] = useState(0);
-
     const [coaches, setCoaches] = useState<any>([]);
-    const [className, setClassName] = useState('개발중');
+    const [className, setClassName] = useState(classGroupList[0]);
     const [note, setNote] = useState('');
 
     const [isShow, setIsShow] = useState(false);
-
-    const [addClassGroupNameInput, setAddClassGroupNameInput] = useState('');
-    const [addClassGroupDescriptionInput, setAddClassGroupDescriptionInput] = useState('');
-    const [addClassGroupFlag, setAddClassGroupFlag] = useState(false);
 
     const handleShowModal = () => {
         setIsShow(true);
@@ -72,12 +69,6 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
         },
         staleTime: 5 * 1000,
     });
-    useEffect(() => {
-        if (addClassGroupFlag) {
-            getClassGroup.refetch();
-            setAddClassGroupFlag(false);
-        }
-    }, [addClassGroupFlag]);
 
     // POST 수업추가 요청을 보낼 함수 정의
     const flagCheckFunc = (flag: boolean) => {
@@ -96,7 +87,6 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
     const postClass = () => {
         const coachIdArray = coaches ? coaches.map((coach: { _id: string }) => coach._id) : [];
         // POST 요청에 보낼 데이터
-
         mutation.mutate({
             requestUrl: '/class',
             data: {
@@ -109,47 +99,20 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                 classGroups: classGroups.map((el: any) => el.name),
                 name: className,
                 amount: 10,
-                masking: masking,
                 coaches: coachIdArray,
                 note: note,
             },
             successFunc: setIsSuccess,
         });
     };
-
-    // POST CLASS GROUP 요청을 보낼 함수 정의
-    const classGroupMutate = useMutation({
-        mutationFn: ({ requestUrl, data, flagCheckFunc }: any) => {
-            return requestPost({
-                requestUrl: requestUrl,
-                data: data,
-                flagCheckFunc: setAddClassGroupFlag,
-            });
-        },
-    });
-    const postFeedback = () => {
-        if (addClassGroupNameInput && addClassGroupDescriptionInput) {
-            classGroupMutate.mutate({
-                requestUrl: '/classgroup',
-                data: {
-                    name: addClassGroupNameInput,
-                    description: addClassGroupDescriptionInput,
-                },
-            });
-        } else {
-            alert('클래스 그룹명 또는 설명을 입력하세요');
-        }
-    };
-
     const handleClean = () => {
         setStartTime('');
         setEndTime('');
         setApplicationDeadline('');
         setPlace('판교점');
-        setClassType('practice');
+        setClassType('실기');
         setClassName('');
         setAmount('');
-        setMasking(0);
         setCoaches([]);
         setIsShow(false);
         setIsSuccess(false);
@@ -163,7 +126,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
             alert('종료 시간을 입력하세요');
             return false;
         } else if (!applicationDeadline) {
-            alert('신청 마감 시간을 입력하세요');
+            alert('마감 시간을 입력하세요');
             return false;
         } else if (!place) {
             alert('수업 장소를 입력하세요');
@@ -207,7 +170,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
     };
 
     useEffect(() => {
-        setClassType('practice');
+        setClassType('실기');
     }, [className]);
     return (
         <div>
@@ -226,13 +189,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
             )}
             {isShow ? (
                 <div className="fixed flex justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
-                    <div
-                        className={
-                            isMobile
-                                ? 'fixed bg-egWhite-default z-[70] w-11/12 h-2/3 overflow-y-scroll p-4 rounded-lg'
-                                : 'fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg'
-                        }
-                    >
+                    <div className="fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg">
                         <div className="flex justify-between">
                             <div className="mb-2 text-lg font-bold">수업 추가하기</div>
                             <CgClose onClick={handleCloseModal} />
@@ -244,17 +201,17 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                                     <div className="mr-1">
                                         <input
                                             type="radio"
-                                            id="group"
+                                            id="단체"
                                             name="lessonType"
-                                            value="group"
+                                            value="단체"
                                             className="hidden"
                                             defaultChecked={true}
                                             onChange={(e) => setLessonType(e.target.value)}
                                         />
                                         <label
-                                            htmlFor="group"
+                                            htmlFor="단체"
                                             className={
-                                                lessonType === 'group'
+                                                lessonType === '단체'
                                                     ? 'px-5 py-2 border rounded-md border-egPurple-default text-egPurple-default'
                                                     : 'px-5 py-2 border rounded-md border-egGrey-default'
                                             }
@@ -265,16 +222,16 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                                     <div>
                                         <input
                                             type="radio"
-                                            id="personal"
+                                            id="개인"
                                             name="lessonType"
-                                            value="personal"
+                                            value="개인"
                                             className="hidden"
                                             onChange={(e) => setLessonType(e.target.value)}
                                         />
                                         <label
-                                            htmlFor="personal"
+                                            htmlFor="개인"
                                             className={
-                                                lessonType === 'personal'
+                                                lessonType === '개인'
                                                     ? 'px-5 py-2 border rounded-md border-egPurple-default text-egPurple-default'
                                                     : 'px-5 py-2 border rounded-md border-egGrey-default'
                                             }
@@ -300,8 +257,8 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                                         className="w-32 p-1 "
                                         onChange={(e) => setClassName(e.target.value)}
                                     >
-                                        {lessonType === 'group'
-                                            ? trainingCourseOptions.map((el, idx) => (
+                                        {lessonType === '단체'
+                                            ? classGroupList.map((el, idx) => (
                                                   <option
                                                       key={idx}
                                                       value={el}
@@ -318,28 +275,51 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                                                   </option>
                                               ))}
                                     </select>
+                                    <BasicModal
+                                        modalBtn={
+                                            <button className="flex items-center p-1 ml-2 border rounded-md border-egPurple-default hover:bg-egPurple-superLight">
+                                                {/* <div className="text-sm">수업 추가</div> */}
+                                                <FiPlus className="w-4 h-4 text-egPurple-default " />
+                                            </button>
+                                        }
+                                        modalTitle={'수업 추가'}
+                                        modalContents={
+                                            <div className="p-2">
+                                                <div>추가하실 수업명을 입력하세요 (최대 15글자)</div>
+                                                <input
+                                                    placeholder="수업명"
+                                                    maxLength={15}
+                                                    type="text"
+                                                    className="w-full p-2 my-4 border border-egPurple-default"
+                                                />
+                                            </div>
+                                        }
+                                        modalFooterExitBtn={'취소'}
+                                        modalFooterActiveBtn={'입력'}
+                                        modalScrollStayFlag={false}
+                                    />
                                 </div>
                             </div>
 
                             {/* 수업 분류 */}
-                            {className === '엘리트반(초3-6/중,고,대)' && (
+                            {className === '엘리트반' && (
                                 <div className="flex justify-between px-1 py-2 border items border-egGrey-default mt-[-1px]">
                                     <span className="ml-1 text-lg w-28">수업분류</span>
                                     <div className="flex items-center text-egGrey-default">
                                         <div className="mr-1">
                                             <input
                                                 type="radio"
-                                                id="practice"
+                                                id="실기"
                                                 name="classification"
-                                                value="practice"
+                                                value="실기"
                                                 className="hidden"
                                                 defaultChecked={true}
                                                 onChange={(e) => setClassType(e.target.value)}
                                             />
                                             <label
-                                                htmlFor="practice"
+                                                htmlFor="실기"
                                                 className={
-                                                    classType === 'practice'
+                                                    classType === '실기'
                                                         ? 'px-5 py-2 border rounded-md border-egPurple-default text-egPurple-default'
                                                         : 'px-5 py-2 border rounded-md border-egGrey-default'
                                                 }
@@ -350,16 +330,16 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                                         <div>
                                             <input
                                                 type="radio"
-                                                id="theory"
+                                                id="이론"
                                                 name="classification"
-                                                value="theory"
+                                                value="이론"
                                                 className="hidden"
                                                 onChange={(e) => setClassType(e.target.value)}
                                             />
                                             <label
-                                                htmlFor="theory"
+                                                htmlFor="이론"
                                                 className={
-                                                    classType === 'theory'
+                                                    classType === '이론'
                                                         ? 'px-5 py-2 border rounded-md border-egPurple-default text-egPurple-default'
                                                         : 'px-5 py-2 border rounded-md border-egGrey-default'
                                                 }
@@ -373,7 +353,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
 
                             {/* 수업 대상자 선택 */}
                             {getClassGroup?.data && (
-                                <div className="flex items-start justify-between px-1 py-2 mt-[-1px] border items border-egGrey-default">
+                                <div className="flex justify-between px-1 py-2 mt-[-1px] border items border-egGrey-default">
                                     <span className="ml-1 text-lg w-28">수업 대상</span>
                                     <div className="flex items-center text-egGrey-default">
                                         <TagCard
@@ -381,41 +361,6 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                                             func={setClassGroups}
                                         />
                                     </div>
-                                    <BasicModal
-                                        modalBtn={
-                                            <button
-                                                type="button"
-                                                className="w-12 border rounded-sm px-15 text-egPurple-default border-egPurple-default hover:bg-egPurple-superLight"
-                                            >
-                                                + 추가
-                                            </button>
-                                        }
-                                        modalTitle={'교육과정 추가'}
-                                        modalContents={
-                                            <div>
-                                                <div className="mt-4">클래스 그룹</div>
-                                                <input
-                                                    placeholder={`클래스 그룹명을 입력하세요`}
-                                                    type="text"
-                                                    maxLength={20}
-                                                    onChange={(e) => setAddClassGroupNameInput(e.target.value)}
-                                                    className="w-full p-2 mt-2 mb-4 border border-egPurple-default"
-                                                />
-                                                <div>그룹 설명</div>
-                                                <input
-                                                    placeholder={`설명을 입력하세요(ex: 초6~중3 선수반)`}
-                                                    type="text"
-                                                    maxLength={50}
-                                                    onChange={(e) => setAddClassGroupDescriptionInput(e.target.value)}
-                                                    className="w-full p-2 mt-2 mb-4 border border-egPurple-default"
-                                                />
-                                            </div>
-                                        }
-                                        modalFooterExitBtn={'취소'}
-                                        modalFooterActiveBtn={'추가'}
-                                        modalFooterActiveFunc={postFeedback}
-                                        modalFooterActiveFuncAfterClose={true}
-                                    />
                                 </div>
                             )}
 
@@ -455,17 +400,11 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                             </div>
 
                             {/* 위치 */}
-                            <div className="flex items-center justify-between px-1 pt-3  pb-2 border border-egGrey-default mt-[-1px]">
+                            <div className="flex items-center justify-between px-1 pt-3 pb-2 border border-egGrey-default mt-[-1px]">
                                 <span className="ml-1 mr-4 text-lg w-28">위치</span>
 
-                                <div
-                                    className={
-                                        isMobile
-                                            ? 'grid grid-cols-1 gap-4 text-egGrey-default'
-                                            : 'flex text-egGrey-default'
-                                    }
-                                >
-                                    <div className="inline-block mr-1">
+                                <div className="flex text-egGrey-default">
+                                    <div className="mr-1">
                                         <input
                                             type="radio"
                                             id="판교점"
@@ -523,49 +462,15 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                                     }}
                                 />
                             </div>
-                            {/* 알림 포인트 */}
-                            <div className="flex items-center justify-between py-2 px-1 border border-egGrey-default mt-[-1px]">
-                                <span className="ml-1 mr-4 text-lg w-30">회차소진 + 교육안내 알림 회차</span>
-                                <input
-                                    placeholder="개발중"
-                                    type="number"
-                                    min="0"
-                                    max="99"
-                                    className="w-24 py-1 pl-3 text-center border rounded-md border-egGrey-default"
-                                    // onChange={(e) => {
-                                    // }}
-                                />
-                            </div>
-                            {/* 마스킹 */}
-                            <div className="flex items-center justify-between py-2 px-1 border border-egGrey-default mt-[-1px]">
-                                <span className="ml-1 mr-4 text-lg w-28">인원 마스킹</span>
-                                <input
-                                    value={masking}
-                                    placeholder="숫자 입력"
-                                    type="number"
-                                    min={0}
-                                    max={amount}
-                                    className="w-24 p-1 border rounded-md text-end border-egGrey-default"
-                                    onChange={(e) => {
-                                        setMasking(Number(e.target.value));
-                                    }}
-                                />
-                            </div>
                             {/* 참석 코치 */}
-                            <div
-                                className={
-                                    isMobile
-                                        ? 'p-2 border border-egGrey-default mt-[-1px]'
-                                        : 'flex justify-between p-2 border border-egGrey-default mt-[-1px]'
-                                }
-                            >
+                            <div className="flex justify-between p-2 border border-egGrey-default mt-[-1px]">
                                 <span className="mr-4 text-lg w-28">참석 코치</span>
                                 <div className="flex">
-                                    <div className="w-40 p-1 mr-1 border rounded-md h-fit min-h-8 border-egGrey-default">
+                                    <div className="w-40 h-8 p-1 mr-1 border rounded-md border-egGrey-default">
                                         {coaches.length > 0 && (
-                                            <div className="inline-block">
+                                            <div className="flex ">
                                                 {coaches.map((el: any, idx: number) => (
-                                                    <div className="flex items-center px-1 my-1 mr-1 text-sm rounded-sm bg-egBlack-superLight w-fit">
+                                                    <div className="flex items-center px-1 mr-1 text-sm rounded-sm bg-egBlack-superLight w-fit">
                                                         {el.name} <CgClose onClick={() => handleDeleteCoaches(idx)} />
                                                     </div>
                                                 ))}
@@ -575,7 +480,7 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
                                     <SearchModal
                                         modalBtn={
                                             <button className="flex items-center justify-center px-2 py-1 border rounded-md border-egPurple-default hover:bg-egPurple-superLight">
-                                                <div className="mr-1 text-sm">코치</div>
+                                                <div className="mr-1 text-sm">코치 찾기</div>
                                                 <IoMdSearch className="h-4 text-egPurple-default" />
                                             </button>
                                         }
