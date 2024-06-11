@@ -9,11 +9,11 @@ import { requestGet } from 'api/basic';
 import Divider from 'components/Common/Divider';
 // Eg Components
 import EgPhotoCard from 'components/EgMaterials/PhotoCard';
-import UserTable from 'layouts/Admin/User/Components/UserTable';
+import UserTable from 'layouts/Admin/User/UserComponents/UserTable';
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
 // Admin Home Components
-import TitleBar from 'layouts/Admin/Home/Components/TitleBar';
+import TitleBar from 'layouts/Admin/Home/HomeComponents/TitleBar';
 
 export interface ColumnType {
     id: string;

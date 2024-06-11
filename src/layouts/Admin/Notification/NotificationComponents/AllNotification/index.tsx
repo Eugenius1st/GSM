@@ -27,9 +27,6 @@ import AlarmModal from 'components/Modals/AlarmModal';
 import BasicModal from 'components/Modals/BasicModal';
 // colors
 import colors from 'assets/colors/palette';
-// Eg Components
-import DropDownModal from 'components/EgMaterials/DropDown';
-import EgCheckBox from 'components/EgMaterials/CheckBox';
 // react-icons
 import { FaArrowDown } from 'react-icons/fa';
 import { FaArrowUp } from 'react-icons/fa';
@@ -37,23 +34,25 @@ import { IoIosInformationCircleOutline } from 'react-icons/io';
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
 // Notification Components
-import TagCard from 'layouts/Admin/Notification/Components/TagCard';
+import TagCard from 'layouts/Admin/Notification/NotificationComponents/TagCard';
 
 interface Data {
     id: number;
-    lesson: string;
+    birth: number;
     name: string;
+    className: string;
     expiration: number;
-    remainingRounds: number | '0';
+    usingRounds: number | '0';
     paymentRound: number | '0';
 }
 
 interface InitialData {
     id: number;
-    lesson: string;
+    className: string;
     name: string;
+    birth: number;
     expiration: number;
-    remainingRounds: number | '0';
+    usingRounds: number | '0';
     paymentRound: number | '0';
 }
 
@@ -61,97 +60,120 @@ const initialData: InitialData[] = [
     {
         id: 1,
         name: '손흥민',
-        lesson: '엘리트',
+        className: '엘리트',
+        birth: 2016,
         expiration: 7,
-        remainingRounds: 5,
+        usingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 2,
         name: '김민재',
-        lesson: '엘리트',
+        className: '엘리트',
+        birth: 2016,
+
         expiration: 5,
-        remainingRounds: 5,
+        usingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 3,
         name: '홍길동',
-        lesson: '엘리트',
+        className: '엘리트',
+        birth: 2016,
+
         expiration: 3,
-        remainingRounds: 5,
+        usingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 4,
         name: '손흥민',
-        lesson: '엘리트',
+        className: '엘리트',
+        birth: 2016,
+
         expiration: 7,
-        remainingRounds: 5,
+        usingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 5,
         name: '김민재',
-        lesson: '엘리트',
+        className: '엘리트',
+        birth: 2016,
+
         expiration: 5,
-        remainingRounds: 5,
+        usingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 6,
         name: '홍길동',
-        lesson: '엘리트',
+        className: '엘리트',
+        birth: 2016,
+
         expiration: 3,
-        remainingRounds: 5,
+        usingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 7,
         name: '손흥민',
-        lesson: '엘리트',
+        className: '엘리트',
+        birth: 2016,
+
         expiration: 7,
-        remainingRounds: 5,
+        usingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 8,
         name: '김민재',
-        lesson: '엘리트',
+        className: '엘리트',
+        birth: 2016,
+
         expiration: 5,
-        remainingRounds: 5,
+        usingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 9,
         name: '홍길동',
-        lesson: '엘리트',
+        className: '엘리트',
+        birth: 2016,
+
         expiration: 3,
-        remainingRounds: 5,
+        usingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 10,
         name: '손흥민',
-        lesson: '기본기·어린이',
+        className: '기본기·어린이',
+        birth: 2017,
+
         expiration: 7,
-        remainingRounds: 5,
+        usingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 11,
         name: '김민재',
-        lesson: '기본기·어린이',
+        className: '기본기·어린이',
+        birth: 2018,
+
         expiration: 5,
-        remainingRounds: 5,
+        usingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 12,
         name: '홍길동',
-        lesson: '기본기·어린이',
+        className: '기본기·어린이',
+        birth: 2010,
+
         expiration: 3,
-        remainingRounds: 5,
+        usingRounds: 5,
         paymentRound: 10,
     },
 ];
@@ -164,8 +186,9 @@ function DataProcess(DataList: InitialData[]) {
             // push 메서드 사용
             id: el.id,
             name: el.name,
-            lesson: el.lesson,
-            remainingRounds: el.remainingRounds,
+            className: el.className,
+            birth: el.birth,
+            usingRounds: el.usingRounds,
             paymentRound: el.paymentRound,
             expiration: el.expiration,
         });
@@ -187,21 +210,22 @@ const headCells: readonly HeadCell[] = [
         numeric: false,
         label: '이름',
     },
+
     {
-        id: 'lesson',
+        id: 'className',
         numeric: false,
-        label: '수업명',
+        label: '클래스',
+    },
+    {
+        id: 'birth',
+        numeric: false,
+        label: '년생',
     },
 
     {
-        id: 'remainingRounds',
+        id: 'usingRounds',
         numeric: false,
-        label: '잔여회차',
-    },
-    {
-        id: 'expiration',
-        numeric: false,
-        label: '만료',
+        label: '사용회차',
     },
 ];
 
@@ -323,10 +347,23 @@ export default function EnhancedTable() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const { egPurple, egBlack } = colors;
-
     // 필터탭
     const [lessonType, setLessonType] = React.useState('group');
     const [classType, setClassType] = React.useState('practice');
+    const remainRoundState = [
+        { label: '있음', value: 'remain' },
+        { label: '없음', value: 'none' },
+        { label: '전체', value: 'remainRoundStateAll' },
+    ];
+    const [remainRound, setRemainRound] = React.useState('remain');
+    const applyPeriodState = [
+        { label: '~2주', value: '2주' },
+        { label: '~3개월', value: '3개월' },
+        { label: '~6개월', value: '6개월' },
+        { label: '~1년', value: '1년' },
+        { label: '전체', value: 'applyPeriodStateAll' },
+    ];
+    const [lastApply, setLastApply] = React.useState('2주');
 
     // GET ClassGroup
     const [classGroups, setClassGroups] = React.useState([]);
@@ -340,7 +377,7 @@ export default function EnhancedTable() {
         staleTime: 5 * 1000,
     });
 
-    // 핸들러
+    //핸들러
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
             const newSelected = rows.map((n) => n.id);
@@ -382,6 +419,7 @@ export default function EnhancedTable() {
         { label: '수업신청공지', link: '/admin/notification/application' },
         { label: '회차차감공지', link: '/admin/notification/round' },
     ];
+
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
@@ -392,7 +430,7 @@ export default function EnhancedTable() {
                             <Link to={el.link}>
                                 <span
                                     className={
-                                        el.label === '수업신청공지'
+                                        el.label === '공지'
                                             ? 'px-2 pb-1 mr-2 border-b-2 text-egPurple-default border-egPurple-default'
                                             : 'px-2 pb-1 mr-2 text-egGrey-default-default'
                                     }
@@ -525,12 +563,12 @@ export default function EnhancedTable() {
                             </div>
                         </div>
                     </div>
-                    <div className="flex w-full ">
+                    <div className="flex w-full">
                         <div className="flex items-center justify-center w-2/12 py-2 text-center border bg-egPurple-superLight">
                             클래스그룹
                         </div>
                         {/* <div className="grid w-10/12 grid-cols-7 px-4 py-2 border"> */}
-                        <div className="w-10/12 border">
+                        <div className="w-10/12">
                             {getClassGroup.data?.result && (
                                 <TagCard
                                     tagList={getClassGroup?.data?.result}
@@ -540,6 +578,68 @@ export default function EnhancedTable() {
                             )}
                         </div>
                         {/* </div> */}
+                    </div>
+                    <div className="flex w-full">
+                        <div className="w-2/12 py-2 text-center border bg-egPurple-superLight">잔여수강권</div>
+                        <div className="grid w-10/12 grid-cols-10 px-4 py-2 border">
+                            {remainRoundState.map((el, idx) => (
+                                <div
+                                    key={idx}
+                                    className="flex items-center"
+                                >
+                                    <input
+                                        type="radio"
+                                        id={el.value}
+                                        name="remainRound"
+                                        value={el.value}
+                                        className="hidden"
+                                        defaultChecked={remainRound === el.value}
+                                        onChange={(e) => setRemainRound(e.target.value)}
+                                    />
+                                    <label
+                                        htmlFor={el.value}
+                                        className={
+                                            remainRound === el.value
+                                                ? 'bg-egPurple-default py-1 w-14 text-center rounded-2xl text-egWhite-default'
+                                                : 'w-14 text-center'
+                                        }
+                                    >
+                                        {el.label}
+                                    </label>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="flex w-full">
+                        <div className="w-2/12 py-2 text-center border bg-egPurple-superLight">마지막수업신청</div>
+                        <div className="grid w-10/12 grid-cols-8 px-4 py-2 border">
+                            {applyPeriodState.map((el, idx) => (
+                                <div
+                                    key={idx}
+                                    className="flex items-center"
+                                >
+                                    <input
+                                        type="radio"
+                                        id={el.value}
+                                        name="applyPeriod"
+                                        value={el.value}
+                                        className="hidden"
+                                        defaultChecked={lastApply === el.value}
+                                        onChange={(e) => setLastApply(e.target.value)}
+                                    />
+                                    <label
+                                        htmlFor={el.value}
+                                        className={
+                                            lastApply === el.value
+                                                ? 'bg-egPurple-default py-1 w-16 text-center rounded-2xl text-egWhite-default'
+                                                : 'w-16 text-center'
+                                        }
+                                    >
+                                        {el.label}
+                                    </label>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </Box>
                 <Box sx={{ textAlign: 'end', m: 2 }}>
@@ -607,20 +707,19 @@ export default function EnhancedTable() {
                                             sx={{ paddingX: 0 }}
                                             align="center"
                                         >
-                                            {row.lesson}
-                                        </TableCell>
-
-                                        <TableCell
-                                            align="center"
-                                            sx={{ paddingX: 0 }}
-                                        >
-                                            {row.remainingRounds}/{row.paymentRound}
+                                            {row.className}
                                         </TableCell>
                                         <TableCell
                                             align="center"
                                             sx={{ paddingX: 0 }}
                                         >
-                                            D-{row.expiration}
+                                            {row.birth}학년변환
+                                        </TableCell>
+                                        <TableCell
+                                            align="center"
+                                            sx={{ paddingX: 0 }}
+                                        >
+                                            {row.usingRounds}/{row.paymentRound}
                                         </TableCell>
 
                                         <TableCell
