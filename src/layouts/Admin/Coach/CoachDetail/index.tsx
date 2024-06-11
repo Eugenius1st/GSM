@@ -10,7 +10,7 @@ import EmptyCard from 'components/Cards/EmptyCard';
 // Common
 import Divider from 'components/Common/Divider';
 // Admin Coach Components
-import CoachProfileCard from 'layouts/Admin/Coach/Components/CoachProfileCard';
+// import CoachProfileCard from 'layouts/Admin/Coach/Components/CoachProfileCard';
 // Modals
 import EditModal from 'components/Modals/EditModal';
 import PasswordEditModal from 'components/Modals/PasswordEditModal';
@@ -100,7 +100,7 @@ const CoachDetail = () => {
 
             {curCoach ? (
                 <div>
-                    <CoachProfileCard coachInfo={curCoach && curCoach} />
+                    {/* <CoachProfileCard coachInfo={curCoach && curCoach} /> */}
                     <Divider />
                     {/* <MemoCard
                         tab={['임금', '특이사항']}
