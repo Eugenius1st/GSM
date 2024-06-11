@@ -7,7 +7,7 @@ import { IsMobileSelector } from 'atom/isMobile';
 // api
 import { requestGet } from 'api/basic';
 // Class Components
-import ViewUserCard from 'layouts/User/Class/components/ViewUserCard';
+import ViewUserCard from 'layouts/User/Class/ViewUserCard';
 // Cards
 import ClassCard from 'components/Cards/ClassCard';
 import { ClassInfoType } from 'components/Cards/ClassCard';

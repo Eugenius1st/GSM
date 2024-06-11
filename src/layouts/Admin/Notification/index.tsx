@@ -1,4 +1,10 @@
 // Eg Components
+import EgPageTable from 'components/EgMaterials/PageTable';
+// NotificatioinContents
+// import Application from 'layouts/Admin/Notification/Components/Application';
+import AllNotification from 'layouts/Admin/Notification/Components/AllNotification';
+import RoundDebuction from 'layouts/Admin/Notification/Components/RoundDebuction';
+// import AlarmTable from 'layouts/Admin/Notification/Components/AlarmTable';
 import NotifiactionTable from 'layouts/Admin/Notification/Components/NotificationTable';
 // images
 import coach_son from 'assets/coach/coach_son.jpeg';

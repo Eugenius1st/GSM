@@ -1,5 +1,6 @@
 // Material UI
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -17,12 +18,20 @@ import Tooltip from '@mui/material/Tooltip';
 // hooks
 import { useRecoilValue } from 'recoil';
 import { IsMobileSelector } from 'atom/isMobile';
+import { useQuery } from '@tanstack/react-query';
+import { requestGet } from 'api/basic';
 // Buttons
 import PurpleBtn from 'components/Buttons/PurpleBtn';
 // Modals
 import AlarmModal from 'components/Modals/AlarmModal';
+import BasicModal from 'components/Modals/BasicModal';
 // colors
 import colors from 'assets/colors/palette';
+// react-icons
+import { FaArrowDown } from 'react-icons/fa';
+import { FaArrowUp } from 'react-icons/fa';
+import { IoIosInformationCircleOutline } from 'react-icons/io';
+
 // Eg Components
 import DropDownModal from 'components/EgMaterials/DropDown';
 import EgCheckBox from 'components/EgMaterials/CheckBox';
@@ -292,7 +301,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                 )
             )}
 
-            {numSelected > 0 ? (
+            {numSelected > 0 && (
                 <Tooltip title="Add">
                     <IconButton
                         sx={{
@@ -306,41 +315,6 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                         선택 알림 전송
                     </IconButton>
                 </Tooltip>
-            ) : (
-                <div className={'flex items-center ml-[-1rem]'}>
-                    <div
-                        className={isMobile ? 'flex items-center' : 'flex items-center w-44'}
-                        onClick={() => setApplicationOnWeek(!applicationOnWeek)}
-                    >
-                        <EgCheckBox checked={applicationOnWeek} />
-                        <div>이번주 수업 신청 X</div>
-                    </div>
-                    <div
-                        className={isMobile ? 'flex items-center mr-4' : 'flex items-center w-44 mr-4'}
-                        onClick={() => setNotApplicationOnWeek(!notApplicationOnWeek)}
-                    >
-                        <EgCheckBox checked={notApplicationOnWeek} />
-                        <div>이번주 수업 신청 O</div>
-                    </div>
-                    <Tooltip title="Filter list">
-                        <DropDownModal
-                            itemList={[
-                                {
-                                    item: 'ALL',
-                                },
-                                {
-                                    item: '엘리트반',
-                                },
-                                {
-                                    item: '취미반',
-                                },
-                                {
-                                    item: '성인반',
-                                },
-                            ]}
-                        />
-                    </Tooltip>
-                </div>
             )}
         </Toolbar>
     );
@@ -350,7 +324,35 @@ export default function EnhancedTable() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const { egPurple, egBlack } = colors;
+    // 필터탭
+    const [lessonType, setLessonType] = React.useState('group');
+    const [classType, setClassType] = React.useState('practice');
+    const remainRoundState = [
+        { label: '있음', value: 'remain' },
+        { label: '없음', value: 'none' },
+        { label: '전체', value: 'remainRoundStateAll' },
+    ];
+    const [remainRound, setRemainRound] = React.useState('remain');
+    const applyPeriodState = [
+        { label: '~2주', value: '2주' },
+        { label: '~3개월', value: '3개월' },
+        { label: '~6개월', value: '6개월' },
+        { label: '~1년', value: '1년' },
+        { label: '전체', value: 'applyPeriodStateAll' },
+    ];
+    const [lastApply, setLastApply] = React.useState('2주');
 
+    // GET ClassGroup
+    const [classGroups, setClassGroups] = React.useState([]);
+    const getClassGroup = useQuery({
+        queryKey: ['allClassGroup'],
+        queryFn: () => {
+            return requestGet({
+                requestUrl: `/classGroup`,
+            });
+        },
+        staleTime: 5 * 1000,
+    });
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
             const newSelected = rows.map((n) => n.id);
@@ -387,11 +389,239 @@ export default function EnhancedTable() {
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
+    const NotificationTab = [
+        { label: '공지', link: '/admin/notification/entire' },
+        { label: '수업신청공지', link: '/admin/notification/application' },
+        { label: '회차차감공지', link: '/admin/notification/round' },
+    ];
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <EnhancedTableToolbar numSelected={selected.length} />
+                <Box sx={{ mx: 2, mb: 2, display: 'flex', alignItems: 'center' }}>
+                    {NotificationTab.map((el, idx) => (
+                        <div key={idx}>
+                            <Link to={el.link}>
+                                <span
+                                    className={
+                                        el.label === '회차차감공지'
+                                            ? 'px-2 pb-1 mr-2 border-b-2 text-egPurple-default border-egPurple-default'
+                                            : 'px-2 pb-1 mr-2 text-egGrey-default-default'
+                                    }
+                                >
+                                    {el.label}
+                                </span>
+                            </Link>
+                            {idx < NotificationTab.length - 1 && <span>·</span>}
+                        </div>
+                    ))}
+                    <BasicModal
+                        modalBtn={<IoIosInformationCircleOutline className="text-orange-600" />}
+                        modalTitle={
+                            <div>
+                                <span className="px-2 bg-egPurple-superLight w-fit">공지용어 안내</span>
+                            </div>
+                        }
+                        modalContents={
+                            <div>
+                                <div className="mt-2 mb-4 border-b-2"></div>
+                                <div className="flex my-2">
+                                    <div className="mr-2 font-bold">공지 |</div>
+                                    <div>전체회원들에게 공지</div>
+                                </div>
+                                <div className="flex my-2">
+                                    <div className="mr-2 font-bold">회차차감 공지 |</div>
+                                    <div>전 주 수업 수강한 경우 공지</div>
+                                </div>
+                                <div className="flex my-2">
+                                    <div className="mr-2 font-bold">수업신청 공지 |</div>
+                                    <div>이번주 수업 신청 안한 경우 공지</div>
+                                </div>
+                            </div>
+                        }
+                    />
+                </Box>
+                {/* 필터탭 */}
+                <Box>
+                    <div className="flex w-full">
+                        <div className="w-2/12 py-2 text-center border bg-egPurple-superLight">레슨타입</div>
+                        <div className="grid w-10/12 grid-cols-10 px-4 py-2 border">
+                            <div className="flex items-center">
+                                <input
+                                    type="radio"
+                                    id="group"
+                                    name="lessonType"
+                                    value="group"
+                                    className="hidden"
+                                    defaultChecked={lessonType === 'group'}
+                                    onChange={(e) => setLessonType(e.target.value)}
+                                />
+                                <label
+                                    htmlFor="group"
+                                    className={
+                                        lessonType === 'group'
+                                            ? 'bg-egPurple-default py-1 w-14 text-center rounded-2xl text-egWhite-default'
+                                            : 'w-14 text-center'
+                                    }
+                                >
+                                    단체
+                                </label>
+                            </div>
+                            <div className="flex items-center">
+                                <input
+                                    type="radio"
+                                    id="personal"
+                                    name="lessonType"
+                                    value="personal"
+                                    className="hidden"
+                                    defaultChecked={lessonType === 'personal'}
+                                    onChange={(e) => setLessonType(e.target.value)}
+                                />
+                                <label
+                                    htmlFor="personal"
+                                    className={
+                                        lessonType === 'personal'
+                                            ? 'bg-egPurple-default py-1 w-14 text-center rounded-2xl text-egWhite-default'
+                                            : 'w-14 text-center'
+                                    }
+                                >
+                                    개인
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex w-full">
+                        <div className="w-2/12 py-2 text-center border bg-egPurple-superLight">클래스타입</div>
+                        <div className="grid w-10/12 grid-cols-10 px-4 py-2 border">
+                            <div className="flex items-center">
+                                <input
+                                    type="radio"
+                                    id="practice"
+                                    name="classType"
+                                    value="practice"
+                                    className="hidden"
+                                    defaultChecked={classType === 'practice'}
+                                    onChange={(e) => setClassType(e.target.value)}
+                                />
+                                <label
+                                    htmlFor="practice"
+                                    className={
+                                        classType === 'practice'
+                                            ? 'bg-egPurple-default py-1 w-14 text-center rounded-2xl text-egWhite-default'
+                                            : 'w-14 text-center'
+                                    }
+                                >
+                                    실기
+                                </label>
+                            </div>
+                            <div className="flex items-center">
+                                <input
+                                    type="radio"
+                                    id="theory"
+                                    name="classType"
+                                    value="theory"
+                                    className="hidden"
+                                    defaultChecked={classType === 'theory'}
+                                    onChange={(e) => setClassType(e.target.value)}
+                                />
+                                <label
+                                    htmlFor="theory"
+                                    className={
+                                        classType === 'theory'
+                                            ? 'w-14 bg-egPurple-default py-1 px-2 text-center rounded-2xl text-egWhite-default'
+                                            : 'w-14 text-center'
+                                    }
+                                >
+                                    이론
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex w-full">
+                        <div className="flex items-center justify-center w-2/12 py-2 text-center border bg-egPurple-superLight">
+                            클래스그룹
+                        </div>
+                        {/* <div className="grid w-10/12 grid-cols-7 px-4 py-2 border"> */}
+                        <div className="w-10/12">
+                            {getClassGroup.data?.result && (
+                                <TagCard
+                                    tagList={getClassGroup?.data?.result}
+                                    func={setClassGroups}
+                                    defaultTagList={getClassGroup?.data?.result}
+                                />
+                            )}
+                        </div>
+                        {/* </div> */}
+                    </div>
+                    <div className="flex w-full">
+                        <div className="w-2/12 py-2 text-center border bg-egPurple-superLight">잔여수강권</div>
+                        <div className="grid w-10/12 grid-cols-10 px-4 py-2 border">
+                            {remainRoundState.map((el, idx) => (
+                                <div
+                                    key={idx}
+                                    className="flex items-center"
+                                >
+                                    <input
+                                        type="radio"
+                                        id={el.value}
+                                        name="remainRound"
+                                        value={el.value}
+                                        className="hidden"
+                                        defaultChecked={remainRound === el.value}
+                                        onChange={(e) => setRemainRound(e.target.value)}
+                                    />
+                                    <label
+                                        htmlFor={el.value}
+                                        className={
+                                            remainRound === el.value
+                                                ? 'bg-egPurple-default py-1 w-14 text-center rounded-2xl text-egWhite-default'
+                                                : 'w-14 text-center'
+                                        }
+                                    >
+                                        {el.label}
+                                    </label>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="flex w-full">
+                        <div className="w-2/12 py-2 text-center border bg-egPurple-superLight">마지막수업신청</div>
+                        <div className="grid w-10/12 grid-cols-8 px-4 py-2 border">
+                            {applyPeriodState.map((el, idx) => (
+                                <div
+                                    key={idx}
+                                    className="flex items-center"
+                                >
+                                    <input
+                                        type="radio"
+                                        id={el.value}
+                                        name="applyPeriod"
+                                        value={el.value}
+                                        className="hidden"
+                                        defaultChecked={lastApply === el.value}
+                                        onChange={(e) => setLastApply(e.target.value)}
+                                    />
+                                    <label
+                                        htmlFor={el.value}
+                                        className={
+                                            lastApply === el.value
+                                                ? 'bg-egPurple-default py-1 w-16 text-center rounded-2xl text-egWhite-default'
+                                                : 'w-16 text-center'
+                                        }
+                                    >
+                                        {el.label}
+                                    </label>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </Box>
+                <Box sx={{ textAlign: 'end', m: 2 }}>
+                    <button className="p-1 border rounded-md border-egBlack-light ">
+                        최신가입자 <FaArrowDown className="inline text-egPurple-default" />
+                    </button>
+                </Box>
+                {/* 테이블 */}
                 <TableContainer sx={{ overflowY: 'scroll' }}>
                     <Table
                         sx={{ minWidth: 440 }}

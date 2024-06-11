@@ -8,7 +8,7 @@ import { CgClose } from 'react-icons/cg';
 
 interface BasicModalType {
     modalBtn: React.ReactNode;
-    modalTitle?: string;
+    modalTitle?: React.ReactNode | string;
     modalContents?: React.ReactNode | string;
     modalFooterExitBtn?: string;
     modalFooterActiveBtn?: string;
