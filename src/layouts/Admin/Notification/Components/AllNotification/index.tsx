@@ -34,7 +34,7 @@ import { IoIosInformationCircleOutline } from 'react-icons/io';
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
 // Notification Components
-import TagCard from 'layouts/Admin/Notification/components/TagCard';
+import TagCard from 'layouts/Admin/Notification/Components/TagCard';
 
 interface Data {
     id: number;
