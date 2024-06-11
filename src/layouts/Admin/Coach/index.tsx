@@ -8,7 +8,7 @@ import { requestGet } from 'api/basic';
 import PaginationRounded from 'components/EgMaterials/Pagenation';
 // Eg Components
 
-// import CoachTable from 'layouts/Admin/Coach/Components/CoachTable';
+import CoachTable from 'layouts/Admin/Coach/Components/CoachTable';
 // Common
 import SearchBar from 'components/Common/SearchBar';
 import SelectMenu from 'components/Common/SelectMenu';
@@ -93,11 +93,11 @@ const Coach = () => {
         <div className="mb-2 eg-default-wrapper">
             <div className="eg-title">코치관리</div>
 
-            {/* <CoachTable
+            <CoachTable
                 tableRowData={tableRowData && tableRowData}
                 coachSearchState={coachSearchState}
                 setCoachSearchState={setCoachSearchState}
-            /> */}
+            />
             <div className="flex justify-center mt-4">
                 {!coachSearchState && (
                     <PaginationRounded
