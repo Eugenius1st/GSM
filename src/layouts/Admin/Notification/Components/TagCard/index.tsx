@@ -30,26 +30,23 @@ const TagCard = ({ tagList, func, defaultTagList }: TagListType) => {
         }
     };
     useEffect(() => {
-        if (defaultTagList && defaultTagList?.length > 0) setCheckedTag(defaultTagList);
+        if (defaultTagList) setCheckedTag(defaultTagList);
     }, [defaultTagList]);
     return (
         <div>
             {/* 각 태그에 대한 체크박스 생성 */}
             {tagList.map((tag: TagType, idx, number) => (
-                <button
-                    type="button"
+                <div
                     key={idx}
                     className={
                         checkedTag.some((checkedTag) => checkedTag._id === tag._id)
-                            ? // ? 'inline-block w-fit border bg-egPurple-default border-egPurple-default text-egWhite-default px-2 py-1 rounded-md m-1'
-                              // : 'inline-block w-fit border border-egBlack-light text-egBlack-light px-2 py-1 rounded-md m-1 hover:bg-egGrey-light'
-                              'inline-block w-fit mx-2 my-1 bg-egPurple-default py-1 px-3 text-center rounded-2xl text-egWhite-default'
-                            : 'inline-block w-fit mx-2 my-1 text-center px-3 py-1'
+                            ? 'inline-block w-fit border bg-egPurple-default border-egPurple-default text-egWhite-default px-2 py-1 rounded-md m-1'
+                            : 'inline-block w-fit border border-egBlack-light text-egBlack-light px-2 py-1 rounded-md m-1 hover:bg-egGrey-light'
                     }
                     onClick={() => tagHandler(tag, idx)} // 체크박스 상태 변경 이벤트 핸들러
                 >
                     {tag.name}
-                </button>
+                </div>
             ))}
         </div>
     );

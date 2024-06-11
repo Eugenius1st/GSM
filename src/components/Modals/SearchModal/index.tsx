@@ -1,9 +1,6 @@
 // hooks
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-// recoil
-import { useRecoilValue } from 'recoil';
-import { IsMobileSelector } from 'atom/isMobile';
 // api
 import { requestGet } from 'api/basic';
 // Buttons
@@ -16,6 +13,7 @@ import { IoMdSearch } from 'react-icons/io';
 import EmptyCard from 'components/Cards/EmptyCard';
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
+import { PathOrFileDescriptor } from 'fs';
 
 interface SearchModalType {
     modalBtn: React.ReactNode;
@@ -45,7 +43,6 @@ const SearchModal = ({
     modalActiveFunc,
     modalScrollStayFlag = true,
 }: SearchModalType) => {
-    let isMobile = useRecoilValue(IsMobileSelector);
     const [isShow, setIsShow] = useState(false);
     const [queryEnabled, setQueryEnabled] = useState(false);
     const [searchInput, setSearchInput] = useState('');
@@ -62,31 +59,27 @@ const SearchModal = ({
         if (modalScrollStayFlag) document.body.style.overflow = 'unset';
     };
     // GET 요청을 보낼 함수 정의
-    const getSearchCoach = useQuery({
+    const { data, error, isLoading, refetch } = useQuery({
         queryKey: ['searchAdmin'],
         queryFn: () => {
             if (searchInput) {
                 return requestGet({
                     requestUrl: `/admin/search/${searchInput}?with_head=true&take=${itemsPerPage}&page=${curPage}`,
+                    successFunc: setSearchedData,
                 });
             } else {
                 // searchInput이 undefined일 때에 대한 처리
                 return Promise.resolve([]); // 또는 다른 유효한 값을 반환할 수 있음
             }
         },
+        staleTime: 100,
         enabled: queryEnabled, // enabled 옵션을 사용하여 쿼리를 활성화 또는 비활성화합니다.
     });
-    useEffect(() => {
-        if (getSearchCoach.data) {
-            console.log('getSearchCoach.data', getSearchCoach.data);
-            setSearchedData(getSearchCoach.data.result);
-        }
-    }, [getSearchCoach.data]);
     const handleButtonClick = () => {
         // 버튼 클릭 시에만 쿼리를 활성화하도록 설정합니다.
         if (searchInput) {
             setQueryEnabled(true);
-            getSearchCoach.refetch();
+            refetch();
         }
     };
     const handleActive = (data: AdminDataType) => {
@@ -100,13 +93,7 @@ const SearchModal = ({
             <div onClick={handleShowModal}>{modalBtn}</div>
             {isShow ? (
                 <div className="fixed flex justify-center items-center top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] border border-red-100 z-[60]">
-                    <div
-                        className={
-                            isMobile
-                                ? 'fixed bg-egWhite-default z-[70] w-full max-w-[30rem] p-4 rounded-lg'
-                                : 'fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg'
-                        }
-                    >
+                    <div className="fixed bg-egWhite-default z-[70] w-[30rem] p-4 rounded-lg">
                         <div className="flex items-center justify-between">
                             <div className="mb-2 text-xl font-bold">{modalTitle}</div>
                             <CgClose onClick={handleCloseModal} />

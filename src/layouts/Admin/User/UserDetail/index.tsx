@@ -1,6 +1,5 @@
 // hooks
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation } from '@tanstack/react-query';
 // api
@@ -27,12 +26,11 @@ interface PatchDataType {
 
 const UserDetail = () => {
     const { userId } = useParams();
-    const [userPhoto, setUserPhoto] = useState('');
+    // const [curUser, setCurUser] = useState();
     const [patchUnblockFlag, setPatchUnblockFlag] = useState(false); // 비활성화 성공 여부
     const [patchBlockFlag, setPatchBlockFlag] = useState(false); // 비활성화 성공 여부
     const [annotation, setAnnotation] = useState<any>({ feedback: {}, significant: {} });
     const navigate = useNavigate();
-
     // GET USER INFO 요청을 보낼 함수 정의
     const getUserDetailInfo = useQuery({
         queryKey: [`userDetailInfo-${userId}`],
@@ -45,25 +43,6 @@ const UserDetail = () => {
         },
         staleTime: 5 * 1000,
     });
-    // GET USER PHOTO
-    useEffect(() => {
-        if (userId) {
-            axios
-                .get(`${process.env.REACT_APP_API_URL}/photo/student/${userId}?isThumbnail=true`, {
-                    responseType: 'blob',
-                })
-                .then((response) => {
-                    const url = window.URL.createObjectURL(
-                        new Blob([response.data], { type: response.headers['content-type'] })
-                    );
-                    setUserPhoto(url);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        }
-    }, [userId]);
-
     //GET USER FEEDBACK 요청을 보낼 함수
     const getUserFeedback = useQuery({
         queryKey: [`userFeedback-${userId}`],
@@ -146,12 +125,7 @@ const UserDetail = () => {
                     <PasswordEditModal />
                 </div>
             </div>
-            {getUserDetailInfo.data && (
-                <UserProfileCard
-                    userInfo={getUserDetailInfo.data}
-                    userPhoto={userPhoto}
-                />
-            )}
+            {getUserDetailInfo.data && <UserProfileCard userInfo={getUserDetailInfo.data} />}
             <Divider />
             {userRoundInfo && getUserDetailInfo.data && (
                 <UserRoundCard

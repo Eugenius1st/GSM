@@ -1,7 +1,6 @@
 // hooks
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 // api
 import { requestGet } from 'api/basic';
 // User Component
@@ -42,36 +41,20 @@ const User = () => {
     });
 
     // Table 에 적합한 Row 형태로 변경하기
-    async function convertTableRowData() {
+    function convertTableRowData() {
         // 코치 정보를 담을 빈 배열 생성
         const rows: RowDataType[] = [];
-        for (const user of allUsers) {
-            const { _id, name, birth, team } = user; // 원하는 속성들을 추출
-            let userPhoto = '';
-            if (_id) {
-                try {
-                    const response = await axios.get(
-                        `${process.env.REACT_APP_API_URL}/photo/student/${_id}?isThumbnail=true`,
-                        {
-                            responseType: 'blob',
-                        }
-                    );
-                    const url = window.URL.createObjectURL(
-                        new Blob([response.data], { type: response.headers['content-type'] })
-                    );
-                    userPhoto = url;
-                } catch (error) {
-                    // console.log(error);
-                }
-            }
+        allUsers.forEach((user: RowDataType, index: number) => {
+            const { _id, photo, name, birth, team } = user; // 원하는 속성들을 추출
             rows.push({
                 _id: _id, // 배열 인덱스를 이용하여 id 부여
-                photo: userPhoto, // 사진 속성 그대로 사용
+                photo: photo, // 사진 속성 그대로 사용
                 name: name, // 이름 속성 그대로 사용
                 birth: new Date(birth).getFullYear(), // 출생일에서 연도만 추출
                 team: team, // 레벨 속성 그대로 사용
             });
-        } // 변환된 배열 반환
+        });
+        // 변환된 배열 반환
         setTableRowData(rows);
     }
     // 렌더링 관련

@@ -15,7 +15,10 @@ import { ClassInfoType } from 'components/Cards/ClassCard';
 // Buttons
 import PurpleBtn from 'components/Buttons/PurpleBtn';
 // images
-import userTempPhoto from 'assets/user/userTempPhoto.png';
+import user1 from 'assets/user/user1.jpg';
+import user2 from 'assets/user/user2.png';
+import user3 from 'assets/user/user3.jpeg';
+import user4 from 'assets/user/user4.png';
 // Common
 import Divider from 'components/Common/Divider';
 import WhiteBtn from 'components/Buttons/WhiteBtn';
@@ -32,7 +35,7 @@ const ClassDetail = () => {
     const [deleteState, setDeleteState] = useState(false);
     // GET 요청을 보낼 함수 정의
     const { data, error, isLoading, refetch } = useQuery({
-        queryKey: [`adminClassDetail-${classId}`],
+        queryKey: ['adminClassDetail'],
         queryFn: () => {
             if (classId) {
                 return requestGet({
@@ -52,6 +55,7 @@ const ClassDetail = () => {
             flagCheckFunc: setDeleteState,
         });
     };
+
     useEffect(() => {
         setCurClass(data);
     }, [data]);
@@ -71,20 +75,20 @@ const ClassDetail = () => {
     };
 
     const attendInfo = [
-        { profile: userTempPhoto, name: '홍길동', age: 13, attend: '출석' },
-        { profile: userTempPhoto, name: '홍이동', age: 13, attend: '불참' },
-        { profile: userTempPhoto, name: '홍삼동', age: 13, attend: '지각' },
-        { profile: userTempPhoto, name: '홍사동', age: 13, attend: '취소' },
-        { profile: userTempPhoto, name: '홍길동', age: 13, attend: '출석' },
-        { profile: userTempPhoto, name: '홍이동', age: 13, attend: '불참' },
-        { profile: userTempPhoto, name: '홍삼동', age: 13, attend: '지각' },
-        { profile: userTempPhoto, name: '홍사동', age: 13, attend: '취소' },
+        { profile: user1, name: '홍길동', age: 13, attend: '출석' },
+        { profile: user2, name: '홍이동', age: 13, attend: '불참' },
+        { profile: user3, name: '홍삼동', age: 13, attend: '지각' },
+        { profile: user4, name: '홍사동', age: 13, attend: '취소' },
+        { profile: user1, name: '홍길동', age: 13, attend: '출석' },
+        { profile: user2, name: '홍이동', age: 13, attend: '불참' },
+        { profile: user3, name: '홍삼동', age: 13, attend: '지각' },
+        { profile: user4, name: '홍사동', age: 13, attend: '취소' },
     ];
     const waitingInfo = [
-        { profile: userTempPhoto, name: '홍길동', age: 13, attend: '출석' },
-        { profile: userTempPhoto, name: '홍이동', age: 13, attend: '불참' },
-        { profile: userTempPhoto, name: '홍삼동', age: 13, attend: '지각' },
-        { profile: userTempPhoto, name: '홍사동', age: 13, attend: '취소' },
+        { profile: user1, name: '홍길동', age: 13, attend: '출석' },
+        { profile: user2, name: '홍이동', age: 13, attend: '불참' },
+        { profile: user3, name: '홍삼동', age: 13, attend: '지각' },
+        { profile: user4, name: '홍사동', age: 13, attend: '취소' },
     ];
     return (
         <div className="eg-default-wrapper">

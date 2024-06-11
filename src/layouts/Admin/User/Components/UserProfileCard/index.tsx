@@ -5,14 +5,15 @@ import { IsMobileSelector } from 'atom/isMobile';
 // Eg Components
 import EgCheckBox from 'components/EgMaterials/CheckBox';
 // utility
-import { gradeMatcherByAge } from 'utility/standardConst';
+import { classGroupMatcherByEng } from 'utility/standardConst';
 // Common
 import Divider from 'components/Common/Divider';
 import BasicModal from 'components/Modals/BasicModal';
-// images
-import userTempPhoto from 'assets/user/userTempPhoto.png';
 // utility
 import { positionMatcherByEng } from 'utility/standardConst';
+
+// images
+import userImg from 'assets/user/user.png';
 
 interface reasonList {
     count?: string;
@@ -77,10 +78,9 @@ interface UserInfoType {
 
 interface InfoType {
     userInfo: UserInfoType;
-    userPhoto?: string;
 }
 
-const UserProfileCard = ({ userInfo, userPhoto }: InfoType) => {
+const UserProfileCard = ({ userInfo }: InfoType) => {
     const {
         classGroupId,
         classGroupName,
@@ -137,12 +137,12 @@ const UserProfileCard = ({ userInfo, userPhoto }: InfoType) => {
             <div className={'w-full m-auto border border-egGrey-default p-4'}>
                 <div className="flex justify-center mb-5">
                     <img
-                        src={userPhoto ? userPhoto : userTempPhoto}
+                        src={photo === 'any-photo-url' ? userImg : ''}
                         alt="coach_son"
-                        className={'object-cover w-32 h-32 p-1 mr-4 border rounded-full border-egPurple-default'}
+                        className={'object-cover h-32 p-1 mr-4 border rounded-full border-egPurple-default min-w-32'}
                     />
                 </div>
-                <div className={isMobile ? 'w-full' : 'w-full grid grid-cols-2 gap-x-4'}>
+                <div className={'w-full grid grid-cols-2 gap-x-4'}>
                     <div className={listStyle}>
                         <div className={titleStyle}>
                             <span className={highLight}>이름</span>
@@ -161,9 +161,7 @@ const UserProfileCard = ({ userInfo, userPhoto }: InfoType) => {
                         <div className={titleStyle}>
                             <span className={highLight}>생년월일</span>
                         </div>
-                        <div className={contentStyle}>
-                            {birth?.slice(0, 10)} / {gradeMatcherByAge(Number(birth?.slice(0, 4)))}
-                        </div>
+                        <div className={contentStyle}>{birth?.slice(0, 10)}</div>
                     </div>
 
                     <div className={listStyle}>
@@ -302,10 +300,10 @@ const UserProfileCard = ({ userInfo, userPhoto }: InfoType) => {
                         <span className={highLight}>마케팅 동의</span>
                     </div>
                     <div className={contentStyle}>
-                        <div className={isMobile ? 'w-full' : 'grid w-full grid-cols-2'}>
+                        <div className="grid w-full grid-cols-2">
                             <div
                                 onClick={() => setMarketingPrivacy(!marketingPrivacy)}
-                                className="inline-block w-full"
+                                className="inline-block full"
                             >
                                 {marketingPrivacy && <EgCheckBox checked={marketingPrivacy} />}
 

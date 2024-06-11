@@ -26,8 +26,6 @@ const UserRegist = () => {
     const [basicInfoData, setBasicInfoData] = useRecoilState(BasicInfoAtomSelector);
     const [additionalInfoData, setAdditionalInfoData] = useRecoilState(AdditionalInfoAtomSelector);
     // const [researchInfoData, setResearchInfoData] = useRecoilState(ResearchInfoAtomSelector);
-    const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
-
     function handleNext() {
         if (registStage < 5) setRegistStage(registStage + 1);
     }
@@ -43,25 +41,11 @@ const UserRegist = () => {
 
         window.scrollTo(0, 0);
         if (registStage === 5) {
-            handleClear();
+            setTermsAgreeData('');
+            setBasicInfoData('');
+            setAdditionalInfoData('');
         }
     }, [registStage]);
-
-    // atom 값 초기화
-    const handleClear = () => {
-        setTermsAgreeData('');
-        setBasicInfoData('');
-        setAdditionalInfoData('');
-    };
-    useEffect(() => {
-        handleClear();
-        console.log(
-            'termsAgreeData, basicInfoData, additionalInfoData',
-            termsAgreeData,
-            basicInfoData,
-            additionalInfoData
-        );
-    }, []);
 
     return (
         <div className="eg-regist-wrapper">
@@ -106,8 +90,6 @@ const UserRegist = () => {
                     handlePreview={handlePreview}
                     basicInfoData={basicInfoData}
                     setBasicInfoData={setBasicInfoData}
-                    selectedPhoto={selectedPhoto}
-                    setSelectedPhoto={setSelectedPhoto}
                 />
             ) : registStage === 3 ? (
                 <AdditionalInfo
@@ -122,7 +104,6 @@ const UserRegist = () => {
                     registStage={registStage}
                     handleNext={handleNext}
                     handlePreview={handlePreview}
-
                     // researchInfoData={researchInfoData}
                     // setResearchInfoData={setResearchInfoData}
                 />
