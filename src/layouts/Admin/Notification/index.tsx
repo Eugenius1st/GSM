@@ -5,10 +5,10 @@ import WhiteBtn from 'components/Buttons/WhiteBtn';
 // Eg Components
 import EgPageTable from 'components/EgMaterials/PageTable';
 // NotificatioinContents
-import Application from 'layouts/Admin/Notification/Components/Application';
-import AllNotification from 'layouts/Admin/Notification/Components/AllNotification';
-import RoundDebuction from 'layouts/Admin/Notification/Components/RoundDebuction';
-import AlarmTable from 'layouts/Admin/Notification/Components/AlarmTable';
+import Application from 'layouts/Admin/Notification/NotificationComponents/Application';
+import AllNotification from 'layouts/Admin/Notification/NotificationComponents/AllNotification';
+import RoundDebuction from 'layouts/Admin/Notification/NotificationComponents/RoundDebuction';
+import AlarmTable from 'layouts/Admin/Notification/NotificationComponents/AlarmTable';
 // images
 import coach_son from 'assets/coach/coach_son.jpeg';
 import coach_kim from 'assets/coach/coach_kim.jpeg';

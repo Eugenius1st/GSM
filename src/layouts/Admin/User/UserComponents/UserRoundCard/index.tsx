@@ -7,7 +7,7 @@ import { IsMobileSelector } from 'atom/isMobile';
 import { IoIosArrowDown } from 'react-icons/io';
 import { IoIosArrowUp } from 'react-icons/io';
 // Admin User Components
-import UserRoundProduct from 'layouts/Admin/User/Components/UserRoundProduct';
+import UserRoundProduct from 'layouts/Admin/User/UserComponents/UserRoundProduct';
 // Modals
 import LastRoundInfoModal from 'components/Modals/LastRoundInfoModal';
 interface RoundInfoType {

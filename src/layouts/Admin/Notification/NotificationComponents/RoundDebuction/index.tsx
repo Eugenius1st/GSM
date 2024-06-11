@@ -31,28 +31,30 @@ import colors from 'assets/colors/palette';
 import { FaArrowDown } from 'react-icons/fa';
 import { FaArrowUp } from 'react-icons/fa';
 import { IoIosInformationCircleOutline } from 'react-icons/io';
+
+// Eg Components
+import DropDownModal from 'components/EgMaterials/DropDown';
+import EgCheckBox from 'components/EgMaterials/CheckBox';
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
 // Notification Components
-import TagCard from 'layouts/Admin/Notification/Components/TagCard';
+import TagCard from 'layouts/Admin/Notification/NotificationComponents/TagCard';
 
 interface Data {
     id: number;
-    birth: number;
+    lesson: string;
     name: string;
-    className: string;
     expiration: number;
-    usingRounds: number | '0';
+    remainingRounds: number | '0';
     paymentRound: number | '0';
 }
 
 interface InitialData {
     id: number;
-    className: string;
+    lesson: string;
     name: string;
-    birth: number;
     expiration: number;
-    usingRounds: number | '0';
+    remainingRounds: number | '0';
     paymentRound: number | '0';
 }
 
@@ -60,120 +62,97 @@ const initialData: InitialData[] = [
     {
         id: 1,
         name: '손흥민',
-        className: '엘리트',
-        birth: 2016,
+        lesson: '엘리트',
         expiration: 7,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 2,
         name: '김민재',
-        className: '엘리트',
-        birth: 2016,
-
+        lesson: '엘리트',
         expiration: 5,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 3,
         name: '홍길동',
-        className: '엘리트',
-        birth: 2016,
-
+        lesson: '엘리트',
         expiration: 3,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 4,
         name: '손흥민',
-        className: '엘리트',
-        birth: 2016,
-
+        lesson: '엘리트',
         expiration: 7,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 5,
         name: '김민재',
-        className: '엘리트',
-        birth: 2016,
-
+        lesson: '엘리트',
         expiration: 5,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 6,
         name: '홍길동',
-        className: '엘리트',
-        birth: 2016,
-
+        lesson: '엘리트',
         expiration: 3,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 7,
         name: '손흥민',
-        className: '엘리트',
-        birth: 2016,
-
+        lesson: '엘리트',
         expiration: 7,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 8,
         name: '김민재',
-        className: '엘리트',
-        birth: 2016,
-
+        lesson: '엘리트',
         expiration: 5,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 9,
         name: '홍길동',
-        className: '엘리트',
-        birth: 2016,
-
+        lesson: '엘리트',
         expiration: 3,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 10,
         name: '손흥민',
-        className: '기본기·어린이',
-        birth: 2017,
-
+        lesson: '기본기·어린이',
         expiration: 7,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 11,
         name: '김민재',
-        className: '기본기·어린이',
-        birth: 2018,
-
+        lesson: '기본기·어린이',
         expiration: 5,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
     {
         id: 12,
         name: '홍길동',
-        className: '기본기·어린이',
-        birth: 2010,
-
+        lesson: '기본기·어린이',
         expiration: 3,
-        usingRounds: 5,
+        remainingRounds: 5,
         paymentRound: 10,
     },
 ];
@@ -186,9 +165,8 @@ function DataProcess(DataList: InitialData[]) {
             // push 메서드 사용
             id: el.id,
             name: el.name,
-            className: el.className,
-            birth: el.birth,
-            usingRounds: el.usingRounds,
+            lesson: el.lesson,
+            remainingRounds: el.remainingRounds,
             paymentRound: el.paymentRound,
             expiration: el.expiration,
         });
@@ -210,22 +188,21 @@ const headCells: readonly HeadCell[] = [
         numeric: false,
         label: '이름',
     },
-
     {
-        id: 'className',
+        id: 'lesson',
         numeric: false,
-        label: '클래스',
-    },
-    {
-        id: 'birth',
-        numeric: false,
-        label: '년생',
+        label: '수업명',
     },
 
     {
-        id: 'usingRounds',
+        id: 'remainingRounds',
         numeric: false,
-        label: '사용회차',
+        label: '잔여회차',
+    },
+    {
+        id: 'expiration',
+        numeric: false,
+        label: '만료',
     },
 ];
 
@@ -376,8 +353,6 @@ export default function EnhancedTable() {
         },
         staleTime: 5 * 1000,
     });
-
-    //핸들러
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
             const newSelected = rows.map((n) => n.id);
@@ -419,7 +394,6 @@ export default function EnhancedTable() {
         { label: '수업신청공지', link: '/admin/notification/application' },
         { label: '회차차감공지', link: '/admin/notification/round' },
     ];
-
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
@@ -430,7 +404,7 @@ export default function EnhancedTable() {
                             <Link to={el.link}>
                                 <span
                                     className={
-                                        el.label === '공지'
+                                        el.label === '회차차감공지'
                                             ? 'px-2 pb-1 mr-2 border-b-2 text-egPurple-default border-egPurple-default'
                                             : 'px-2 pb-1 mr-2 text-egGrey-default-default'
                                     }
@@ -707,19 +681,20 @@ export default function EnhancedTable() {
                                             sx={{ paddingX: 0 }}
                                             align="center"
                                         >
-                                            {row.className}
+                                            {row.lesson}
+                                        </TableCell>
+
+                                        <TableCell
+                                            align="center"
+                                            sx={{ paddingX: 0 }}
+                                        >
+                                            {row.remainingRounds}/{row.paymentRound}
                                         </TableCell>
                                         <TableCell
                                             align="center"
                                             sx={{ paddingX: 0 }}
                                         >
-                                            {row.birth}학년변환
-                                        </TableCell>
-                                        <TableCell
-                                            align="center"
-                                            sx={{ paddingX: 0 }}
-                                        >
-                                            {row.usingRounds}/{row.paymentRound}
+                                            D-{row.expiration}
                                         </TableCell>
 
                                         <TableCell

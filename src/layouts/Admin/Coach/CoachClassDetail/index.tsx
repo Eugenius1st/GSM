@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 // api
 import { requestGet } from 'api/basic';
 // Class Components
-import ViewUserCard from 'layouts/Admin/Class/Components/ViewUserCard';
+import ViewUserCard from 'layouts/Admin/Class/ClassComponents/ViewUserCard';
 // Icons
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 // Cards
