@@ -152,6 +152,7 @@ const UserDetail = () => {
                     userPhoto={userPhoto}
                 />
             )}
+
             <Divider />
             {userRoundInfo && getUserDetailInfo.data && (
                 <UserRoundCard

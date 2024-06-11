@@ -13,7 +13,6 @@ export const trainingCourseOptions = [
 export const positionOptions = ['GK', 'CB', 'LWB', 'RWB', 'CDM', 'CAM', 'CM', 'LM', 'RM', 'ST'];
 
 // 포지션 한문 <-> 영문
-
 export function classGroupMatcherByKor(classGroup: string) {
     switch (classGroup) {
         case '엘리트반(초3-6/중,고,대)':
@@ -119,3 +118,46 @@ export function classGroupMatcherByEng(classGroup: string) {
             return '모르겠음,수정필요';
     }
 }
+
+// 학생(본인), 부, 모 -> 영문
+export function relationMatcherByEng(relation: string | undefined) {
+    switch (relation) {
+        case 'student':
+            return '본인';
+        case 'father':
+            return '부(아버지)';
+        case 'mother':
+            return '모(어머니)';
+        default:
+            return relation;
+    }
+}
+
+// 수업참여 상태 영문 -> 한문
+export function ARMatcherByEng(relation: string | undefined) {
+    switch (relation) {
+        case 'CONFIRMED':
+            return '확정';
+        case 'RESERVED':
+            return '예약';
+        case 'ATTENDED':
+            return '출석';
+        case 'PRECEIVED':
+            return '지각';
+        case 'ABSENT':
+            return '결석';
+        case 'CANCELED':
+            return '취소';
+        case 'WITHDRAWED':
+            return '철회';
+        default:
+            return relation;
+    }
+}
+// CONFIRMED	확정	O	수업 정원 내 신청으로 수업 수강 확정
+// RESERVED	예약	O	수업 정원 외 신청으로 기존 신청자가 빠지면 우선순위에 따라 신청
+// ATTENDED	출석	O	정상 출석
+// PRECEIVED	지각	O	수업 내 N분 이상 지각
+// ABSENT	결석	O	수업 당일 결석
+// CANCELED	취소	O	회원의 개인 변심 또는 마감이후 변동으로 취소
+// WITHDRAWED

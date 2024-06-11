@@ -54,8 +54,8 @@ const BasicInfo = ({
     const [phoneFather, setPhoneFather] = useState('');
     const [phoneMother, setPhoneMother] = useState('');
 
-    const [defaultMajorPhone, setDefaultMajorPhone] = useState('');
-    const [majorPhone, setMajorPhone] = useState('');
+    const [defaultprimaryContact, setDefaultPrimaryContact] = useState('');
+    const [primaryContact, setPrimaryContact] = useState('');
 
     const [residence, setResidence] = useState('');
     const [residenceSpecific, setResidenceSpecific] = useState('');
@@ -95,8 +95,8 @@ const BasicInfo = ({
         } else if (!pwRegex.test(userPW)) {
             alert('Password는 8~20자의 영문 대소문자, 숫자, 특수문자로 이루어져야 합니다.');
             return false;
-        } else if (!name || !phone || !residence || !residenceSpecific || !birth || !gender) {
-            alert('모든 필수 항목을 입력해주세요.'); // ??? || majorPhone
+        } else if (!name || !phone || !primaryContact || !residence || !residenceSpecific || !birth || !gender) {
+            alert('모든 필수 항목을 입력해주세요.');
             return false;
         } else if (!phoneRegex.test(phone)) {
             alert('유효한 휴대폰 번호가 아닙니다.');
@@ -108,6 +108,12 @@ const BasicInfo = ({
                 alert('19세 이하의 경우, 부모님 중 적어도 한 분의 전화번호를 정확히 입력해주세요.');
                 return false;
             }
+        } else if (primaryContact === 'father' && !phoneFather) {
+            alert('대표로 선택하신 분의 연락처를 입력해주세요.');
+            return false;
+        } else if (primaryContact === 'mother' && !phoneFather) {
+            alert('대표로 선택하신 분의 연락처를 입력해주세요.');
+            return false;
         }
 
         // 모든 조건을 통과하면 true 반환
@@ -161,7 +167,7 @@ const BasicInfo = ({
                 phone: phone,
                 phoneFather: phoneFather,
                 phoneMother: phoneMother,
-                // ??? majorPhone: majorPhone,
+                primaryContact: primaryContact,
                 residence: residence,
                 residenceSpecific: residenceSpecific,
                 birth: birth,
@@ -182,6 +188,8 @@ const BasicInfo = ({
             setPhone(basicInfoData.phone);
             setPhoneFather(basicInfoData.phoneFather);
             setPhoneMother(basicInfoData.phoneMother);
+            setPrimaryContact(basicInfoData.primaryContact);
+            setDefaultPrimaryContact(basicInfoData.primaryContact);
             setBirth(basicInfoData.birth);
             setDefaultBirth(basicInfoData.birth);
             setGender(basicInfoData.gender);
@@ -351,20 +359,20 @@ const BasicInfo = ({
                         <RadioButton
                             RadioBtnList={[
                                 {
-                                    value: '본인',
+                                    value: 'student',
                                     name: '본인',
                                 },
                                 {
-                                    value: '부',
+                                    value: 'father',
                                     name: '부',
                                 },
                                 {
-                                    value: '모',
+                                    value: 'mother',
                                     name: '모',
                                 },
                             ]}
-                            func={setMajorPhone}
-                            defaultRadio={defaultMajorPhone}
+                            func={setPrimaryContact}
+                            defaultRadio={defaultprimaryContact}
                         />
                     </div>
 

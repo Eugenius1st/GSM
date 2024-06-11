@@ -12,7 +12,9 @@ import BasicModal from 'components/Modals/BasicModal';
 // images
 import userTempPhoto from 'assets/user/userTempPhoto.png';
 // utility
-import { positionMatcherByEng } from 'utility/standardConst';
+import { positionMatcherByEng, relationMatcherByEng } from 'utility/standardConst';
+// Admin User Components
+import UserSkillListCard from 'layouts/Admin/User/components/UserSkillListCard';
 
 interface reasonList {
     count?: string;
@@ -30,6 +32,7 @@ interface ClassInfo {
 interface prosImproType {
     category: string;
     name: string;
+    _id: string;
 }
 
 interface UserInfoType {
@@ -49,6 +52,7 @@ interface UserInfoType {
     phone?: string;
     phoneFather?: string;
     phoneMother?: string;
+    primaryContact?: string;
     residence?: string;
     residenceSpecific?: string;
     birth?: string;
@@ -98,6 +102,7 @@ const UserProfileCard = ({ userInfo, userPhoto }: InfoType) => {
         phone,
         phoneFather,
         phoneMother,
+        primaryContact,
         residence,
         residenceSpecific,
         birth,
@@ -128,10 +133,8 @@ const UserProfileCard = ({ userInfo, userPhoto }: InfoType) => {
     const titleStyle = 'mr-2 font-bold px-1 my-1 w-28';
     const highLight = 'px-1 bg-egPurple-superLight';
     const contentStyle = 'px-1';
-
     const [marketingPrivacy, setMarketingPrivacy] = useState(marketingAgree);
     const [marketingEvent, setMarketingEvent] = useState(serviceAgree);
-
     return (
         <div>
             <div className={'w-full m-auto border border-egGrey-default p-4'}>
@@ -205,7 +208,7 @@ const UserProfileCard = ({ userInfo, userPhoto }: InfoType) => {
                         <div className={titleStyle}>
                             <span className={highLight}>대표 연락처</span>
                         </div>
-                        <div className={contentStyle}>개발중</div>
+                        <div className={contentStyle}>{relationMatcherByEng(primaryContact)}</div>
                     </div>
                 </div>
             </div>
@@ -236,9 +239,8 @@ const UserProfileCard = ({ userInfo, userPhoto }: InfoType) => {
                         ))}
                     </div>
                 </div>
-                <div className={listStyle}>
+                {/* <div className={listStyle}>
                     <div className={titleStyle}>
-                        {' '}
                         <span className={highLight}>장점</span>
                     </div>
                     <div className={contentStyle}>
@@ -251,8 +253,8 @@ const UserProfileCard = ({ userInfo, userPhoto }: InfoType) => {
                             </span>
                         ))}
                     </div>
-                </div>
-                <div className={listStyle}>
+                </div> */}
+                {/* <div className={listStyle}>
                     <div className={titleStyle}>
                         {' '}
                         <span className={highLight}>개선점</span>
@@ -267,7 +269,7 @@ const UserProfileCard = ({ userInfo, userPhoto }: InfoType) => {
                             </span>
                         ))}
                     </div>
-                </div>
+                </div> */}
 
                 <div className={listStyle}>
                     <div className={titleStyle}>
@@ -322,6 +324,21 @@ const UserProfileCard = ({ userInfo, userPhoto }: InfoType) => {
                         </div>
                     </div>
                 </div>
+
+                {/* 장점, 개선점 */}
+                {pros && (
+                    <UserSkillListCard
+                        title="내 장점"
+                        userSkills={pros} // 객체로 변환 필요
+                    />
+                )}
+
+                {improvements && (
+                    <UserSkillListCard
+                        title="개선 희망점"
+                        userSkills={improvements} // 객체로 변환 필요
+                    />
+                )}
             </div>
         </div>
     );

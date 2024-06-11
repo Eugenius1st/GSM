@@ -209,7 +209,8 @@ const AdminRegist = () => {
     };
     useEffect(() => {
         if (mutation.status === 'success') {
-            handlePostPhoto();
+            if (selectedPhoto) handlePostPhoto();
+            else navigate('/admin');
         }
     }, [mutation.status]);
     return (

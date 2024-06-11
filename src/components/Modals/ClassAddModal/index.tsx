@@ -45,9 +45,8 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
     const [masking, setMasking] = useState(0);
 
     const [coaches, setCoaches] = useState<any>([]);
-    const [className, setClassName] = useState('개발중');
+    const [className, setClassName] = useState('');
     const [note, setNote] = useState('');
-
     const [isShow, setIsShow] = useState(false);
 
     const [addClassGroupNameInput, setAddClassGroupNameInput] = useState('');
@@ -156,7 +155,9 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
     };
 
     const dataValidate = () => {
-        if (!startTime) {
+        if (!className) {
+            alert('수업명을 선택하세요');
+        } else if (!startTime) {
             alert('시작 시간을 입력하세요');
             return false;
         } else if (!endTime) {
@@ -209,6 +210,11 @@ const ClassAddModal = ({ isSuccess, setIsSuccess }: ClassAddModalType) => {
     useEffect(() => {
         setClassType('practice');
     }, [className]);
+    useEffect(() => {
+        if (lessonType === 'personal') setClassName('개인레슨반');
+        else setClassName(trainingCourseOptions[0]);
+    }, [lessonType]);
+
     return (
         <div>
             <WhiteBtn

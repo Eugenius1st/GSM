@@ -145,7 +145,6 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
             searchCoach();
         }
     }, [classInfo]);
-
     return (
         <div>
             {classInfo ? (
@@ -196,7 +195,10 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
                                 <div className={titleStyle}>
                                     <span className={highLight}>등록 마감</span>
                                 </div>
-                                <div>개발중 </div>
+                                <div>{`${dateConverter(classInfo?.startTime, 'month_day')}  ${dateConverter(
+                                    classInfo?.applicationDeadline,
+                                    'time'
+                                )}`}</div>
                             </div>
                             {/* 위치 */}
                             <div className={infoStyle}>
@@ -211,24 +213,27 @@ const ClassCard = ({ title, classInfo }: ClasCardType) => {
                                 </div>
                                 <div>
                                     <div>
-                                        {classInfo?.attendancereservations &&
-                                        classInfo?.masking &&
-                                        classInfo?.attendancereservations >= classInfo?.masking ? (
+                                        {classInfo?.attendancereservations ? (
+                                            // classInfo?.masking &&
+                                            // classInfo?.attendancereservations >= classInfo?.masking ? (
                                             // 예약 수가 더 많은 경우
                                             <span>{classInfo?.attendancereservations.length}</span>
-                                        ) : classInfo?.attendancereservations &&
-                                          classInfo?.masking &&
-                                          classInfo?.attendancereservations < classInfo?.masking ? (
-                                            // 마스킹 값이 더 큰 경우
-                                            <span className="text-egPurple-default">{classInfo.masking}</span>
                                         ) : (
+                                            // ) : classInfo?.attendancereservations &&
+                                            //   classInfo?.masking &&
+                                            //   classInfo?.attendancereservations < classInfo?.masking ? (
+                                            // 마스킹 값이 더 큰 경우
+                                            // <span className="text-egPurple-default">{classInfo.masking}</span>
                                             // 그 외의 경우
                                             <span> 0</span>
                                         )}
                                         /{classInfo?.amount} (대기자: {classInfo?.reserved ? classInfo?.reserved : 0}{' '}
                                         명)
                                     </div>
-                                    <div>{loginState === 'admin' && ` 마스킹 (개발중)`}</div>
+                                    <div>
+                                        {loginState === 'admin' &&
+                                            `마스킹: ${classInfo.masking ? classInfo.masking : 0} 명`}
+                                    </div>
                                 </div>
                             </div>
                         </div>

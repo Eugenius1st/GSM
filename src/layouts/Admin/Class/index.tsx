@@ -27,7 +27,6 @@ const Class = () => {
     const [allClass, setAllClass] = useState<ClassInfoType[]>([]);
     const [allCount, setAllCount] = useState(1);
     const [isAddSuccess, setIsAddSuccess] = useState(false);
-
     //ALL CLASS GET 요청을 보낼 함수 정의
     const getAllClass = useQuery({
         queryKey: ['adminAllClassData'],

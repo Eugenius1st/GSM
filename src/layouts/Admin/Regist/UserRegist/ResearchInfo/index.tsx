@@ -141,6 +141,7 @@ handleState) => {
                 phone,
                 phoneFather,
                 phoneMother,
+                primaryContact,
                 residence,
                 residenceSpecific,
                 birth,
@@ -161,6 +162,7 @@ handleState) => {
                     phone: phone,
                     phoneFather: phoneFather,
                     phoneMother: phoneMother,
+                    primaryContact: primaryContact,
                     residence: residence,
                     residenceSpecific: residenceSpecific,
                     birth: birth,
@@ -202,7 +204,8 @@ handleState) => {
     };
     useEffect(() => {
         if (mutation.status === 'success') {
-            handlePostPhoto();
+            if (basicInfoData?.photo) handlePostPhoto();
+            else handleNext();
         }
     }, [mutation.status]);
 

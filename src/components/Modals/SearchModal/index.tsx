@@ -78,7 +78,6 @@ const SearchModal = ({
     });
     useEffect(() => {
         if (getSearchCoach.data) {
-            console.log('getSearchCoach.data', getSearchCoach.data);
             setSearchedData(getSearchCoach.data.result);
         }
     }, [getSearchCoach.data]);

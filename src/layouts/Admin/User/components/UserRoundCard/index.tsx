@@ -1,5 +1,7 @@
 // hooks
 import { useEffect, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { requestPost } from 'api/basic';
 // recoil
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { IsMobileSelector } from 'atom/isMobile';
@@ -10,6 +12,7 @@ import { IoIosArrowUp } from 'react-icons/io';
 import UserRoundProduct from 'layouts/Admin/User/components/UserRoundProduct';
 // Modals
 import LastRoundInfoModal from 'components/Modals/LastRoundInfoModal';
+import BasicModal from 'components/Modals/BasicModal';
 interface RoundInfoType {
     _id: string;
     studentId: string;
@@ -36,9 +39,10 @@ const UserRoundCard = ({ roundInfo, count, classGroupName, getRoundrefetchFunc }
     let isMobile = useRecoilValue(IsMobileSelector);
     const lessonTypeList = ['단체', '개인'];
     const [lessonType, setLessonType] = useState(lessonTypeList[0]);
-    const [seeMore, setSeeMore] = useState(false);
     const [groupRounds, setGroupRounds] = useState<RoundInfoType[] | []>([]);
     const [personalRounds, setPersonalRounds] = useState<RoundInfoType[] | []>([]);
+    const [addClassGroupNameInput, setAddClassGroupNameInput] = useState('');
+    const [addClassGroupDescriptionInput, setAddClassGroupDescriptionInput] = useState('');
     // style
     const listStyle = 'flex items-center border-b border-egGrey-default mt-1';
     const titleStyle = 'mr-2 font-bold px-1 my-1 w-28';
@@ -54,6 +58,29 @@ const UserRoundCard = ({ roundInfo, count, classGroupName, getRoundrefetchFunc }
         'my-1 text-egPurple-default border p-1 rounded-md hover:bg-egPurple-superLight border-egPurple-default';
     const roundDisAvailableMobileStyle = 'my-1 rounded-md text-egGrey-default border p-1  border-egGrey-default';
 
+    // POST 요청을 보낼 함수 정의
+    const classGroupMutate = useMutation({
+        mutationFn: ({ requestUrl, data, flagCheckFunc }: any) => {
+            return requestPost({
+                requestUrl: requestUrl,
+                data: data,
+                // flagCheckFunc: setAddClassGroupFlag,
+            });
+        },
+    });
+    const postClassGroup = () => {
+        if (addClassGroupNameInput && addClassGroupDescriptionInput) {
+            classGroupMutate.mutate({
+                requestUrl: '/classgroup',
+                data: {
+                    name: addClassGroupNameInput,
+                    description: addClassGroupDescriptionInput,
+                },
+            });
+        } else {
+            alert('클래스 그룹명 또는 설명을 입력하세요');
+        }
+    };
     // round sorting
     const sortRounds = (rounds: RoundInfoType[]): RoundInfoType[] => {
         return rounds.sort((a, b) => {
@@ -125,17 +152,54 @@ const UserRoundCard = ({ roundInfo, count, classGroupName, getRoundrefetchFunc }
                         <div className={titleStyle}>
                             <span className={highLight}>클래스그룹</span>
                         </div>
-                        <div className={contentStyle}>{classGroupName}</div>
+                        <div className="flex justify-between w-full">
+                            <div className={contentStyle}>{classGroupName}</div>
+                            <BasicModal
+                                modalBtn={
+                                    <button
+                                        type="button"
+                                        className="px-1 ml-2 border rounded-sm text-egGrey-default border-egGrey-default hover:bg-egPurple-superLight"
+                                    >
+                                        + 클래스 그룹
+                                    </button>
+                                }
+                                modalTitle={'교육과정 추가'}
+                                modalContents={
+                                    <div>
+                                        <div className="mt-4">클래스 그룹</div>
+                                        <input
+                                            placeholder={`클래스 그룹명을 입력하세요`}
+                                            type="text"
+                                            maxLength={20}
+                                            onChange={(e) => setAddClassGroupNameInput(e.target.value)}
+                                            className="w-full p-2 mt-2 mb-4 border border-egPurple-default"
+                                        />
+                                        <div>그룹 설명</div>
+                                        <input
+                                            placeholder={`설명을 입력하세요(ex: 초6~중3 선수반)`}
+                                            type="text"
+                                            maxLength={50}
+                                            onChange={(e) => setAddClassGroupDescriptionInput(e.target.value)}
+                                            className="w-full p-2 mt-2 mb-4 border border-egPurple-default"
+                                        />
+                                    </div>
+                                }
+                                modalFooterExitBtn={'취소'}
+                                modalFooterActiveBtn={'추가'}
+                                modalFooterActiveFunc={postClassGroup}
+                                modalFooterActiveFuncAfterClose={true}
+                            />
+                        </div>
                     </div>
 
-                    <div className="flex items-start justify-between mt-1">
-                        <div className="flex">
-                            <div className={titleStyle}>
-                                <span className={highLight}>회차정보</span>
-                            </div>
-                            <LastRoundInfoModal />
+                    <div className="flex items-center justify-between mt-1 mb-2">
+                        <div className={titleStyle}>
+                            <span className={highLight}>회차정보</span>
                         </div>
-                        <UserRoundProduct getRoundrefetchFunc={getRoundrefetchFunc} />
+                        <LastRoundInfoModal
+                            groupRounds={groupRounds}
+                            personalRounds={personalRounds}
+                        />
                     </div>
                     <div className={'flex items-center justify-between w-full px-1 mb-1'}>
                         {lessonType === '단체' ? (
@@ -293,16 +357,10 @@ const UserRoundCard = ({ roundInfo, count, classGroupName, getRoundrefetchFunc }
                             <></>
                         )}
                     </div>
-                    {seeMore && (
-                        <div className={listStyle}>
-                            <div className={titleStyle}></div>
-                            <div className="w-full">
-                                <div className="mb-2 bg-egPurple-superLight">개발중 등록내역 yyyy-mm-dd</div>
-                                <div className="mb-2 bg-egPurple-superLight">개발중 등록내역 yyyy-mm-dd</div>
-                                <div className="mb-2 bg-egPurple-superLight">개발중 등록내역 yyyy-mm-dd</div>
-                            </div>
-                        </div>
-                    )}
+
+                    <div className="flex justify-end">
+                        <UserRoundProduct getRoundrefetchFunc={getRoundrefetchFunc} />
+                    </div>
                 </div>
             </div>
         </div>

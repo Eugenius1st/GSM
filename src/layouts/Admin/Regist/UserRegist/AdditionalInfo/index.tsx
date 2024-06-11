@@ -117,7 +117,7 @@ const AdditionalInfo = ({
             });
         },
     });
-    const postFeedback = () => {
+    const postClassGroup = () => {
         if (addClassGroupNameInput && addClassGroupDescriptionInput) {
             classGroupMutate.mutate({
                 requestUrl: '/classgroup',
@@ -197,7 +197,7 @@ const AdditionalInfo = ({
                         }
                         modalFooterExitBtn={'취소'}
                         modalFooterActiveBtn={'추가'}
-                        modalFooterActiveFunc={postFeedback}
+                        modalFooterActiveFunc={postClassGroup}
                         modalFooterActiveFuncAfterClose={true}
                     />
                 </div>
