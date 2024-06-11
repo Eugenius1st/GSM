@@ -10,8 +10,8 @@ import MemoCard from 'components/Cards/MemoCard';
 // Common
 import Divider from 'components/Common/Divider';
 // Admin User Components
-import UserProfileCard from 'layouts/Admin/User/UserComponents/UserProfileCard';
-import UserRoundCard from 'layouts/Admin/User/UserComponents/UserRoundCard';
+import UserProfileCard from 'layouts/Admin/User/components/UserProfileCard';
+import UserRoundCard from 'layouts/Admin/User/components/UserRoundCard';
 // Modals
 import EditModal from 'components/Modals/EditModal';
 import PasswordEditModal from 'components/Modals/PasswordEditModal';

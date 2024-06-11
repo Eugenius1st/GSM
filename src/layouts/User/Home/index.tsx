@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { IsMobileSelector } from 'atom/isMobile';
 // User Components
-import UserProfileCard from 'layouts/User/Home/EditComponents/UserProfileCard';
+import UserProfileCard from 'layouts/User/Home/components/UserProfileCard';
 import ClassCard from 'components/Cards/ClassCard';
 // images
 import userTempPhoto from 'assets/user/userTempPhoto.png';

@@ -5,7 +5,7 @@ import axios from 'axios';
 // api
 import { requestGet } from 'api/basic';
 // User Component
-import UserTable from 'layouts/Admin/User/UserComponents/UserTable';
+import UserTable from 'layouts/Admin/User/components/UserTable';
 // Pagination
 import PaginationRounded from 'components/EgMaterials/Pagenation';
 
